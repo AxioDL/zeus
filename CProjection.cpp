@@ -70,5 +70,3 @@ void CProjection::_updateCachedMatrix()
         throw std::runtime_error("attempted to cache invalid projection type");
 }
 
-
-

@@ -9,14 +9,7 @@ class ZE_ALIGN(16) CPlane
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    CPlane()
-    {
-#if __SSE__
-        mVec128 = _mm_xor_ps(mVec128, mVec128);
-#else
-        a = 0.0f; b = 0.0f; c = 0.0f; d = 0.0f;
-#endif
-    }
+    inline CPlane() {}
     CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
     CPlane(const CVector3f& point, float displacement)
     {
@@ -28,7 +21,16 @@ public:
         d = displacement;
     }
     
-protected:
+    inline void normalize()
+    {
+        float nd = d;
+        float mag = vec.length();
+        assert(mag != 0.0f);
+        mag = 1.0 / mag;
+        vec *= mag;
+        d = nd * mag;
+    }
+    
     union
     {
         struct
@@ -36,6 +38,7 @@ protected:
             float a, b, c, d;
         };
         float p[4];
+        CVector3f vec;
 #ifdef __SSE__
         __m128 mVec128;
 #endif

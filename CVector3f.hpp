@@ -4,6 +4,7 @@
 #include "Global.hpp"
 #include <Athena/IStreamReader.hpp>
 #include <math.h>
+#include <assert.h>
 
 typedef union
 {
@@ -18,7 +19,7 @@ class ZE_ALIGN(16) CVector3f
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
-    CVector3f() {zeroOut();}
+    inline CVector3f() {zeroOut();}
 #if __SSE__
     CVector3f(const __m128& mVec128) : mVec128(mVec128) {v[3] = 0.0f;}
 #endif
@@ -148,8 +149,20 @@ public:
 #endif
         return *this;
     }
-    void normalize();
-    CVector3f normalized() const;
+    inline void normalize()
+    {
+        float mag = length();
+        assert(mag != 0.0);
+        mag = 1.0 / mag;
+        *this *= mag;
+    }
+    inline CVector3f normalized() const
+    {
+        float mag = length();
+        assert(mag != 0.0);
+        mag = 1.0 / mag;
+        return *this * mag;
+    }
     inline CVector3f cross(const CVector3f& rhs) const
     {
         return CVector3f(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
@@ -236,6 +249,7 @@ public:
     };
 
     static const CVector3f skOne;
+    static const CVector3f skNegOne;
     static const CVector3f skZero;
 };
 

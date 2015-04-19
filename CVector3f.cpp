@@ -4,31 +4,9 @@
 #include <assert.h>
 #include "Math.hpp"
 
-const CVector3f CVector3f::skOne = CVector3f(1);
+const CVector3f CVector3f::skOne = CVector3f(1.0);
+const CVector3f CVector3f::skNegOne = CVector3f(-1.0);
 const CVector3f CVector3f::skZero;
-
-void CVector3f::normalize()
-{
-    float mag = length();
-    assert(mag != 0.0);
-    
-    x /= mag;
-    y /= mag;
-    z /= mag;
-}
-
-CVector3f CVector3f::normalized() const
-{
-    CVector3f ret;
-    float mag = length();
-    assert(mag != 0.0);
-
-    ret.x = x/mag;
-    ret.y = y/mag;
-    ret.z = z/mag;
-
-    return ret;
-}
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {

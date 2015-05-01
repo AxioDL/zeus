@@ -18,6 +18,7 @@ HEADERS += \
     $$PWD/CAxisAngle.hpp \
     $$PWD/CPlane.hpp \
     $$PWD/CTransform.hpp \
+    $$PWD/CColor.hpp \
     $$PWD/Global.hpp \
     $$PWD/MathLib.hpp
 

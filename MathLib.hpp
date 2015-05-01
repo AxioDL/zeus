@@ -9,6 +9,7 @@
 #include "CVector3d.hpp"
 #include "CVector3f.hpp"
 #include "CPlane.hpp"
+#include "CColor.hpp"
 #include "Global.hpp"
 #include "Math.hpp"
 

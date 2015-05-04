@@ -6,7 +6,8 @@ SOURCES += \
     $$PWD/CMatrix3f.cpp \
     $$PWD/CProjection.cpp \
     $$PWD/CPlane.cpp \
-    $$PWD/CTransform.cpp
+    $$PWD/CTransform.cpp \
+    $$PWD/CVector2f.cpp
 
 HEADERS += \
     $$PWD/CVector3f.hpp \
@@ -20,6 +21,7 @@ HEADERS += \
     $$PWD/CTransform.hpp \
     $$PWD/CColor.hpp \
     $$PWD/Global.hpp \
-    $$PWD/MathLib.hpp
+    $$PWD/MathLib.hpp \
+    $$PWD/CVector2f.hpp
 
 INCLUDEPATH += $$PWD

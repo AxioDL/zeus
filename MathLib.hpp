@@ -6,6 +6,7 @@
 #include "CProjection.hpp"
 #include "CTransform.hpp"
 #include "CQuaternion.hpp"
+#include "CVector2f.hpp"
 #include "CVector3d.hpp"
 #include "CVector3f.hpp"
 #include "CPlane.hpp"

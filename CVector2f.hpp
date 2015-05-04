@@ -1,5 +1,5 @@
-#ifndef CVector2f_HPP
-#define CVector2f_HPP
+#ifndef CVECTOR2f_HPP
+#define CVECTOR2f_HPP
 
 #include "Global.hpp"
 #include <Athena/IStreamReader.hpp>
@@ -17,7 +17,7 @@ public:
 #if __SSE__
     CVector2f(const __m128& mVec128) : mVec128(mVec128) {v[2] = 0.0f; v[3] = 0.0f;}
 #endif
-    CVector2f(float xyz) {splat(xyz);}
+    CVector2f(float xy) {splat(xy);}
     CVector2f(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
     CVector2f(Athena::io::IStreamReader& input)
     {
@@ -30,7 +30,7 @@ public:
     inline bool operator ==(const CVector2f& rhs) const
     {return (x == rhs.x && y == rhs.y);}
     inline bool operator !=(const CVector2f& rhs) const
-    {return !(x == rhs.x && y == rhs.y);}
+    {return !(*this == rhs);}
     inline CVector2f operator+(const CVector2f& rhs) const
     {
 #if __SSE__
@@ -203,13 +203,13 @@ public:
 #endif
     }
 
-    inline void splat(float xyz)
+    inline void splat(float xy)
     {
 #if __SSE__
-        TVectorUnion splat = {{xyz, xyz, 0.0f, 0.0f}};
+        TVectorUnion splat = {{xy, xy, 0.0f, 0.0f}};
         mVec128 = splat.mVec128;
 #else
-        v[0] = xyz; v[1] = xyz; v[2] = 0.0f; v[3] = 0.0f;
+        v[0] = xy; v[1] = xy; v[2] = 0.0f; v[3] = 0.0f;
 #endif
     }
 

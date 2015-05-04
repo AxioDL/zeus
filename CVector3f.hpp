@@ -36,7 +36,7 @@ public:
     inline bool operator ==(const CVector3f& rhs) const
     {return (x == rhs.x && y == rhs.y && z == rhs.z);}
     inline bool operator !=(const CVector3f& rhs) const
-    {return !(x == rhs.x && y == rhs.y && z == rhs.z);}
+    {return !(*this == rhs);}
     inline CVector3f operator+(const CVector3f& rhs) const
     {
 #if __SSE__

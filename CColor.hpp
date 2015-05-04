@@ -33,7 +33,7 @@ public:
         a = reader.readFloat();
     }
 
-    inline float operator[](const int& idx) { return (&r)[idx]; }
+    inline const float& operator[](const int& idx) { return (&r)[idx]; }
     
     union
     {

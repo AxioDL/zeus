@@ -165,7 +165,7 @@ public:
     {
 #if __SSE4_1__
         TVectorUnion result;
-        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
+        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x31);
         return result.v[0];
 #elif __SSE__
         TVectorUnion result;
@@ -179,7 +179,7 @@ public:
     {
 #if __SSE4_1__
         TVectorUnion result;
-        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0x71);
+        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0x31);
         return result.v[0];
 #elif __SSE__
         TVectorUnion result;

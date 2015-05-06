@@ -1,7 +1,7 @@
 #ifndef CFRUSTUM_HPP
 #define CFRUSTUM_HPP
 
-#include <MathLib.hpp>
+#include "CPlane.hpp"
 #include "SBoundingBox.hpp"
 
 class CFrustum

@@ -27,6 +27,8 @@ HEADERS += \
     $$PWD/CRectangle.hpp \
     $$PWD/CMatrix4f.hpp \
     $$PWD/TVectorUnion.hpp \
-    $$PWD/CVector4f.hpp
+    $$PWD/CVector4f.hpp \
+    $$PWD/CFrustum.hpp \
+    $$PWD/SBoundingBox.hpp
 
 INCLUDEPATH += $$PWD

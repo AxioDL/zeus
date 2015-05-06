@@ -1,6 +1,7 @@
 #ifndef BOUNDINGBOX_HPP
 #define BOUNDINGBOX_HPP
-#include <MathLib.hpp>
+
+#include "CVector3f.hpp"
 #include <Athena/IStreamReader.hpp>
 
 struct SBoundingBox

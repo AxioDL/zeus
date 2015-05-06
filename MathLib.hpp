@@ -12,6 +12,8 @@
 #include "CVector4f.hpp"
 #include "CRectangle.hpp"
 #include "CPlane.hpp"
+#include "SBoundingBox.hpp"
+#include "CFrustum.hpp"
 #include "CColor.hpp"
 #include "Global.hpp"
 #include "Math.hpp"

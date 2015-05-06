@@ -73,7 +73,7 @@ public:
 
         return CVector4f(res.mVec128);
 #else
-        return CVector3f(
+        return CVector4f(
                     m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
                 m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
                 m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],

@@ -2,17 +2,11 @@
 #define CVECTOR3F_HPP
 
 #include "Global.hpp"
+#include "CVector2f.hpp"
+#include "TVectorUnion.hpp"
 #include <Athena/IStreamReader.hpp>
 #include <math.h>
 #include <assert.h>
-
-typedef union
-{
-    float v[4];
-#if __SSE__
-    __m128 mVec128;
-#endif
-} TVectorUnion;
 
 class ZE_ALIGN(16) CVector3f
 {
@@ -30,6 +24,13 @@ public:
         x = input.readFloat();
         y = input.readFloat();
         z = input.readFloat();
+        v[3] = 0.0f;
+    }
+    CVector3f(const CVector2f& other)
+    {
+        x = other.x;
+        y = other.y;
+        z = 0.0;
         v[3] = 0.0f;
     }
 
@@ -231,6 +232,10 @@ public:
     }
     static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
 
+    inline bool isNormalized(float thresh = 0.0001f) const
+    {
+        return (length() > thresh);
+    }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

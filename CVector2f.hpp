@@ -2,15 +2,16 @@
 #define CVECTOR2f_HPP
 
 #include "Global.hpp"
+#include "TVectorUnion.hpp"
+
 #include <Athena/IStreamReader.hpp>
 #include <math.h>
 #include <assert.h>
-#include "CVector3f.hpp"
 
 
 class ZE_ALIGN(16) CVector2f
 {
-public:
+    public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
     inline CVector2f() {zeroOut();}
@@ -31,6 +32,47 @@ public:
     {return (x == rhs.x && y == rhs.y);}
     inline bool operator !=(const CVector2f& rhs) const
     {return !(*this == rhs);}
+    inline bool operator <(const CVector2f& rhs) const
+    {
+#if __SSE__
+        TVectorUnion vec;
+        vec.mVec128 = _mm_cmplt_ps(mVec128, rhs.mVec128);
+        return (vec.v[0] != 0 || vec.v[1] != 0);
+#else
+        return (x < rhs.x || y < rhs.y);
+#endif
+    }
+    inline bool operator <=(const CVector2f& rhs) const
+    {
+#if __SSE__
+        TVectorUnion vec;
+        vec.mVec128 = _mm_cmple_ps(mVec128, rhs.mVec128);
+        return (vec.v[0] != 0 || vec.v[1] != 0);
+#else
+        return (x <= rhs.x || y <= rhs.y);
+#endif
+    }
+    inline bool operator >(const CVector2f& rhs) const
+    {
+#if __SSE__
+        TVectorUnion vec;
+        vec.mVec128 = _mm_cmpgt_ps(mVec128, rhs.mVec128);
+        return (vec.v[0] != 0 || vec.v[1] != 0);
+#else
+        return (x > rhs.x || y > rhs.y);
+#endif
+    }
+    inline bool operator >=(const CVector2f& rhs) const
+    {
+#if __SSE__
+        TVectorUnion vec;
+        vec.mVec128 = _mm_cmpge_ps(mVec128, rhs.mVec128);
+        return (vec.v[0] != 0 || vec.v[1] != 0);
+#else
+        return (x >= rhs.x || y >= rhs.y);
+#endif
+    }
+
     inline CVector2f operator+(const CVector2f& rhs) const
     {
 #if __SSE__
@@ -225,6 +267,10 @@ public:
     }
     static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
+    inline bool isNormalized(float thresh = 0.0001f) const
+    {
+        return (length() > thresh);
+    }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

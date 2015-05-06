@@ -38,13 +38,13 @@ public:
         m[1][1] = scaleVec[1];
         m[2][2] = scaleVec[2];
     }
-    CMatrix3f(const CVector3f& u, const CVector3f& m, const CVector3f& w)
-    {vec[0] = u; vec[1] = m; vec[2] = w;}
+    CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2)
+    {vec[0] = r0; vec[1] = r1; vec[2] = r2;}
     CMatrix3f(const CMatrix3f& other)
     {vec[0] = other.vec[0]; vec[1] = other.vec[1]; vec[2] = other.vec[2];}
 #if __SSE__
-    CMatrix3f(const __m128& u, const __m128& m, const __m128& w)
-    {vec[0].mVec128 = u; vec[1].mVec128 = m; vec[2].mVec128 = w;}
+    CMatrix3f(const __m128& r0, const __m128& r1, const __m128& r2)
+    {vec[0].mVec128 = r0; vec[1].mVec128 = r1; vec[2].mVec128 = r2;}
 #endif
     CMatrix3f(const CVector3f& axis, float angle);
     CMatrix3f(const CQuaternion& quat);

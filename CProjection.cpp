@@ -1,14 +1,6 @@
 #include "CProjection.hpp"
 #include <math.h>
 
-const TMatrix4f kIdentityMtx4 =
-{{
-    {1.0, 0.0, 0.0, 0.0},
-    {0.0, 1.0, 0.0, 0.0},
-    {0.0, 0.0, 1.0, 0.0},
-    {0.0, 0.0, 0.0, 1.0}
-}};
-
 void CProjection::_updateCachedMatrix()
 {
     if (m_projType == PROJ_ORTHO)

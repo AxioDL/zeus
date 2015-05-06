@@ -3,8 +3,8 @@
 
 #include "Global.hpp"
 #include "CMatrix3f.hpp"
+#include "CMatrix4f.hpp"
 #include "CVector3f.hpp"
-#include "CProjection.hpp"
 
 class ZE_ALIGN(16) CTransform
 {
@@ -27,13 +27,13 @@ public:
     inline CVector3f operator*(const CVector3f& other) const
     {return m_origin + m_basis * other;}
     
-    inline void toMatrix4f(TMatrix4f& mat) const
+    inline void toMatrix4f(CMatrix4f& mat) const
     {
 #if __SSE__
-        mat.mVec128[0] = m_basis[0].mVec128; mat.m[0][3] = 0.0f;
-        mat.mVec128[1] = m_basis[1].mVec128; mat.m[1][3] = 0.0f;
-        mat.mVec128[2] = m_basis[2].mVec128; mat.m[2][3] = 0.0f;
-        mat.mVec128[3] = m_origin.mVec128; mat.m[3][3] = 1.0f;
+        mat.vec[0].mVec128 = m_basis[0].mVec128; mat.m[0][3] = 0.0f;
+        mat.vec[1].mVec128 = m_basis[1].mVec128; mat.m[1][3] = 0.0f;
+        mat.vec[2].mVec128 = m_basis[2].mVec128; mat.m[2][3] = 0.0f;
+        mat.vec[3].mVec128 = m_origin.mVec128; mat.m[3][3] = 1.0f;
 #else
         mat.m[0][0] = m_basis[0][0]; mat.m[0][1] = m_basis[0][1]; mat.m[0][2] = m_basis[0][2]; mat.m[0][3] = 0.0f;
         mat.m[1][0] = m_basis[1][0]; mat.m[1][1] = m_basis[1][1]; mat.m[1][2] = m_basis[1][2]; mat.m[1][3] = 0.0f;

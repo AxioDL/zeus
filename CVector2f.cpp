@@ -42,9 +42,7 @@ CVector2f CVector2f::slerp(const CVector2f& a, const CVector2f& b, float t)
         const double d = 1.0 / sin(theta);
         const double s0 = sin((1.0 - t) * theta);
 
-        ret.x = (float)(a.x * s0 + b.x * s1) * d;
-        ret.y = (float)(a.y * s0 + b.y * s1) * d;
-
+        ret = (a * s0 + b * s1) * d;
         return ret;
     }
     return a;

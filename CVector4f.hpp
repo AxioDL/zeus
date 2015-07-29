@@ -18,6 +18,17 @@ class ZE_ALIGN(16) CVector4f
 #if __SSE__
     CVector4f(const __m128& mVec128) : mVec128(mVec128) {}
 #endif
+#if ZE_ATHENA_TYPES
+    CVector4f(const atVec4f& vec)
+#if __SSE__
+        : mVec128(vec.mVec128){}
+#else
+    {
+        x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], w = vec.vec[3];
+    }
+#endif
+#endif
+
     CVector4f(float xyzw) {splat(xyzw);}
     CVector4f(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
     CVector4f(Athena::io::IStreamReader& input)

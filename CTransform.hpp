@@ -10,11 +10,11 @@ class ZE_ALIGN(16) CTransform
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
-    
+
     CTransform() : m_basis(false) {}
     CTransform(const CMatrix3f& basis, const CVector3f& offset=CVector3f::skZero) :
     m_basis(basis), m_origin(offset) {}
-    
+
     inline CTransform operator*(const CTransform& rhs) const
     {return CTransform(m_basis * rhs.m_basis, m_origin + (m_basis * rhs.m_origin));}
     

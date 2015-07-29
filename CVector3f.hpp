@@ -17,6 +17,16 @@ public:
 #if __SSE__
     CVector3f(const __m128& mVec128) : mVec128(mVec128) {v[3] = 0.0f;}
 #endif
+#if ZE_ATHENA_TYPES
+    CVector3f(const atVec3f& vec)
+#if __SSE__
+        : mVec128(vec.mVec128){}
+#else
+    {
+        x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], v[3] = 0.0f;
+    }
+#endif
+#endif
     CVector3f(float xyz) {splat(xyz);}
     CVector3f(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
     CVector3f(Athena::io::IStreamReader& input)

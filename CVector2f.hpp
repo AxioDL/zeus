@@ -18,6 +18,16 @@ class ZE_ALIGN(16) CVector2f
 #if __SSE__
     CVector2f(const __m128& mVec128) : mVec128(mVec128) {v[2] = 0.0f; v[3] = 0.0f;}
 #endif
+#if ZE_ATHENA_TYPES
+    CVector2f(const atVec2f& vec)
+#if __SSE__
+        : mVec128(vec.mVec128){}
+#else
+    {
+        x = vec.vec[0], y = vec.vec[1], v[2] = 0.0f, v[3] = 0.0f;
+    }
+#endif
+#endif
     CVector2f(float xy) {splat(xy);}
     CVector2f(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
     CVector2f(Athena::io::IStreamReader& input)

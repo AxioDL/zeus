@@ -2,7 +2,7 @@
 #define CFRUSTUM_HPP
 
 #include "CPlane.hpp"
-#include "SBoundingBox.hpp"
+#include "CAABox.hpp"
 
 class CFrustum
 {
@@ -84,7 +84,7 @@ public:
         
     }
     
-    inline bool aabbFrustumTest(const SBoundingBox& aabb) const
+    inline bool aabbFrustumTest(const CAABox& aabb) const
     {
         CVector3f vmin, vmax;
         int i;

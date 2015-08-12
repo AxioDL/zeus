@@ -29,6 +29,8 @@ namespace Math
     
     extern const CVector3f kUpVec;
     CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up=kUpVec);
+    inline CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
+    { return bary.x * p0 + bary.y * p1 + bary.z * p2; }
 }
 
 #endif // MATH_HPP

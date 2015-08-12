@@ -1,41 +1,6 @@
 #include "CQuaternion.hpp"
 #include <math.h>
 
-CQuaternion::CQuaternion()
-    : r(1.0f)
-{
-}
-
-CQuaternion::CQuaternion(float r, float x, float y, float z)
-    : r(r), v(x, y, z)
-{
-}
-
-CQuaternion::CQuaternion(float x, float y, float z)
-{
-    fromVector3f(CVector3f(x, y, z));
-}
-
-CQuaternion::CQuaternion(const CVector3f& vec)
-{
-    fromVector3f(vec);
-}
-
-CQuaternion::CQuaternion(float r, const CVector3f& vec)
-    : r(r), v(vec)
-{
-}
-
-CQuaternion::CQuaternion(Athena::io::IStreamReader& input)
-{
-    r = input.readFloat();
-    v = CVector3f(input);
-}
-
-CQuaternion::~CQuaternion()
-{
-}
-
 void CQuaternion::fromVector3f(const CVector3f& vec)
 {
     float cosX = cosf(0.5 * vec.x);

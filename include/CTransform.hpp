@@ -23,6 +23,12 @@ public:
         CMatrix3f inv = m_basis.inverted();
         return CTransform(inv, inv * -m_origin);
     }
+
+    inline void translate(const CVector3f& position)
+    {
+        m_basis = CMatrix3f::skIdentityMatrix3f;
+        m_origin = position;
+    }
     
     inline CVector3f operator*(const CVector3f& other) const
     {return m_origin + m_basis * other;}

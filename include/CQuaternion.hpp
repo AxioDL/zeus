@@ -4,6 +4,7 @@
 #include "Global.hpp"
 #include "CAxisAngle.hpp"
 #include "CVector3f.hpp"
+#include "CVector4f.hpp"
 #include <math.h>
 #include <Athena/IStreamReader.hpp>
 
@@ -12,13 +13,23 @@ class ZE_ALIGN(16) CQuaternion
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
-    CQuaternion();
-    CQuaternion(float r, float x, float y, float z);
-    CQuaternion(float x, float y, float z);
-    CQuaternion(const CVector3f& vec);
-    CQuaternion(float r, const CVector3f& vec);
-    CQuaternion(Athena::io::IStreamReader& input);
-    ~CQuaternion();
+    CQuaternion() : r(1.0f) {}
+    CQuaternion(float r, float x, float y, float z) : r(r), v(x, y, z){}
+    CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
+    CQuaternion(float r, const CVector3f& vec) : r(r), v(vec){}
+    CQuaternion(Athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
+    CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
+    CQuaternion(const CVector4f& vec)
+          : r(vec.w)
+    {
+#if __SSE__
+        v.mVec128 = vec.mVec128; v.v[3] = 0;
+#else
+        v.x = vec.x; v.y = vec.y; v.z = vec.z;
+#endif
+    }
+
+    virtual ~CQuaternion() {}
 
     void fromVector3f(const CVector3f& vec);
 

@@ -4,6 +4,13 @@
 #include "MathLib.hpp"
 #include <iostream>
 
+#if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
+#define COLOR(rgba) ( ( (rgba) & 0x000000FF ) << 24 | ( (rgba) & 0x0000FF00 ) <<  8 \
+                    | ( (rgba) & 0x00FF0000 ) >>  8 | ( (rgba) & 0xFF000000 ) >> 24 )
+#else
+#define COLOR(rgba) rgba
+#endif
+
 typedef union _RGBA32
 {
     struct
@@ -18,6 +25,16 @@ class ZE_ALIGN(16) CColor
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
+    static const CColor skRed;
+    static const CColor skBlack;
+    static const CColor skBlue;
+    static const CColor skGreen;
+    static const CColor skGrey;
+    static const CColor skOrange;
+    static const CColor skPurple;
+    static const CColor skYellow;
+    static const CColor skWhite;
+
 #if __SSE__
     CColor(const __m128& mVec128) : mVec128(mVec128) {}
 #endif
@@ -26,6 +43,8 @@ public:
     CColor(float rgb, float a = 1.0) { splat(rgb, a); }
     CColor(float r, float g, float b, float a = 1.0f) {v[0] = r; v[1] = g; v[2] = b; v[3] = a; }
     CColor(Athena::io::IStreamReader& reader) {readRGBA(reader);}
+    CColor(atUint32 rgba) { fromRGBA32(rgba); }
+    CColor(const unsigned char* rgba) { fromRGBA8(rgba[0], rgba[1], rgba[2], rgba[3]); }
 
     inline void readRGBA(Athena::io::IStreamReader& reader)
     {

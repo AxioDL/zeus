@@ -12,6 +12,7 @@ public:
     explicit CMatrix4f(bool zero = false)
     {
         memset(m, 0, sizeof(m));
+
         if (!zero)
         {
             m[0][0] = 1.0;
@@ -67,17 +68,17 @@ public:
 #if __SSE__
         TVectorUnion res;
         res.mVec128 = _mm_add_ps(_mm_add_ps(_mm_mul_ps(vec[0].mVec128, ze_splat_ps(other.mVec128, 0)),
-                                 _mm_mul_ps(vec[1].mVec128, ze_splat_ps(other.mVec128, 1))),
-                      _mm_add_ps(_mm_mul_ps(vec[2].mVec128, ze_splat_ps(other.mVec128, 2)),
-                                 _mm_mul_ps(vec[3].mVec128, ze_splat_ps(other.mVec128, 3))));
+                                            _mm_mul_ps(vec[1].mVec128, ze_splat_ps(other.mVec128, 1))),
+                                 _mm_add_ps(_mm_mul_ps(vec[2].mVec128, ze_splat_ps(other.mVec128, 2)),
+                                            _mm_mul_ps(vec[3].mVec128, ze_splat_ps(other.mVec128, 3))));
 
         return CVector4f(res.mVec128);
 #else
         return CVector4f(
-                    m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
-                m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
-                m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],
-                m[0][3] * other.v[0] + m[1][3] * other.v[1] + m[2][3] * other.v[2] + m[3][3] * other.v[3]);
+                   m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
+                   m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
+                   m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],
+                   m[0][3] * other.v[0] + m[1][3] * other.v[1] + m[2][3] * other.v[2] + m[3][3] * other.v[3]);
 #endif
     }
 
@@ -143,34 +144,37 @@ static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
     CMatrix4f ret;
 #if __SSE__
     unsigned i;
-    for (i=0 ; i<4 ; ++i) {
+
+    for (i = 0 ; i < 4 ; ++i)
+    {
         ret.vec[i].mVec128 =
-                _mm_add_ps(_mm_add_ps(_mm_add_ps(
-                                          _mm_mul_ps(lhs.vec[0].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(0, 0, 0, 0))),
+            _mm_add_ps(_mm_add_ps(_mm_add_ps(
+                                      _mm_mul_ps(lhs.vec[0].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(0, 0, 0, 0))),
                                       _mm_mul_ps(lhs.vec[1].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(1, 1, 1, 1)))),
-                _mm_mul_ps(lhs.vec[2].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(2, 2, 2, 2)))),
-                _mm_mul_ps(lhs.vec[3].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(3, 3, 3, 3))));
+                                  _mm_mul_ps(lhs.vec[2].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(2, 2, 2, 2)))),
+                       _mm_mul_ps(lhs.vec[3].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(3, 3, 3, 3))));
     }
+
 #else
-    ret.m[0][0] = lhs.m[0][0]*rhs.m[0][0] + lhs.m[1][0]*rhs.m[0][1] + lhs.m[2][0]*rhs.m[0][2] + lhs.m[3][0]*rhs.m[0][3];
-    ret.m[1][0] = lhs.m[0][0]*rhs.m[1][0] + lhs.m[1][0]*rhs.m[1][1] + lhs.m[2][0]*rhs.m[1][2] + lhs.m[3][0]*rhs.m[1][3];
-    ret.m[2][0] = lhs.m[0][0]*rhs.m[2][0] + lhs.m[1][0]*rhs.m[2][1] + lhs.m[2][0]*rhs.m[2][2] + lhs.m[3][0]*rhs.m[2][3];
-    ret.m[3][0] = lhs.m[0][0]*rhs.m[3][0] + lhs.m[1][0]*rhs.m[3][1] + lhs.m[2][0]*rhs.m[3][2] + lhs.m[3][0]*rhs.m[3][3];
+    ret.m[0][0] = lhs.m[0][0] * rhs.m[0][0] + lhs.m[1][0] * rhs.m[0][1] + lhs.m[2][0] * rhs.m[0][2] + lhs.m[3][0] * rhs.m[0][3];
+    ret.m[1][0] = lhs.m[0][0] * rhs.m[1][0] + lhs.m[1][0] * rhs.m[1][1] + lhs.m[2][0] * rhs.m[1][2] + lhs.m[3][0] * rhs.m[1][3];
+    ret.m[2][0] = lhs.m[0][0] * rhs.m[2][0] + lhs.m[1][0] * rhs.m[2][1] + lhs.m[2][0] * rhs.m[2][2] + lhs.m[3][0] * rhs.m[2][3];
+    ret.m[3][0] = lhs.m[0][0] * rhs.m[3][0] + lhs.m[1][0] * rhs.m[3][1] + lhs.m[2][0] * rhs.m[3][2] + lhs.m[3][0] * rhs.m[3][3];
 
-    ret.m[0][1] = lhs.m[0][1]*rhs.m[0][0] + lhs.m[1][1]*rhs.m[0][1] + lhs.m[2][1]*rhs.m[0][2] + lhs.m[3][1]*rhs.m[0][3];
-    ret.m[1][1] = lhs.m[0][1]*rhs.m[1][0] + lhs.m[1][1]*rhs.m[1][1] + lhs.m[2][1]*rhs.m[1][2] + lhs.m[3][1]*rhs.m[1][3];
-    ret.m[2][1] = lhs.m[0][1]*rhs.m[2][0] + lhs.m[1][1]*rhs.m[2][1] + lhs.m[2][1]*rhs.m[2][2] + lhs.m[3][1]*rhs.m[2][3];
-    ret.m[3][1] = lhs.m[0][1]*rhs.m[3][0] + lhs.m[1][1]*rhs.m[3][1] + lhs.m[2][1]*rhs.m[3][2] + lhs.m[3][1]*rhs.m[3][3];
+    ret.m[0][1] = lhs.m[0][1] * rhs.m[0][0] + lhs.m[1][1] * rhs.m[0][1] + lhs.m[2][1] * rhs.m[0][2] + lhs.m[3][1] * rhs.m[0][3];
+    ret.m[1][1] = lhs.m[0][1] * rhs.m[1][0] + lhs.m[1][1] * rhs.m[1][1] + lhs.m[2][1] * rhs.m[1][2] + lhs.m[3][1] * rhs.m[1][3];
+    ret.m[2][1] = lhs.m[0][1] * rhs.m[2][0] + lhs.m[1][1] * rhs.m[2][1] + lhs.m[2][1] * rhs.m[2][2] + lhs.m[3][1] * rhs.m[2][3];
+    ret.m[3][1] = lhs.m[0][1] * rhs.m[3][0] + lhs.m[1][1] * rhs.m[3][1] + lhs.m[2][1] * rhs.m[3][2] + lhs.m[3][1] * rhs.m[3][3];
 
-    ret.m[0][2] = lhs.m[0][2]*rhs.m[0][0] + lhs.m[1][2]*rhs.m[0][1] + lhs.m[2][2]*rhs.m[0][2] + lhs.m[3][2]*rhs.m[0][3];
-    ret.m[1][2] = lhs.m[0][2]*rhs.m[1][0] + lhs.m[1][2]*rhs.m[1][1] + lhs.m[2][2]*rhs.m[1][2] + lhs.m[3][2]*rhs.m[1][3];
-    ret.m[2][2] = lhs.m[0][2]*rhs.m[2][0] + lhs.m[1][2]*rhs.m[2][1] + lhs.m[2][2]*rhs.m[2][2] + lhs.m[3][2]*rhs.m[2][3];
-    ret.m[3][2] = lhs.m[0][2]*rhs.m[3][0] + lhs.m[1][2]*rhs.m[3][1] + lhs.m[2][2]*rhs.m[3][2] + lhs.m[3][2]*rhs.m[3][3];
+    ret.m[0][2] = lhs.m[0][2] * rhs.m[0][0] + lhs.m[1][2] * rhs.m[0][1] + lhs.m[2][2] * rhs.m[0][2] + lhs.m[3][2] * rhs.m[0][3];
+    ret.m[1][2] = lhs.m[0][2] * rhs.m[1][0] + lhs.m[1][2] * rhs.m[1][1] + lhs.m[2][2] * rhs.m[1][2] + lhs.m[3][2] * rhs.m[1][3];
+    ret.m[2][2] = lhs.m[0][2] * rhs.m[2][0] + lhs.m[1][2] * rhs.m[2][1] + lhs.m[2][2] * rhs.m[2][2] + lhs.m[3][2] * rhs.m[2][3];
+    ret.m[3][2] = lhs.m[0][2] * rhs.m[3][0] + lhs.m[1][2] * rhs.m[3][1] + lhs.m[2][2] * rhs.m[3][2] + lhs.m[3][2] * rhs.m[3][3];
 
-    ret.m[0][3] = lhs.m[0][3]*rhs.m[0][0] + lhs.m[1][3]*rhs.m[0][1] + lhs.m[2][3]*rhs.m[0][2] + lhs.m[3][3]*rhs.m[0][3];
-    ret.m[1][3] = lhs.m[0][3]*rhs.m[1][0] + lhs.m[1][3]*rhs.m[1][1] + lhs.m[2][3]*rhs.m[1][2] + lhs.m[3][3]*rhs.m[1][3];
-    ret.m[2][3] = lhs.m[0][3]*rhs.m[2][0] + lhs.m[1][3]*rhs.m[2][1] + lhs.m[2][3]*rhs.m[2][2] + lhs.m[3][3]*rhs.m[2][3];
-    ret.m[3][3] = lhs.m[0][3]*rhs.m[3][0] + lhs.m[1][3]*rhs.m[3][1] + lhs.m[2][3]*rhs.m[2][2] + lhs.m[3][3]*rhs.m[3][3];
+    ret.m[0][3] = lhs.m[0][3] * rhs.m[0][0] + lhs.m[1][3] * rhs.m[0][1] + lhs.m[2][3] * rhs.m[0][2] + lhs.m[3][3] * rhs.m[0][3];
+    ret.m[1][3] = lhs.m[0][3] * rhs.m[1][0] + lhs.m[1][3] * rhs.m[1][1] + lhs.m[2][3] * rhs.m[1][2] + lhs.m[3][3] * rhs.m[1][3];
+    ret.m[2][3] = lhs.m[0][3] * rhs.m[2][0] + lhs.m[1][3] * rhs.m[2][1] + lhs.m[2][3] * rhs.m[2][2] + lhs.m[3][3] * rhs.m[2][3];
+    ret.m[3][3] = lhs.m[0][3] * rhs.m[3][0] + lhs.m[1][3] * rhs.m[3][1] + lhs.m[2][3] * rhs.m[2][2] + lhs.m[3][3] * rhs.m[3][3];
 #endif
     return ret;
 }

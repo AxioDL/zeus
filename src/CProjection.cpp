@@ -1,5 +1,6 @@
 #include "CProjection.hpp"
 #include <math.h>
+#include <stdio.h>
 
 void CProjection::_updateCachedMatrix()
 {
@@ -59,6 +60,9 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[3][3] = 0.0f;
     }
     else
-        throw std::runtime_error("attempted to cache invalid projection type");
+    {
+        fprintf(stderr, "attempted to cache invalid projection type");
+        abort();
+    }
 }
 

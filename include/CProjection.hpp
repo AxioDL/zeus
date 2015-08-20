@@ -3,7 +3,7 @@
 
 #include "Global.hpp"
 #include "CMatrix4f.hpp"
-#include <stdexcept>
+#include <stdio.h>
 
 #define _USE_MATH_DEFINES 1
 #include <math.h>
@@ -65,13 +65,19 @@ public:
     inline const SProjOrtho& getOrtho() const
     {
         if (m_projType != PROJ_ORTHO)
-            throw std::runtime_error("attempted to access orthographic structure of non-ortho projection");
+        {
+            fprintf(stderr, "attempted to access orthographic structure of non-ortho projection");
+            abort();
+        }
         return m_ortho;
     }
     inline const SProjPersp& getPersp() const
     {
         if (m_projType != PROJ_PERSP)
-            throw std::runtime_error("attempted to access perspective structure of non-persp projection");
+        {
+            fprintf(stderr, "attempted to access perspective structure of non-persp projection");
+            abort();
+        }
         return m_persp;
     }
     

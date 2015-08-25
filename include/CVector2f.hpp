@@ -277,9 +277,14 @@ class ZE_ALIGN(16) CVector2f
     }
     static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
-    inline bool isNormalized(float thresh = 0.0001f) const
+    inline bool isNormalized(float thresh = 1e-5f) const
     {
-        return (length() > thresh);
+        return (fabs(1.0f - lengthSquared()) <= thresh);
+    }
+
+    inline bool canBeNormalized()
+    {
+        return !isNormalized();
     }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}

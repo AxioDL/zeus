@@ -11,6 +11,14 @@ public:
 
     inline CPlane() {}
     CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
+    CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
+    {
+        CVector3f ab = b - a;
+        CVector3f ac = c - a;
+        vec = ab.cross(ac).normalized();
+        d = -a.dot(vec);
+    }
+
     CPlane(const CVector3f& point, float displacement)
     {
 #if __SSE__

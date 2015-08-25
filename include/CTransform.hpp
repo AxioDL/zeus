@@ -5,6 +5,7 @@
 #include "CMatrix3f.hpp"
 #include "CMatrix4f.hpp"
 #include "CVector3f.hpp"
+#include "CQuaternion.hpp"
 
 class ZE_ALIGN(16) CTransform
 {
@@ -29,7 +30,54 @@ public:
         m_basis = CMatrix3f::skIdentityMatrix3f;
         m_origin = position;
     }
-    
+
+    inline void rotate(const CVector3f& euler)
+    {
+        *this = *this * CMatrix3f(CQuaternion(euler));
+    }
+
+    inline void scaleBy(float factor)
+    {
+        CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor)));
+        *this = *this * xfrm;
+    }
+
+    inline void scale(const CVector3f& scale)
+    {
+        m_basis = CMatrix3f(true);
+        m_basis[0][0] = scale.x;
+        m_basis[1][1] = scale.y;
+        m_basis[2][2] = scale.z;
+        m_origin.zeroOut();
+    }
+
+    inline void scale(float x, float y, float z)
+    {
+        scale({x, y, z});
+    }
+
+    inline void multiplyIgnoreTranslation(const CTransform& xfrm)
+    {
+        m_basis = m_basis*xfrm.m_basis;
+    }
+
+    inline CTransform getRotation()
+    {
+        CTransform ret = *this;
+        ret.m_origin.zeroOut();
+        return ret;
+    }
+
+    /**
+     * @brief buildMatrix3f Returns the stored matrix
+     * buildMatrix3f is here for compliance with Retro's Math API
+     * @return The Matrix (Neo, you are the one)
+     */
+    inline CMatrix3f buildMatrix3f()
+    {
+        return m_basis;
+    }
+
     inline CVector3f operator*(const CVector3f& other) const
     {return m_origin + m_basis * other;}
     
@@ -46,6 +94,24 @@ public:
         mat.m[2][0] = m_basis[2][0]; mat.m[2][1] = m_basis[2][1]; mat.m[2][2] = m_basis[2][2]; mat.m[2][3] = 0.0f;
         mat.m[3][0] = m_origin[0]; mat.m[3][1] = m_origin[1]; mat.m[3][2] = m_origin[2]; mat.m[3][3] = 1.0f;
 #endif
+    }
+
+    static inline CTransform fromColumns(const CVector3f& m0, const CVector3f& m1, const CVector3f& m2, const CVector3f& m3)
+    {
+        CTransform ret;
+        ret.m_basis[0][0] = m0[0];
+        ret.m_basis[0][1] = m1[0];
+        ret.m_basis[0][2] = m2[0];
+        ret.m_origin[0]   = m3[0];
+        ret.m_basis[1][0] = m0[1];
+        ret.m_basis[1][1] = m1[1];
+        ret.m_basis[1][2] = m2[1];
+        ret.m_origin[1]   = m3[1];
+        ret.m_basis[2][0] = m0[2];
+        ret.m_basis[2][1] = m1[2];
+        ret.m_basis[2][2] = m2[2];
+        ret.m_origin[2]   = m3[2];
+        return ret;
     }
 
     CMatrix3f m_basis;

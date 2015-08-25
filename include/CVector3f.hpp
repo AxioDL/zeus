@@ -163,22 +163,29 @@ public:
     inline void normalize()
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        *this *= mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            *this *= mag;
+        }
+        else
+            x = 1.0, y = 0.0, z = 0.0;
     }
     inline CVector3f normalized() const
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        return *this * mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            return *this * mag;
+        }
+        return {1, 0, 0};
     }
     inline CVector3f cross(const CVector3f& rhs) const
     {
         return CVector3f(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
     }
-    inline float     dot(const CVector3f& rhs) const
+    inline float dot(const CVector3f& rhs) const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -192,7 +199,7 @@ public:
         return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
 #endif
     }
-    inline float     lengthSquared() const
+    inline float lengthSquared() const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -206,7 +213,7 @@ public:
         return x*x + y*y + z*z;
 #endif
     }
-    inline float     length() const
+    inline float length() const
     {
         return sqrtf(lengthSquared());
     }
@@ -241,10 +248,37 @@ public:
         return lerp(a, b, t).normalized();
     }
     static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
+    //static CVector3f slerp(const CVector3f& a, const CVector3f& b, const CRelAngle& angle);
 
-    inline bool isNormalized(float thresh = 0.0001f) const
+    inline bool isNormalized(float thresh = 1e-5f) const
     {
-        return (length() > thresh);
+        return (fabs(1.0f - lengthSquared()) <= thresh);
+    }
+
+    inline bool canBeNormalized()
+    {
+        return !isNormalized();
+    }
+
+    inline void scaleToLength(float newLength)
+    {
+        float length = lengthSquared();
+        if (length < 1e-6f)
+        {
+            x = newLength, y = 0.f, z = 0.f;
+            return;
+        }
+
+        length = sqrt(length);
+        float scalar = newLength / length;
+        *this *= scalar;
+    }
+
+    inline CVector3f scaledToLength(float newLength) const
+    {
+        CVector3f v = *this;
+        v.scaleToLength(newLength);
+        return v;
     }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}

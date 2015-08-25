@@ -57,3 +57,4 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle)
     
     return result;
 }
+

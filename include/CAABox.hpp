@@ -118,6 +118,13 @@ public:
                 (other.z >= -0.f) ? m_min.z : m_max.z};
     }
 
+    inline CVector3f furthestPointAlongVector(const CVector3f& other)
+    {
+        return {(other.x >= -0.f) ? m_max.x : m_min.x,
+                (other.y >= -0.f) ? m_max.y : m_min.y,
+                (other.z >= -0.f) ? m_max.z : m_min.z};
+    }
+
     inline CVector3f getPoint(const int point)
     {
         int zOff = point & 4;

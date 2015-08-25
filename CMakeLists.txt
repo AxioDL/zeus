@@ -31,6 +31,7 @@ add_library(Math
     include/CMatrix3f.hpp
     include/CProjection.hpp
     include/CAxisAngle.hpp
+    include/CRelAngle.hpp
     include/CPlane.hpp
     include/CTransform.hpp
     include/CColor.hpp

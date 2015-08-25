@@ -2,6 +2,7 @@
 #define __MATHLIB_HPP
 
 #include "CAxisAngle.hpp"
+#include "CRelAngle.hpp"
 #include "CMatrix3f.hpp"
 #include "CMatrix4f.hpp"
 #include "CProjection.hpp"

@@ -295,9 +295,14 @@ class ZE_ALIGN(16) CVector4f
         return lerp(a, b, t).normalized();
     }
 
-    inline bool isNormalized(float thresh = 0.0001f) const
+    inline bool isNormalized(float thresh = 1e-5f) const
     {
-        return (length() > thresh);
+        return (fabs(1.0f - lengthSquared()) <= thresh);
+    }
+
+    inline bool canBeNormalized()
+    {
+        return !isNormalized();
     }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}

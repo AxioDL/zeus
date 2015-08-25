@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.0)
+project(zeus)
+
 if (NOT DEFINED ATHENA_INCLUDE_DIR)
     set(ATHENA_INCLUDE_DIR ../Athena/include)
 endif()
@@ -41,4 +44,6 @@ add_library(Math
     include/CFrustum.hpp
     include/CAABox.hpp
     include/COBBox.hpp)
+
+add_subdirectory(test)
 

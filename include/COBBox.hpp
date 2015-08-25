@@ -5,9 +5,10 @@
 #include "CVector3f.hpp"
 #include "CAABox.hpp"
 
-class COBBox
+class ZE_ALIGN(16) COBBox
 {
 public:
+    ZE_DECLARE_ALIGNED_ALLOCATOR();
     CTransform m_transform;
     CVector3f  m_extents;
 
@@ -15,7 +16,10 @@ public:
     {}
 
     COBBox(const CAABox& aabb)
-    { createFromAABox(aabb); }
+        : m_extents(aabb.extents())
+    {
+        m_transform.m_origin = aabb.center();
+    }
 
     CAABox calculateAABox(const CTransform& transform = CTransform())
     {
@@ -33,26 +37,15 @@ public:
             {-1.0,  1.0,  1.0}
         };
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i+=2)
         {
             CVector3f p = (m_extents * basis[i]);
+            ret.accumulateBounds(trans * p);
+            p = m_extents * basis[i + 1];
             ret.accumulateBounds(trans * p);
         }
 
         return ret;
-    }
-
-    void createFromAABox(const CAABox& box)
-    {
-        m_extents = box.extents();
-        m_transform.m_origin = box.center();
-    }
-
-    static inline COBBox fromAABox(const CAABox& box)
-    {
-        COBBox ret;
-        ret.createFromAABox(box);
-        return box;
     }
 };
 

@@ -29,9 +29,10 @@
         inline void* operator new[](size_t sizeInBytes)  { return zeAlloc(sizeInBytes,16); } \
         inline void  operator delete[](void* ptr)        { zeFree(ptr); } \
         inline void* operator new[](size_t, void* ptr)   { return ptr; } \
-        inline void  operator delete[](void*, void*)     { }
+        inline void  operator delete[](void*, void*)     { } \
+        void __unused__()
 #else
-#   define ZE_DECLARE_ALIGNED_ALLOCATOR()
+#   define ZE_DECLARE_ALIGNED_ALLOCATOR() void __unused__()
 #endif
 
 #if __SSE__

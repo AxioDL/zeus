@@ -16,8 +16,8 @@
 
 namespace Math
 {
-    inline void clamp(float& val, float min, float max) {val = MAX(min, MIN(max, val));}
-    inline void clamp(int& val, int min, int max) {val = MAX(min, MIN(max, val));}
+    template<typename T>
+    inline T clamp(T min, T val, T max) {return MAX(min, MIN(max, val));}
     
     inline float radToDeg(float rad) {return rad * 180.f / M_PI;}
     inline float degToRad(float deg) {return deg * M_PI / 180;}

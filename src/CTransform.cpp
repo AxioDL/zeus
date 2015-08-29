@@ -58,3 +58,9 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle)
     return result;
 }
 
+CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin)
+{
+    CTransform ret = CTransformFromEditorEuler(eulerVec);
+    ret.m_origin = origin;
+    return ret;
+}

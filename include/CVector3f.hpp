@@ -169,7 +169,7 @@ public:
             *this *= mag;
         }
         else
-            x = 1.0, y = 0.0, z = 0.0;
+            zeroOut();
     }
     inline CVector3f normalized() const
     {
@@ -179,7 +179,7 @@ public:
             mag = 1.0 / mag;
             return *this * mag;
         }
-        return {1, 0, 0};
+        return {0, 0, 0};
     }
     inline CVector3f cross(const CVector3f& rhs) const
     {
@@ -260,6 +260,11 @@ public:
         return !isNormalized();
     }
 
+    inline bool isZero() const
+    {
+        return lengthSquared() <= 1e-7;
+    }
+
     inline void scaleToLength(float newLength)
     {
         float length = lengthSquared();
@@ -279,6 +284,12 @@ public:
         CVector3f v = *this;
         v.scaleToLength(newLength);
         return v;
+    }
+
+    inline bool isEqu(const CVector3f& other, float epsilon=1e-7f)
+    {
+        CVector3f diffVec = other - *this;
+        return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon);
     }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}

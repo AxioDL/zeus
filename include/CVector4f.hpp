@@ -222,16 +222,23 @@ class ZE_ALIGN(16) CVector4f
     inline void normalize()
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        *this *= mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            *this *= mag;
+        }
+        else
+            zeroOut();
     }
     inline CVector4f normalized() const
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        return *this * mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            return *this * mag;
+        }
+        return {0, 0, 0, 0};
     }
 
     inline float dot(const CVector4f& rhs) const

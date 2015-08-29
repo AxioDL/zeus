@@ -44,7 +44,10 @@ add_library(Math
     include/CVector4f.hpp
     include/CFrustum.hpp
     include/CAABox.hpp
-    include/COBBox.hpp)
+    include/COBBox.hpp
+    include/CLine.hpp
+    include/CSphere.hpp
+    include/CUnitVector.hpp)
 
 add_subdirectory(test)
 

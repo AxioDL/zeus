@@ -3,6 +3,8 @@
 
 #include "CVector3f.hpp"
 #include "CTransform.hpp"
+#include "CPlane.hpp"
+#include "Math.hpp"
 #include <Athena/IStreamReader.hpp>
 
 class ZE_ALIGN(16) CAABox
@@ -55,12 +57,53 @@ public:
     
     inline bool intersects(const CAABox& other) const
     {
-        if (m_max[0] < other.m_min[0]) return false;
-        if (m_min[0] > other.m_max[0]) return false;
-        if (m_max[1] < other.m_min[1]) return false;
-        if (m_min[1] > other.m_max[1]) return false;
-        if (m_max[2] < other.m_min[2]) return false;
-        if (m_min[2] > other.m_max[2]) return false;
+        bool x1 = (m_max[0] < other.m_min[0]);
+        bool x2 = (m_min[0] > other.m_max[0]);
+        bool y1 = (m_max[1] < other.m_min[1]);
+        bool y2 = (m_min[1] > other.m_max[1]);
+        bool z1 = (m_max[2] < other.m_min[2]);
+        bool z2 = (m_min[2] > other.m_max[2]);
+        return x1 && x2 && y1 && y2 && z1 && z2;
+    }
+
+    inline bool inside(const CAABox& other) const
+    {
+        bool x = m_min[0] >= other.m_min[0] && m_max[0] <= other.m_max[0];
+        bool y = m_min[1] >= other.m_min[1] && m_max[1] <= other.m_max[1];
+        bool z = m_min[2] >= other.m_min[2] && m_max[2] <= other.m_max[2];
+        return x && y && z;
+    }
+
+    inline bool insidePlane(const CPlane& plane) const
+    {
+        CVector3f vmin, vmax;
+        /* X axis */
+        if (plane.a >= 0) {
+            vmin[0] = m_min[0];
+            vmax[0] = m_max[0];
+        } else {
+            vmin[0] = m_max[0];
+            vmax[0] = m_min[0];
+        }
+        /* Y axis */
+        if (plane.b >= 0) {
+            vmin[1] = m_min[1];
+            vmax[1] = m_max[1];
+        } else {
+            vmin[1] = m_max[1];
+            vmax[1] = m_min[1];
+        }
+        /* Z axis */
+        if (plane.c >= 0) {
+            vmin[2] = m_min[2];
+            vmax[2] = m_max[2];
+        } else {
+            vmin[2] = m_max[2];
+            vmax[2] = m_min[2];
+        }
+        float dadot = plane.vec.dot(vmax);
+        if (dadot + plane.d < 0)
+            return false;
         return true;
     }
 
@@ -68,7 +111,7 @@ public:
     {
         return (m_min + m_max) * 0.5f;
     }
-    CVector3f extents() const
+    CVector3f volume() const
     {
         return (m_max - m_min) * 0.5f;
     }
@@ -113,16 +156,18 @@ public:
 
     inline CVector3f closestPointAlongVector(const CVector3f& other)
     {
-        return {(other.x >= -0.f) ? m_min.x : m_max.x,
-                (other.y >= -0.f) ? m_min.y : m_max.y,
-                (other.z >= -0.f) ? m_min.z : m_max.z};
+        CVector3f center = this->center();
+        return {(other.x < center.x ? m_min.x : m_max.x),
+                (other.y < center.y ? m_min.y : m_max.y),
+                (other.z < center.z ? m_min.z : m_max.z)};
     }
 
     inline CVector3f furthestPointAlongVector(const CVector3f& other)
     {
-        return {(other.x >= -0.f) ? m_max.x : m_min.x,
-                (other.y >= -0.f) ? m_max.y : m_min.y,
-                (other.z >= -0.f) ? m_max.z : m_min.z};
+        CVector3f center = this->center();
+        return {(other.x < center.x ? m_max.x : m_min.x),
+                (other.y < center.y ? m_max.y : m_min.y),
+                (other.z < center.z ? m_max.z : m_min.z)};
     }
 
     inline CVector3f getPoint(const int point)
@@ -139,18 +184,9 @@ public:
     inline CVector3f clampToBox(const CVector3f& vec)
     {
         CVector3f ret = vec;
-        if (ret.x < m_min.x)
-            ret.x = m_min.x;
-        if (ret.y < m_min.y)
-            ret.y = m_min.y;
-        if (ret.z < m_min.z)
-            ret.z = m_min.z;
-        if (ret.x > m_max.x)
-            ret.x = m_max.x;
-        if (ret.y > m_max.y)
-            ret.y = m_max.y;
-        if (ret.z > m_max.z)
-            ret.z = m_max.z;
+        Math::clamp(ret.x, m_min.x, m_max.x);
+        Math::clamp(ret.y, m_min.y, m_max.y);
+        Math::clamp(ret.z, m_min.z, m_max.z);
         return ret;
     }
 

@@ -123,6 +123,7 @@ static inline CTransform CTransformFromScaleVector(const CVector3f& scale)
     return CTransform(CMatrix3f(scale));
 }
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
+CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin);
 CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
 
 #endif // CTRANSFORM_HPP

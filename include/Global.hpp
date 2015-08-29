@@ -11,7 +11,7 @@
 #       define ZE_ALIGN(x) __declspec(align(x))
 #   else
 #       include <mm_malloc.h>
-#       define ZE_ALIGN(x) __attribute__((aligned(x)))
+#       define ZE_ALIGN(x) alignas(16)
 #   endif
 #   define ZE_SHUFFLE(x,y,z,w) ((w)<<6 | (z)<<4 | (y)<<2 | (x))
 #   define zeAlloc(sz, align) _mm_malloc(sz, align)

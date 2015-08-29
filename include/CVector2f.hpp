@@ -198,17 +198,26 @@ class ZE_ALIGN(16) CVector2f
     inline void normalize()
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        *this *= mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            *this *= mag;
+        }
+        else
+            zeroOut();
     }
+
     inline CVector2f normalized() const
     {
         float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        return *this * mag;
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            return *this * mag;
+        }
+        return {1, 0};
     }
+
     inline float cross(const CVector2f& rhs) const
     {
         return (x * rhs.y) - (y * rhs.x);

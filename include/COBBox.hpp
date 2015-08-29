@@ -16,7 +16,7 @@ public:
     {}
 
     COBBox(const CAABox& aabb)
-        : m_extents(aabb.extents())
+        : m_extents(aabb.volume())
     {
         m_transform.m_origin = aabb.center();
     }

@@ -14,6 +14,7 @@
 #include "CUnitVector.hpp"
 #include "CRectangle.hpp"
 #include "CPlane.hpp"
+#include "CLine.hpp"
 #include "CAABox.hpp"
 #include "COBBox.hpp"
 #include "CSphere.hpp"

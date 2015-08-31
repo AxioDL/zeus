@@ -215,7 +215,7 @@ class ZE_ALIGN(16) CVector2f
             mag = 1.0 / mag;
             return *this * mag;
         }
-        return {1, 0};
+        return {0, 0};
     }
 
     inline float cross(const CVector2f& rhs) const

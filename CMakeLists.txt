@@ -3,8 +3,9 @@ if (NOT DEFINED ATHENA_INCLUDE_DIR)
 endif()
 include_directories(include ${ATHENA_INCLUDE_DIR})
 
+if(NOT WIN32)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
-
+endif()
 
 add_library(Math
     src/CVector3f.cpp

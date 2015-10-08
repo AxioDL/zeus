@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdio.h>
 
+namespace Zeus
+{
 void CProjection::_updateCachedMatrix()
 {
     if (m_projType == PROJ_ORTHO)
@@ -64,5 +66,6 @@ void CProjection::_updateCachedMatrix()
         fprintf(stderr, "attempted to cache invalid projection type");
         abort();
     }
+}
 }
 

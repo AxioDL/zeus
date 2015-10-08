@@ -6,7 +6,8 @@
 #include <assert.h>
 
 /* Column-major matrix class */
-
+namespace Zeus
+{
 class CQuaternion;
 class ZE_ALIGN(16) CMatrix3f
 {
@@ -105,5 +106,7 @@ public:
 };
 
 CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs);
+
+}
 
 #endif // CMATRIX3F_HPP

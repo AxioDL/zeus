@@ -8,6 +8,8 @@
 #include <math.h>
 #include <Athena/IStreamReader.hpp>
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CQuaternion
 {
 public:
@@ -46,8 +48,8 @@ public:
     const CQuaternion& operator*=(const CQuaternion& q);
     const CQuaternion& operator*=(float scale);
     const CQuaternion& operator/=(float scale);
-    float length() const;
-    float lengthSquared() const;
+    float magnitude() const;
+    float magSquared() const;
     void normalize();
     CQuaternion normalized() const;
     void invert();
@@ -106,4 +108,5 @@ public:
 CQuaternion operator+(float lhs, const CQuaternion& rhs);
 CQuaternion operator-(float lhs, const CQuaternion& rhs);
 CQuaternion operator*(float lhs, const CQuaternion& rhs);
+}
 #endif // CQUATERNION_HPP

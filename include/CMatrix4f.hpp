@@ -4,6 +4,8 @@
 #include "CVector4f.hpp"
 #include "CVector3f.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CMatrix4f
 {
 public:
@@ -177,6 +179,7 @@ static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
     ret.m[3][3] = lhs.m[0][3] * rhs.m[3][0] + lhs.m[1][3] * rhs.m[3][1] + lhs.m[2][3] * rhs.m[2][2] + lhs.m[3][3] * rhs.m[3][3];
 #endif
     return ret;
+}
 }
 
 #endif // CMATRIX4F

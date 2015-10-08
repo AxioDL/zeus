@@ -1,6 +1,8 @@
 #include "CQuaternion.hpp"
 #include <math.h>
 
+namespace Zeus
+{
 void CQuaternion::fromVector3f(const CVector3f& vec)
 {
     float cosX = cosf(0.5 * vec.x);
@@ -102,24 +104,24 @@ const CQuaternion& CQuaternion::operator/=(float scale)
     return *this;
 }
 
-float CQuaternion::length() const
+float CQuaternion::magnitude() const
 {
-    return sqrt(lengthSquared());
+    return sqrt(magSquared());
 }
 
-float CQuaternion::lengthSquared() const
+float CQuaternion::magSquared() const
 {
     return (r*r + (v.dot(v)));
 }
 
 void CQuaternion::normalize()
 {
-    *this /= length();
+    *this /= magnitude();
 }
 
 CQuaternion CQuaternion::normalized() const
 {
-    return *this/length();
+    return *this/magnitude();
 }
 
 void CQuaternion::invert()
@@ -170,7 +172,7 @@ CQuaternion CQuaternion::log() const
 
 CQuaternion CQuaternion::exp() const
 {
-    float a = (v.length());
+    float a = (v.magnitude());
     float sina = sinf(a);
     float cosa = cos(a);
     CQuaternion ret;
@@ -248,4 +250,5 @@ CQuaternion operator-(float lhs, const CQuaternion& rhs)
 CQuaternion operator*(float lhs, const CQuaternion& rhs)
 {
     return CQuaternion(lhs * rhs.r, lhs * rhs.v);
+}
 }

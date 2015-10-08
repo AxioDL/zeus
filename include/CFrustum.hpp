@@ -4,6 +4,8 @@
 #include "CPlane.hpp"
 #include "CAABox.hpp"
 
+namespace Zeus
+{
 class CFrustum
 {
     CPlane m_planes[6];
@@ -123,5 +125,5 @@ public:
     }
     
 };
-
+}
 #endif // CFRUSTUM_HPP

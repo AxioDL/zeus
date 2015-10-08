@@ -1,5 +1,7 @@
 #include "CTransform.hpp"
 
+namespace Zeus
+{
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec)
 {
     CTransform result;
@@ -56,4 +58,12 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle)
     result.m_basis.m[2][2] = t * axisN.v[2] * axisN.v[2] + c;
     
     return result;
+}
+
+CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin)
+{
+    CTransform ret = CTransformFromEditorEuler(eulerVec);
+    ret.m_origin = origin;
+    return ret;
+}
 }

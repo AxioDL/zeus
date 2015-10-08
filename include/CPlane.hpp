@@ -3,7 +3,10 @@
 
 #include "Global.hpp"
 #include "CVector3f.hpp"
+#include "Math.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CPlane
 {
 public:
@@ -11,6 +14,14 @@ public:
 
     inline CPlane() {}
     CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
+    CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
+    {
+        CVector3f ab = b - a;
+        CVector3f ac = c - a;
+        vec = ab.cross(ac).normalized();
+        d = -a.dot(vec);
+    }
+
     CPlane(const CVector3f& point, float displacement)
     {
 #if __SSE__
@@ -20,11 +31,18 @@ public:
 #endif
         d = displacement;
     }
+
+    float clipLineSegment(const CVector3f& a, const CVector3f& b)
+    {
+        float mag = ((b.z - a.z) * (((b.x - a.x) * ((b.y - a.y) * vec.y)) + vec.x)) + vec.z;
+        float dis = (-(vec.y - d)) / mag;
+        return Math::clamp(0.0f, dis, 1.0f);
+    }
     
     inline void normalize()
     {
         float nd = d;
-        float mag = vec.length();
+        float mag = vec.magnitude();
         assert(mag != 0.0f);
         mag = 1.0 / mag;
         vec *= mag;
@@ -44,5 +62,6 @@ public:
 #endif
     };
 };
+}
 
 #endif // CPLANE_HPP

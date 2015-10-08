@@ -4,14 +4,16 @@
 #include <assert.h>
 #include "Math.hpp"
 
+namespace Zeus
+{
 const CVector3f CVector3f::skOne = CVector3f(1.0);
 const CVector3f CVector3f::skNegOne = CVector3f(-1.0);
 const CVector3f CVector3f::skZero;
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {
-    float mag1 = a.length();
-    float mag2 = b.length();
+    float mag1 = a.magnitude();
+    float mag2 = b.magnitude();
 
     if (!mag1 || !mag2)
         return 0;
@@ -49,4 +51,5 @@ CVector3f CVector3f::slerp(const CVector3f& a, const CVector3f& b, float t)
         return ret;
     }
     return a;
+}
 }

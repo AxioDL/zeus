@@ -8,6 +8,8 @@
 #include <math.h>
 #include <assert.h>
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CVector3f
 {
 public:
@@ -162,23 +164,29 @@ public:
     }
     inline void normalize()
     {
-        float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        *this *= mag;
+        float mag = magnitude();
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            *this *= mag;
+        }
+        else
+            zeroOut();
     }
     inline CVector3f normalized() const
     {
-        float mag = length();
-        assert(mag != 0.0);
-        mag = 1.0 / mag;
-        return *this * mag;
+        float mag = magnitude();
+        if (mag > 1e-6f)
+        {
+            mag = 1.0 / mag;
+            return *this * mag;
+        }
+        return {0, 0, 0};
     }
     inline CVector3f cross(const CVector3f& rhs) const
-    {
-        return CVector3f(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
-    }
-    inline float     dot(const CVector3f& rhs) const
+    { return CVector3f(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x); }
+
+    inline float dot(const CVector3f& rhs) const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -192,7 +200,7 @@ public:
         return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
 #endif
     }
-    inline float     lengthSquared() const
+    inline float magSquared() const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -206,10 +214,8 @@ public:
         return x*x + y*y + z*z;
 #endif
     }
-    inline float     length() const
-    {
-        return sqrtf(lengthSquared());
-    }
+    inline float magnitude() const
+    { return sqrtf(magSquared()); }
     
     inline void zeroOut()
     {
@@ -233,18 +239,46 @@ public:
     static float getAngleDiff(const CVector3f& a, const CVector3f& b);
 
     static inline CVector3f lerp(const CVector3f& a, const CVector3f& b, float t)
-    {
-        return (a + (b - a) * t);
-    }
+    { return (a + (b - a) * t); }
     static inline CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t)
-    {
-        return lerp(a, b, t).normalized();
-    }
+    { return lerp(a, b, t).normalized(); }
     static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
+    //static CVector3f slerp(const CVector3f& a, const CVector3f& b, const CRelAngle& angle);
 
-    inline bool isNormalized(float thresh = 0.0001f) const
+    inline bool isNormalized(float thresh = 1e-5f) const
+    { return (fabs(1.0f - magSquared()) <= thresh); }
+
+    inline bool canBeNormalized()
+    { return !isNormalized(); }
+
+    inline bool isZero() const
+    { return magSquared() <= 1e-7; }
+
+    inline void scaleToLength(float newLength)
     {
-        return (length() > thresh);
+        float length = magSquared();
+        if (length < 1e-6f)
+        {
+            x = newLength, y = 0.f, z = 0.f;
+            return;
+        }
+
+        length = sqrt(length);
+        float scalar = newLength / length;
+        *this *= scalar;
+    }
+
+    inline CVector3f scaledToLength(float newLength) const
+    {
+        CVector3f v = *this;
+        v.scaleToLength(newLength);
+        return v;
+    }
+
+    inline bool isEqu(const CVector3f& other, float epsilon=1e-7f)
+    {
+        CVector3f diffVec = other - *this;
+        return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon);
     }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
@@ -253,10 +287,7 @@ public:
 
     union
     {
-        struct
-        {
-            float x, y, z;
-        };
+        struct { float x, y, z; };
         float v[4];
 #if __SSE__
         __m128 mVec128;
@@ -307,6 +338,7 @@ static inline CVector3f operator/(float lhs, const CVector3f& rhs)
 #else
     return CVector3f(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z);
 #endif
+}
 }
 
 #endif // CVECTOR3F_HPP

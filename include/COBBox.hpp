@@ -5,6 +5,8 @@
 #include "CVector3f.hpp"
 #include "CAABox.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) COBBox
 {
 public:
@@ -36,17 +38,27 @@ public:
             {-1.0,  1.0, -1.0},
             {-1.0,  1.0,  1.0}
         };
+        CVector3f p = m_extents * basis[0];
 
-        for (int i = 0; i < 8; i+=2)
-        {
-            CVector3f p = (m_extents * basis[i]);
-            ret.accumulateBounds(trans * p);
-            p = m_extents * basis[i + 1];
-            ret.accumulateBounds(trans * p);
-        }
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[1];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[2];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[3];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[4];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[5];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[6];
+        ret.accumulateBounds(trans * p);
+        p = m_extents * basis[7];
+        ret.accumulateBounds(trans * p);
 
         return ret;
     }
 };
+}
 
 #endif

@@ -2,6 +2,8 @@
 #include "CQuaternion.hpp"
 #include "Global.hpp"
 
+namespace Zeus
+{
 const CMatrix3f CMatrix3f::skIdentityMatrix3f = CMatrix3f();
 
 CMatrix3f::CMatrix3f(const CQuaternion& quat)
@@ -136,4 +138,4 @@ CMatrix3f CMatrix3f::inverted() const
                      -(m[0][0]*m[1][2] - m[0][2]*m[1][0]) * det,
                      (m[0][0]*m[1][1] - m[0][1]*m[1][0]) * det);
 }
-
+}

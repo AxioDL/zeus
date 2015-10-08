@@ -4,6 +4,8 @@
 #include "Global.hpp"
 #include "CVector3f.hpp"
 
+namespace Zeus
+{
 struct ZE_ALIGN(16) CAxisAngle
 {
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -20,5 +22,6 @@ struct ZE_ALIGN(16) CAxisAngle
     CVector3f axis;
     float     angle;
 };
+}
 
 #endif // CAXISANGLE_H

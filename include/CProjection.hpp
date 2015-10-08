@@ -7,7 +7,8 @@
 
 #define _USE_MATH_DEFINES 1
 #include <math.h>
-
+namespace Zeus
+{
 enum EProjType
 {
     PROJ_NONE = 0,
@@ -110,5 +111,6 @@ protected:
     CMatrix4f m_mtx;
     
 };
+}
 
 #endif // CMATRIX3F_HPP

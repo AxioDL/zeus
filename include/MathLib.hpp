@@ -10,6 +10,7 @@
 #include "CQuaternion.hpp"
 #include "CVector2f.hpp"
 #include "CVector3f.hpp"
+#include "CVector3d.hpp"
 #include "CVector4f.hpp"
 #include "CUnitVector.hpp"
 #include "CRectangle.hpp"

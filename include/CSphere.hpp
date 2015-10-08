@@ -3,23 +3,15 @@
 
 #include "CVector3f.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CSphere
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    CSphere(const CVector3f& position, float radius)
-    {
-#if __SSE__
-        mVec128 = position.mVec128;
-#endif
-        r = radius;
-    }
-
-    inline CVector3f getSurfaceNormal(const CVector3f& coord)
-    {
-        return (vec - coord).normalized();
-    }
+    CSphere(const CVector3f& position, float radius) { vec = position; r = radius; }
+    inline CVector3f getSurfaceNormal(const CVector3f& coord) { return (vec - coord).normalized(); }
 
     union
     {
@@ -31,5 +23,6 @@ public:
 #endif
     };
 };
+}
 
 #endif

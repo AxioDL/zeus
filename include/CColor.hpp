@@ -11,7 +11,9 @@
 #define COLOR(rgba) rgba
 #endif
 
-typedef union _RGBA32
+namespace Zeus
+{
+typedef union
 {
     struct
     {
@@ -170,19 +172,19 @@ public:
     }
     inline void normalize()
     {
-        float mag = length();
+        float mag = magnitude();
         assert(mag != 0.0);
         mag = 1.0 / mag;
         *this *= mag;
     }
     inline CColor normalized()
     {
-        float mag = length();
+        float mag = magnitude();
         assert(mag != 0.0);
         mag = 1.0 / mag;
         return *this * mag;
     }
-    inline float lengthSquared() const
+    inline float magSquared() const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -196,9 +198,9 @@ public:
         return r * r + g * g + b * b + a * a;
 #endif
     }
-    inline float length() const
+    inline float magnitude() const
     {
-        return sqrtf(lengthSquared());
+        return sqrtf(magSquared());
     }
     static inline CColor lerp(const CColor& a, const CColor& b, float t)
     {
@@ -286,6 +288,8 @@ static inline CColor operator/(float lhs, const CColor& rhs)
 #else
     return CColor(lhs / rhs.r, lhs / rhs.g, lhs / rhs.b, lhs / rhs.a);
 #endif
+}
+
 }
 
 #endif // CCOLOR_HPP

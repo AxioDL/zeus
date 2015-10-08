@@ -7,6 +7,8 @@
 #include "CVector3f.hpp"
 #include "CQuaternion.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CTransform
 {
 public:
@@ -31,55 +33,40 @@ public:
         m_origin = position;
     }
 
-    inline void rotate(const CVector3f& euler)
-    {
-        *this = *this * CMatrix3f(CQuaternion(euler));
-    }
+    inline void translate(float x, float y, float z) { translate({x, y, z}); }
+
+    inline void rotate(const CVector3f& euler) { *this = *this * CMatrix3f(CQuaternion(euler)); }
 
     inline void scaleBy(float factor)
-    {
-        CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor)));
-        *this = *this * xfrm;
-    }
+    { CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor))); *this = *this * xfrm; }
 
-    inline void scale(const CVector3f& scale)
+    inline void scale(const CVector3f& factor)
     {
         m_basis = CMatrix3f(true);
-        m_basis[0][0] = scale.x;
-        m_basis[1][1] = scale.y;
-        m_basis[2][2] = scale.z;
+        m_basis[0][0] = factor.x;
+        m_basis[1][1] = factor.y;
+        m_basis[2][2] = factor.z;
         m_origin.zeroOut();
     }
 
-    inline void scale(float x, float y, float z)
-    {
-        scale({x, y, z});
-    }
 
-    inline void multiplyIgnoreTranslation(const CTransform& xfrm)
-    {
-        m_basis = m_basis*xfrm.m_basis;
-    }
+    inline void scale(float x, float y, float z) { scale({x, y, z}); }
+    inline void scale(float factor) { scale({factor, factor, factor}); }
 
-    inline CTransform getRotation()
-    {
-        CTransform ret = *this;
-        ret.m_origin.zeroOut();
-        return ret;
-    }
+    inline void multiplyIgnoreTranslation(const CTransform& xfrm) { m_basis = m_basis*xfrm.m_basis; }
+
+    inline CTransform getRotation() { CTransform ret = *this; ret.m_origin.zeroOut(); return ret; }
+    void setRotation(const CMatrix3f& mat)   { m_basis = mat; }
+    void setRotation(const CTransform& xfrm) { setRotation(xfrm.m_basis); }
 
     /**
      * @brief buildMatrix3f Returns the stored matrix
      * buildMatrix3f is here for compliance with Retro's Math API
      * @return The Matrix (Neo, you are the one)
      */
-    inline CMatrix3f buildMatrix3f()
-    {
-        return m_basis;
-    }
+    inline CMatrix3f buildMatrix3f() { return m_basis; }
 
-    inline CVector3f operator*(const CVector3f& other) const
-    {return m_origin + m_basis * other;}
+    inline CVector3f operator*(const CVector3f& other) const {return m_origin + m_basis * other;}
     
     inline void toMatrix4f(CMatrix4f& mat) const
     {
@@ -125,5 +112,6 @@ static inline CTransform CTransformFromScaleVector(const CVector3f& scale)
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
 CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin);
 CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
+}
 
 #endif // CTRANSFORM_HPP

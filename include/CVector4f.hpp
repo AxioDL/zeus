@@ -9,6 +9,8 @@
 #include <float.h>
 #include <assert.h>
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CVector4f
 {
     public:
@@ -221,7 +223,7 @@ class ZE_ALIGN(16) CVector4f
     }
     inline void normalize()
     {
-        float mag = length();
+        float mag = magnitude();
         if (mag > 1e-6f)
         {
             mag = 1.0 / mag;
@@ -232,7 +234,7 @@ class ZE_ALIGN(16) CVector4f
     }
     inline CVector4f normalized() const
     {
-        float mag = length();
+        float mag = magnitude();
         if (mag > 1e-6f)
         {
             mag = 1.0 / mag;
@@ -255,7 +257,7 @@ class ZE_ALIGN(16) CVector4f
         return (x * rhs.x) + (y * rhs.y) + (z * rhs.z) + (w * rhs.w);
 #endif
     }
-    inline float lengthSquared() const
+    inline float magSquared() const
     {
 #if __SSE4_1__
         TVectorUnion result;
@@ -269,9 +271,9 @@ class ZE_ALIGN(16) CVector4f
         return x*x + y*y + z*z + w*w;
 #endif
     }
-    inline float length() const
+    inline float magnitude() const
     {
-        return sqrtf(lengthSquared());
+        return sqrtf(magSquared());
     }
 
     inline void zeroOut()
@@ -304,7 +306,7 @@ class ZE_ALIGN(16) CVector4f
 
     inline bool isNormalized(float thresh = 1e-5f) const
     {
-        return (fabs(1.0f - lengthSquared()) <= thresh);
+        return (fabs(1.0f - magSquared()) <= thresh);
     }
 
     inline bool canBeNormalized()
@@ -372,6 +374,7 @@ static inline CVector4f operator/(float lhs, const CVector4f& rhs)
 #else
     return CVector4f(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z, lhs / rhs.w);
 #endif
+}
 }
 
 #endif // CVECTOR4F_HPP

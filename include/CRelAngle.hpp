@@ -4,6 +4,8 @@
 #include "CVector3f.hpp"
 #include "Math.hpp"
 
+namespace Zeus
+{
 /**
  * @brief The CRelAngle class represents relative angles in radians
  */
@@ -26,5 +28,6 @@ public:
     {
     }
 };
+}
 
 #endif // CRELANGLE_HPP

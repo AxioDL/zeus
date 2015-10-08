@@ -7,6 +7,8 @@
 #include "Math.hpp"
 #include <Athena/IStreamReader.hpp>
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CAABox
 {
 public:
@@ -107,26 +109,29 @@ public:
         return true;
     }
 
-    CVector3f center() const
-    {
-        return (m_min + m_max) * 0.5f;
-    }
-    CVector3f volume() const
-    {
-        return (m_max - m_min) * 0.5f;
-    }
+    CVector3f center() const {return (m_min + m_max) * 0.5f;}
+
+    CVector3f volume() const {return (m_max - m_min) * 0.5f;}
 
     inline CAABox getTransformedAABox(const CTransform& xfrm)
     {
         CAABox box;
-        for (int i = 0; i < 8; i+=2)
-        {
-            CVector3f point = xfrm * getPoint(i);
-            box.accumulateBounds(point);
-            point = xfrm * getPoint(i+1);
-            box.accumulateBounds(point);
-        }
-
+        CVector3f point = xfrm * getPoint(0);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(1);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(2);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(3);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(4);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(5);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(6);
+        box.accumulateBounds(point);
+        point = xfrm * getPoint(7);
+        box.accumulateBounds(point);
         return box;
     }
 
@@ -138,7 +143,6 @@ public:
             m_min.y = point.y;
         if (m_min.z > point.z)
             m_min.z = point.z;
-
         if (m_max.x < point.x)
             m_max.x = point.x;
         if (m_max.y < point.y)
@@ -184,9 +188,9 @@ public:
     inline CVector3f clampToBox(const CVector3f& vec)
     {
         CVector3f ret = vec;
-        Math::clamp(ret.x, m_min.x, m_max.x);
-        Math::clamp(ret.y, m_min.y, m_max.y);
-        Math::clamp(ret.z, m_min.z, m_max.z);
+        Math::clamp(m_min.x, ret.x, m_max.x);
+        Math::clamp(m_min.y, ret.y, m_max.y);
+        Math::clamp(m_min.z, ret.z, m_max.z);
         return ret;
     }
 
@@ -223,20 +227,11 @@ public:
         negZ.m_min = m_min;
     }
 
-    inline bool invalid()
-    {
-        return (m_max.x < m_min.x || m_max.y < m_min.y || m_max.z < m_min.z);
-    }
+    inline bool invalid() {return (m_max.x < m_min.x || m_max.y < m_min.y || m_max.z < m_min.z);}
 };
 
-inline bool operator ==(const CAABox& left, const CAABox& right)
-{
-    return (left.m_min == right.m_min && left.m_max == right.m_max);
-}
-inline bool operator !=(const CAABox& left, const CAABox& right)
-{
-    return (left.m_min != right.m_min || left.m_max != right.m_max);
-
+inline bool operator ==(const CAABox& left, const CAABox& right) {return (left.m_min == right.m_min && left.m_max == right.m_max);}
+inline bool operator !=(const CAABox& left, const CAABox& right) {return (left.m_min != right.m_min || left.m_max != right.m_max);}
 }
 
 #endif // CAABOX_HPP

@@ -1,6 +1,9 @@
 #include <iostream>
 #include <MathLib.hpp>
 
+// This is only for testing, do NOT do this normally
+using namespace Zeus;
+
 int main()
 {
     assert(!CAABox({100, 100, 100}, {100, 100, 100}).invalid());
@@ -25,6 +28,8 @@ int main()
     assert(test2.inside(test));
     assert(test3.inside(test));
     assert(!test4.inside(test));
+
+    std::cout << Math::round(1.5) << std::endl;
 
     return 0;
 }

@@ -3,6 +3,8 @@
 
 #include "CVector3f.hpp"
 
+namespace Zeus
+{
 class ZE_ALIGN(16) CUnitVector3f : public CVector3f
 {
 public:
@@ -15,5 +17,5 @@ public:
             normalize();
     }
 };
-
+}
 #endif

@@ -2,6 +2,8 @@
 #define CRECTANGLE_HPP
 #include "CVector2f.hpp"
 
+namespace Zeus
+{
 class CRectangle
 {
 public:
@@ -28,5 +30,6 @@ public:
     CVector2f position;
     CVector2f size;
 };
+}
 
 #endif // CRECTANGLE_HPP

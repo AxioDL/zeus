@@ -1,2 +1,2 @@
 #include "CAABox.hpp"
-const CAABox CAABox::skInvertedBox = CAABox();
+const Zeus::CAABox Zeus::CAABox::skInvertedBox = CAABox();

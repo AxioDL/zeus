@@ -1,5 +1,7 @@
 #include "CTransform.hpp"
 
+namespace Zeus
+{
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec)
 {
     CTransform result;
@@ -63,4 +65,5 @@ CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f
     CTransform ret = CTransformFromEditorEuler(eulerVec);
     ret.m_origin = origin;
     return ret;
+}
 }

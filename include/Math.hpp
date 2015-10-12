@@ -6,8 +6,9 @@
 #endif
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES 1
-#include <cmath>
 #endif
+#include <cmath>
+#include <algorithm>
 
 #include "CVector3f.hpp"
 #include "CTransform.hpp"

@@ -58,7 +58,7 @@ namespace Math
 
     // Since round(double) doesn't exist in some <cmath> implementations
     // we'll define our own
-    inline double round(double val) { return (val < 0.0 ? ceilingF(val - 0.5) : ceilingF(val + 0.5)); }
+    inline double round(double val) { return (val < 0.0 ? ceilingF(val - 0.5) : floorF(val + 0.5)); }
     inline double powD(float a, float b) { return exp(a * log(b)); }
 
     double sqrtD(double val);

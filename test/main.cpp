@@ -31,8 +31,15 @@ int main()
     assert(test3.inside(test));
     assert(!test4.inside(test));
 
-   std::cout << std::setprecision(16) << (double)Math::fastArcCosR(1.802073) << std::endl;
-   std::cout << Math::floorPowerOfTwo(256) << std::endl;
+    std::cout << Math::min(1, 3) << std::endl;
+    std::cout << Math::min(2, 1) << std::endl;
+    std::cout << Math::max(1, 3) << std::endl;
+    std::cout << Math::max(2, 1) << std::endl;
+    std::cout << Math::clamp(-50,  100, 50) << std::endl;
+    std::cout << Math::clamp(-50, -100, 50) << std::endl;
+    std::cout << Math::powF(6.66663489, 2) << std::endl;
+    std::cout << Math::invSqrtF(1) << std::endl;
+    std::cout << Math::floorPowerOfTwo(256) << std::endl;
 
     return 0;
 }

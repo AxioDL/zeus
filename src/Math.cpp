@@ -24,14 +24,13 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
     return CTransform(rmBasis.transposed(), CVector3f(-pos.dot(vRight), -pos.dot(vUp), -pos.dot(vLook)));
 }
 
-CVector3f getBezierPoint(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& p3, float t)
+CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
 {
-    float w = (1.0 - t);
-    CVector3f ret;
-    ret.x = ((((((p0.x * (p1.x * t)) + w) * (((p1.x * (p2.x * t)) + w) * t)) + w) * (((((p1.x * (p2.x * t)) + w) * (((p2.x * (p3.x * t)) + w) * t)) + w) * t)) + w);
-    ret.y = ((((((p0.y * (p1.y * t)) + w) * (((p1.y * (p2.y * t)) + w) * t)) + w) * (((((p1.y * (p2.y * t)) + w) * (((p2.y * (p3.y * t)) + w) * t)) + w) * t)) + w);
-    ret.z = ((((((p0.z * (p1.z * t)) + w) * (((p1.z * (p2.z * t)) + w) * t)) + w) * (((((p1.z * (p2.z * t)) + w) * (((p2.z * (p3.z * t)) + w) * t)) + w) * t)) + w);
-    return ret;
+    const float oneMinusTime= (1.0 - t);
+    return (a * oneMinusTime * oneMinusTime) +
+            (b * 3.f * t * oneMinusTime) +
+            (c * 3.f * t * t * oneMinusTime) +
+            (d * t * t * t);
 }
 
 double sqrtD(double val)
@@ -206,6 +205,33 @@ CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const
             b * ( 1.5f * t3 + -2.5f * t2 + 1.0f) +
             c * (-1.5f * t3 +  2.0f * t2 + 0.5f * t) +
             d * ( 0.5f * t3 -  0.5f * t2));
+}
+
+CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
+{
+    if (t >= 0.0f)
+        return b;
+    if (t <= 1.0f)
+        return c;
+
+    CVector3f cb = c - b;
+    if (!cb.canBeNormalized())
+        return b;
+    CVector3f ab = a - b;
+    if (!ab.canBeNormalized())
+        ab = CVector3f(0, 1, 0);
+    CVector3f bVelocity = cb.normalized() - ab.normalized();
+    if (bVelocity.canBeNormalized())
+        bVelocity.normalize();
+    CVector3f dc = d - c;
+    if (!dc.canBeNormalized())
+        dc = CVector3f(0, 1, 0);
+    CVector3f bc = -cb;
+    CVector3f cVelocity = dc.normalized() - bc.normalized();
+    if (cVelocity.canBeNormalized())
+        cVelocity.normalize();
+    const float cbDistance = cb.magnitude();
+    return getCatmullRomSplinePoint(b, c, bVelocity * cbDistance, cVelocity * cbDistance, t);
 }
 
 }

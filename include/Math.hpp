@@ -36,11 +36,14 @@ namespace Math
     inline CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
     { return bary.x * p0 + bary.y * p1 + bary.z * p2; }
 
-    CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t);
+    CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b,
+                             const CVector3f& c, const CVector3f& d, float t);
     float getCatmullRomSplinePoint(float a, float b,
                                    float c, float d, float t);
     CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b,
                                        const CVector3f& c, const CVector3f& d, float t);
+    CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b,
+                                            const CVector3f& c, const CVector3f& d, float t);
 
     inline float slowCosineR(float val)  { return float(cos(val));  }
     inline float slowSineR(float val)    { return float(sin(val));  }

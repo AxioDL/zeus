@@ -7,7 +7,7 @@
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES 1
 #endif
-#include <cmath>
+#include <math.h>
 #include <algorithm>
 
 #include "CVector3f.hpp"

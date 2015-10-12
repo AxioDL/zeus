@@ -46,8 +46,13 @@ double sqrtD(double val)
     }
     double q;
 #if __SSE__
-    __m128d splat { val };
-    q = _mm_sqrt_pd(splat)[0];
+    union
+    {
+        __m128d v;
+        double d[2];
+    } qv = { val };
+    qv.v = _mm_sqrt_sd(qv.v, qv.v);
+    q = qv.d[0];
 #else
     // le sigh, let's use Carmack's inverse square -.-
     union

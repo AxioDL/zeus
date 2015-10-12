@@ -1,5 +1,4 @@
 #include "Math.hpp"
-#include <x86intrin.h>
 
 namespace Zeus
 {

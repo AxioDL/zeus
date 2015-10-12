@@ -4,7 +4,6 @@
 #if _M_IX86_FP >= 1 || _M_X64
 #   define __SSE__ 1
 #endif
-#include <x86intrin.h>
 
 #if __SSE__
 #   include <immintrin.h>

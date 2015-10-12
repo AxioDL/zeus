@@ -1,10 +1,16 @@
 #ifndef MATH_HPP
 #define MATH_HPP
 
+#ifndef NOMINMAX
+#define NOMINMAX 1
+#endif
+#ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES 1
+#endif
 #include <math.h>
 #include "CVector3f.hpp"
 #include "CTransform.hpp"
+#include <algorithm>
 
 namespace Zeus
 {

@@ -4,6 +4,7 @@
 #if _M_IX86_FP >= 1 || _M_X64
 #   define __SSE__ 1
 #endif
+#include <x86intrin.h>
 
 #if __SSE__
 #   include <immintrin.h>
@@ -46,6 +47,9 @@
 #       define zeCastiTo128f(a)  ((__m128) (a))
 #   endif
 #endif
+
+inline int rotr(int x, int n) { return ((x >> n) | (x << (32 - n))); }
+inline int rotl(int x, int n) { return ((x << n) | (x >> (32 - n))); }
 
 
 #endif //ZEUS_GLOBAL_HPP

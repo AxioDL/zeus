@@ -1,4 +1,5 @@
 #include "Math.hpp"
+#include <x86intrin.h>
 
 namespace Zeus
 {
@@ -24,19 +25,25 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
     return CTransform(rmBasis.transposed(), CVector3f(-pos.dot(vRight), -pos.dot(vUp), -pos.dot(vLook)));
 }
 
-CVector3f getBezierPoint(const CVector3f& r4, const CVector3f& r5, const CVector3f& r6, const CVector3f& r7, float f1)
+CVector3f getBezierPoint(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& p3, float t)
 {
-    //TODO: This isn't quite right, figure out what's really going on and reimplement
-#if 0
-    float inv = 1.0 - f1;
-    CVector3f r3;
-    r3.x = ((((((r4.x * (r5.x * f1)) + inv) * (((r5.x * (r6.x * f1)) + inv) * f1)) + inv) * (((((r5.x * (r6.x * f1)) + inv) * (((r6.x * (r7.x * f1)) + inv) * f1)) + inv) * f1)) + inv);
-    r3.y = ((((((r4.y * (r5.y * f1)) + inv) * (((r5.y * (r6.y * f1)) + inv) * f1)) + inv) * (((((r5.y * (r6.y * f1)) + inv) * (((r6.y * (r7.y * f1)) + inv) * f1)) + inv) * f1)) + inv);
-    r3.z = ((((((r4.z * (r5.z * f1)) + inv) * (((r5.z * (r6.z * f1)) + inv) * f1)) + inv) * (((((r5.z * (r6.z * f1)) + inv) * (((r6.z * (r7.z * f1)) + inv) * f1)) + inv) * f1)) + inv);
+    float w = (1.0 - t);
+    CVector3f ret;
+    ret.x = ((((((p0.x * (p1.x * t)) + w) * (((p1.x * (p2.x * t)) + w) * t)) + w) * (((((p1.x * (p2.x * t)) + w) * (((p2.x * (p3.x * t)) + w) * t)) + w) * t)) + w);
+    ret.y = ((((((p0.y * (p1.y * t)) + w) * (((p1.y * (p2.y * t)) + w) * t)) + w) * (((((p1.y * (p2.y * t)) + w) * (((p2.y * (p3.y * t)) + w) * t)) + w) * t)) + w);
+    ret.z = ((((((p0.z * (p1.z * t)) + w) * (((p1.z * (p2.z * t)) + w) * t)) + w) * (((((p1.z * (p2.z * t)) + w) * (((p2.z * (p3.z * t)) + w) * t)) + w) * t)) + w);
+    return ret;
+}
 
-    return r3;
-#endif
+float getCatmullRomSplinePoint(float p0, float p1, float p2, float p3, float t)
+{
+    return 0.0f;
+}
+
+CVector3f getCatmullRomSplinePoint(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& p3, float t)
+{
     return CVector3f::skZero;
 }
+
 }
 }

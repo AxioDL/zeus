@@ -42,23 +42,18 @@ public:
 #if __SSE__
         TDblVectorUnion splat {x, y, z, 0.0};
         mVec128[0] = splat.mVec128[0];
-        mVec128[0] = splat.mVec128[1];
+        mVec128[1] = splat.mVec128[1];
 #else
         v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;
 #endif
     }
 
-    CVector3d(float x, float y, float z)
-        : CVector3d(double(x), double(y), double(z))
-    {
-    }
-
     CVector3f asCVector3f()
     {
         CVector3f ret;
-        ret.x = Math::round(x);
-        ret.y = Math::round(y);
-        ret.z = Math::round(z);
+        ret.x = float(x);
+        ret.y = float(y);
+        ret.z = float(z);
         return ret;
     }
 

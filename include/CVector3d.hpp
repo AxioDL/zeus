@@ -14,7 +14,7 @@ public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     CVector3d() { zeroOut(); }
 #if __SSE__
-    CVector3d(__m128d mVec128[2])
+    CVector3d(const __m128d mVec128[2])
     {
         this->mVec128[0] = mVec128[0];
         this->mVec128[1] = mVec128[1];
@@ -24,7 +24,7 @@ public:
 #if ZE_ATHENA_TYPES
     CVector3d(const atVec3d& vec)
 #if __SSE__
-        : mVec128(vec.mVec128){}
+        : CVector3d(vec.mVec128){}
 #else
     {
         x = v[0], y = v[1], z = v[2], v[3] = 0.0f;

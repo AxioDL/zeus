@@ -17,6 +17,10 @@ public:
     CTransform() : m_basis(false) {}
     CTransform(const CMatrix3f& basis, const CVector3f& offset=CVector3f::skZero) :
     m_basis(basis), m_origin(offset) {}
+#if ZE_ATHENA_TYPES
+    CTransform(const atVec4f* mtx)
+    : m_basis(mtx[0], mtx[1], mtx[2]), m_origin(mtx[0].vec[3], mtx[1].vec[3], mtx[2].vec[3]) {}
+#endif
 
     inline CTransform operator*(const CTransform& rhs) const
     {return CTransform(m_basis * rhs.m_basis, m_origin + (m_basis * rhs.m_origin));}

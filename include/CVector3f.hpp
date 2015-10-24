@@ -22,7 +22,15 @@ public:
 #if ZE_ATHENA_TYPES
     CVector3f(const atVec3f& vec)
 #if __SSE__
-        : mVec128(vec.mVec128){}
+    : mVec128(vec.mVec128){}
+#else
+    {
+        x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], v[3] = 0.0f;
+    }
+#endif
+    CVector3f(const atVec4f& vec)
+#if __SSE__
+    : mVec128(vec.mVec128){}
 #else
     {
         x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], v[3] = 0.0f;

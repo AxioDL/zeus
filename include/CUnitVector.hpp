@@ -5,15 +5,20 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CUnitVector3f : public CVector3f
+class alignas(16) CUnitVector3f : public CVector3f
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    CUnitVector3f(const CVector3f& vec)
+    CUnitVector3f()
+        : CVector3f(0, 1, 0)
+    {
+    }
+
+    CUnitVector3f(const CVector3f& vec, bool doNormalize = false)
         : CVector3f(vec)
     {
-        if (canBeNormalized())
+        if (doNormalize && canBeNormalized())
             normalize();
     }
 };

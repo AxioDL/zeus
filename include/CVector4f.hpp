@@ -11,7 +11,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CVector4f
+class alignas(16) CVector4f
 {
     public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -224,23 +224,14 @@ class ZE_ALIGN(16) CVector4f
     inline void normalize()
     {
         float mag = magnitude();
-        if (mag > 1e-6f)
-        {
-            mag = 1.0 / mag;
-            *this *= mag;
-        }
-        else
-            zeroOut();
+        mag = 1.0 / mag;
+        *this *= mag;
     }
     inline CVector4f normalized() const
     {
         float mag = magnitude();
-        if (mag > 1e-6f)
-        {
-            mag = 1.0 / mag;
-            return *this * mag;
-        }
-        return {0, 0, 0, 0};
+        mag = 1.0 / mag;
+        return *this * mag;
     }
 
     inline float dot(const CVector4f& rhs) const
@@ -304,15 +295,16 @@ class ZE_ALIGN(16) CVector4f
         return lerp(a, b, t).normalized();
     }
 
-    inline bool isNormalized(float thresh = 1e-5f) const
+    inline bool canBeNormalized() const
     {
-        return (fabs(1.0f - magSquared()) <= thresh);
+        const float epsilon = 1.1920929e-7f;
+        if (fabs(x) >= epsilon || fabs(y) >= epsilon || fabs(z) >= epsilon || fabs(w) >= epsilon)
+            return true;
+        return false;
     }
 
-    inline bool canBeNormalized()
-    {
-        return !isNormalized();
-    }
+    inline bool isNormalized() const
+    { return !canBeNormalized(); }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

@@ -7,7 +7,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) COBBox
+class alignas(16) COBBox
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();

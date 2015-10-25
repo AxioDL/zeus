@@ -1,4 +1,6 @@
 #include "Math.hpp"
+#include "CTransform.hpp"
+#include "CVector3f.hpp"
 
 namespace Zeus
 {
@@ -238,6 +240,13 @@ CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, 
     const float cbDistance = cb.magnitude();
     return getCatmullRomSplinePoint(b, c, bVelocity * cbDistance, cVelocity * cbDistance, t);
 }
+
+CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
+{ return bary.x * p0 + bary.y * p1 + bary.z * p2; }
+
+CVector3f radToDeg(const CVector3f& rad) {return rad * kRadToDegVec;}
+
+CVector3f degToRad(const CVector3f& deg) {return deg * kDegToRadVec;}
 
 }
 }

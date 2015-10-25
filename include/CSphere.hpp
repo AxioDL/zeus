@@ -5,7 +5,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CSphere
+class alignas(16) CSphere
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();

@@ -7,20 +7,18 @@
 
 #if __SSE__
 #   include <immintrin.h>
-#   ifdef _MSC_VER
-#       define ZE_ALIGN(x) __declspec(align(x))
-#   else
+#   ifndef _MSC_VER
 #       include <mm_malloc.h>
-#       define ZE_ALIGN(x) alignas(16)
 #   endif
-#   define ZE_SHUFFLE(x,y,z,w) ((w)<<6 | (z)<<4 | (y)<<2 | (x))
 #   define zeAlloc(sz, align) _mm_malloc(sz, align)
 #   define zeFree(ptr) _mm_free(ptr)
-#else
-#   define ZE_ALIGN(x)
+#elif GEKKO
+#   include <ps_intrins.h>
+#   define zeAlloc(sz, align) _ps_malloc(sz, align)
+#   define zeFree(ptr) _ps_free(ptr)
 #endif
 
-#if __SSE__
+#if __SSE__ || __GEKKO_PS__
 #   define ZE_DECLARE_ALIGNED_ALLOCATOR() \
         inline void* operator new(size_t sizeInBytes)    { return zeAlloc(sizeInBytes,16); } \
         inline void  operator delete(void* ptr)          { zeFree(ptr); } \
@@ -45,6 +43,8 @@
 #   else
 #       define zeCastiTo128f(a)  ((__m128) (a))
 #   endif
+#elif __GEKKO_PS__
+
 #endif
 
 inline int rotr(int x, int n) { return ((x >> n) | (x << (32 - n))); }

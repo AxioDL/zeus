@@ -2,20 +2,34 @@
 #define CAABOX_HPP
 
 #include "CVector3f.hpp"
+#include "CUnitVector.hpp"
 #include "CTransform.hpp"
 #include "CPlane.hpp"
+#include "CLine.hpp"
 #include "Math.hpp"
 #include <Athena/IStreamReader.hpp>
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CAABox
+class alignas(16) CAABox
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    enum EBoxEdgeID
+    enum EBoxEdgeId
     {
+        UnknownEdge0,
+        UnknownEdge1,
+        UnknownEdge2,
+        UnknownEdge3,
+        UnknownEdge4,
+        UnknownEdge5,
+        UnknownEdge6,
+        UnknownEdge7,
+        UnknownEdge8,
+        UnknownEdge9,
+        UnknownEdge10,
+        UnknownEdge11
     };
 
     enum EBoxFaceID
@@ -112,6 +126,52 @@ public:
     CVector3f center() const {return (m_min + m_max) * 0.5f;}
 
     CVector3f volume() const {return (m_max - m_min) * 0.5f;}
+
+    inline CLine getEdge(EBoxEdgeId id)
+    {
+        switch (id)
+        {
+            case UnknownEdge0:
+                return CLine({m_min.x, m_min.y, m_min.z},
+                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+            case UnknownEdge1:
+                return CLine({m_max.x, m_min.y, m_min.z},
+                             CUnitVector3f({m_min.x, m_min.y, m_min.z}));
+            case UnknownEdge2:
+                return CLine({m_max.x, m_min.y, m_max.z},
+                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+            case UnknownEdge3:
+                return CLine({m_min.x, m_min.y, m_max.z},
+                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+            case UnknownEdge4:
+                return CLine({m_max.x, m_max.y, m_min.z},
+                             CUnitVector3f({m_max.x, m_max.y, m_max.z}));
+            case UnknownEdge5:
+                return CLine({m_min.x, m_max.y, m_min.z},
+                             CUnitVector3f({m_max.x, m_max.y, m_min.z}));
+            case UnknownEdge6:
+                return CLine({m_min.x, m_max.y, m_max.z},
+                             CUnitVector3f({m_min.x, m_max.y, m_min.z}));
+            case UnknownEdge7:
+                return CLine({m_max.x, m_max.y, m_max.z},
+                             CUnitVector3f({m_min.x, m_max.y, m_max.z}));
+            case UnknownEdge8:
+                return CLine({m_min.x, m_max.y, m_max.z},
+                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+            case UnknownEdge9:
+                return CLine({m_min.x, m_max.y, m_min.z},
+                             CUnitVector3f({m_min.x, m_min.y, m_min.z}));
+            case UnknownEdge10:
+                return CLine({m_max.x, m_max.y, m_min.z},
+                             CUnitVector3f({m_max.x, m_min.y, m_min.z}));
+            case UnknownEdge11:
+                return CLine({m_max.x, m_max.y, m_max.z},
+                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+            default:
+                return CLine({m_min.x, m_min.y, m_min.z},
+                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+        }
+    }
 
     inline CAABox getTransformedAABox(const CTransform& xfrm)
     {

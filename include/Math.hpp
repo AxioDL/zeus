@@ -10,11 +10,10 @@
 #include <math.h>
 #include <algorithm>
 
-#include "CVector3f.hpp"
-#include "CTransform.hpp"
-
 namespace Zeus
 {
+class CVector3f;
+class CTransform;
 namespace Math
 {
     template<typename T>
@@ -29,13 +28,12 @@ namespace Math
 
     extern const CVector3f kRadToDegVec;
     extern const CVector3f kDegToRadVec;
-    inline CVector3f radToDeg(CVector3f rad) {return rad * kRadToDegVec;}
-    inline CVector3f degToRad(CVector3f deg) {return deg * kDegToRadVec;}
+    CVector3f radToDeg(const CVector3f& rad);
+    CVector3f degToRad(const CVector3f& deg);
 
     extern const CVector3f kUpVec;
     CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up=kUpVec);
-    inline CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
-    { return bary.x * p0 + bary.y * p1 + bary.z * p2; }
+    CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary);
 
     CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b,
                              const CVector3f& c, const CVector3f& d, float t);
@@ -51,7 +49,7 @@ namespace Math
     inline float slowTangentR(float val) { return float(tan(val)); }
     inline float arcSineR(float val)     { return float(asin(val)); }
     inline float arcTangentR(float val)  { return float(atan(val)); }
-    inline float arcCosineR(float val)      { return float(acos(val)); }
+    inline float arcCosineR(float val)   { return float(acos(val)); }
     inline float powF(float a, float b)  { return float(exp(b * log(a))); }
     inline float floorF(float val)       { return float(floor(val)); }
     inline float ceilingF(float val)
@@ -63,7 +61,7 @@ namespace Math
     // Since round(double) doesn't exist in some <cmath> implementations
     // we'll define our own
     inline double round(double val) { return (val < 0.0 ? ceilingF(val - 0.5) : floorF(val + 0.5)); }
-    inline double powD(float a, float b) { return exp(a * log(b)); }
+    inline double powD(float a, float b) { return exp(b * log(a)); }
 
     double sqrtD(double val);
     inline double invSqrtD(double val)  { return 1.0 / sqrtD(val); }

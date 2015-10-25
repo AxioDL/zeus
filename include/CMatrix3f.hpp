@@ -9,7 +9,7 @@
 namespace Zeus
 {
 class CQuaternion;
-class ZE_ALIGN(16) CMatrix3f
+class alignas(16) CMatrix3f
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -46,6 +46,18 @@ public:
 #if __SSE__
     CMatrix3f(const __m128& r0, const __m128& r1, const __m128& r2)
     {vec[0].mVec128 = r0; vec[1].mVec128 = r1; vec[2].mVec128 = r2;}
+#endif
+#if ZE_ATHENA_TYPES
+    CMatrix3f(const atVec4f& r0, const atVec4f& r1, const atVec4f& r2)
+    {
+#if __SSE__
+        vec[0].mVec128 = r0.mVec128; vec[1].mVec128 = r1.mVec128; vec[2].mVec128 = r2.mVec128;
+#else
+        vec[0].x = r0.vec[0]; vec[0].y = r0.vec[1]; vec[0].z = r0.vec[2];
+        vec[1].x = r1.vec[0]; vec[1].y = r1.vec[1]; vec[1].z = r1.vec[2];
+        vec[2].x = r2.vec[0]; vec[2].y = r2.vec[1]; vec[2].z = r2.vec[2];
+#endif
+    }
 #endif
     CMatrix3f(const CVector3f& axis, float angle);
     CMatrix3f(const CQuaternion& quat);
@@ -85,6 +97,15 @@ public:
     {
         assert(0 <= i && i < 3);
         return vec[i];
+    }
+
+    inline const CMatrix3f orthonormalized()
+    {
+        CMatrix3f ret;
+        ret.vec[0] = vec[0].normalized();
+        ret.vec[1] = vec[2].normalized();
+        ret.vec[2] = vec[1].normalized();
+        return ret;
     }
 
     static const CMatrix3f skIdentityMatrix3f;

@@ -22,7 +22,7 @@ typedef union
     unsigned int rgba;
 } RGBA32;
 
-class ZE_ALIGN(16) CColor
+class alignas(16) CColor
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();

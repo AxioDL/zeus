@@ -2,6 +2,7 @@
 #define CVECTOR2f_HPP
 
 #include "Global.hpp"
+#include "Math.hpp"
 #include "TVectorUnion.hpp"
 
 #include <Athena/IStreamReader.hpp>
@@ -10,7 +11,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CVector2f
+class alignas(16) CVector2f
 {
     public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -199,24 +200,15 @@ class ZE_ALIGN(16) CVector2f
     inline void normalize()
     {
         float mag = magnitude();
-        if (mag > 1e-6f)
-        {
-            mag = 1.0 / mag;
-            *this *= mag;
-        }
-        else
-            zeroOut();
+        mag = 1.0 / mag;
+        *this *= mag;
     }
 
     inline CVector2f normalized() const
     {
         float mag = magnitude();
-        if (mag > 1e-6f)
-        {
-            mag = 1.0 / mag;
-            return *this * mag;
-        }
-        return {0, 0};
+        mag = 1.0 / mag;
+        return *this * mag;
     }
 
     inline float cross(const CVector2f& rhs) const
@@ -252,9 +244,7 @@ class ZE_ALIGN(16) CVector2f
 #endif
     }
     inline float magnitude() const
-    {
-        return sqrtf(magSquared());
-    }
+    { return Math::sqrtF(magSquared()); }
 
     inline void zeroOut()
     {
@@ -287,15 +277,19 @@ class ZE_ALIGN(16) CVector2f
     }
     static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
-    inline bool isNormalized(float thresh = 1e-5f) const
+    inline bool canBeNormalized() const
     {
-        return (fabs(1.0f - magSquared()) <= thresh);
+        const float epsilon = 1.1920929e-7f;
+        if (fabs(x) >= epsilon || fabs(y) >= epsilon)
+            return true;
+        return false;
     }
 
-    inline bool canBeNormalized()
-    {
-        return !isNormalized();
-    }
+    inline bool isNormalized() const
+    { return !canBeNormalized(); }
+
+    inline bool isZero() const
+    { return magSquared() <= 1.1920929e-7f; }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

@@ -9,7 +9,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CTransform
+class alignas(16) CTransform
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();

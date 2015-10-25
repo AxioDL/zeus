@@ -10,7 +10,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CQuaternion
+class alignas(16) CQuaternion
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();

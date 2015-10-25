@@ -18,7 +18,8 @@ float CVector2f::getAngleDiff(const CVector2f& a, const CVector2f& b)
     if (!mag1 || !mag2)
         return 0;
 
-    float theta = acosf(a.dot(b) / (mag1 * mag2));
+    float dot = a.dot(b);
+    float theta = Math::arcCosineR(dot / (mag1 * mag2));
     return theta;
 }
 

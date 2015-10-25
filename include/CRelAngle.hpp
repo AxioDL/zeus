@@ -9,7 +9,7 @@ namespace Zeus
 /**
  * @brief The CRelAngle class represents relative angles in radians
  */
-class ZE_ALIGN(16) CRelAngle : public CVector3f
+class alignas(16) CRelAngle : public CVector3f
 {
 public:
     /**

@@ -8,7 +8,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CVector3d
+class alignas(16) CVector3d
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -23,13 +23,14 @@ public:
 #endif
 #if ZE_ATHENA_TYPES
     CVector3d(const atVec3d& vec)
-#if __SSE__
-        : CVector3d(vec.mVec128){}
-#else
     {
+#if __SSE__
+        mVec128[0] = vec.mVec128[0];
+        mVec128[1] = vec.mVec128[1];
+#else
         x = v[0], y = v[1], z = v[2], v[3] = 0.0f;
-    }
 #endif
+    }
 #endif
 
     CVector3d(double xyz) { splat(xyz); }

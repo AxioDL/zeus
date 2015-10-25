@@ -3,24 +3,25 @@
 
 #include "Global.hpp"
 #include "CVector3f.hpp"
+#include "CUnitVector.hpp"
 
 namespace Zeus
 {
-struct ZE_ALIGN(16) CAxisAngle
+struct alignas(16) CAxisAngle : CVector3f
 {
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
-    CAxisAngle()
-        : axis(CVector3f::skOne),
-          angle(0)
-    {}
-    CAxisAngle(const CVector3f& axis, float angle)
-        : axis(axis),
-          angle(angle)
+    CAxisAngle() = default;
+    CAxisAngle(const CUnitVector3f& axis, float angle)
+        : CVector3f(axis * angle)
     {}
 
-    CVector3f axis;
-    float     angle;
+    CAxisAngle(const CVector3f& axisAngle)
+        : CVector3f(axisAngle)
+    {}
+
+    float angle() { return magnitude(); }
+    const CVector3f& getVector() { return *this; }
 };
 }
 

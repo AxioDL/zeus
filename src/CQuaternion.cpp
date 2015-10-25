@@ -136,18 +136,19 @@ CQuaternion CQuaternion::inverse() const
 
 CAxisAngle CQuaternion::toAxisAngle()
 {
-    CAxisAngle ret;
-    ret.angle = acosf(r);
+//    CAxisAngle ret;
+//    ret.angle = acosf(r);
 
-    float thetaInv = 1.0f/sinf(ret.angle);
+//    float thetaInv = 1.0f/sinf(ret.angle);
 
-    ret.axis.x = v.x * thetaInv;
-    ret.axis.y = v.y * thetaInv;
-    ret.axis.z = v.z * thetaInv;
+//    ret.axis.x = v.x * thetaInv;
+//    ret.axis.y = v.y * thetaInv;
+//    ret.axis.z = v.z * thetaInv;
 
-    ret.angle *= 2;
+//    ret.angle *= 2;
 
-    return ret;
+//    return ret;
+    return CAxisAngle();
 }
 
 CQuaternion CQuaternion::log() const

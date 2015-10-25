@@ -9,7 +9,7 @@
 namespace Zeus
 {
 class CQuaternion;
-class ZE_ALIGN(16) CMatrix3f
+class alignas(16) CMatrix3f
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -85,6 +85,15 @@ public:
     {
         assert(0 <= i && i < 3);
         return vec[i];
+    }
+
+    inline const CMatrix3f orthonormalized()
+    {
+        CMatrix3f ret;
+        ret.vec[0] = vec[0].normalized();
+        ret.vec[1] = vec[2].normalized();
+        ret.vec[2] = vec[1].normalized();
+        return ret;
     }
 
     static const CMatrix3f skIdentityMatrix3f;

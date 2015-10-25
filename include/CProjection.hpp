@@ -30,7 +30,7 @@ struct SProjPersp
 };
 extern const SProjOrtho kOrthoIdentity;
 
-class ZE_ALIGN(16) CProjection
+class alignas(16) CProjection
 {
     void _updateCachedMatrix();
 public:

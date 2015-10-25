@@ -7,7 +7,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CPlane
+class alignas(16) CPlane
 {
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
@@ -43,7 +43,6 @@ public:
     {
         float nd = d;
         float mag = vec.magnitude();
-        assert(mag != 0.0f);
         mag = 1.0 / mag;
         vec *= mag;
         d = nd * mag;

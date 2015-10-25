@@ -6,7 +6,7 @@
 
 namespace Zeus
 {
-class ZE_ALIGN(16) CMatrix4f
+class alignas(16) CMatrix4f
 {
 public:
     static const CMatrix4f skIdentityMatrix4f;

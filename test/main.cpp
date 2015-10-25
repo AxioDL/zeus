@@ -40,6 +40,7 @@ int main()
     std::cout << Math::powF(6.66663489, 2) << std::endl;
     std::cout << Math::invSqrtF(1) << std::endl;
     std::cout << Math::floorPowerOfTwo(256) << std::endl;
+    CLine line({-89.120926, 59.328712, 3.265882}, CUnitVector3f({-90.120926, 59.328712, 3.265882}));
 
     return 0;
 }

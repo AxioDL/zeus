@@ -6,7 +6,9 @@
 #include "CVector3f.hpp"
 #include "CVector4f.hpp"
 #include <math.h>
+#if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
+#endif
 
 namespace Zeus
 {
@@ -19,7 +21,9 @@ public:
     CQuaternion(float r, float x, float y, float z) : r(r), v(x, y, z){}
     CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
     CQuaternion(float r, const CVector3f& vec) : r(r), v(vec){}
+#if ZE_ATHENA_TYPES
     CQuaternion(Athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
+#endif
     CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
     CQuaternion(const CVector4f& vec)
           : r(vec.w)

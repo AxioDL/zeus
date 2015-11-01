@@ -7,7 +7,9 @@
 #include "CPlane.hpp"
 #include "CLine.hpp"
 #include "Math.hpp"
+#if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
+#endif
 
 namespace Zeus
 {
@@ -58,8 +60,9 @@ public:
           m_max(maxX, maxY, maxZ)
     {
     }
-
+#if ZE_ATHENA_TYPES
     CAABox(Athena::io::IStreamReader& in) {readBoundingBox(in);}
+#endif
     
     inline void readBoundingBox(Athena::io::IStreamReader& in)
     {

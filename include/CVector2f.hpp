@@ -5,7 +5,10 @@
 #include "Math.hpp"
 #include "TVectorUnion.hpp"
 
+#if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
+#endif
+
 #include <math.h>
 #include <assert.h>
 
@@ -32,6 +35,7 @@ class alignas(16) CVector2f
 #endif
     CVector2f(float xy) {splat(xy);}
     CVector2f(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
+#if ZE_ATHENA_TYPES
     CVector2f(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
@@ -39,6 +43,7 @@ class alignas(16) CVector2f
         v[2] = 0.0f;
         v[3] = 0.0f;
     }
+#endif
 
     inline bool operator ==(const CVector2f& rhs) const
     {return (x == rhs.x && y == rhs.y);}

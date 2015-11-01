@@ -5,6 +5,12 @@
 // This is only for testing, do NOT do this normally
 using namespace Zeus;
 
+union Color
+{
+    struct { Zeus::Comp8 r, g, b, a; };
+    Zeus::Comp32 rgba;
+};
+
 int main()
 {
     assert(!CAABox({100, 100, 100}, {100, 100, 100}).invalid());
@@ -42,5 +48,11 @@ int main()
     std::cout << Math::floorPowerOfTwo(256) << std::endl;
     CLine line({-89.120926, 59.328712, 3.265882}, CUnitVector3f({-90.120926, 59.328712, 3.265882}));
 
+    CColor ctest1;
+    ctest1.fromHSV(0, 255/255.f, .5);
+    float h, s, v;
+    ctest1.toHSV(h, s, v);
+    std::cout << (int)ctest1.r << " " << (int)ctest1.g << " " << (int)ctest1.b << " " << (int)ctest1.a << std::endl;
+    std::cout << h << " " << s << " " << v << " " << (float)(ctest1.a / 255.f) << std::endl;
     return 0;
 }

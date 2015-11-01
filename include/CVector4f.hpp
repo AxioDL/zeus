@@ -4,7 +4,9 @@
 #include "Global.hpp"
 #include "TVectorUnion.hpp"
 #include "CVector3f.hpp"
+#if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
+#endif
 #include <math.h>
 #include <float.h>
 #include <assert.h>
@@ -33,6 +35,7 @@ class alignas(16) CVector4f
 
     CVector4f(float xyzw) {splat(xyzw);}
     CVector4f(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
+#if ZE_ATHENA_TYPES
     CVector4f(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
@@ -40,6 +43,7 @@ class alignas(16) CVector4f
         z = input.readFloat();
         w = input.readFloat();
     }
+#endif
 
     CVector4f(const CVector3f& other)
     {

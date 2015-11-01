@@ -5,7 +5,10 @@
 #include "Math.hpp"
 #include "CVector2f.hpp"
 #include "TVectorUnion.hpp"
+#if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
+#endif
+
 #include <math.h>
 #include <assert.h>
 
@@ -32,6 +35,7 @@ public:
 #endif
     CVector3f(float xyz) {splat(xyz);}
     CVector3f(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
+#if ZE_ATHENA_TYPES
     CVector3f(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
@@ -39,6 +43,7 @@ public:
         z = input.readFloat();
         v[3] = 0.0f;
     }
+#endif
     CVector3f(const CVector2f& other)
     {
         x = other.x;

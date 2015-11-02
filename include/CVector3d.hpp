@@ -60,15 +60,16 @@ public:
 
     double magSquared() const
     {
-/*
-#if __SSE4_1__
-        TDblVectorUnion result;
-        result.mVec128 = _mm_dp_pd(mVec128, mVec128, 0x71);
-        return result.v[0];
-#elif __SSE__
-*/
 #if __SSE__
         TDblVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128[0] = _mm_dp_pd(mVec128[0], mVec128[0], 0x71);
+            result.mVec128[1] = _mm_dp_pd(mVec128[1], mVec128[1], 0x71);
+            return result.v[0] + result.v[2];
+        }
+#endif
         result.mVec128[0] = _mm_mul_pd(mVec128[0], mVec128[0]);
         result.mVec128[1] = _mm_mul_pd(mVec128[1], mVec128[1]);
         return result.v[0] + result.v[1] + result.v[2];
@@ -83,15 +84,18 @@ public:
 
     double dot(const CVector3d& rhs) const
     {
-/*
-#if __SSE4_1__
-        TDblVectorUnion result;
-        result.mVec128 = _mm_dp_pd(mVec128, mVec128, 0x71);
-        return result.v[0];
-#elif __SSE__
-*/
+
 #if __SSE__
         TDblVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128[0] = _mm_dp_pd(mVec128[0], rhs.mVec128[0], 0x71);
+            result.mVec128[1] = _mm_dp_pd(mVec128[1], rhs.mVec128[1], 0x71);
+            return result.v[0] + result.v[2];
+        }
+#endif
+
         result.mVec128[0] = _mm_mul_pd(mVec128[0], rhs.mVec128[0]);
         result.mVec128[1] = _mm_mul_pd(mVec128[1], rhs.mVec128[1]);
         return result.v[0] + result.v[1] + result.v[2];

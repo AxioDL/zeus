@@ -12,6 +12,25 @@
 
 namespace Zeus
 {
+struct CPUInfo
+{
+const char cpuBrand [32] = {0};
+const char cpuVendor[32] = {0};
+const bool isIntel       = false;
+const bool SSE1          = false;
+const bool SSE2          = false;
+const bool SSE3          = false;
+const bool SSSE3         = false;
+const bool SSE41         = false;
+const bool SSE42         = false;
+const bool SSE4a         = false;
+const bool AESNI         = false;
+};
+/**
+ * Detects CPU capabilities and returns true if SSE4.1 or SSE4.2 is available
+ */
+void detectCPU();
+const CPUInfo cpuFeatures();
 class CVector3f;
 class CTransform;
 namespace Math

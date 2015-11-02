@@ -7,4 +7,4 @@ add_executable(zeustest
     main.cpp)
 
 target_link_libraries(zeustest
-    Math)
+    Math GL)

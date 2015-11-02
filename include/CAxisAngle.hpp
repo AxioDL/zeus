@@ -12,8 +12,8 @@ struct alignas(16) CAxisAngle : CVector3f
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
     CAxisAngle() = default;
-    CAxisAngle(const CUnitVector3f& axis, float angle)
-        : CVector3f(axis * angle)
+    CAxisAngle(const CUnitVector3f& axis, float distance)
+        : CVector3f(distance * axis)
     {}
 
     CAxisAngle(const CVector3f& axisAngle)

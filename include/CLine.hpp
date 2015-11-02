@@ -17,8 +17,7 @@ public:
         start = a;
         if (ab.x != 0.0f || ab.y != 0.0f || ab.z != 0.0f)
             normal = ab;
-        else
-            normal = CVector3f::skZero;
+
         end = b;
     }
 

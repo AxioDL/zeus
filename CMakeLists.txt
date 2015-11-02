@@ -7,7 +7,7 @@ endif()
 include_directories(include ${ATHENA_INCLUDE_DIR})
 
 if(NOT WIN32)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1 -msse4.2 -std=c++14")
 endif()
 
 add_library(Math
@@ -48,7 +48,8 @@ add_library(Math
     include/COBBox.hpp
     include/CLine.hpp
     include/CSphere.hpp
-    include/CUnitVector.hpp)
+    include/CUnitVector.hpp
+    include/CMRay.hpp)
 
 add_subdirectory(test)
 

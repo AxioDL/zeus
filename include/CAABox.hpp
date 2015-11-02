@@ -6,6 +6,7 @@
 #include "CTransform.hpp"
 #include "CPlane.hpp"
 #include "CLine.hpp"
+#include "CSphere.hpp"
 #include "Math.hpp"
 #if ZE_ATHENA_TYPES
 #include <Athena/IStreamReader.hpp>
@@ -62,16 +63,37 @@ public:
     }
 #if ZE_ATHENA_TYPES
     CAABox(Athena::io::IStreamReader& in) {readBoundingBox(in);}
-#endif
     
     inline void readBoundingBox(Athena::io::IStreamReader& in)
     {
-        m_min[0] = in.readFloat();
-        m_min[1] = in.readFloat();
-        m_min[2] = in.readFloat();
-        m_max[0] = in.readFloat();
-        m_max[1] = in.readFloat();
-        m_max[2] = in.readFloat();
+        m_min = CVector3f(in);
+        m_max = CVector3f(in);
+    }
+#endif
+
+    float distanceFromPointSquared(const CVector3f& other) const
+    {
+        float dist = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            if (other[i] < m_min[i])
+            {
+                const float tmp = (m_min[i] - other[i]);
+                dist += tmp * tmp;
+            }
+            else if (other[i] > m_max[i])
+            {
+                const float tmp = (other[i] - m_max[i]);
+                dist += tmp * tmp;
+            }
+        }
+
+        return dist;
+    }
+
+    float distanceFromPoint(const CVector3f &other) const
+    {
+        return Math::sqrtF(distanceFromPointSquared(other));
     }
     
     inline bool intersects(const CAABox& other) const
@@ -83,6 +105,10 @@ public:
         bool z1 = (m_max[2] < other.m_min[2]);
         bool z2 = (m_min[2] > other.m_max[2]);
         return x1 && x2 && y1 && y2 && z1 && z2;
+    }
+    bool intersects(const CSphere& other) const
+    {
+        return distanceFromPointSquared(other.position) <= other.radius * other.radius;
     }
 
     inline bool inside(const CAABox& other) const
@@ -289,6 +315,7 @@ public:
         negZ.m_max.z = midZ;
         negZ.m_min = m_min;
     }
+
 
     inline bool invalid() {return (m_max.x < m_min.x || m_max.y < m_min.y || m_max.z < m_min.z);}
 };

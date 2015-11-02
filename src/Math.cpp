@@ -1,9 +1,67 @@
 #include "Math.hpp"
 #include "CTransform.hpp"
 #include "CVector3f.hpp"
+#include <cpuid.h>
 
 namespace Zeus
 {
+
+static CPUInfo g_cpuFeatures;
+
+void getCpuInfo(int level,
+              unsigned int* eax,
+              unsigned int* ebx,
+              unsigned int* ecx,
+              unsigned int* edx)
+{
+#if !GEKKO
+#if _WIN32
+    unsigned int regs[4];
+    __cpuid(regs, level);
+    *eax = regs[0];
+    *ebx = regs[1];
+    *ecx = regs[2];
+    *edx = regs[3];
+#else
+    __cpuid(level, *eax, *ebx, *ecx, *edx);
+#endif
+#endif
+}
+
+void detectCPU()
+{
+#if !GEKKO
+    static bool isInit = false;
+    if (isInit)
+        return;
+
+    unsigned int eax, ebx, ecx, edx;
+    getCpuInfo(0, &eax, &ebx, &ecx, &edx);
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = ebx;
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = edx;
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = ecx;
+    getCpuInfo(0x80000000, &eax, &ebx, &ecx, &edx);
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand) = ebx;
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand + 4) = edx;
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand + 8) = ecx;
+    getCpuInfo(1, &eax, &ebx, &ecx, &edx);
+
+    memset((bool*)&g_cpuFeatures.AESNI, ((ecx & 0x02000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE1,  ((edx & 0x02000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE2,  ((edx & 0x04000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE3,  ((ecx & 0x00000001) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSSE3, ((ecx & 0x00000200) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE41, ((ecx & 0x00080000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE42, ((ecx & 0x00100000) != 0), 1);
+
+
+    isInit = true;
+#endif
+}
+
+
+const CPUInfo cpuFeatures() { return g_cpuFeatures; }
+
 namespace Math
 {
 const CVector3f kUpVec(0.0, 0.0, 1.0);
@@ -249,4 +307,5 @@ CVector3f radToDeg(const CVector3f& rad) {return rad * kRadToDegVec;}
 CVector3f degToRad(const CVector3f& deg) {return deg * kDegToRadVec;}
 
 }
+
 }

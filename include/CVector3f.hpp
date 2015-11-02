@@ -203,12 +203,15 @@ public:
 
     inline float dot(const CVector3f& rhs) const
     {
-#if __SSE4_1__
+#if __SSE__
         TVectorUnion result;
-        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
-        return result.v[0];
-#elif __SSE__
-        TVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0xF1);
+            return result.v[0];
+        }
+#endif
         result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
         return result.v[0] + result.v[1] + result.v[2];
 #else
@@ -217,12 +220,16 @@ public:
     }
     inline float magSquared() const
     {
-#if __SSE4_1__
+#if __SSE__
         TVectorUnion result;
-        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0x71);
-        return result.v[0];
-#elif __SSE__
-        TVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0x71);
+            return result.v[0];
+        }
+#endif
+
         result.mVec128 = _mm_mul_ps(mVec128, mVec128);
         return result.v[0] + result.v[1] + result.v[2];
 #else

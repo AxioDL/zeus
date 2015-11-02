@@ -10,18 +10,20 @@ class alignas(16) CSphere
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    CSphere(const CVector3f& position, float radius) { vec = position; r = radius; }
-    inline CVector3f getSurfaceNormal(const CVector3f& coord) { return (vec - coord).normalized(); }
+    CSphere(const CVector3f& position, float radius)
+        : position(position), radius(radius) { }
 
-    union
+    inline CVector3f getSurfaceNormal(const CVector3f& coord)
+    { return (position - coord).normalized(); }
+
+    inline bool intersects(const CSphere& other)
     {
-        struct { float x, y, z, r; };
-        float s[4];
-        CVector3f vec;
-#if __SSE__
-        __m128 mVec128;
-#endif
-    };
+        float dist = (position - other.position).magnitude();
+        return dist < (radius + other.radius);
+    }
+
+    CVector3f position;
+    float radius;
 };
 }
 

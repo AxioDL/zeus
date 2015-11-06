@@ -254,6 +254,68 @@ public:
         }
     }
 
+    float hueToRgb(float p, float q, float t)
+    {
+        if (t < 0.0f)
+            t += 1.0f;
+        if (t > 1.0f)
+            t -= 1.0f;
+        if (t < 1.f/6.f)
+            return p + (q - p) * 6.f * t;
+        if (t < 1.f/2.f)
+            return q;
+        if (t < 2.f/3.f)
+            return p + (q - p) * (2.f/3.f - t) * 6.f;
+        return p;
+    }
+
+    void fromHSL(float h, float s, float l, float _a = 1.0)
+    {
+        float _r, _g, _b;
+
+        if (s == 0.0f)
+            r = g = b = l;
+        else
+        {
+            const float q = l < 0.5f ? l * (1.f + s) : l + s - 1.f * s;
+            const float p = 2 * l - q;
+            _r = hueToRgb(p, q, h + 1.f/3);
+            _g = hueToRgb(p, q, h);
+            _b = hueToRgb(p, q, h - 1.f/3);
+        }
+
+
+        r = _r * 255.f;
+        g = _g * 255.f;
+        b = _b * 255.f;
+        a = _a * 255.f;
+    }
+
+    void toHSL(float& h, float& s, float& l)
+    {
+        const float rf = r / 255.f;
+        const float gf = g / 255.f;
+        const float bf = b / 255.f;
+        const float min = Math::min(rf, Math::min(gf, bf));
+        const float max = Math::max(rf, Math::max(gf, bf));
+        const float d = max - min;
+
+        if (max == min)
+            h = s = 0;
+        else
+        {
+            s = l > 0.5f ? d / (2.f - max - min) : d / (max + min);
+            if (max == rf)
+                h = (gf - bf) / d + (gf < bf ? 6.f : 0.f);
+            else if (max == gf)
+                h = (bf - rf) / d + 2.f;
+            else if (max = bf)
+                h = (rf - gf) / d + 4.f;
+
+            h /= 6;
+        }
+    }
+
     void fromRGBA32(unsigned int rgba)
     { this->rgba = COLOR(rgba); }
 };

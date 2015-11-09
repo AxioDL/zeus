@@ -195,30 +195,7 @@ public:
      * @param v[0-1] The value percentage of the color.
      * @param a[0-1] The alpha percentage of the color.
      */
-    void fromHSV(float h, float s, float v, float _a = 1.0)
-    {
-        int i = int(h * 6);
-        float f = h * 6 - i;
-        float p = v * (1 - s);
-        float q = v * (1 - f * s);
-        float t = v * (1 - (1 - f) * s);
-        float _r, _g, _b;
-
-        switch(i % 6)
-        {
-            case 0: _r = v, _g = t, _b = p; break;
-            case 1: _r = q, _g = v, _b = p; break;
-            case 2: _r = p, _g = v, _b = t; break;
-            case 3: _r = p, _g = q, _b = v; break;
-            case 4: _r = t, _g = p, _b = v; break;
-            case 5: _r = v, _g = p, _b = q; break;
-        }
-
-        r = _r * 255;
-        g = _g * 255;
-        b = _b * 255;
-        a = _a * 255;
-    }
+    void fromHSV(float h, float s, float v, float _a = 1.0);
 
     /**
      * @brief Converts rgba to hsv
@@ -227,32 +204,12 @@ public:
      * @param v[0-1] The value percentage of the color.
      * @param a[0-1] The alpha percentage of the color.
      */
-    void toHSV(float& h, float& s, float& v) const
-    {
-        float rf = r/255.f;
-        float gf = g/255.f;
-        float bf = b/255.f;
+    void toHSV(float& h, float& s, float& v) const;
 
-        float min = Math::min(rf, Math::min(gf, bf));
-        float max = Math::max(rf, Math::max(gf, bf));
-        v = max;
 
-        float delta = max - min;
-        s = max == 0 ? 0 : delta / max;
+    void fromHSL(float h, float s, float l, float _a = 1.0);
 
-        if (max == min)
-            h = 0;
-        else
-        {
-            if (max == rf)
-                h = (gf - bf) / delta + (gf < bf ? 6 : 0);
-            else if (max == gf)
-                h = (bf - rf) / delta + 2;
-            else if (max == bf)
-                h = (rf - gf) / delta + 4;
-            h /= 6;
-        }
-    }
+    void toHSL(float& h, float& s, float& l);
 
     void fromRGBA32(unsigned int rgba)
     { this->rgba = COLOR(rgba); }

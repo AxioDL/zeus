@@ -1,7 +1,11 @@
 #include "Math.hpp"
 #include "CTransform.hpp"
 #include "CVector3f.hpp"
+#if _WIN32
+#include <intrin.h>
+#else
 #include <cpuid.h>
+#endif
 
 namespace Zeus
 {
@@ -16,7 +20,7 @@ void getCpuInfo(int level,
 {
 #if !GEKKO
 #if _WIN32
-    unsigned int regs[4];
+    int regs[4];
     __cpuid(regs, level);
     *eax = regs[0];
     *ebx = regs[1];

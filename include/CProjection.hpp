@@ -87,7 +87,7 @@ public:
 protected:
 
     /* Projection type */
-    enum EProjType m_projType;
+    EProjType m_projType;
     
     /* Projection intermediate */
     union

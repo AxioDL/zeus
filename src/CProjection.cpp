@@ -6,7 +6,7 @@ namespace Zeus
 {
 void CProjection::_updateCachedMatrix()
 {
-    if (m_projType == PROJ_ORTHO)
+    if (m_projType == EProjType::Orthographic)
     {
         float tmp;
         
@@ -33,7 +33,7 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[2][3] = 0.0f;
         m_mtx.m[3][3] = 1.0f;
     }
-    else if (m_projType == PROJ_PERSP)
+    else if (m_projType == EProjType::Perspective)
     {
         float cot,tmp;
         float t_fovy = tanf(m_persp.m_fov / 2.0);

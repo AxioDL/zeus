@@ -9,11 +9,11 @@
 #include <math.h>
 namespace Zeus
 {
-enum EProjType
+enum class EProjType
 {
-    PROJ_NONE = 0,
-    PROJ_ORTHO = 1,
-    PROJ_PERSP = 2
+    None = 0,
+    Orthographic = 1,
+    Perspective = 2
 };
 struct SProjOrtho
 {
@@ -38,7 +38,7 @@ public:
 
     CProjection()
     {
-        m_projType = PROJ_ORTHO;
+        m_projType = EProjType::Orthographic;
         m_ortho = SProjOrtho();
         m_mtx = CMatrix4f::skIdentityMatrix4f;
     }
@@ -58,14 +58,14 @@ public:
     }
     
     inline void setOrtho(const SProjOrtho& ortho)
-    {m_projType = PROJ_ORTHO; m_ortho = ortho; _updateCachedMatrix();}
+    {m_projType = EProjType::Orthographic; m_ortho = ortho; _updateCachedMatrix();}
     inline void setPersp(const SProjPersp& persp)
-    {m_projType = PROJ_PERSP; m_persp = persp; _updateCachedMatrix();}
+    {m_projType = EProjType::Perspective; m_persp = persp; _updateCachedMatrix();}
     
     inline EProjType getType() const {return m_projType;}
     inline const SProjOrtho& getOrtho() const
     {
-        if (m_projType != PROJ_ORTHO)
+        if (m_projType != EProjType::Orthographic)
         {
             fprintf(stderr, "attempted to access orthographic structure of non-ortho projection");
             abort();
@@ -74,7 +74,7 @@ public:
     }
     inline const SProjPersp& getPersp() const
     {
-        if (m_projType != PROJ_PERSP)
+        if (m_projType != EProjType::Perspective)
         {
             fprintf(stderr, "attempted to access perspective structure of non-persp projection");
             abort();

@@ -19,7 +19,7 @@ class alignas(16) CAABox
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    enum EBoxEdgeId
+    enum class EBoxEdgeId
     {
         UnknownEdge0,
         UnknownEdge1,
@@ -35,7 +35,7 @@ public:
         UnknownEdge11
     };
 
-    enum EBoxFaceID
+    enum class EBoxFaceID
     {
     };
 
@@ -160,40 +160,40 @@ public:
     {
         switch (id)
         {
-            case UnknownEdge0:
+            case EBoxEdgeId::UnknownEdge0:
                 return CLine({m_min.x, m_min.y, m_min.z},
                              CUnitVector3f({m_min.x, m_min.y, m_max.z}));
-            case UnknownEdge1:
+            case EBoxEdgeId::UnknownEdge1:
                 return CLine({m_max.x, m_min.y, m_min.z},
                              CUnitVector3f({m_min.x, m_min.y, m_min.z}));
-            case UnknownEdge2:
+            case EBoxEdgeId::UnknownEdge2:
                 return CLine({m_max.x, m_min.y, m_max.z},
                              CUnitVector3f({m_max.x, m_min.y, m_max.z}));
-            case UnknownEdge3:
+            case EBoxEdgeId::UnknownEdge3:
                 return CLine({m_min.x, m_min.y, m_max.z},
                              CUnitVector3f({m_max.x, m_min.y, m_max.z}));
-            case UnknownEdge4:
+            case EBoxEdgeId::UnknownEdge4:
                 return CLine({m_max.x, m_max.y, m_min.z},
                              CUnitVector3f({m_max.x, m_max.y, m_max.z}));
-            case UnknownEdge5:
+            case EBoxEdgeId::UnknownEdge5:
                 return CLine({m_min.x, m_max.y, m_min.z},
                              CUnitVector3f({m_max.x, m_max.y, m_min.z}));
-            case UnknownEdge6:
+            case EBoxEdgeId::UnknownEdge6:
                 return CLine({m_min.x, m_max.y, m_max.z},
                              CUnitVector3f({m_min.x, m_max.y, m_min.z}));
-            case UnknownEdge7:
+            case EBoxEdgeId::UnknownEdge7:
                 return CLine({m_max.x, m_max.y, m_max.z},
                              CUnitVector3f({m_min.x, m_max.y, m_max.z}));
-            case UnknownEdge8:
+            case EBoxEdgeId::UnknownEdge8:
                 return CLine({m_min.x, m_max.y, m_max.z},
                              CUnitVector3f({m_min.x, m_min.y, m_max.z}));
-            case UnknownEdge9:
+            case EBoxEdgeId::UnknownEdge9:
                 return CLine({m_min.x, m_max.y, m_min.z},
                              CUnitVector3f({m_min.x, m_min.y, m_min.z}));
-            case UnknownEdge10:
+            case EBoxEdgeId::UnknownEdge10:
                 return CLine({m_max.x, m_max.y, m_min.z},
                              CUnitVector3f({m_max.x, m_min.y, m_min.z}));
-            case UnknownEdge11:
+            case EBoxEdgeId::UnknownEdge11:
                 return CLine({m_max.x, m_max.y, m_max.z},
                              CUnitVector3f({m_max.x, m_min.y, m_max.z}));
             default:

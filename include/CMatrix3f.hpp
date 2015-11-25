@@ -4,6 +4,7 @@
 #include "Global.hpp"
 #include "CVector3f.hpp"
 #include <assert.h>
+#include <string.h>
 
 /* Column-major matrix class */
 namespace Zeus

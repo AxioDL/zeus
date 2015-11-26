@@ -13,6 +13,7 @@
 
 namespace Zeus
 {
+class CColor;
 class alignas(16) CVector4f
 {
     public:
@@ -35,6 +36,7 @@ class alignas(16) CVector4f
 
     CVector4f(float xyzw) {splat(xyzw);}
     CVector4f(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
+    CVector4f(const CColor& other);
 #if ZE_ATHENA_TYPES
     CVector4f(Athena::io::IStreamReader& input)
     {
@@ -53,6 +55,7 @@ class alignas(16) CVector4f
         w = 1.0f;
     }
 
+    CVector4f& operator=(const CColor& other);
     inline bool operator ==(const CVector4f& rhs) const
     {
 #if __SSE__

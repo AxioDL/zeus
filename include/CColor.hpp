@@ -1,7 +1,8 @@
 #ifndef CCOLOR_HPP
 #define CCOLOR_HPP
 
-#include "MathLib.hpp"
+#include "Math.hpp"
+#include "TVectorUnion.hpp"
 #include <iostream>
 
 #if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
@@ -24,6 +25,8 @@ typedef union
 
 typedef uint8_t Comp8;
 typedef uint32_t Comp32;
+
+class CVector4f;
 
 class alignas(16) CColor
 {
@@ -53,6 +56,9 @@ public:
 
     CColor(Comp32 rgba) { fromRGBA32(rgba); }
     CColor(const Comp8* rgba) { fromRGBA8(rgba[0], rgba[1], rgba[2], rgba[3]); }
+
+    CColor(const CVector4f& other);
+    CColor& operator=(const CVector4f& other);
 
 #if ZE_ATHENA_TYPES
     inline void readRGBA(Athena::io::IStreamReader& reader)
@@ -195,12 +201,16 @@ public:
     }
     inline float magSquared() const
     {
-#if __SSE4_1__
+#if __SSE__
         TVectorUnion result;
-        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
-        return result.v[0];
-#elif __SSE__
-        TVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
+            return result.v[0];
+        }
+#endif
+
         result.mVec128 = _mm_mul_ps(mVec128, mVec128);
         return result.v[0] + result.v[1] + result.v[2] + result.v[3];
 #else

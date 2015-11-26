@@ -1,4 +1,5 @@
 #include "CColor.hpp"
+#include "CVector4f.hpp"
 
 namespace Zeus
 {
@@ -27,6 +28,18 @@ float hueToRgb(float p, float q, float t)
     return p;
 }
 
+CColor::CColor(const CVector4f& other)
+{ r = other.x; g = other.y; b = other.z; a = other.w; }
+
+CColor& CColor::operator=(const CVector4f& other)
+{
+    r = other.x;
+    g = other.y;
+    b = other.z;
+    a = other.w;
+
+    return *this;
+}
 void CColor::fromHSV(float h, float s, float v, float _a)
 {
     int i = int(h * 6);

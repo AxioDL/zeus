@@ -46,20 +46,16 @@ void CColor::fromHSV(float h, float s, float v, float _a)
     case 5: _r = v, _g = p, _b = q; break;
     }
 
-    r = _r * 255;
-    g = _g * 255;
-    b = _b * 255;
-    a = _a * 255;
+    r = _r;
+    g = _g;
+    b = _b;
+    a = _a;
 }
 
 void CColor::toHSV(float &h, float &s, float &v) const
 {
-    float rf = r/255.f;
-    float gf = g/255.f;
-    float bf = b/255.f;
-
-    float min = Math::min(rf, Math::min(gf, bf));
-    float max = Math::max(rf, Math::max(gf, bf));
+    float min = Math::min(r, Math::min(g, b));
+    float max = Math::max(r, Math::max(g, b));
     v = max;
 
     float delta = max - min;
@@ -69,45 +65,35 @@ void CColor::toHSV(float &h, float &s, float &v) const
         h = 0;
     else
     {
-        if (max == rf)
-            h = (gf - bf) / delta + (gf < bf ? 6 : 0);
-        else if (max == gf)
-            h = (bf - rf) / delta + 2;
-        else if (max == bf)
-            h = (rf - gf) / delta + 4;
+        if (max == r)
+            h = (g - b) / delta + (g < b ? 6 : 0);
+        else if (max == g)
+            h = (b - r) / delta + 2;
+        else if (max == b)
+            h = (r - g) / delta + 4;
         h /= 6;
     }
 }
 
 void CColor::fromHSL(float h, float s, float l, float _a)
 {
-    float _r, _g, _b;
-
     if (s == 0.0f)
         r = g = b = l;
     else
     {
         const float q = l < 0.5f ? l * (1.f + s) : l + s - 1.f * s;
         const float p = 2 * l - q;
-        _r = hueToRgb(p, q, h + 1.f/3);
-        _g = hueToRgb(p, q, h);
-        _b = hueToRgb(p, q, h - 1.f/3);
+        r = hueToRgb(p, q, h + 1.f/3);
+        g = hueToRgb(p, q, h);
+        b = hueToRgb(p, q, h - 1.f/3);
     }
-
-
-    r = _r * 255.f;
-    g = _g * 255.f;
-    b = _b * 255.f;
-    a = _a * 255.f;
+    a = _a;
 }
 
 void CColor::toHSL(float &h, float &s, float &l)
 {
-    const float rf = r / 255.f;
-    const float gf = g / 255.f;
-    const float bf = b / 255.f;
-    const float min = Math::min(rf, Math::min(gf, bf));
-    const float max = Math::max(rf, Math::max(gf, bf));
+    const float min = Math::min(r, Math::min(g, b));
+    const float max = Math::max(r, Math::max(g, b));
     const float d = max - min;
 
     if (max == min)
@@ -115,12 +101,12 @@ void CColor::toHSL(float &h, float &s, float &l)
     else
     {
         s = l > 0.5f ? d / (2.f - max - min) : d / (max + min);
-        if (max == rf)
-            h = (gf - bf) / d + (gf < bf ? 6.f : 0.f);
-        else if (max == gf)
-            h = (bf - rf) / d + 2.f;
-        else if (max == bf)
-            h = (rf - gf) / d + 4.f;
+        if (max == r)
+            h = (g - b) / d + (g < b ? 6.f : 0.f);
+        else if (max == g)
+            h = (b - r) / d + 2.f;
+        else if (max == b)
+            h = (r - g) / d + 4.f;
 
         h /= 6;
     }

@@ -35,7 +35,8 @@ class alignas(16) CVector4f
 #endif
 
     CVector4f(float xyzw) {splat(xyzw);}
-    CVector4f(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
+    void assign(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
+    CVector4f(float x, float y, float z, float w) {assign(x, y, z, w);}
     CVector4f(const CColor& other);
 #if ZE_ATHENA_TYPES
     CVector4f(Athena::io::IStreamReader& input)

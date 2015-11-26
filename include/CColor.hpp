@@ -1,12 +1,16 @@
 #ifndef CCOLOR_HPP
 #define CCOLOR_HPP
 
+#include "Global.hpp"
 #include "Math.hpp"
 #include "TVectorUnion.hpp"
+#if ZE_ATHENA_TYPES
+#include <Athena/FileReader.hpp>
+#endif
 #include <iostream>
 
 #if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
-#define COLOR(rgba) ( ( (rgba) & 0x000000FF ) << 24 | ( (rgba) & 0x0000FF00 ) <<  8 \
+#define COLOR(rgba) (unsigned)( ( (rgba) & 0x000000FF ) << 24 | ( (rgba) & 0x0000FF00 ) <<  8 \
                     | ( (rgba) & 0x00FF0000 ) >>  8 | ( (rgba) & 0xFF000000 ) >> 24 )
 #else
 #define COLOR(rgba) rgba
@@ -188,17 +192,16 @@ public:
     inline void normalize()
     {
         float mag = magnitude();
-        assert(mag != 0.0);
         mag = 1.0 / mag;
         *this *= mag;
     }
-    inline CColor normalized()
+    inline CColor normalized() const
     {
         float mag = magnitude();
-        assert(mag != 0.0);
         mag = 1.0 / mag;
         return *this * mag;
     }
+
     inline float magSquared() const
     {
 #if __SSE__

@@ -3,15 +3,15 @@
 
 namespace Zeus
 {
-const CColor CColor::skRed   (0xFF0000FFul);
-const CColor CColor::skBlack (0x000000FFul);
-const CColor CColor::skBlue  (0x0000FFFFul);
-const CColor CColor::skGreen (0x00FF00FFul);
-const CColor CColor::skGrey  (0x808080FFul);
-const CColor CColor::skOrange(0xFF7000FFul);
-const CColor CColor::skPurple(0xA000FFFFul);
-const CColor CColor::skYellow(0xFFFF00FFul);
-const CColor CColor::skWhite (0xFFFFFFFFul);
+const CColor CColor::skRed   (Comp32(0xFF0000FFul));
+const CColor CColor::skBlack (Comp32(0x000000FFul));
+const CColor CColor::skBlue  (Comp32(0x0000FFFFul));
+const CColor CColor::skGreen (Comp32(0x00FF00FFul));
+const CColor CColor::skGrey  (Comp32(0x808080FFul));
+const CColor CColor::skOrange(Comp32(0xFF7000FFul));
+const CColor CColor::skPurple(Comp32(0xA000FFFFul));
+const CColor CColor::skYellow(Comp32(0xFFFF00FFul));
+const CColor CColor::skWhite (Comp32(0xFFFFFFFFul));
 
 float hueToRgb(float p, float q, float t)
 {

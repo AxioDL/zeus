@@ -34,15 +34,17 @@ public:
 #endif
 #endif
     CVector3f(float xyz) {splat(xyz);}
-    CVector3f(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
+    void assign(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
+    CVector3f(float x, float y, float z) {assign(x, y, z);}
 #if ZE_ATHENA_TYPES
-    CVector3f(Athena::io::IStreamReader& input)
+    void read(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
         y = input.readFloat();
         z = input.readFloat();
         v[3] = 0.0f;
     }
+    CVector3f(Athena::io::IStreamReader& input) {read(input);}
 #endif
     CVector3f(const CVector2f& other)
     {

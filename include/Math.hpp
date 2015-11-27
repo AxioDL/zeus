@@ -1,6 +1,8 @@
 #ifndef MATH_HPP
 #define MATH_HPP
 
+#undef min
+#undef max
 #ifndef NOMINMAX
 #define NOMINMAX 1
 #endif

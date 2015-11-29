@@ -46,6 +46,7 @@ public:
     static const CColor skPurple;
     static const CColor skYellow;
     static const CColor skWhite;
+    static const CColor skClear;
 
 #if __SSE__
     CColor(const __m128& mVec128) : mVec128(mVec128) {}

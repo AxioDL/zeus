@@ -12,6 +12,7 @@ const CColor CColor::skOrange(Comp32(0xFF7000FFul));
 const CColor CColor::skPurple(Comp32(0xA000FFFFul));
 const CColor CColor::skYellow(Comp32(0xFFFF00FFul));
 const CColor CColor::skWhite (Comp32(0xFFFFFFFFul));
+const CColor CColor::skClear (Comp32(0x00000000ul));
 
 float hueToRgb(float p, float q, float t)
 {

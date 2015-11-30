@@ -34,7 +34,8 @@ class alignas(16) CVector2f
 #endif
 #endif
     CVector2f(float xy) {splat(xy);}
-    CVector2f(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
+    void assign(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
+    CVector2f(float x, float y) {assign(x, y);}
 #if ZE_ATHENA_TYPES
     CVector2f(Athena::io::IStreamReader& input)
     {

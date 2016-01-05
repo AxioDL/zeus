@@ -296,7 +296,7 @@ public:
     void toHSL(float& h, float& s, float& l);
 
     CColor toGrayscale()
-    { return {Math::sqrtF(magSquared() / 3)}; }
+    { return {Math::sqrtF((r * r + g * g + b * b) / 3)}; }
 };
 
 static inline CColor operator+(float lhs, const CColor& rhs)

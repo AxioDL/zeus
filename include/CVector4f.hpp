@@ -16,8 +16,22 @@ namespace Zeus
 class CColor;
 class alignas(16) CVector4f
 {
-    public:
+#if __atdna__
+    float clangVec __attribute__((__vector_size__(16)));
+#endif
+public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
+    union
+    {
+        struct
+        {
+            float x, y, z, w;
+        };
+        float v[4];
+#if __SSE__
+        __m128 mVec128;
+#endif
+    };
 
     inline CVector4f() {zeroOut();}
 #if __SSE__
@@ -32,21 +46,45 @@ class alignas(16) CVector4f
         x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], w = vec.vec[3];
     }
 #endif
-#endif
 
-    CVector4f(float xyzw) {splat(xyzw);}
-    void assign(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
-    CVector4f(float x, float y, float z, float w) {assign(x, y, z, w);}
-    CVector4f(const CColor& other);
-#if ZE_ATHENA_TYPES
-    CVector4f(Athena::io::IStreamReader& input)
+    operator atVec4f()
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+    operator atVec4f() const
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+
+    void read(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
         y = input.readFloat();
         z = input.readFloat();
         w = input.readFloat();
     }
+
+    CVector4f(Athena::io::IStreamReader& input)
+    { read(input); }
+
 #endif
+
+    CVector4f(float xyzw) {splat(xyzw);}
+    void assign(float x, float y, float z, float w) {v[0] = x; v[1] = y; v[2] = z; v[3] = w;}
+    CVector4f(float x, float y, float z, float w) {assign(x, y, z, w);}
+    CVector4f(const CColor& other);
 
     CVector4f(const CVector3f& other)
     {
@@ -324,18 +362,6 @@ class alignas(16) CVector4f
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}
 
-
-    union
-    {
-        struct
-        {
-            float x, y, z, w;
-        };
-        float v[4];
-#if __SSE__
-        __m128 mVec128;
-#endif
-    };
 
     static const CVector4f skOne;
     static const CVector4f skNegOne;

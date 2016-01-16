@@ -16,8 +16,22 @@ namespace Zeus
 {
 class alignas(16) CVector2f
 {
-    public:
+#if __atdna__
+    float clangVec __attribute__((__vector_size__(8)));
+#endif
+public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
+    union
+    {
+        struct
+        {
+            float x, y;
+        };
+        float v[4];
+#if __SSE__
+        __m128 mVec128;
+#endif
+    };
 
     inline CVector2f() {zeroOut();}
 #if __SSE__
@@ -32,19 +46,43 @@ class alignas(16) CVector2f
         x = vec.vec[0], y = vec.vec[1], v[2] = 0.0f, v[3] = 0.0f;
     }
 #endif
+
+    operator atVec2f()
+    {
+        atVec2f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
 #endif
-    CVector2f(float xy) {splat(xy);}
-    void assign(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
-    CVector2f(float x, float y) {assign(x, y);}
-#if ZE_ATHENA_TYPES
-    CVector2f(Athena::io::IStreamReader& input)
+        return ret;
+    }
+    operator atVec2f() const
+    {
+        atVec2f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+
+    void read(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
         y = input.readFloat();
         v[2] = 0.0f;
         v[3] = 0.0f;
     }
+
+    CVector2f(Athena::io::IStreamReader& input)
+    { read(input); }
 #endif
+
+    CVector2f(float xy) {splat(xy);}
+    void assign(float x, float y) {v[0] = x; v[1] = y; v[2] = 0; v[3] = 0.0;}
+    CVector2f(float x, float y) {assign(x, y);}
 
     inline bool operator ==(const CVector2f& rhs) const
     {return (x == rhs.x && y == rhs.y);}
@@ -306,18 +344,6 @@ class alignas(16) CVector2f
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}
 
-
-    union
-    {
-        struct
-        {
-            float x, y;
-        };
-        float v[4];
-#if __SSE__
-        __m128 mVec128;
-#endif
-    };
 
     static const CVector2f skOne;
     static const CVector2f skNegOne;

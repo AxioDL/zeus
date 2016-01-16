@@ -16,13 +16,28 @@ namespace Zeus
 {
 class alignas(16) CVector3f
 {
+#if __atdna__
+    float clangVec __attribute__((__vector_size__(12)));
+#endif
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
-    
+
+    union
+    {
+        struct { float x, y, z; };
+        float v[4];
+#if __SSE__
+        __m128 mVec128;
+#elif __GEKKO_PS__
+        ps128_t mVec128;
+#endif
+    };
+
     inline CVector3f() {zeroOut();}
 #if __SSE__ || __GEKKO_PS__
     CVector3f(const __m128& mVec128) : mVec128(mVec128) {v[3] = 0.0f;}
 #endif
+
 #if ZE_ATHENA_TYPES
     CVector3f(const atVec3f& vec)
 #if __SSE__ || __GEKKO_PS__
@@ -32,11 +47,28 @@ public:
         x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], v[3] = 0.0f;
     }
 #endif
+
+    operator atVec3f()
+    {
+        atVec3f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
 #endif
-    CVector3f(float xyz) {splat(xyz);}
-    void assign(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
-    CVector3f(float x, float y, float z) {assign(x, y, z);}
-#if ZE_ATHENA_TYPES
+        return ret;
+    }
+    operator atVec3f() const
+    {
+        atVec3f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+
     void read(Athena::io::IStreamReader& input)
     {
         x = input.readFloat();
@@ -46,6 +78,11 @@ public:
     }
     CVector3f(Athena::io::IStreamReader& input) {read(input);}
 #endif
+
+    CVector3f(float xyz) {splat(xyz);}
+    void assign(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
+    CVector3f(float x, float y, float z) {assign(x, y, z);}
+
     CVector3f(const CVector2f& other)
     {
         x = other.x;
@@ -312,18 +349,6 @@ public:
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}
-
-
-    union
-    {
-        struct { float x, y, z; };
-        float v[4];
-#if __SSE__
-        __m128 mVec128;
-#elif __GEKKO_PS__
-        ps128_t mVec128;
-#endif
-    };
 
     static const CVector3f skOne;
     static const CVector3f skNegOne;

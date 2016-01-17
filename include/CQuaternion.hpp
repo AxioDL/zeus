@@ -14,6 +14,9 @@ namespace Zeus
 {
 class alignas(16) CQuaternion
 {
+#if __atdna__ && ZE_ATHENA_TYPES
+    float clangVec __attribute__((__vector_size__(16)));
+#endif
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
@@ -23,6 +26,36 @@ public:
     CQuaternion(float r, const CVector3f& vec) : v(vec){ this->r = r;}
 #if ZE_ATHENA_TYPES
     CQuaternion(Athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
+    CQuaternion(const atVec4f& vec)
+    {
+#if __SSE__
+        v.mVec128 = vec.mVec128;
+#else
+        x = vec.vec[0]; y = vec.vec[1]; z = vec.vec[2]; r = vec.vec[3];
+#endif
+    }
+
+    operator atVec4f()
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = v.mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+    operator atVec4f() const
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = v.mVec128;
+#else
+        ret.vec = v;
+#endif
+        return ret;
+    }
+
 #endif
     CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
     CQuaternion(const CVector4f& vec)

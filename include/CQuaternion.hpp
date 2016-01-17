@@ -26,12 +26,11 @@ public:
 #endif
     CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
     CQuaternion(const CVector4f& vec)
-          : r(vec.w)
     {
 #if __SSE__
-        v.mVec128 = vec.mVec128; v.v[3] = 0;
+        v.mVec128 = vec.mVec128;
 #else
-        v.x = vec.x; v.y = vec.y; v.z = vec.z;
+        v.x = vec.x; v.y = vec.y; v.z = vec.z; r = vec.w;
 #endif
     }
 
@@ -105,8 +104,11 @@ public:
         return asinf(-2.0 * (v.x * v.z - r * v.y));
     }
 
-    float r;
-    CVector3f v;
+    union
+    {
+        struct { float x, y, z, r; };
+        CVector3f v;
+    };
 };
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);

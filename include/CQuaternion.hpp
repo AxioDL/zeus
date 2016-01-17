@@ -18,7 +18,7 @@ public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
     
     CQuaternion() : r(1.0f) {}
-    CQuaternion(float r, float x, float y, float z) : r(r), v(x, y, z){ this->r = r; }
+    CQuaternion(float r, float x, float y, float z) : v(x, y, z){ this->r = r; }
     CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
     CQuaternion(float r, const CVector3f& vec) : v(vec){ this->r = r;}
 #if ZE_ATHENA_TYPES

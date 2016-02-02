@@ -102,6 +102,11 @@ public:
         return CQuaternion(cosf(angle/2), axis*sinf(angle/2));
     }
 
+    void rotateX(float angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
+    void rotateY(float angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
+    void rotateZ(float angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
+
+
     CAxisAngle toAxisAngle();
 
     static inline CVector3f rotate(const CQuaternion& rotation, const CVector3f& v)

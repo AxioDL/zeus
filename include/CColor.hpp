@@ -57,6 +57,14 @@ public:
     CColor(float r, float g, float b, float a = 1.0f) {v[0] = r; v[1] = g; v[2] = b; v[3] = a; }
 #if ZE_ATHENA_TYPES
     CColor(Athena::io::IStreamReader& reader) {readRGBA(reader);}
+    CColor(const atVec4f& vec)
+#if __SSE__ || __GEKKO_PS__
+        : mVec128(vec.mVec128){}
+#else
+    {
+        r = vec.vec[0], g = vec.vec[1], b = vec.vec[2], a = vec.vec[3];
+    }
+#endif
 #endif
 
     CColor(Comp32 rgba) { fromRGBA32(rgba); }

@@ -22,6 +22,11 @@ public:
     : m_basis(mtx[0], mtx[1], mtx[2]), m_origin(mtx[0].vec[3], mtx[1].vec[3], mtx[2].vec[3]) {}
 #endif
 
+    static inline CTransform Identity()
+    {
+        return CTransform(CMatrix3f::skIdentityMatrix3f);
+    }
+
     inline CTransform operator*(const CTransform& rhs) const
     {return CTransform(m_basis * rhs.m_basis, m_origin + (m_basis * rhs.m_origin));}
     

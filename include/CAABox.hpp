@@ -240,6 +240,12 @@ public:
             m_max.z = point.z;
     }
 
+    inline void accumulateBounds(const CAABox& other)
+    {
+        accumulateBounds(other.m_min);
+        accumulateBounds(other.m_max);
+    }
+
     inline bool pointInside(const CVector3f& other) const
     {
         return (m_min.x <= other.x && other.x <= m_max.z &&

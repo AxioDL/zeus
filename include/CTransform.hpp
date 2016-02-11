@@ -46,6 +46,54 @@ public:
 
     inline void rotate(const CVector3f& euler) { *this = *this * CMatrix3f(CQuaternion(euler)); }
 
+    inline void rotateLocalX(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+
+        Zeus::CVector3f b2 = m_basis[2] * sinT;
+        Zeus::CVector3f b1 = m_basis[1] * sinT;
+        Zeus::CVector3f cosV(cosT);
+
+        m_basis[1] *= cosV;
+        m_basis[2] *= cosV;
+
+        m_basis[1] += b2;
+        m_basis[2] -= b1;
+    }
+
+    inline void rotateLocalY(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+
+        Zeus::CVector3f b0 = m_basis[0] * sinT;
+        Zeus::CVector3f b2 = m_basis[2] * sinT;
+        Zeus::CVector3f cosV(cosT);
+
+        m_basis[0] *= cosV;
+        m_basis[2] *= cosV;
+
+        m_basis[2] += b0;
+        m_basis[0] -= b2;
+    }
+
+    inline void rotateLocalZ(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+
+        Zeus::CVector3f b0 = m_basis[0] * sinT;
+        Zeus::CVector3f b1 = m_basis[1] * sinT;
+        Zeus::CVector3f cosV(cosT);
+
+        m_basis[0] *= cosV;
+        m_basis[1] *= cosV;
+
+        m_basis[0] += b1;
+        m_basis[1] -= b0;
+    }
+
     inline void scaleBy(float factor)
     { CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor))); *this = *this * xfrm; }
 

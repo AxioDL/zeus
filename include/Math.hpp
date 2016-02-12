@@ -96,7 +96,7 @@ namespace Math
     template <class T>
     inline int PopCount(T x)
     {
-        using U = std::conditional_t<std::is_enum<T>::value, std::underlying_type_t<T>, T>;
+        using U = std::make_unsigned_t<std::conditional_t<std::is_enum<T>::value, std::underlying_type_t<T>, T>>;
         U cx = U(x);
         const U m1  = U(0x5555555555555555); //binary: 0101...
         const U m2  = U(0x3333333333333333); //binary: 00110011..

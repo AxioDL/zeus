@@ -92,6 +92,22 @@ namespace Math
     float fastCosR(float val);
     float fastSinR(float val);
     int floorPowerOfTwo(int x);
+
+    template <class T>
+    inline int PopCount(T x)
+    {
+        using U = std::conditional_t<std::is_enum<T>::value, std::underlying_type_t<T>, T>;
+        U cx = U(x);
+        const U m1  = U(0x5555555555555555); //binary: 0101...
+        const U m2  = U(0x3333333333333333); //binary: 00110011..
+        const U m4  = U(0x0f0f0f0f0f0f0f0f); //binary:  4 zeros,  4 ones ...
+        const U h01 = U(0x0101010101010101); //the sum of 256 to the power of 0,1,2,3...
+
+        cx -= (cx >> 1) & m1;             //put count of each 2 bits into those 2 bits
+        cx = (cx & m2) + ((cx >> 2) & m2); //put count of each 4 bits into those 4 bits
+        cx = (cx + (cx >> 4)) & m4;        //put count of each 8 bits into those 8 bits
+        return (cx * h01) >> ((sizeof(U)-1)*8);  //returns left 8 bits of x + (x<<8) + (x<<16) + (x<<24) + ...
+    }
 }
 }
 

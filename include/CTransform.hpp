@@ -36,15 +36,47 @@ public:
         return CTransform(inv, inv * -m_origin);
     }
 
-    inline void translate(const CVector3f& position)
+    static inline CTransform Translate(const CVector3f& position)
     {
-        m_basis = CMatrix3f::skIdentityMatrix3f;
-        m_origin = position;
+        return {CMatrix3f::skIdentityMatrix3f, position};
     }
 
-    inline void translate(float x, float y, float z) { translate({x, y, z}); }
+    static inline CTransform Translate(float x, float y, float z) { return Translate({x, y, z}); }
+
+    inline CTransform& operator+=(const CVector3f& other)
+    {
+        m_origin += other;
+        return *this;
+    }
 
     inline void rotate(const CVector3f& euler) { *this = *this * CMatrix3f(CQuaternion(euler)); }
+
+    static inline CTransform RotateX(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+        return CTransform(CMatrix3f({1.f, 0.f, 0.f, 0.f},
+                                    {0.f, cosT, sinT, 0.f},
+                                    {0.f, -sinT, cosT, 0.f}));
+    }
+
+    static inline CTransform RotateY(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+        return CTransform(CMatrix3f({cosT, 0.f, -sinT, 0.f},
+                                    {0.f, 1.f, 0.f, 0.f},
+                                    {sinT, 0.f, cosT, 0.f}));
+    }
+
+    static inline CTransform RotateZ(float theta)
+    {
+        float sinT = sinf(theta);
+        float cosT = cosf(theta);
+        return CTransform(CMatrix3f({cosT, sinT, 0.f, 0.f},
+                                    {-sinT, cosT, 0.f, 0.f},
+                                    {0.f, 0.f, 1.f, 0.f}));
+    }
 
     inline void rotateLocalX(float theta)
     {
@@ -97,18 +129,26 @@ public:
     inline void scaleBy(float factor)
     { CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor))); *this = *this * xfrm; }
 
-    inline void scale(const CVector3f& factor)
+    static inline CTransform Scale(const CVector3f& factor)
     {
-        m_basis = CMatrix3f(true);
-        m_basis[0][0] = factor.x;
-        m_basis[1][1] = factor.y;
-        m_basis[2][2] = factor.z;
-        m_origin.zeroOut();
+        return CTransform(CMatrix3f({factor.x, 0.f, 0.f, 0.f},
+                                    {0.f, factor.y, 0.f, 0.f},
+                                    {0.f, 0.f, factor.z, 0.f}));
     }
 
+    static inline CTransform Scale(float x, float y, float z)
+    {
+        return CTransform(CMatrix3f({x, 0.f, 0.f, 0.f},
+                                    {0.f, y, 0.f, 0.f},
+                                    {0.f, 0.f, z, 0.f}));
+    }
 
-    inline void scale(float x, float y, float z) { scale({x, y, z}); }
-    inline void scale(float factor) { scale({factor, factor, factor}); }
+    static inline CTransform Scale(float factor)
+    {
+        return CTransform(CMatrix3f({factor, 0.f, 0.f, 0.f},
+                                    {0.f, factor, 0.f, 0.f},
+                                    {0.f, 0.f, factor, 0.f}));
+    }
 
     inline void multiplyIgnoreTranslation(const CTransform& xfrm) { m_basis = m_basis*xfrm.m_basis; }
 

@@ -92,6 +92,7 @@ namespace Math
     float fastCosR(float val);
     float fastSinR(float val);
     int floorPowerOfTwo(int x);
+    int ceilingPowerOfTwo(int x);
 
     template <class T>
     inline int PopCount(T x)

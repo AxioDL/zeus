@@ -198,6 +198,22 @@ int floorPowerOfTwo(int x)
     return x - (x >> 1);
 }
 
+int ceilingPowerOfTwo(int x)
+{
+    if (x == 0)
+        return 0;
+
+    x--;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    x++;
+
+    return x;
+}
+
 float fastCosR(float val)
 {
     if (fabs(val) > M_PI)

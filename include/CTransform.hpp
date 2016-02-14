@@ -126,6 +126,11 @@ public:
         m_basis[1] -= b0;
     }
 
+    inline CVector3f transposeRotate(const CVector3f& in) const
+    {
+        return CVector3f(m_basis[0].dot(in), m_basis[1].dot(in), m_basis[2].dot(in));
+    }
+
     inline void scaleBy(float factor)
     { CTransform xfrm(CMatrix3f(CVector3f(factor, factor, factor))); *this = *this * xfrm; }
 

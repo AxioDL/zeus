@@ -88,10 +88,23 @@ public:
 
     CVector4f(const CVector3f& other)
     {
+#if __SSE__
+        mVec128 = other.mVec128;
+#else
         x = other.x;
         y = other.y;
         z = other.z;
+#endif
         w = 1.0f;
+    }
+
+    inline CVector3f toVec3f() const
+    {
+#if __SSE__
+        return CVector3f(mVec128);
+#else
+        return CVector3f(x, y, z);
+#endif
     }
 
     CVector4f& operator=(const CColor& other);

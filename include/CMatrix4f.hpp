@@ -132,6 +132,12 @@ public:
         return ret;
     }
 
+    inline CVector3f multiplyOneOverW(const CVector3f& point) const
+    {
+        CVector4f xfVec = *this * point;
+        return xfVec.toVec3f() / xfVec.w;
+    }
+
     union
     {
         float m[4][4];

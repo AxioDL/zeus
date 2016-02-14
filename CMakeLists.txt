@@ -37,6 +37,7 @@ add_library(Math
     include/Global.hpp
     include/MathLib.hpp
     include/TVectorUnion.hpp
+    include/CVector2i.hpp
     include/CVector2f.hpp
     include/CVector3f.hpp
     include/CVector3d.hpp

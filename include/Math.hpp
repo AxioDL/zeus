@@ -32,7 +32,7 @@ const bool AESNI         = false;
  * Detects CPU capabilities and returns true if SSE4.1 or SSE4.2 is available
  */
 void detectCPU();
-const CPUInfo cpuFeatures();
+const CPUInfo& cpuFeatures();
 class CVector3f;
 class CTransform;
 namespace Math

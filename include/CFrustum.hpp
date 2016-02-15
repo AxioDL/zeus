@@ -13,8 +13,7 @@ public:
     
     inline void updatePlanes(const CTransform& modelview, const CProjection& projection)
     {
-        CMatrix4f mv;
-        modelview.toMatrix4f(mv);
+        CMatrix4f mv = modelview.toMatrix4f();
         CMatrix4f mvp = projection.getCachedMatrix() * mv;
         CMatrix4f mvp_rm = mvp.transposed();
         

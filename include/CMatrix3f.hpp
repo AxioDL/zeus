@@ -127,7 +127,32 @@ public:
     };
 };
 
-CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs);
+static CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs)
+{
+#if __SSE__
+    unsigned i;
+    TVectorUnion resVec[3];
+    for (i=0 ; i<3 ; ++i) {
+        resVec[i].mVec128 =
+        _mm_add_ps(_mm_add_ps(
+                   _mm_mul_ps(lhs[0].mVec128, ze_splat_ps(rhs[i].mVec128, 0)),
+                   _mm_mul_ps(lhs[1].mVec128, ze_splat_ps(rhs[i].mVec128, 1))),
+                   _mm_mul_ps(lhs[2].mVec128, ze_splat_ps(rhs[i].mVec128, 2)));
+        resVec[i].v[3] = 0.0;
+    }
+    return CMatrix3f(resVec[0].mVec128, resVec[1].mVec128, resVec[2].mVec128);
+#else
+    return CMatrix3f(lhs[0][0] * rhs[0][0] + lhs[1][0] * rhs[0][1] + lhs[2][0] * rhs[0][2],
+                     lhs[0][0] * rhs[1][0] + lhs[1][0] * rhs[1][1] + lhs[2][0] * rhs[1][2],
+                     lhs[0][0] * rhs[2][0] + lhs[1][0] * rhs[2][1] + lhs[2][0] * rhs[2][2],
+                     lhs[0][1] * rhs[0][0] + lhs[1][1] * rhs[0][1] + lhs[2][1] * rhs[0][2],
+                     lhs[0][1] * rhs[1][0] + lhs[1][1] * rhs[1][1] + lhs[2][1] * rhs[1][2],
+                     lhs[0][1] * rhs[2][0] + lhs[1][1] * rhs[2][1] + lhs[2][1] * rhs[2][2],
+                     lhs[0][2] * rhs[0][0] + lhs[1][2] * rhs[0][1] + lhs[2][2] * rhs[0][2],
+                     lhs[0][2] * rhs[1][0] + lhs[1][2] * rhs[1][1] + lhs[2][2] * rhs[1][2],
+                     lhs[0][2] * rhs[2][0] + lhs[1][2] * rhs[2][1] + lhs[2][2] * rhs[2][2]);
+#endif
+}
 
 }
 

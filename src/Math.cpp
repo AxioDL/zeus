@@ -64,7 +64,7 @@ void detectCPU()
 }
 
 
-const CPUInfo cpuFeatures() { return g_cpuFeatures; }
+const CPUInfo& cpuFeatures() { return g_cpuFeatures; }
 
 namespace Math
 {

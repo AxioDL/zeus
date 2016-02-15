@@ -170,19 +170,14 @@ public:
 
     inline CVector3f operator*(const CVector3f& other) const {return m_origin + m_basis * other;}
     
-    inline void toMatrix4f(CMatrix4f& mat) const
+    inline CMatrix4f toMatrix4f() const
     {
-#if __SSE__
-        mat.vec[0].mVec128 = m_basis[0].mVec128; mat.m[0][3] = 0.0f;
-        mat.vec[1].mVec128 = m_basis[1].mVec128; mat.m[1][3] = 0.0f;
-        mat.vec[2].mVec128 = m_basis[2].mVec128; mat.m[2][3] = 0.0f;
-        mat.vec[3].mVec128 = m_origin.mVec128; mat.m[3][3] = 1.0f;
-#else
-        mat.m[0][0] = m_basis[0][0]; mat.m[0][1] = m_basis[0][1]; mat.m[0][2] = m_basis[0][2]; mat.m[0][3] = 0.0f;
-        mat.m[1][0] = m_basis[1][0]; mat.m[1][1] = m_basis[1][1]; mat.m[1][2] = m_basis[1][2]; mat.m[1][3] = 0.0f;
-        mat.m[2][0] = m_basis[2][0]; mat.m[2][1] = m_basis[2][1]; mat.m[2][2] = m_basis[2][2]; mat.m[2][3] = 0.0f;
-        mat.m[3][0] = m_origin[0]; mat.m[3][1] = m_origin[1]; mat.m[3][2] = m_origin[2]; mat.m[3][3] = 1.0f;
-#endif
+        CMatrix4f ret(m_basis[0], m_basis[1], m_basis[2], m_origin);
+        ret[0][3] = 0.0f;
+        ret[1][3] = 0.0f;
+        ret[2][3] = 0.0f;
+        ret[3][3] = 1.0f;
+        return ret;
     }
 
     static inline CTransform fromColumns(const CVector3f& m0, const CVector3f& m1, const CVector3f& m2, const CVector3f& m3)

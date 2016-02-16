@@ -12,22 +12,13 @@ namespace Zeus
 
 static CPUInfo g_cpuFeatures;
 
-void getCpuInfo(int level,
-              unsigned int* eax,
-              unsigned int* ebx,
-              unsigned int* ecx,
-              unsigned int* edx)
+void getCpuInfo(int level, int regs[4])
 {
 #if !GEKKO
 #if _WIN32
-    int regs[4];
     __cpuid(regs, level);
-    *eax = regs[0];
-    *ebx = regs[1];
-    *ecx = regs[2];
-    *edx = regs[3];
 #else
-    __cpuid(level, *eax, *ebx, *ecx, *edx);
+    __cpuid(level, regs[0], regs[1], regs[2], regs[3]);
 #endif
 #endif
 }
@@ -39,24 +30,32 @@ void detectCPU()
     if (isInit)
         return;
 
-    unsigned int eax, ebx, ecx, edx;
-    getCpuInfo(0, &eax, &ebx, &ecx, &edx);
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = ebx;
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = edx;
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = ecx;
-    getCpuInfo(0x80000000, &eax, &ebx, &ecx, &edx);
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand) = ebx;
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand + 4) = edx;
-    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuBrand + 8) = ecx;
-    getCpuInfo(1, &eax, &ebx, &ecx, &edx);
+    int regs[4];
+    getCpuInfo(0, regs);
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = regs[1];
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = regs[3];
+    *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = regs[2];
+    for (unsigned int i = 0x80000002; i < 0x80000004; i++)
+    {
+        getCpuInfo(i, regs);
+        // Interpret CPU brand string and cache information.
+        if  (i == 0x80000002)
+            memcpy((char*)g_cpuFeatures.cpuBrand, regs, sizeof(regs));
+        else if( i == 0x80000003 )
+            memcpy((char*)g_cpuFeatures.cpuBrand + 16, regs, sizeof(regs));
+        else if( i == 0x80000004 )
+            memcpy((char*)g_cpuFeatures.cpuBrand + 32, regs, sizeof(regs));
+    }
 
-    memset((bool*)&g_cpuFeatures.AESNI, ((ecx & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE1,  ((edx & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE2,  ((edx & 0x04000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE3,  ((ecx & 0x00000001) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSSE3, ((ecx & 0x00000200) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE41, ((ecx & 0x00080000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE42, ((ecx & 0x00100000) != 0), 1);
+    getCpuInfo(1, regs);
+
+    memset((bool*)&g_cpuFeatures.AESNI, ((regs[2] & 0x02000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE1,  ((regs[3] & 0x02000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE2,  ((regs[3] & 0x04000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE3,  ((regs[2] & 0x00000001) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSSE3, ((regs[2] & 0x00000200) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
 
 
     isInit = true;

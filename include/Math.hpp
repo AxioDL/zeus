@@ -17,7 +17,7 @@ namespace Zeus
 struct CPUInfo
 {
 const char cpuBrand [32] = {0};
-const char cpuVendor[32] = {0};
+const char cpuVendor[64] = {0};
 const bool isIntel       = false;
 const bool SSE1          = false;
 const bool SSE2          = false;

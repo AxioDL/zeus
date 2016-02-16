@@ -43,9 +43,25 @@ public:
 
     static inline CTransform Translate(float x, float y, float z) { return Translate({x, y, z}); }
 
+    inline CTransform operator+(const CVector3f& other)
+    {
+        return CTransform(m_basis, m_origin + other);
+    }
+
     inline CTransform& operator+=(const CVector3f& other)
     {
         m_origin += other;
+        return *this;
+    }
+
+    inline CTransform operator-(const CVector3f& other)
+    {
+        return CTransform(m_basis, m_origin - other);
+    }
+
+    inline CTransform& operator-=(const CVector3f& other)
+    {
+        m_origin -= other;
         return *this;
     }
 

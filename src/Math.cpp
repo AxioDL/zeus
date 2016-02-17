@@ -35,7 +35,7 @@ void detectCPU()
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = regs[1];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = regs[3];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = regs[2];
-    for (unsigned int i = 0x80000002; i < 0x80000004; i++)
+    for (unsigned int i = 0x80000002; i <= 0x80000004; i++)
     {
         getCpuInfo(i, regs);
         // Interpret CPU brand string and cache information.

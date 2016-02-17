@@ -35,16 +35,20 @@ void detectCPU()
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = regs[1];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = regs[3];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = regs[2];
-    for (unsigned int i = 0x80000002; i < 0x80000004; i++)
+    getCpuInfo(0x80000000, regs);
+    if (regs[0] >= 0x80000004)
     {
-        getCpuInfo(i, regs);
-        // Interpret CPU brand string and cache information.
-        if  (i == 0x80000002)
-            memcpy((char*)g_cpuFeatures.cpuBrand, regs, sizeof(regs));
-        else if( i == 0x80000003 )
-            memcpy((char*)g_cpuFeatures.cpuBrand + 16, regs, sizeof(regs));
-        else if( i == 0x80000004 )
-            memcpy((char*)g_cpuFeatures.cpuBrand + 32, regs, sizeof(regs));
+        for (unsigned int i = 0x80000002; i <= 0x80000004; i++)
+        {
+            getCpuInfo(i, regs);
+            // Interpret CPU brand string and cache information.
+            if  (i == 0x80000002)
+                memcpy((char*)g_cpuFeatures.cpuBrand, regs, sizeof(regs));
+            else if( i == 0x80000003 )
+                memcpy((char*)g_cpuFeatures.cpuBrand + 16, regs, sizeof(regs));
+            else if( i == 0x80000004 )
+                memcpy((char*)g_cpuFeatures.cpuBrand + 32, regs, sizeof(regs));
+        }
     }
 
     getCpuInfo(1, regs);

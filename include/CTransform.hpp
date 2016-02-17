@@ -29,7 +29,7 @@ public:
 
     inline CTransform operator*(const CTransform& rhs) const
     {return CTransform(m_basis * rhs.m_basis, m_origin + (m_basis * rhs.m_origin));}
-    
+
     inline CTransform inverse() const
     {
         CMatrix3f inv = m_basis.inverted();
@@ -71,27 +71,27 @@ public:
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f({1.f, 0.f, 0.f, 0.f},
-                                    {0.f, cosT, sinT, 0.f},
-                                    {0.f, -sinT, cosT, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{1.f, 0.f, 0.f, 0.f},
+                                    atVec4f{0.f, cosT, sinT, 0.f},
+                                    atVec4f{0.f, -sinT, cosT, 0.f}));
     }
 
     static inline CTransform RotateY(float theta)
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f({cosT, 0.f, -sinT, 0.f},
-                                    {0.f, 1.f, 0.f, 0.f},
-                                    {sinT, 0.f, cosT, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{cosT, 0.f, -sinT, 0.f},
+                                    atVec4f{0.f, 1.f, 0.f, 0.f},
+                                    atVec4f{sinT, 0.f, cosT, 0.f}));
     }
 
     static inline CTransform RotateZ(float theta)
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f({cosT, sinT, 0.f, 0.f},
-                                    {-sinT, cosT, 0.f, 0.f},
-                                    {0.f, 0.f, 1.f, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{cosT, sinT, 0.f, 0.f},
+                                    atVec4f{-sinT, cosT, 0.f, 0.f},
+                                    atVec4f{0.f, 0.f, 1.f, 0.f}));
     }
 
     inline void rotateLocalX(float theta)
@@ -152,23 +152,23 @@ public:
 
     static inline CTransform Scale(const CVector3f& factor)
     {
-        return CTransform(CMatrix3f({factor.x, 0.f, 0.f, 0.f},
-                                    {0.f, factor.y, 0.f, 0.f},
-                                    {0.f, 0.f, factor.z, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{factor.x, 0.f, 0.f, 0.f},
+                                    atVec4f{0.f, factor.y, 0.f, 0.f},
+                                    atVec4f{0.f, 0.f, factor.z, 0.f}));
     }
 
     static inline CTransform Scale(float x, float y, float z)
     {
-        return CTransform(CMatrix3f({x, 0.f, 0.f, 0.f},
-                                    {0.f, y, 0.f, 0.f},
-                                    {0.f, 0.f, z, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{x, 0.f, 0.f, 0.f},
+                                    atVec4f{0.f, y, 0.f, 0.f},
+                                    atVec4f{0.f, 0.f, z, 0.f}));
     }
 
     static inline CTransform Scale(float factor)
     {
-        return CTransform(CMatrix3f({factor, 0.f, 0.f, 0.f},
-                                    {0.f, factor, 0.f, 0.f},
-                                    {0.f, 0.f, factor, 0.f}));
+        return CTransform(CMatrix3f(atVec4f{factor, 0.f, 0.f, 0.f},
+                                    atVec4f{0.f, factor, 0.f, 0.f},
+                                    atVec4f{0.f, 0.f, factor, 0.f}));
     }
 
     inline void multiplyIgnoreTranslation(const CTransform& xfrm) { m_basis = m_basis*xfrm.m_basis; }
@@ -185,7 +185,7 @@ public:
     inline CMatrix3f buildMatrix3f() { return m_basis; }
 
     inline CVector3f operator*(const CVector3f& other) const {return m_origin + m_basis * other;}
-    
+
     inline CMatrix4f toMatrix4f() const
     {
         CMatrix4f ret(m_basis[0], m_basis[1], m_basis[2], m_origin);

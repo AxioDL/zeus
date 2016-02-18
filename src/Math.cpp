@@ -134,7 +134,6 @@ double sqrtD(double val)
     p.v *= (1.5f - (x * p.v * p.v));
     p.v *= (1.5f - (x * p.v * p.v));
     q = p.v;
-#endif
 
     static const double half = 0.5;
     static const double three = 3.0;
@@ -155,6 +154,7 @@ double sqrtD(double val)
     sq = -((val * three) - sq);
     sq = q * sq;
     q = val * sq;
+#endif
     return q;
 }
 

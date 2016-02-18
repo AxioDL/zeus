@@ -255,6 +255,11 @@ public:
         return *this * mag;
     }
 
+    inline CVector2f perpendicularVector() const
+    {
+        return {-y, x};
+    }
+
     inline float cross(const CVector2f& rhs) const
     {
         return (x * rhs.y) - (y * rhs.x);

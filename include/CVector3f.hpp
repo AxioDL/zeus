@@ -91,6 +91,15 @@ public:
         v[3] = 0.0f;
     }
 
+    inline CVector2f toVec2f() const
+    {
+#if __SSE__
+        return CVector2f(mVec128);
+#else
+        return CVector2f(x, y);
+#endif
+    }
+
     inline bool operator ==(const CVector3f& rhs) const
     {return (x == rhs.x && y == rhs.y && z == rhs.z);}
     inline bool operator !=(const CVector3f& rhs) const

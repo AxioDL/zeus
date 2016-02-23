@@ -18,17 +18,18 @@
 
 namespace Zeus
 {
+typedef uint8_t Comp8;
+typedef uint32_t Comp32;
+constexpr float OneOver255 = 1.f/255.f;
+
 typedef union
 {
     struct
     {
-        unsigned char r, g, b, a;
+        Comp8 r, g, b, a;
     };
-    unsigned int rgba;
+    Comp32 rgba;
 } RGBA32;
-
-typedef uint8_t Comp8;
-typedef uint32_t Comp32;
 
 class CVector4f;
 
@@ -265,19 +266,34 @@ public:
 #endif
     };
 
-    void fromRGBA8(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+    void fromRGBA8(Comp8 r, Comp8 g, Comp8 b, Comp8 a)
     {
-        this->r = r / 255.f;
-        this->g = g / 255.f;
-        this->b = b / 255.f;
-        this->a = a / 255.f;
+        this->r = r * OneOver255;
+        this->g = g * OneOver255;
+        this->b = b * OneOver255;
+        this->a = a * OneOver255;
     }
 
-    void fromRGBA32(unsigned int rgba)
+    void fromRGBA32(Comp32 rgba)
     {
         static RGBA32 tmp;
         tmp.rgba = COLOR(rgba);
         fromRGBA8(tmp.r, tmp.g, tmp.b, tmp.a);
+    }
+
+    /*!
+     * \brief Converts a CColor to RGBA8
+     * \param r
+     * \param g
+     * \param b
+     * \param a
+     */
+    void toRGBA8(Comp8& r, Comp8& g, Comp8& b, Comp8& a)
+    {
+        r = this->r * 255;
+        g = this->g * 255;
+        b = this->b * 255;
+        a = this->a * 255;
     }
 
     /**

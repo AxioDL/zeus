@@ -62,7 +62,17 @@ public:
 #endif
     CMatrix3f(const CVector3f& axis, float angle);
     CMatrix3f(const CQuaternion& quat);
-    
+    CMatrix3f(const TVectorUnion& r0, const TVectorUnion& r1, const TVectorUnion& r2)
+    {
+#if __SSE__
+        vec[0].mVec128 = r0.mVec128; vec[1].mVec128 = r1.mVec128; vec[2].mVec128 = r2.mVec128;
+#else
+        vec[0].x = r0.vec[0]; vec[0].y = r0.vec[1]; vec[0].z = r0.vec[2];
+        vec[1].x = r1.vec[0]; vec[1].y = r1.vec[1]; vec[1].z = r1.vec[2];
+        vec[2].x = r2.vec[0]; vec[2].y = r2.vec[1]; vec[2].z = r2.vec[2];
+#endif
+    }
+
     inline CMatrix3f& operator=(const CMatrix3f& other)
     {
         vec[0] = other.vec[0];

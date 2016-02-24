@@ -71,27 +71,27 @@ public:
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f(CVector4f{1.f, 0.f, 0.f, 0.f},
-                                    CVector4f{0.f, cosT, sinT, 0.f},
-                                    CVector4f{0.f, -sinT, cosT, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{1.f, 0.f, 0.f, 0.f},
+                                    TVectorUnion{0.f, cosT, sinT, 0.f},
+                                    TVectorUnion{0.f, -sinT, cosT, 0.f}));
     }
 
     static inline CTransform RotateY(float theta)
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f(CVector4f{cosT, 0.f, -sinT, 0.f},
-                                    CVector4f{0.f, 1.f, 0.f, 0.f},
-                                    CVector4f{sinT, 0.f, cosT, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{cosT, 0.f, -sinT, 0.f},
+                                    TVectorUnion{0.f, 1.f, 0.f, 0.f},
+                                    TVectorUnion{sinT, 0.f, cosT, 0.f}));
     }
 
     static inline CTransform RotateZ(float theta)
     {
         float sinT = sinf(theta);
         float cosT = cosf(theta);
-        return CTransform(CMatrix3f(CVector4f{cosT, sinT, 0.f, 0.f},
-                                    CVector4f{-sinT, cosT, 0.f, 0.f},
-                                    CVector4f{0.f, 0.f, 1.f, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{cosT, sinT, 0.f, 0.f},
+                                    TVectorUnion{-sinT, cosT, 0.f, 0.f},
+                                    TVectorUnion{0.f, 0.f, 1.f, 0.f}));
     }
 
     inline void rotateLocalX(float theta)
@@ -152,23 +152,23 @@ public:
 
     static inline CTransform Scale(const CVector3f& factor)
     {
-        return CTransform(CMatrix3f(CVector4f{factor.x, 0.f, 0.f, 0.f},
-                                    CVector4f{0.f, factor.y, 0.f, 0.f},
-                                    CVector4f{0.f, 0.f, factor.z, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{factor.x, 0.f, 0.f, 0.f},
+                                    TVectorUnion{0.f, factor.y, 0.f, 0.f},
+                                    TVectorUnion{0.f, 0.f, factor.z, 0.f}));
     }
 
     static inline CTransform Scale(float x, float y, float z)
     {
-        return CTransform(CMatrix3f(CVector4f{x, 0.f, 0.f, 0.f},
-                                    CVector4f{0.f, y, 0.f, 0.f},
-                                    CVector4f{0.f, 0.f, z, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{x, 0.f, 0.f, 0.f},
+                                    TVectorUnion{0.f, y, 0.f, 0.f},
+                                    TVectorUnion{0.f, 0.f, z, 0.f}));
     }
 
     static inline CTransform Scale(float factor)
     {
-        return CTransform(CMatrix3f(CVector4f{factor, 0.f, 0.f, 0.f},
-                                    CVector4f{0.f, factor, 0.f, 0.f},
-                                    CVector4f{0.f, 0.f, factor, 0.f}));
+        return CTransform(CMatrix3f(TVectorUnion{factor, 0.f, 0.f, 0.f},
+                                    TVectorUnion{0.f, factor, 0.f, 0.f},
+                                    TVectorUnion{0.f, 0.f, factor, 0.f}));
     }
 
     inline void multiplyIgnoreTranslation(const CTransform& xfrm) { m_basis = m_basis*xfrm.m_basis; }

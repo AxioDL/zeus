@@ -2,16 +2,13 @@
 #define CVECTOR2i_HPP
 
 #include "Global.hpp"
-#include "Math.hpp"
+#include "zeus/Math.hpp"
 
 #if ZE_ATHENA_TYPES
-#include <Athena/IStreamReader.hpp>
+#include <athena/IStreamReader.hpp>
 #endif
 
-#include <math.h>
-#include <assert.h>
-
-namespace Zeus
+namespace zeus
 {
 
 class CVector2i

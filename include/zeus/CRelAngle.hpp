@@ -1,10 +1,10 @@
 #ifndef CRELANGLE_HPP
 #define CRELANGLE_HPP
 
-#include "CVector3f.hpp"
-#include "Math.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/Math.hpp"
 
-namespace Zeus
+namespace zeus
 {
 /**
  * @brief The CRelAngle class represents relative angles in radians
@@ -18,9 +18,9 @@ public:
      */
     CRelAngle(const CVector3f& angles)
     {
-        x = Math::degToRad(angles.x);
-        y = Math::degToRad(angles.y);
-        z = Math::degToRad(angles.z);
+        x = degToRad(angles.x);
+        y = degToRad(angles.y);
+        z = degToRad(angles.z);
     }
 
     CRelAngle(float x, float y, float z)

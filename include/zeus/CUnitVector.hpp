@@ -1,9 +1,9 @@
 #ifndef CUNITVECTOR_HPP
 #define CUNITVECTOR_HPP
 
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CUnitVector3f : public CVector3f
 {

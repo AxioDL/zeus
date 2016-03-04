@@ -2,10 +2,10 @@
 #define CCOLOR_HPP
 
 #include "Global.hpp"
-#include "Math.hpp"
+#include "zeus/Math.hpp"
 #include "TVectorUnion.hpp"
 #if ZE_ATHENA_TYPES
-#include <Athena/FileReader.hpp>
+#include <athena/FileReader.hpp>
 #endif
 #include <iostream>
 
@@ -16,7 +16,7 @@
 #define COLOR(rgba) rgba
 #endif
 
-namespace Zeus
+namespace zeus
 {
 typedef uint8_t Comp8;
 typedef uint32_t Comp32;
@@ -57,7 +57,7 @@ public:
     CColor(float rgb, float a = 1.0) { splat(rgb, a); }
     CColor(float r, float g, float b, float a = 1.0f) {v[0] = r; v[1] = g; v[2] = b; v[3] = a; }
 #if ZE_ATHENA_TYPES
-    CColor(Athena::io::IStreamReader& reader) {readRGBA(reader);}
+    CColor(athena::io::IStreamReader& reader) {readRGBA(reader);}
     CColor(const atVec4f& vec)
 #if __SSE__ || __GEKKO_PS__
         : mVec128(vec.mVec128){}
@@ -75,14 +75,14 @@ public:
     CColor& operator=(const CVector4f& other);
 
 #if ZE_ATHENA_TYPES
-    inline void readRGBA(Athena::io::IStreamReader& reader)
+    inline void readRGBA(athena::io::IStreamReader& reader)
     {
         r = reader.readFloat();
         g = reader.readFloat();
         b = reader.readFloat();
         a = reader.readFloat();
     }
-    inline void readBGRA(Athena::io::IStreamReader& reader)
+    inline void readBGRA(athena::io::IStreamReader& reader)
     {
         b = reader.readFloat();
         g = reader.readFloat();
@@ -232,7 +232,7 @@ public:
     }
     inline float magnitude() const
     {
-        return sqrtf(magSquared());
+        return std::sqrt(magSquared());
     }
     static inline CColor lerp(const CColor& a, const CColor& b, float t)
     {
@@ -320,7 +320,7 @@ public:
     void toHSL(float& h, float& s, float& l);
 
     CColor toGrayscale()
-    { return {Math::sqrtF((r * r + g * g + b * b) / 3), a}; }
+    { return {sqrtF((r * r + g * g + b * b) / 3), a}; }
 };
 
 static inline CColor operator+(float lhs, const CColor& rhs)

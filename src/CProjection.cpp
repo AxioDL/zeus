@@ -1,11 +1,12 @@
-#include "CProjection.hpp"
-#include <math.h>
-#include <stdio.h>
+#include "zeus/CProjection.hpp"
+#include "zeus/Math.hpp"
+#include <cassert>
 
-namespace Zeus
+namespace zeus
 {
 void CProjection::_updateCachedMatrix()
 {
+    assert(m_projType == EProjType::Orthographic || m_projType == EProjType::Perspective);
     if (m_projType == EProjType::Orthographic)
     {
         float tmp;
@@ -36,7 +37,7 @@ void CProjection::_updateCachedMatrix()
     else if (m_projType == EProjType::Perspective)
     {
         float cot,tmp;
-        float t_fovy = tanf(m_persp.m_fov / 2.0);
+        float t_fovy = std::tan(m_persp.m_fov / 2.0f);
         
         cot = 1.0f / t_fovy;
         
@@ -60,11 +61,6 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[1][3] = 0.0f;
         m_mtx.m[2][3] = -1.0f;
         m_mtx.m[3][3] = 0.0f;
-    }
-    else
-    {
-        fprintf(stderr, "attempted to cache invalid projection type");
-        abort();
     }
 }
 }

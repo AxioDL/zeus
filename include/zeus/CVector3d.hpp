@@ -2,11 +2,11 @@
 #define CVECTOR3D_HPP
 
 #include "Global.hpp"
-#include "Math.hpp"
+#include "zeus/Math.hpp"
 #include "TVectorUnion.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CVector3d
 {

@@ -1,9 +1,9 @@
-#include "CVector4f.hpp"
-#include "CColor.hpp"
+#include "zeus/CVector4f.hpp"
+#include "zeus/CColor.hpp"
 
-namespace Zeus
+namespace zeus
 {
-CVector4f::CVector4f(const Zeus::CColor& other)
+CVector4f::CVector4f(const zeus::CColor& other)
     : x(other.r), y(other.g), z(other.b), w(other.a)
 {
 }

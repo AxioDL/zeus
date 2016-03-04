@@ -1,18 +1,18 @@
 #ifndef CAABOX_HPP
 #define CAABOX_HPP
 
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #include "CUnitVector.hpp"
-#include "CTransform.hpp"
-#include "CPlane.hpp"
+#include "zeus/CTransform.hpp"
+#include "zeus/CPlane.hpp"
 #include "CLine.hpp"
 #include "CSphere.hpp"
-#include "Math.hpp"
+#include "zeus/Math.hpp"
 #if ZE_ATHENA_TYPES
-#include <Athena/IStreamReader.hpp>
+#include <athena/IStreamReader.hpp>
 #endif
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CAABox
 {
@@ -62,9 +62,9 @@ public:
     {
     }
 #if ZE_ATHENA_TYPES
-    CAABox(Athena::io::IStreamReader& in) {readBoundingBox(in);}
+    CAABox(athena::io::IStreamReader& in) {readBoundingBox(in);}
     
-    inline void readBoundingBox(Athena::io::IStreamReader& in)
+    inline void readBoundingBox(athena::io::IStreamReader& in)
     {
         m_min = CVector3f(in);
         m_max = CVector3f(in);
@@ -93,7 +93,7 @@ public:
 
     float distanceFromPoint(const CVector3f &other) const
     {
-        return Math::sqrtF(distanceFromPointSquared(other));
+        return sqrtF(distanceFromPointSquared(other));
     }
     
     inline bool intersects(const CAABox& other) const
@@ -283,9 +283,9 @@ public:
     inline CVector3f clampToBox(const CVector3f& vec)
     {
         CVector3f ret = vec;
-        Math::clamp(m_min.x, ret.x, m_max.x);
-        Math::clamp(m_min.y, ret.y, m_max.y);
-        Math::clamp(m_min.z, ret.z, m_max.z);
+        clamp(m_min.x, ret.x, m_max.x);
+        clamp(m_min.y, ret.y, m_max.y);
+        clamp(m_min.z, ret.z, m_max.z);
         return ret;
     }
 

@@ -1,7 +1,7 @@
 #ifndef TVECTORUNION
 #define TVECTORUNION
 
-namespace Zeus
+namespace zeus
 {
 typedef union
 {

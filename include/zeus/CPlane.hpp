@@ -2,10 +2,10 @@
 #define CPLANE_HPP
 
 #include "Global.hpp"
-#include "CVector3f.hpp"
-#include "Math.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/Math.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CPlane
 {
@@ -36,7 +36,7 @@ public:
     {
         float mag = ((b.z - a.z) * (((b.x - a.x) * ((b.y - a.y) * vec.y)) + vec.x)) + vec.z;
         float dis = (-(vec.y - d)) / mag;
-        return Math::clamp(0.0f, dis, 1.0f);
+        return clamp(0.0f, dis, 1.0f);
     }
     
     inline void normalize()

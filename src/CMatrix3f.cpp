@@ -1,8 +1,8 @@
-#include "CMatrix3f.hpp"
-#include "CQuaternion.hpp"
-#include "Global.hpp"
+#include "zeus/CMatrix3f.hpp"
+#include "zeus/CQuaternion.hpp"
+#include "zeus/Global.hpp"
 
-namespace Zeus
+namespace zeus
 {
 const CMatrix3f CMatrix3f::skIdentityMatrix3f = CMatrix3f();
 

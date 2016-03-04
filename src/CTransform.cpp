@@ -1,6 +1,6 @@
-#include "CTransform.hpp"
+#include "zeus/CTransform.hpp"
 
-namespace Zeus
+namespace zeus
 {
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec)
 {
@@ -11,27 +11,27 @@ CTransform CTransformFromEditorEuler(const CVector3f& eulerVec)
     tj = eulerVec[1];
     th = eulerVec[2];
     
-    ci = cos(ti);
-    cj = cos(tj);
-    ch = cos(th);
-    si = sin(ti);
-    sj = sin(tj);
-    sh = sin(th);
+    ci = std::cos(ti);
+    cj = std::cos(tj);
+    ch = std::cos(th);
+    si = std::sin(ti);
+    sj = std::sin(tj);
+    sh = std::sin(th);
     
     cc = ci * ch;
     cs = ci * sh;
     sc = si * ch;
     ss = si * sh;
     
-    result.m_basis.m[0][0] = (float)(cj * ch);
-    result.m_basis.m[1][0] = (float)(sj * sc - cs);
-    result.m_basis.m[2][0] = (float)(sj * cc + ss);
-    result.m_basis.m[0][1] = (float)(cj * sh);
-    result.m_basis.m[1][1] = (float)(sj * ss + cc);
-    result.m_basis.m[2][1] = (float)(sj * cs - sc);
-    result.m_basis.m[0][2] = (float)(-sj);
-    result.m_basis.m[1][2] = (float)(cj * si);
-    result.m_basis.m[2][2] = (float)(cj * ci);
+    result.m_basis.m[0][0] = float(cj * ch);
+    result.m_basis.m[1][0] = float(sj * sc - cs);
+    result.m_basis.m[2][0] = float(sj * cc + ss);
+    result.m_basis.m[0][1] = float(cj * sh);
+    result.m_basis.m[1][1] = float(sj * ss + cc);
+    result.m_basis.m[2][1] = float(sj * cs - sc);
+    result.m_basis.m[0][2] = float(-sj);
+    result.m_basis.m[1][2] = float(cj * si);
+    result.m_basis.m[2][2] = float(cj * ci);
     
     return result;
 }
@@ -41,9 +41,9 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle)
     CTransform result;
     CVector3f axisN = axis.normalized();
     
-    float c = cosf(angle);
-    float s = sinf(angle);
-    float t = 1 - c;
+    float c = std::cos(angle);
+    float s = std::sin(angle);
+    float t = 1.f - c;
     
     result.m_basis.m[0][0] = t * axisN.v[0] * axisN.v[0] + c;
     result.m_basis.m[1][0] = t * axisN.v[0] * axisN.v[1] - axisN.v[2] * s;

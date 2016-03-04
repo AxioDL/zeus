@@ -1,10 +1,10 @@
 #ifndef CMATRIX4F
 #define CMATRIX4F
-#include "CMatrix3f.hpp"
-#include "CVector4f.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CMatrix3f.hpp"
+#include "zeus/CVector4f.hpp"
+#include "zeus/CVector3f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CMatrix4f
 {

@@ -1,17 +1,17 @@
-#include "CQuaternion.hpp"
-#include <math.h>
+#include "zeus/CQuaternion.hpp"
+#include "zeus/Math.hpp"
 
-namespace Zeus
+namespace zeus
 {
 void CQuaternion::fromVector3f(const CVector3f& vec)
 {
-    float cosX = cosf(0.5 * vec.x);
-    float cosY = cosf(0.5 * vec.y);
-    float cosZ = cosf(0.5 * vec.z);
+    float cosX = std::cos(0.5f * vec.x);
+    float cosY = std::cos(0.5f * vec.y);
+    float cosZ = std::cos(0.5f * vec.z);
 
-    float sinX = sinf(0.5 * vec.x);
-    float sinY = sinf(0.5 * vec.y);
-    float sinZ = sinf(0.5 * vec.z);
+    float sinX = std::sin(0.5f * vec.x);
+    float sinY = std::sin(0.5f * vec.y);
+    float sinZ = std::sin(0.5f * vec.z);
 
     r   = cosZ * cosY * cosX + sinZ * sinY * sinX;
     v.x = cosZ * cosY * sinX - sinZ * sinY * cosX;
@@ -106,7 +106,7 @@ const CQuaternion& CQuaternion::operator/=(float scale)
 
 float CQuaternion::magnitude() const
 {
-    return sqrt(magSquared());
+    return std::sqrt(magSquared());
 }
 
 float CQuaternion::magSquared() const
@@ -137,15 +137,15 @@ CQuaternion CQuaternion::inverse() const
 CAxisAngle CQuaternion::toAxisAngle()
 {
 //    CAxisAngle ret;
-//    ret.angle = acosf(r);
+//    ret.angle = std::acos(r);
 
-//    float thetaInv = 1.0f/sinf(ret.angle);
+//    float thetaInv = 1.0f/std::sin(ret.angle);
 
 //    ret.axis.x = v.x * thetaInv;
 //    ret.axis.y = v.y * thetaInv;
 //    ret.axis.z = v.z * thetaInv;
 
-//    ret.angle *= 2;
+//    ret.angle *= 2.f;
 
 //    return ret;
     return CAxisAngle();
@@ -153,20 +153,20 @@ CAxisAngle CQuaternion::toAxisAngle()
 
 CQuaternion CQuaternion::log() const
 {
-    float a = acosf(r);
-    float sina = sinf(a);
+    float a = std::acos(r);
+    float sina = std::sin(a);
     CQuaternion ret;
 
-    ret.r = 0;
+    ret.r = 0.f;
 
-    if (sina > 0)
+    if (sina > 0.f)
     {
         ret.v.x = a * v.x / sina;
         ret.v.y = a * v.y / sina;
         ret.v.z = a * v.z / sina;
     }
     else
-        ret.v = CVector3f(0);
+        ret.v = CVector3f(0.f);
 
     return ret;
 }
@@ -174,19 +174,19 @@ CQuaternion CQuaternion::log() const
 CQuaternion CQuaternion::exp() const
 {
     float a = (v.magnitude());
-    float sina = sinf(a);
-    float cosa = cos(a);
+    float sina = std::sin(a);
+    float cosa = std::cos(a);
     CQuaternion ret;
 
     ret.r = cosa;
-    if (a > 0)
+    if (a > 0.f)
     {
         ret.v.x = sina * v.x / a;
         ret.v.y = sina * v.y / a;
         ret.v.z = sina * v.z / a;
     }
     else
-        ret.v = CVector3f(0);
+        ret.v = CVector3f(0.f);
 
     return ret;
 }
@@ -215,18 +215,18 @@ CQuaternion CQuaternion::slerp(CQuaternion& a, CQuaternion& b, double t)
 
     CQuaternion ret;
 
-    float mag = sqrtf(a.dot(a) * b.dot(b));
+    float mag = std::sqrt(a.dot(a) * b.dot(b));
 
     float prod = a.dot(b) / mag;
 
-    if (fabsf(prod) < 1.0)
+    if (std::fabs(prod) < 1.0f)
     {
-        const double sign = (prod < 0.0) ? -1.0 : 1.0;
+        const double sign = (prod < 0.0f) ? -1.0f : 1.0f;
 
-        const double theta = acos(sign * prod);
-        const double s1 = sin (sign * t * theta);
-        const double d = 1.0 / sin(theta);
-        const double s0 = sin((1.0 - t) * theta);
+        const double theta = std::acos(sign * prod);
+        const double s1 = std::sin(sign * t * theta);
+        const double d = 1.0 / std::sin(theta);
+        const double s0 = std::sin((1.0 - t) * theta);
 
         ret.v.x = (float)(a.v.x * s0 + b.v.x * s1) * d;
         ret.v.y = (float)(a.v.y * s0 + b.v.y * s1) * d;

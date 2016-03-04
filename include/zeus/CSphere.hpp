@@ -1,9 +1,9 @@
 #ifndef CSPHERE_HPP
 #define CSPHERE_HPP
 
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CSphere
 {

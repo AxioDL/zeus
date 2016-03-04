@@ -1,8 +1,8 @@
 #ifndef CRECTANGLE_HPP
 #define CRECTANGLE_HPP
-#include "CVector2f.hpp"
+#include "zeus/CVector2f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class CRectangle
 {

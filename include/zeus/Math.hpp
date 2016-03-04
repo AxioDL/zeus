@@ -1,0 +1,114 @@
+#ifndef MATH_HPP
+#define MATH_HPP
+
+#undef min
+#undef max
+
+#undef M_PI
+#define M_PI		3.14159265358979323846	/* pi */
+#undef M_PI_2
+#define M_PI_2		1.57079632679489661923	/* pi/2 */
+#undef M_PI_4
+#define M_PI_4		0.78539816339744830962	/* pi/4 */
+#undef M_1_PI
+#define M_1_PI		0.31830988618379067154	/* 1/pi */
+#undef M_2_PI
+#define M_2_PI		0.63661977236758134308	/* 2/pi */
+#undef M_2_SQRTPI
+#define M_2_SQRTPI	1.12837916709551257390	/* 2/sqrt(pi) */
+#undef M_SQRT2
+#define M_SQRT2	1.41421356237309504880	/* sqrt(2) */
+#undef M_SQRT1_2
+#define M_SQRT1_2	0.70710678118654752440	/* 1/sqrt(2) */
+
+#include <cmath>
+#include <algorithm>
+
+namespace zeus
+{
+struct CPUInfo
+{
+const char cpuBrand [48] = {0};
+const char cpuVendor[32] = {0};
+const bool isIntel       = false;
+const bool SSE1          = false;
+const bool SSE2          = false;
+const bool SSE3          = false;
+const bool SSSE3         = false;
+const bool SSE41         = false;
+const bool SSE42         = false;
+const bool SSE4a         = false;
+const bool AESNI         = false;
+};
+/**
+ * Detects CPU capabilities and returns true if SSE4.1 or SSE4.2 is available
+ */
+void detectCPU();
+const CPUInfo& cpuFeatures();
+class CVector3f;
+class CTransform;
+
+template<typename T>
+inline T min(T a, T b) { return a < b ? a : b; }
+template<typename T>
+inline T max(T a, T b) { return a > b ? a : b; }
+
+template<typename T>
+inline T clamp(T a, T val, T b) {return max<T>(a, min<T>(b, val));}
+inline float radToDeg(float rad) {return rad * 180.f / M_PI;}
+inline float degToRad(float deg) {return deg * M_PI / 180.f;}
+inline double radToDeg(double rad) {return rad * 180.0 / M_PI;}
+inline double degToRad(double deg) {return deg * M_PI / 180.0;}
+
+CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary);
+
+CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b,
+                         const CVector3f& c, const CVector3f& d, float t);
+float getCatmullRomSplinePoint(float a, float b,
+                               float c, float d, float t);
+CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b,
+                                   const CVector3f& c, const CVector3f& d, float t);
+CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b,
+                                        const CVector3f& c, const CVector3f& d, float t);
+
+inline float powF(float a, float b)  { return std::pow(a, b); }
+inline float floorF(float val)       { return std::floor(val); }
+inline float ceilingF(float val)
+{
+    float tmp = std::floor(val);
+    return (tmp == val ? tmp : tmp + 1.0);
+}
+
+// Since round(double) doesn't exist in some <cmath> implementations
+// we'll define our own
+inline double round(double val) { return (val < 0.0 ? ceilingF(val - 0.5) : floorF(val + 0.5)); }
+inline double powD(float a, float b) { return std::exp(b * std::log(a)); }
+
+double sqrtD(double val);
+inline double invSqrtD(double val)  { return 1.0 / sqrtD(val); }
+inline float invSqrtF(float val)    { return float(1.0 / sqrtD(val)); }
+inline float sqrtF(float val)       { return float(sqrtD(val)); }
+float fastArcCosF(float val);
+float fastCosF(float val);
+float fastSinF(float val);
+int floorPowerOfTwo(int x);
+int ceilingPowerOfTwo(int x);
+
+template <class T>
+inline int PopCount(T x)
+{
+    using U = std::make_unsigned_t<std::conditional_t<std::is_enum<T>::value, std::underlying_type_t<T>, T>>;
+    U cx = U(x);
+    const U m1  = U(0x5555555555555555); //binary: 0101...
+    const U m2  = U(0x3333333333333333); //binary: 00110011..
+    const U m4  = U(0x0f0f0f0f0f0f0f0f); //binary:  4 zeros,  4 ones ...
+    const U h01 = U(0x0101010101010101); //the sum of 256 to the power of 0,1,2,3...
+
+    cx -= (cx >> 1) & m1;             //put count of each 2 bits into those 2 bits
+    cx = (cx & m2) + ((cx >> 2) & m2); //put count of each 4 bits into those 4 bits
+    cx = (cx + (cx >> 4)) & m4;        //put count of each 8 bits into those 8 bits
+    return (cx * h01) >> ((sizeof(U)-1)*8);  //returns left 8 bits of x + (x<<8) + (x<<16) + (x<<24) + ...
+}
+}
+
+#endif // MATH_HPP

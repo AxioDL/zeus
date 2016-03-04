@@ -2,12 +2,12 @@
 #define CPROJECTION_HPP
 
 #include "Global.hpp"
-#include "CMatrix4f.hpp"
-#include <stdio.h>
+#include "zeus/CMatrix4f.hpp"
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
 
-#define _USE_MATH_DEFINES 1
-#include <math.h>
-namespace Zeus
+namespace zeus
 {
 enum class EProjType
 {
@@ -25,7 +25,7 @@ struct SProjOrtho
 struct SProjPersp
 {
     float m_fov, m_aspect, m_near, m_far;
-    SProjPersp(float p_fov=55.0f * M_PI / 180.0f, float p_aspect=1.0f, float p_near=0.1f, float p_far=4096.f) :
+    SProjPersp(float p_fov=degToRad(55.0f), float p_aspect=1.0f, float p_near=0.1f, float p_far=4096.f) :
     m_fov(p_fov), m_aspect(p_aspect), m_near(p_near), m_far(p_far) {}
 };
 extern const SProjOrtho kOrthoIdentity;
@@ -67,8 +67,8 @@ public:
     {
         if (m_projType != EProjType::Orthographic)
         {
-            fprintf(stderr, "attempted to access orthographic structure of non-ortho projection");
-            abort();
+            std::fprintf(stderr, "attempted to access orthographic structure of non-ortho projection");
+            std::abort();
         }
         return m_ortho;
     }
@@ -76,8 +76,8 @@ public:
     {
         if (m_projType != EProjType::Perspective)
         {
-            fprintf(stderr, "attempted to access perspective structure of non-persp projection");
-            abort();
+            std::fprintf(stderr, "attempted to access perspective structure of non-persp projection");
+            std::abort();
         }
         return m_persp;
     }

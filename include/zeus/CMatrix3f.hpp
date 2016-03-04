@@ -2,12 +2,12 @@
 #define CMATRIX3F_HPP
 
 #include "Global.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #include <assert.h>
 #include <string.h>
 
 /* Column-major matrix class */
-namespace Zeus
+namespace zeus
 {
 class CQuaternion;
 class alignas(16) CMatrix3f

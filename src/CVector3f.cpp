@@ -1,14 +1,18 @@
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #include <memory.h>
 #include <cmath>
 #include <assert.h>
-#include "Math.hpp"
+#include "zeus/Math.hpp"
 
-namespace Zeus
+namespace zeus
 {
 const CVector3f CVector3f::skOne = CVector3f(1.0);
 const CVector3f CVector3f::skNegOne = CVector3f(-1.0);
 const CVector3f CVector3f::skZero;
+
+const CVector3f kUpVec(0.0, 0.0, 1.0);
+const CVector3f kRadToDegVec(180.0f / M_PI);
+const CVector3f kDegToRadVec(M_PI / 180.0f);
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {
@@ -16,10 +20,10 @@ float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
     float mag2 = b.magnitude();
 
     if (!mag1 || !mag2)
-        return 0;
+        return 0.f;
 
     float dot = a.dot(b);
-    float theta = Math::arcCosineR(dot / (mag1 * mag2));
+    float theta = std::acos(dot / (mag1 * mag2));
     return theta;
 }
 
@@ -32,13 +36,13 @@ CVector3f CVector3f::slerp(const CVector3f& a, const CVector3f& b, float t)
 
     CVector3f ret;
 
-    float mag = sqrtf(a.dot(a) * b.dot(b));
+    float mag = std::sqrt(a.dot(a) * b.dot(b));
 
     float prod = a.dot(b) / mag;
 
-    if (fabsf(prod) < 1.0)
+    if (std::fabs(prod) < 1.0f)
     {
-        const double sign = (prod < 0.0) ? -1.0 : 1.0;
+        const double sign = (prod < 0.0f) ? -1.0f : 1.0f;
 
         const double theta = acos(sign * prod);
         const double s1 = sin (sign * t * theta);

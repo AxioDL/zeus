@@ -1,10 +1,10 @@
 #ifndef CFRUSTUM_HPP
 #define CFRUSTUM_HPP
 
-#include "CPlane.hpp"
-#include "CAABox.hpp"
+#include "zeus/CPlane.hpp"
+#include "zeus/CAABox.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class CFrustum
 {

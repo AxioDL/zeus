@@ -1,7 +1,7 @@
-#include "CColor.hpp"
-#include "CVector4f.hpp"
+#include "zeus/CColor.hpp"
+#include "zeus/CVector4f.hpp"
 
-namespace Zeus
+namespace zeus
 {
 const CColor CColor::skRed   (Comp32(0xFF0000FFul));
 const CColor CColor::skBlack (Comp32(0x000000FFul));
@@ -68,8 +68,8 @@ void CColor::fromHSV(float h, float s, float v, float _a)
 
 void CColor::toHSV(float &h, float &s, float &v) const
 {
-    float min = Math::min(r, Math::min(g, b));
-    float max = Math::max(r, Math::max(g, b));
+    float min = std::min(r, std::min(g, b));
+    float max = std::max(r, std::max(g, b));
     v = max;
 
     float delta = max - min;
@@ -106,8 +106,8 @@ void CColor::fromHSL(float h, float s, float l, float _a)
 
 void CColor::toHSL(float &h, float &s, float &l)
 {
-    const float min = Math::min(r, Math::min(g, b));
-    const float max = Math::max(r, Math::max(g, b));
+    const float min = std::min(r, std::min(g, b));
+    const float max = std::max(r, std::max(g, b));
     const float d = max - min;
 
     if (max == min)

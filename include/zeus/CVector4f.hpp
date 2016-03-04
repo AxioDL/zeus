@@ -3,15 +3,15 @@
 
 #include "Global.hpp"
 #include "TVectorUnion.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #if ZE_ATHENA_TYPES
-#include <Athena/IStreamReader.hpp>
+#include <athena/IStreamReader.hpp>
 #endif
-#include <math.h>
-#include <float.h>
-#include <assert.h>
+#include "zeus/Math.hpp"
+#include <cfloat>
+#include <cassert>
 
-namespace Zeus
+namespace zeus
 {
 class CColor;
 class alignas(16) CVector4f
@@ -68,7 +68,7 @@ public:
         return ret;
     }
 
-    void read(Athena::io::IStreamReader& input)
+    void read(athena::io::IStreamReader& input)
     {
         x = input.readFloat();
         y = input.readFloat();
@@ -76,7 +76,7 @@ public:
         w = input.readFloat();
     }
 
-    CVector4f(Athena::io::IStreamReader& input)
+    CVector4f(athena::io::IStreamReader& input)
     { read(input); }
 
 #endif
@@ -330,7 +330,7 @@ public:
     }
     inline float magnitude() const
     {
-        return sqrtf(magSquared());
+        return std::sqrt(magSquared());
     }
 
     inline void zeroOut()
@@ -364,7 +364,7 @@ public:
     inline bool canBeNormalized() const
     {
         const float epsilon = 1.1920929e-7f;
-        if (fabs(x) >= epsilon || fabs(y) >= epsilon || fabs(z) >= epsilon || fabs(w) >= epsilon)
+        if (std::fabs(x) >= epsilon || std::fabs(y) >= epsilon || std::fabs(z) >= epsilon || std::fabs(w) >= epsilon)
             return true;
         return false;
     }

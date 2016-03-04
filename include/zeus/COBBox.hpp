@@ -1,11 +1,11 @@
 #ifndef COBBOX_HPP
 #define COBBOX_HPP
 
-#include "CTransform.hpp"
-#include "CVector3f.hpp"
-#include "CAABox.hpp"
+#include "zeus/CTransform.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/CAABox.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) COBBox
 {

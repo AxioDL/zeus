@@ -2,12 +2,12 @@
 #define CTRANSFORM_HPP
 
 #include "Global.hpp"
-#include "CMatrix3f.hpp"
-#include "CMatrix4f.hpp"
-#include "CVector3f.hpp"
-#include "CQuaternion.hpp"
+#include "zeus/CMatrix3f.hpp"
+#include "zeus/CMatrix4f.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/CQuaternion.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CTransform
 {
@@ -69,8 +69,8 @@ public:
 
     static inline CTransform RotateX(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
         return CTransform(CMatrix3f(TVectorUnion{1.f, 0.f, 0.f, 0.f},
                                     TVectorUnion{0.f, cosT, sinT, 0.f},
                                     TVectorUnion{0.f, -sinT, cosT, 0.f}));
@@ -78,8 +78,8 @@ public:
 
     static inline CTransform RotateY(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
         return CTransform(CMatrix3f(TVectorUnion{cosT, 0.f, -sinT, 0.f},
                                     TVectorUnion{0.f, 1.f, 0.f, 0.f},
                                     TVectorUnion{sinT, 0.f, cosT, 0.f}));
@@ -87,8 +87,8 @@ public:
 
     static inline CTransform RotateZ(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
         return CTransform(CMatrix3f(TVectorUnion{cosT, sinT, 0.f, 0.f},
                                     TVectorUnion{-sinT, cosT, 0.f, 0.f},
                                     TVectorUnion{0.f, 0.f, 1.f, 0.f}));
@@ -96,12 +96,12 @@ public:
 
     inline void rotateLocalX(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
 
-        Zeus::CVector3f b2 = m_basis[2] * sinT;
-        Zeus::CVector3f b1 = m_basis[1] * sinT;
-        Zeus::CVector3f cosV(cosT);
+        zeus::CVector3f b2 = m_basis[2] * sinT;
+        zeus::CVector3f b1 = m_basis[1] * sinT;
+        zeus::CVector3f cosV(cosT);
 
         m_basis[1] *= cosV;
         m_basis[2] *= cosV;
@@ -112,12 +112,12 @@ public:
 
     inline void rotateLocalY(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
 
-        Zeus::CVector3f b0 = m_basis[0] * sinT;
-        Zeus::CVector3f b2 = m_basis[2] * sinT;
-        Zeus::CVector3f cosV(cosT);
+        zeus::CVector3f b0 = m_basis[0] * sinT;
+        zeus::CVector3f b2 = m_basis[2] * sinT;
+        zeus::CVector3f cosV(cosT);
 
         m_basis[0] *= cosV;
         m_basis[2] *= cosV;
@@ -128,12 +128,12 @@ public:
 
     inline void rotateLocalZ(float theta)
     {
-        float sinT = sinf(theta);
-        float cosT = cosf(theta);
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
 
-        Zeus::CVector3f b0 = m_basis[0] * sinT;
-        Zeus::CVector3f b1 = m_basis[1] * sinT;
-        Zeus::CVector3f cosV(cosT);
+        zeus::CVector3f b0 = m_basis[0] * sinT;
+        zeus::CVector3f b1 = m_basis[1] * sinT;
+        zeus::CVector3f cosV(cosT);
 
         m_basis[0] *= cosV;
         m_basis[1] *= cosV;
@@ -225,6 +225,7 @@ static inline CTransform CTransformFromScaleVector(const CVector3f& scale)
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
 CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin);
 CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
+CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up=kUpVec);
 }
 
 #endif // CTRANSFORM_HPP

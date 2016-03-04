@@ -1,19 +1,19 @@
 #include <iostream>
 #include <iomanip>
-#include <MathLib.hpp>
+#include <zeus/zeus.hpp>
 
 // This is only for testing, do NOT do this normally
-using namespace Zeus;
+using namespace zeus;
 
 union Color
 {
-    struct { Zeus::Comp8 r, g, b, a; };
-    Zeus::Comp32 rgba;
+    struct { zeus::Comp8 r, g, b, a; };
+    zeus::Comp32 rgba;
 };
 
 int main()
 {
-    Zeus::detectCPU();
+    zeus::detectCPU();
     assert(!CAABox({100, 100, 100}, {100, 100, 100}).invalid());
     assert(CAABox().invalid());
     CVector3f vec{320, 632162.f, 800.f};
@@ -23,7 +23,7 @@ int main()
     assert(!vec.normalized().canBeNormalized());
     float blarg = 5.f;
     CVector3f t{100, 100, 200};
-    blarg = Math::clamp(0.f, blarg, 1.f);
+    blarg = clamp(0.f, blarg, 1.f);
     CAABox test{{-100, -100, -100}, {100, 100, 100}};
     CAABox test2{{-100, -100, -100}, {100, 100, 100}};
     CAABox test3{{-50, -50, -50},  {50, 50, 50}};
@@ -43,15 +43,15 @@ int main()
     CSphere s2({1, 0, 0}, 1);
     CSphere s3({3, 0, 0}, 1);
 
-    std::cout << Math::min(1, 3) << std::endl;
-    std::cout << Math::min(2, 1) << std::endl;
-    std::cout << Math::max(1, 3) << std::endl;
-    std::cout << Math::max(2, 1) << std::endl;
-    std::cout << Math::clamp(-50,  100, 50) << std::endl;
-    std::cout << Math::clamp(-50, -100, 50) << std::endl;
-    std::cout << Math::powF(6.66663489, 2) << std::endl;
-    std::cout << Math::invSqrtF(1) << std::endl;
-    std::cout << Math::floorPowerOfTwo(256) << std::endl;
+    std::cout << min(1, 3) << std::endl;
+    std::cout << min(2, 1) << std::endl;
+    std::cout << max(1, 3) << std::endl;
+    std::cout << max(2, 1) << std::endl;
+    std::cout << clamp(-50,  100, 50) << std::endl;
+    std::cout << clamp(-50, -100, 50) << std::endl;
+    std::cout << powF(6.66663489, 2) << std::endl;
+    std::cout << invSqrtF(1) << std::endl;
+    std::cout << floorPowerOfTwo(256) << std::endl;
     std::cout << " Test 1 " << ( aabb.intersects(s1) ? "succeeded" : "failed" ) << std::endl;
     std::cout << " Test 2 " << ( aabb.intersects(s2) ? "succeeded" : "failed" ) << std::endl;
     std::cout << " Test 3 " << ( aabb.intersects(s3) ? "succeeded" : "failed" ) << std::endl;

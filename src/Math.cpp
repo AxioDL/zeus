@@ -1,13 +1,13 @@
-#include "Math.hpp"
-#include "CTransform.hpp"
-#include "CVector3f.hpp"
+#include "zeus/Math.hpp"
+#include "zeus/CTransform.hpp"
+#include "zeus/CVector3f.hpp"
 #if _WIN32
 #include <intrin.h>
 #else
 #include <cpuid.h>
 #endif
 
-namespace Zeus
+namespace zeus
 {
 
 static CPUInfo g_cpuFeatures;
@@ -68,12 +68,6 @@ void detectCPU()
 
 
 const CPUInfo& cpuFeatures() { return g_cpuFeatures; }
-
-namespace Math
-{
-const CVector3f kUpVec(0.0, 0.0, 1.0);
-const CVector3f kRadToDegVec(180.0f / M_PI);
-const CVector3f kDegToRadVec(M_PI / 180.0f);
 
 CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up)
 {
@@ -158,18 +152,18 @@ double sqrtD(double val)
     return q;
 }
 
-float fastArcCosR(float val)
+float fastArcCosF(float val)
 {
     /* If we're not at a low enough value,
      * the approximation below won't provide any benefit,
      * and we simply fall back to the standard implementation
      */
-    if (fabs(val) >= 0.925000011920929)
-        return float(acos(val));
+    if (std::fabs(val) >= 0.925000011920929)
+        return std::acos(val);
 
     /* Fast Arc Cosine approximation using Taylor Polynomials
      * while this implementation is fast, it's also not as accurate.
-     * This is a straight reimplementation of Retro's CMath::FastArcCosR
+     * This is a straight reimplementation of Retro's CFastArcCosR
      * and as a result of the polynomials, it returns the inverse value,
      * I'm not certain if this was intended originally, but we'll leave it
      * in order to be as accurate as possible.
@@ -217,9 +211,9 @@ int ceilingPowerOfTwo(int x)
     return x;
 }
 
-float fastCosR(float val)
+float fastCosF(float val)
 {
-    if (fabs(val) > M_PI)
+    if (std::fabs(val) > M_PI)
     {
         float rVal = float(uint32_t(val));
         val = -((rVal * val) - 6.2831855);
@@ -240,9 +234,9 @@ float fastCosR(float val)
     return val;
 }
 
-float fastSinR(float val)
+float fastSinF(float val)
 {
-    if (fabs(val) > M_PI)
+    if (std::fabs(val) > M_PI)
     {
         float rVal = float(uint32_t(val));
         val = -((rVal * val) - 6.2831855);
@@ -319,16 +313,10 @@ CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, 
     if (cVelocity.canBeNormalized())
         cVelocity.normalize();
     const float cbDistance = cb.magnitude();
-    return getCatmullRomSplinePoint(b, c, bVelocity * cbDistance, cVelocity * cbDistance, t);
+    return zeus::getCatmullRomSplinePoint(b, c, bVelocity * cbDistance, cVelocity * cbDistance, t);
 }
 
 CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
 { return bary.x * p0 + bary.y * p1 + bary.z * p2; }
-
-CVector3f radToDeg(const CVector3f& rad) {return rad * kRadToDegVec;}
-
-CVector3f degToRad(const CVector3f& deg) {return deg * kDegToRadVec;}
-
-}
 
 }

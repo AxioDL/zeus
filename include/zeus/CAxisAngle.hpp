@@ -2,10 +2,10 @@
 #define CAXISANGLE_H
 
 #include "Global.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #include "CUnitVector.hpp"
 
-namespace Zeus
+namespace zeus
 {
 struct alignas(16) CAxisAngle : CVector3f
 {

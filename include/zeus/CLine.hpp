@@ -2,10 +2,10 @@
 #define CLINE_HPP
 
 #include "Global.hpp"
-#include "CVector3f.hpp"
+#include "zeus/CVector3f.hpp"
 #include "CUnitVector.hpp"
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CLine
 {

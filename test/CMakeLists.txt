@@ -3,8 +3,5 @@ project(zeustest)
 
 include_directories(../include)
 
-add_executable(zeustest
-    main.cpp)
-
-target_link_libraries(zeustest
-    Math)
+add_executable(zeustest main.cpp)
+target_link_libraries(zeustest zeus)

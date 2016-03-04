@@ -3,14 +3,14 @@
 
 #include "Global.hpp"
 #include "CAxisAngle.hpp"
-#include "CVector3f.hpp"
-#include "CVector4f.hpp"
-#include <math.h>
+#include "zeus/CVector3f.hpp"
+#include "zeus/CVector4f.hpp"
+#include "zeus/Math.hpp"
 #if ZE_ATHENA_TYPES
-#include <Athena/IStreamReader.hpp>
+#include <athena/IStreamReader.hpp>
 #endif
 
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CQuaternion
 {
@@ -25,7 +25,7 @@ public:
     CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
     CQuaternion(float r, const CVector3f& vec) : v(vec){ this->r = r;}
 #if ZE_ATHENA_TYPES
-    CQuaternion(Athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
+    CQuaternion(athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
     CQuaternion(const atVec4f& vec)
     {
 #if __SSE__
@@ -99,7 +99,7 @@ public:
      */
     static inline CQuaternion fromAxisAngle(const CVector3f& axis, float angle)
     {
-        return CQuaternion(cosf(angle/2), axis*sinf(angle/2));
+        return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
     }
 
     void rotateX(float angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
@@ -129,17 +129,17 @@ public:
     
     inline float roll() const
     {
-        return atan2f(2.0 * (v.x * v.y + r * v.z), r * r + v.x * v.x - v.y * v.y - v.z * v.z);
+        return std::atan2(2.f * (v.x * v.y + r * v.z), r * r + v.x * v.x - v.y * v.y - v.z * v.z);
     }
     
     inline float pitch() const
     {
-        return atan2f(2.0 * (v.y * v.z + r * v.x), r * r - v.x * v.x - v.y * v.y + v.z * v.z);
+        return std::atan2(2.f * (v.y * v.z + r * v.x), r * r - v.x * v.x - v.y * v.y + v.z * v.z);
     }
     
     inline float yaw() const
     {
-        return asinf(-2.0 * (v.x * v.z - r * v.y));
+        return std::asin(-2.f * (v.x * v.z - r * v.y));
     }
 
     union

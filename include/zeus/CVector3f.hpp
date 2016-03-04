@@ -2,17 +2,14 @@
 #define CVECTOR3F_HPP
 
 #include "Global.hpp"
-#include "Math.hpp"
-#include "CVector2f.hpp"
+#include "zeus/Math.hpp"
+#include "zeus/CVector2f.hpp"
 #include "TVectorUnion.hpp"
 #if ZE_ATHENA_TYPES
-#include <Athena/IStreamReader.hpp>
+#include <athena/IStreamReader.hpp>
 #endif
 
-#include <math.h>
-#include <assert.h>
-
-namespace Zeus
+namespace zeus
 {
 class alignas(16) CVector3f
 {
@@ -69,25 +66,25 @@ public:
         return ret;
     }
 
-    void read(Athena::io::IStreamReader& input)
+    void read(athena::io::IStreamReader& input)
     {
         x = input.readFloat();
         y = input.readFloat();
         z = input.readFloat();
         v[3] = 0.0f;
     }
-    CVector3f(Athena::io::IStreamReader& input) {read(input);}
+    CVector3f(athena::io::IStreamReader& input) {read(input);}
 #endif
 
     CVector3f(float xyz) {splat(xyz);}
-    void assign(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;}
+    void assign(float x, float y, float z) {v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0f;}
     CVector3f(float x, float y, float z) {assign(x, y, z);}
 
     CVector3f(const CVector2f& other)
     {
         x = other.x;
         y = other.y;
-        z = 0.0;
+        z = 0.0f;
         v[3] = 0.0f;
     }
 
@@ -151,7 +148,7 @@ public:
     inline CVector3f operator+(float val) const
     {
 #if __SSE__
-        TVectorUnion splat = {{val, val, val, 0.0}};
+        TVectorUnion splat = {{val, val, val, 0.0f}};
         return CVector3f(_mm_add_ps(mVec128, splat.mVec128));
 #else
         return CVector3f(x + val, y + val, z + val);
@@ -160,7 +157,7 @@ public:
     inline CVector3f operator-(float val) const
     {
 #if __SSE__ || __GEKKO_PS__
-        TVectorUnion splat = {{val, val, val, 0.0}};
+        TVectorUnion splat = {{val, val, val, 0.0f}};
 #endif
 #if __SSE__
         return CVector3f(_mm_sub_ps(mVec128, splat.mVec128));
@@ -173,7 +170,7 @@ public:
     inline CVector3f operator*(float val) const
     {
 #if __SSE__ || __GEKKO_PS__
-        TVectorUnion splat = {{val, val, val, 0.0}};
+        TVectorUnion splat = {{val, val, val, 0.0f}};
 #endif
 #if __SSE__
         return CVector3f(_mm_mul_ps(mVec128, splat.mVec128));
@@ -186,7 +183,7 @@ public:
     inline CVector3f operator/(float val) const
     {
 #if __SSE__ || __GEKKO_PS__
-        TVectorUnion splat = {{val, val, val, 0.0}};
+        TVectorUnion splat = {{val, val, val, 0.0f}};
 #endif
 #if __SSE__
         return CVector3f(_mm_div_ps(mVec128, splat.mVec128));
@@ -285,7 +282,7 @@ public:
 #endif
     }
     inline float magnitude() const
-    { return Math::sqrtF(magSquared()); }
+    { return sqrtF(magSquared()); }
     
     inline void zeroOut()
     {
@@ -318,7 +315,7 @@ public:
     inline bool canBeNormalized() const
     {
         const float epsilon = 1.1920929e-7f;
-        if (fabs(x) >= epsilon || fabs(y) >= epsilon || fabs(z) >= epsilon)
+        if (std::fabs(x) >= epsilon || std::fabs(y) >= epsilon || std::fabs(z) >= epsilon)
             return true;
         return false;
     }
@@ -338,7 +335,7 @@ public:
             return;
         }
 
-        length = sqrt(length);
+        length = std::sqrt(length);
         float scalar = newLength / length;
         *this *= scalar;
     }
@@ -368,7 +365,7 @@ public:
 static inline CVector3f operator+(float lhs, const CVector3f& rhs)
 {
 #if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, 0.0}};
+    TVectorUnion splat = {{lhs, lhs, lhs, 0.0f}};
     return CVector3f(_mm_add_ps(splat.mVec128, rhs.mVec128));
 #else
     return CVector3f(lhs + rhs.x, lhs + rhs.y, lhs + rhs.z);
@@ -378,7 +375,7 @@ static inline CVector3f operator+(float lhs, const CVector3f& rhs)
 static inline CVector3f operator-(float lhs, const CVector3f& rhs)
 {
 #if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, 0.0}};
+    TVectorUnion splat = {{lhs, lhs, lhs, 0.0f}};
     return CVector3f(_mm_sub_ps(splat.mVec128, rhs.mVec128));
 #else
     return CVector3f(lhs - rhs.x, lhs - rhs.y, lhs - rhs.z);
@@ -388,7 +385,7 @@ static inline CVector3f operator-(float lhs, const CVector3f& rhs)
 static inline CVector3f operator*(float lhs, const CVector3f& rhs)
 {
 #if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, 0.0}};
+    TVectorUnion splat = {{lhs, lhs, lhs, 0.0f}};
     return CVector3f(_mm_mul_ps(splat.mVec128, rhs.mVec128));
 #else
     return CVector3f(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
@@ -398,12 +395,19 @@ static inline CVector3f operator*(float lhs, const CVector3f& rhs)
 static inline CVector3f operator/(float lhs, const CVector3f& rhs)
 {
 #if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, 0.0}};
+    TVectorUnion splat = {{lhs, lhs, lhs, 0.0f}};
     return CVector3f(_mm_div_ps(splat.mVec128, rhs.mVec128));
 #else
     return CVector3f(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z);
 #endif
 }
+
+extern const CVector3f kUpVec;
+extern const CVector3f kRadToDegVec;
+extern const CVector3f kDegToRadVec;
+inline CVector3f radToDeg(const CVector3f& rad) {return rad * kRadToDegVec;}
+inline CVector3f degToRad(const CVector3f& deg) {return deg * kDegToRadVec;}
+
 }
 
 #endif // CVECTOR3F_HPP

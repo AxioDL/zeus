@@ -1,10 +1,10 @@
 #ifndef CMRAY_HPP
 #define CMRAY_HPP
-#include "CVector3f.hpp"
-#include "CTransform.hpp"
-#include "Math.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/CTransform.hpp"
+#include "zeus/Math.hpp"
 
-namespace Zeus
+namespace zeus
 {
 struct alignas(16) CMRay
 {

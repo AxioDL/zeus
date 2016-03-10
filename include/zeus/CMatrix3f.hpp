@@ -110,12 +110,13 @@ public:
         return vec[i];
     }
 
-    inline const CMatrix3f orthonormalized()
+    inline const CMatrix3f orthonormalized() const
     {
         CMatrix3f ret;
-        ret.vec[0] = vec[0].normalized();
-        ret.vec[1] = vec[2].normalized();
-        ret.vec[2] = vec[1].normalized();
+        ret[0] = vec[0].normalized();
+        ret[2] = ret[0].cross(vec[1]);
+        ret[2].normalize();
+        ret[1] = ret[2].cross(ret[0]);
         return ret;
     }
 

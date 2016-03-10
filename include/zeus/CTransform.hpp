@@ -214,6 +214,14 @@ public:
         return ret;
     }
 
+    inline void orthonormalize()
+    {
+        m_basis[0].normalize();
+        m_basis[2] = m_basis[0].cross(m_basis[1]);
+        m_basis[2].normalize();
+        m_basis[1] = m_basis[2].cross(m_basis[0]);
+    }
+
     CMatrix3f m_basis;
     CVector3f m_origin;
 };

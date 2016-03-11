@@ -65,7 +65,7 @@ public:
         return *this;
     }
 
-    inline void rotate(const CVector3f& euler) { *this = *this * CMatrix3f(CQuaternion(euler)); }
+    inline zeus::CVector3f rotate(const CVector3f& vec) const { return *this * vec; }
 
     static inline CTransform RotateX(float theta)
     {

@@ -59,6 +59,18 @@ public:
         vec[2].x = r2.vec[0]; vec[2].y = r2.vec[1]; vec[2].z = r2.vec[2];
 #endif
     }
+    void readBig(athena::io::IStreamReader& input)
+    {
+        m[0][0] = input.readFloatBig();
+        m[1][0] = input.readFloatBig();
+        m[2][0] = input.readFloatBig();
+        m[0][1] = input.readFloatBig();
+        m[1][1] = input.readFloatBig();
+        m[2][1] = input.readFloatBig();
+        m[0][2] = input.readFloatBig();
+        m[1][2] = input.readFloatBig();
+        m[2][2] = input.readFloatBig();
+    }
 #endif
     CMatrix3f(const CVector3f& axis, float angle);
     CMatrix3f(const CQuaternion& quat);

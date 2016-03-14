@@ -66,14 +66,13 @@ public:
         return ret;
     }
 
-    void read(athena::io::IStreamReader& input)
+    void readBig(athena::io::IStreamReader& input)
     {
-        x = input.readFloat();
-        y = input.readFloat();
-        z = input.readFloat();
+        x = input.readFloatBig();
+        y = input.readFloatBig();
+        z = input.readFloatBig();
         v[3] = 0.0f;
     }
-    CVector3f(athena::io::IStreamReader& input) {read(input);}
 #endif
 
     CVector3f(float xyz) {splat(xyz);}

@@ -62,12 +62,10 @@ public:
     {
     }
 #if ZE_ATHENA_TYPES
-    CAABox(athena::io::IStreamReader& in) {readBoundingBox(in);}
-    
-    inline void readBoundingBox(athena::io::IStreamReader& in)
+    inline void readBoundingBoxBig(athena::io::IStreamReader& in)
     {
-        m_min = CVector3f(in);
-        m_max = CVector3f(in);
+        m_min.readBig(in);
+        m_max.readBig(in);
     }
 #endif
 

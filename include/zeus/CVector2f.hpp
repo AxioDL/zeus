@@ -68,16 +68,13 @@ public:
         return ret;
     }
 
-    void read(athena::io::IStreamReader& input)
+    void readBig(athena::io::IStreamReader& input)
     {
-        x = input.readFloat();
-        y = input.readFloat();
+        x = input.readFloatBig();
+        y = input.readFloatBig();
         v[2] = 0.0f;
         v[3] = 0.0f;
     }
-
-    CVector2f(athena::io::IStreamReader& input)
-    { read(input); }
 #endif
 
     CVector2f(float xy) {splat(xy);}

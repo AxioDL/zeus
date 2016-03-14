@@ -57,7 +57,6 @@ public:
     CColor(float rgb, float a = 1.0) { splat(rgb, a); }
     CColor(float r, float g, float b, float a = 1.0f) {v[0] = r; v[1] = g; v[2] = b; v[3] = a; }
 #if ZE_ATHENA_TYPES
-    CColor(athena::io::IStreamReader& reader) {readRGBA(reader);}
     CColor(const atVec4f& vec)
 #if __SSE__ || __GEKKO_PS__
         : mVec128(vec.mVec128){}
@@ -75,19 +74,19 @@ public:
     CColor& operator=(const CVector4f& other);
 
 #if ZE_ATHENA_TYPES
-    inline void readRGBA(athena::io::IStreamReader& reader)
+    inline void readRGBABig(athena::io::IStreamReader& reader)
     {
-        r = reader.readFloat();
-        g = reader.readFloat();
-        b = reader.readFloat();
-        a = reader.readFloat();
+        r = reader.readFloatBig();
+        g = reader.readFloatBig();
+        b = reader.readFloatBig();
+        a = reader.readFloatBig();
     }
-    inline void readBGRA(athena::io::IStreamReader& reader)
+    inline void readBGRABig(athena::io::IStreamReader& reader)
     {
-        b = reader.readFloat();
-        g = reader.readFloat();
-        r = reader.readFloat();
-        a = reader.readFloat();
+        b = reader.readFloatBig();
+        g = reader.readFloatBig();
+        r = reader.readFloatBig();
+        a = reader.readFloatBig();
     }
 #endif
 

@@ -25,7 +25,11 @@ public:
     CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
     CQuaternion(float r, const CVector3f& vec) : v(vec){ this->r = r;}
 #if ZE_ATHENA_TYPES
-    CQuaternion(athena::io::IStreamReader& input) { r = input.readFloat(); v = CVector3f(input);}
+    inline void readBig(athena::io::IStreamReader& input)
+    {
+        r = input.readFloatBig();
+        v.readBig(input);
+    }
     CQuaternion(const atVec4f& vec)
     {
 #if __SSE__

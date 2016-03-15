@@ -122,7 +122,7 @@ public:
         return vec[i];
     }
 
-    inline const CMatrix3f orthonormalized() const
+    inline CMatrix3f orthonormalized() const
     {
         CMatrix3f ret;
         ret[0] = vec[0].normalized();

@@ -171,7 +171,12 @@ public:
                                     TVectorUnion{0.f, 0.f, factor, 0.f}));
     }
 
-    inline void multiplyIgnoreTranslation(const CTransform& xfrm) { m_basis = m_basis*xfrm.m_basis; }
+    inline CTransform multiplyIgnoreTranslation(const CTransform& xfrm)
+    {
+        CTransform ret;
+        ret.m_basis = m_basis * xfrm.m_basis;
+        return ret;
+    }
 
     inline CTransform getRotation() { CTransform ret = *this; ret.m_origin.zeroOut(); return ret; }
     void setRotation(const CMatrix3f& mat)   { m_basis = mat; }

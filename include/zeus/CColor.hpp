@@ -320,6 +320,17 @@ public:
 
     CColor toGrayscale()
     { return {sqrtF((r * r + g * g + b * b) / 3), a}; }
+
+    /**
+     * @brief Clamps to GPU-safe RGBA values [0,1]
+     */
+    void Clamp()
+    {
+        this->r = std::min(1.f, std::max(0.f, this->r));
+        this->g = std::min(1.f, std::max(0.f, this->g));
+        this->b = std::min(1.f, std::max(0.f, this->b));
+        this->a = std::min(1.f, std::max(0.f, this->a));
+    }
 };
 
 static inline CColor operator+(float lhs, const CColor& rhs)

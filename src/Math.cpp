@@ -73,16 +73,18 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
 {
     CVector3f vLook,vRight,vUp;
     
-    vLook = pos - lookPos;
+    vLook = lookPos - pos;
+    if (vLook.magnitude() < FLT_EPSILON)
+        vLook = {0.f, 1.f, 0.f};
     vLook.normalize();
     
-    vRight = up.cross(vLook);
+    vRight = vLook.cross(up);
     vRight.normalize();
     
-    vUp = vLook.cross(vRight);
-    
-    CMatrix3f rmBasis(vRight, vUp, vLook);
-    return CTransform(rmBasis.transposed(), CVector3f(-pos.dot(vRight), -pos.dot(vUp), -pos.dot(vLook)));
+    vUp = vRight.cross(vLook);
+
+    CMatrix3f rmBasis(vRight, vLook, vUp);
+    return CTransform(rmBasis, pos);
 }
 
 CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)

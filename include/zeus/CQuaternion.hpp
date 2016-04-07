@@ -19,23 +19,25 @@ class alignas(16) CQuaternion
 #endif
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
-    
-    CQuaternion() : r(1.0f) {}
-    CQuaternion(float r, float x, float y, float z) : v(x, y, z){ this->r = r; }
-    CQuaternion(float x, float y, float z) { fromVector3f(CVector3f(x, y, z)); }
-    CQuaternion(float r, const CVector3f& vec) : v(vec){ this->r = r;}
+
+    CQuaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
+    CQuaternion(float wi, float xi, float yi, float zi) : w(wi), x(xi), y(yi), z(zi) {}
+    CQuaternion(float xi, float yi, float zi) { fromVector3f(CVector3f(xi, yi, zi)); }
+    CQuaternion(float wi, const CVector3f& vec) : w(wi), x(vec.x), y(vec.y), z(vec.z) {}
 #if ZE_ATHENA_TYPES
     inline void readBig(athena::io::IStreamReader& input)
     {
-        r = input.readFloatBig();
-        v.readBig(input);
+        w = input.readFloatBig();
+        x = input.readFloatBig();
+        y = input.readFloatBig();
+        z = input.readFloatBig();
     }
     CQuaternion(const atVec4f& vec)
     {
 #if __SSE__
-        v.mVec128 = vec.mVec128;
+        mVec128 = vec.mVec128;
 #else
-        x = vec.vec[0]; y = vec.vec[1]; z = vec.vec[2]; r = vec.vec[3];
+        x = vec.vec[1]; y = vec.vec[2]; z = vec.vec[3]; w = vec.vec[0];
 #endif
     }
 
@@ -43,9 +45,12 @@ public:
     {
         atVec4f ret;
 #if __SSE__
-        ret.mVec128 = v.mVec128;
+        ret.mVec128 = mVec128;
 #else
-        ret.vec = v;
+        ret.vec[0] = w;
+        ret.vec[1] = x;
+        ret.vec[2] = y;
+        ret.vec[3] = z;
 #endif
         return ret;
     }
@@ -53,9 +58,12 @@ public:
     {
         atVec4f ret;
 #if __SSE__
-        ret.mVec128 = v.mVec128;
+        ret.mVec128 = mVec128;
 #else
-        ret.vec = v;
+        ret.vec[0] = w;
+        ret.vec[1] = x;
+        ret.vec[2] = y;
+        ret.vec[3] = z;
 #endif
         return ret;
     }
@@ -65,13 +73,19 @@ public:
     CQuaternion(const CVector4f& vec)
     {
 #if __SSE__
-        v.mVec128 = vec.mVec128;
+        mVec128 = vec.mVec128;
 #else
-        v.x = vec.x; v.y = vec.y; v.z = vec.z; r = vec.w;
+        x = vec[1]; y = vec[2]; z = vec[3]; w = vec[0];
 #endif
     }
 
-    virtual ~CQuaternion() {}
+    CQuaternion(const CVector3f& vecA, const CVector3f& vecB)
+    {
+        CVector3f vecAN = vecA.normalized();
+        CVector3f vecBN = vecB.normalized();
+        CVector3f w = vecAN.cross(vecBN);
+        *this = CQuaternion(1.f + vecAN.dot(vecBN), w.x, w.y, w.z).normalized();
+    }
 
     void fromVector3f(const CVector3f& vec);
 
@@ -118,7 +132,7 @@ public:
         CQuaternion q = rotation * v;
         q *= rotation.inverse();
 
-        return q.v;
+        return {q.x, q.y, q.z};
     }
 
     CQuaternion log() const;
@@ -130,26 +144,29 @@ public:
     static CQuaternion lerp(CQuaternion& a, CQuaternion& b, double t);
     static CQuaternion slerp(CQuaternion& a, CQuaternion& b, double t);
     static CQuaternion nlerp(CQuaternion& a, CQuaternion& b, double t);
-    
+
     inline float roll() const
     {
-        return std::atan2(2.f * (v.x * v.y + r * v.z), r * r + v.x * v.x - v.y * v.y - v.z * v.z);
+        return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z);
     }
-    
+
     inline float pitch() const
     {
-        return std::atan2(2.f * (v.y * v.z + r * v.x), r * r - v.x * v.x - v.y * v.y + v.z * v.z);
+        return std::atan2(2.f * (y * z + w * x), w * w - x * x - y * y + z * z);
     }
-    
+
     inline float yaw() const
     {
-        return std::asin(-2.f * (v.x * v.z - r * v.y));
+        return std::asin(-2.f * (x * z - w * y));
     }
+    
+    inline float& operator[](size_t idx) {return (&x)[idx];}
+    inline const float& operator[](size_t idx) const {return (&x)[idx];}
 
     union
     {
-        struct { float x, y, z, r; };
-        CVector3f v;
+        __m128 mVec128;
+        struct { float w, x, y, z; };
     };
 };
 

@@ -20,7 +20,7 @@ class alignas(16) CVector2f
     float clangVec __attribute__((__vector_size__(8)));
 #endif
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
+    //ZE_DECLARE_ALIGNED_ALLOCATOR();
     union
     {
         struct

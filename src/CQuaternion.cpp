@@ -13,35 +13,41 @@ void CQuaternion::fromVector3f(const CVector3f& vec)
     float sinY = std::sin(0.5f * vec.y);
     float sinZ = std::sin(0.5f * vec.z);
 
-    r   = cosZ * cosY * cosX + sinZ * sinY * sinX;
-    v.x = cosZ * cosY * sinX - sinZ * sinY * cosX;
-    v.y = cosZ * sinY * cosX + sinZ * cosY * sinX;
-    v.z = sinZ * cosY * cosX - cosZ * sinY * sinX;
+    w = cosZ * cosY * cosX + sinZ * sinY * sinX;
+    x = cosZ * cosY * sinX - sinZ * sinY * cosX;
+    y = cosZ * sinY * cosX + sinZ * cosY * sinX;
+    z = sinZ * cosY * cosX - cosZ * sinY * sinX;
 }
 
 CQuaternion& CQuaternion::operator=(const CQuaternion& q)
 {
-    r = q.r;
-    v = q.v;
+#if __SSE__
+    mVec128 = q.mVec128;
+#else
+    w = q.w;
+    x = q.x;
+    y = q.y;
+    z = q.z;
+#endif
     return *this;
 }
 
 CQuaternion CQuaternion::operator+(const CQuaternion& q) const
 {
-    return CQuaternion(r + q.r, v+q.v);
+    return CQuaternion(w + q.w, x + q.x, y + q.y, z + q.z);
 }
 
 CQuaternion CQuaternion::operator-(const CQuaternion& q) const
 {
-    return CQuaternion(r - q.r, v-q.v);
+    return CQuaternion(w - q.w, x - q.x, y - q.y, z - q.z);
 }
 
 CQuaternion CQuaternion::operator*(const CQuaternion& q) const
 {
-    return CQuaternion(r*q.r - v.dot(q.v),
-                       v.y * q.v.z - v.z * q.v.y + r * q.v.x + v.x*q.r,
-                       v.z * q.v.x - v.x * q.v.z + r * q.v.y + v.y*q.r,
-                       v.x * q.v.y - v.y * q.v.x + r * q.v.z + v.z*q.r);
+    return CQuaternion(w*q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z}),
+                       y * q.z - z * q.y + w * q.x + x*q.w,
+                       z * q.x - x * q.z + w * q.y + y*q.w,
+                       x * q.y - y * q.x + w * q.z + z*q.w);
 }
 
 CQuaternion CQuaternion::operator/(const CQuaternion& q) const
@@ -53,54 +59,62 @@ CQuaternion CQuaternion::operator/(const CQuaternion& q) const
 
 CQuaternion CQuaternion::operator*(float scale) const
 {
-    return CQuaternion(r*scale, v*scale);
+    return CQuaternion(w*scale, x*scale, y*scale, z*scale);
 }
 
 CQuaternion CQuaternion::operator/(float scale) const
 {
-    return CQuaternion(r/scale, v/scale);
+    return CQuaternion(w/scale, x/scale, y/scale, z/scale);
 }
 
 CQuaternion CQuaternion::operator-() const
 {
-    return CQuaternion(-r, -v);
+    return CQuaternion(-w, -x, -y, -z);
 }
 
 const CQuaternion& CQuaternion::operator+=(const CQuaternion& q)
 {
-    r += q.r;
-    v += q.v;
+    w += q.w;
+    x += q.x;
+    y += q.y;
+    z += q.z;
     return *this;
 }
 
 const CQuaternion& CQuaternion::operator-=(const CQuaternion& q)
 {
-    r -= q.r;
-    v -= q.v;
+    w -= q.w;
+    x -= q.x;
+    y -= q.y;
+    z -= q.z;
     return *this;
 }
 
 const CQuaternion& CQuaternion::operator *=(const CQuaternion& q)
 {
-   r = r*q.r - v.dot(q.v);
-   v.x = v.y * q.v.z - v.z * q.v.y + r * q.v.x + v.x*q.r;
-   v.y = v.z * q.v.x - v.x * q.v.z + r * q.v.y + v.y*q.r;
-   v.z = v.x * q.v.y - v.y * q.v.x + r * q.v.z + v.z*q.r;
+    w = w*q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z});
+    x = y * q.z - z * q.y + w * q.x + x*q.w;
+    y = z * q.x - x * q.z + w * q.y + y*q.w;
+    z = x * q.y - y * q.x + w * q.z + z*q.w;
 
-   return *this;
+    return *this;
 }
 
 const CQuaternion& CQuaternion::operator *=(float scale)
 {
-    r *= scale;
-    v *= scale;
+    w *= scale;
+    x *= scale;
+    y *= scale;
+    z *= scale;
     return *this;
 }
 
 const CQuaternion& CQuaternion::operator/=(float scale)
 {
-    r /= scale;
-    v /= scale;
+    w /= scale;
+    x /= scale;
+    y /= scale;
+    z /= scale;
     return *this;
 }
 
@@ -111,7 +125,7 @@ float CQuaternion::magnitude() const
 
 float CQuaternion::magSquared() const
 {
-    return (r*r + (v.dot(v)));
+    return w*w + x*x + y*y + z*z;
 }
 
 void CQuaternion::normalize()
@@ -126,12 +140,14 @@ CQuaternion CQuaternion::normalized() const
 
 void CQuaternion::invert()
 {
-    v = -v;
+    x = -x;
+    y = -y;
+    z = -z;
 }
 
 CQuaternion CQuaternion::inverse() const
 {
-    return CQuaternion(r, -v);
+    return CQuaternion(w, -x, -y, -z);
 }
 
 CAxisAngle CQuaternion::toAxisAngle()
@@ -153,47 +169,55 @@ CAxisAngle CQuaternion::toAxisAngle()
 
 CQuaternion CQuaternion::log() const
 {
-    float a = std::acos(r);
+    float a = std::acos(w);
     float sina = std::sin(a);
     CQuaternion ret;
 
-    ret.r = 0.f;
+    ret.w = 0.f;
 
     if (sina > 0.f)
     {
-        ret.v.x = a * v.x / sina;
-        ret.v.y = a * v.y / sina;
-        ret.v.z = a * v.z / sina;
+        ret.x = a * x / sina;
+        ret.y = a * y / sina;
+        ret.z = a * z / sina;
     }
     else
-        ret.v = CVector3f(0.f);
+    {
+        ret.x = 0.f;
+        ret.y = 0.f;
+        ret.z = 0.f;
+    }
 
     return ret;
 }
 
 CQuaternion CQuaternion::exp() const
 {
-    float a = (v.magnitude());
+    float a = (CVector3f(x, y, z).magnitude());
     float sina = std::sin(a);
     float cosa = std::cos(a);
     CQuaternion ret;
 
-    ret.r = cosa;
+    ret.w = cosa;
     if (a > 0.f)
     {
-        ret.v.x = sina * v.x / a;
-        ret.v.y = sina * v.y / a;
-        ret.v.z = sina * v.z / a;
+        ret.x = sina * x / a;
+        ret.y = sina * y / a;
+        ret.z = sina * z / a;
     }
     else
-        ret.v = CVector3f(0.f);
+    {
+        ret.x = 0.f;
+        ret.y = 0.f;
+        ret.z = 0.f;
+    }
 
     return ret;
 }
 
 float CQuaternion::dot(const CQuaternion& b)
 {
-    return v.x * b.v.x + v.y * b.v.y + v.z * b.v.z + r * b.r;
+    return x * b.x + y * b.y + z * b.z + w * b.w;
 }
 
 CQuaternion CQuaternion::lerp(CQuaternion& a,  CQuaternion& b, double t)
@@ -228,10 +252,10 @@ CQuaternion CQuaternion::slerp(CQuaternion& a, CQuaternion& b, double t)
         const double d = 1.0 / std::sin(theta);
         const double s0 = std::sin((1.0 - t) * theta);
 
-        ret.v.x = (float)(a.v.x * s0 + b.v.x * s1) * d;
-        ret.v.y = (float)(a.v.y * s0 + b.v.y * s1) * d;
-        ret.v.z = (float)(a.v.z * s0 + b.v.z * s1) * d;
-        ret.r   = (float)(a.r   * s0 + b.r   * s1) * d;
+        ret.x = (float)(a.x * s0 + b.x * s1) * d;
+        ret.y = (float)(a.y * s0 + b.y * s1) * d;
+        ret.z = (float)(a.z * s0 + b.z * s1) * d;
+        ret.w = (float)(a.w * s0 + b.w * s1) * d;
 
         return ret;
     }
@@ -240,16 +264,16 @@ CQuaternion CQuaternion::slerp(CQuaternion& a, CQuaternion& b, double t)
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs)
 {
-    return CQuaternion(lhs + rhs.r, lhs * rhs.v);
+    return CQuaternion(lhs + rhs.w, lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 
 CQuaternion operator-(float lhs, const CQuaternion& rhs)
 {
-    return CQuaternion(lhs - rhs.r, lhs * rhs.v);
+    return CQuaternion(lhs - rhs.w, lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 
 CQuaternion operator*(float lhs, const CQuaternion& rhs)
 {
-    return CQuaternion(lhs * rhs.r, lhs * rhs.v);
+    return CQuaternion(lhs * rhs.w, lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 }

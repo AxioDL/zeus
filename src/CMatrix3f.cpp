@@ -9,20 +9,20 @@ const CMatrix3f CMatrix3f::skIdentityMatrix3f = CMatrix3f();
 CMatrix3f::CMatrix3f(const CQuaternion& quat)
 {
     CQuaternion nq = quat.normalized();
-    float x2 = nq.v[0] * nq.v[0];
-    float y2 = nq.v[1] * nq.v[1];
-    float z2 = nq.v[2] * nq.v[2];
+    float x2 = nq.x * nq.x;
+    float y2 = nq.y * nq.y;
+    float z2 = nq.z * nq.z;
     
     m[0][0] = 1.0 - 2.0 * y2 - 2.0 * z2;
-    m[1][0] = 2.0 * nq.v[0] * nq.v[1] - 2.0 * nq.v[2] * nq.r;
-    m[2][0] = 2.0 * nq.v[0] * nq.v[2] + 2.0 * nq.v[1] * nq.r;
+    m[1][0] = 2.0 * nq.x * nq.y - 2.0 * nq.z * nq.w;
+    m[2][0] = 2.0 * nq.x * nq.z + 2.0 * nq.y * nq.w;
     
-    m[0][1] = 2.0 * nq.v[0] * nq.v[1] + 2.0 * nq.v[2] * nq.r;
+    m[0][1] = 2.0 * nq.x * nq.y + 2.0 * nq.z * nq.w;
     m[1][1] = 1.0 - 2.0 * x2 - 2.0 * z2;
-    m[2][1] = 2.0 * nq.v[1] * nq.v[2] - 2.0 * nq.v[0] * nq.r;
+    m[2][1] = 2.0 * nq.y * nq.z - 2.0 * nq.x * nq.w;
     
-    m[0][2] = 2.0 * nq.v[0] * nq.v[2] - 2.0 * nq.v[1] * nq.r;
-    m[1][2] = 2.0 * nq.v[1] * nq.v[2] + 2.0 * nq.v[0] * nq.r;
+    m[0][2] = 2.0 * nq.x * nq.z - 2.0 * nq.y * nq.w;
+    m[1][2] = 2.0 * nq.y * nq.z + 2.0 * nq.x * nq.w;
     m[2][2] = 1.0 - 2.0 * x2 - 2.0 * y2;
     
     m[0][3] = 0.0f;

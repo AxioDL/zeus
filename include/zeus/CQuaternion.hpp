@@ -159,9 +159,9 @@ public:
     {
         return std::asin(-2.f * (x * z - w * y));
     }
-    
-    inline float& operator[](size_t idx) {return (&x)[idx];}
-    inline const float& operator[](size_t idx) const {return (&x)[idx];}
+
+    inline float& operator[](size_t idx) {return (&w)[idx];}
+    inline const float& operator[](size_t idx) const {return (&w)[idx];}
 
     union
     {

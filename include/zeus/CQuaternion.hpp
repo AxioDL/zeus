@@ -5,6 +5,7 @@
 #include "CAxisAngle.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/CVector4f.hpp"
+#include "zeus/CMatrix3f.hpp"
 #include "zeus/Math.hpp"
 #if ZE_ATHENA_TYPES
 #include <athena/IStreamReader.hpp>
@@ -39,6 +40,15 @@ public:
 #else
         x = vec.vec[1]; y = vec.vec[2]; z = vec.vec[3]; w = vec.vec[0];
 #endif
+    }
+
+    CQuaternion(const CMatrix3f& mat)
+    {
+        w = std::sqrt(1.0f + mat[0][0] + mat[1][1] + mat[2][2]) / 2.0f;
+        double w4 = 4.0f * w;
+        x = (mat[1][2] - mat[2][1]) / w4;
+        y = (mat[2][0] - mat[0][2]) / w4;
+        z = (mat[0][1] - mat[1][0]) / w4;
     }
 
     operator atVec4f()
@@ -160,8 +170,8 @@ public:
         return std::asin(-2.f * (x * z - w * y));
     }
     
-    inline float& operator[](size_t idx) {return (&x)[idx];}
-    inline const float& operator[](size_t idx) const {return (&x)[idx];}
+    inline float& operator[](size_t idx) {return (&w)[idx];}
+    inline const float& operator[](size_t idx) const {return (&w)[idx];}
 
     union
     {

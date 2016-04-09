@@ -44,11 +44,42 @@ public:
 
     CQuaternion(const CMatrix3f& mat)
     {
-        w = std::sqrt(1.0f + mat[0][0] + mat[1][1] + mat[2][2]) / 2.0f;
-        double w4 = 4.0f * w;
-        x = (mat[1][2] - mat[2][1]) / w4;
-        y = (mat[2][0] - mat[0][2]) / w4;
-        z = (mat[0][1] - mat[1][0]) / w4;
+        float trace = mat[0][0] + mat[1][1] + mat[2][2];
+        if (trace > 0)
+        {
+            float s = 0.5f / std::sqrt(trace + 1.0f);
+            w = 0.25f / s;
+            x = (mat[1][2] - mat[2][1]) * s;
+            y = (mat[2][0] - mat[0][2]) * s;
+            z = (mat[0][1] - mat[1][0]) * s;
+        }
+        else
+        {
+            if (mat[0][0] > mat[1][1] && mat[0][0] > mat[2][2])
+            {
+                float s = 2.0f * std::sqrt(1.0f + mat[0][0] - mat[1][1] - mat[2][2]);
+                w = (mat[1][2] - mat[2][1]) / s;
+                x = 0.25f * s;
+                y = (mat[1][0] + mat[0][1]) / s;
+                z = (mat[2][0] + mat[0][2]) / s;
+            }
+            else if (mat[1][1] > mat[2][2])
+            {
+                float s = 2.0f * std::sqrt(1.0f + mat[1][1] - mat[0][0] - mat[2][2]);
+                w = (mat[2][0] - mat[0][2]) / s;
+                x = (mat[1][0] + mat[0][1]) / s;
+                y = 0.25f * s;
+                z = (mat[2][1] + mat[1][2]) / s;
+            }
+            else
+            {
+                float s = 2.0f * std::sqrt(1.0f + mat[2][2] - mat[0][0] - mat[1][1]);
+                w = (mat[0][1] - mat[1][0]) / s;
+                x = (mat[2][0] + mat[0][2]) / s;
+                y = (mat[2][1] + mat[1][2]) / s;
+                z = 0.25f * s;
+            }
+        }
     }
 
     operator atVec4f()

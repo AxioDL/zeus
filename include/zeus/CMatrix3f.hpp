@@ -139,6 +139,14 @@ public:
 
     inline void invert() {*this = inverted();}
     CMatrix3f inverted() const;
+
+    void addScaledMatrix(const CMatrix3f& other, float scale)
+    {
+        CVector3f scaleVec(scale);
+        vec[0] += other.vec[0] * scaleVec;
+        vec[1] += other.vec[1] * scaleVec;
+        vec[2] += other.vec[2] * scaleVec;
+    }
     
     union
     {

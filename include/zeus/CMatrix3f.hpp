@@ -40,6 +40,8 @@ public:
         m[1][1] = scaleVec[1];
         m[2][2] = scaleVec[2];
     }
+    CMatrix3f(float scale)
+    : CMatrix3f(CVector3f(scale)) {}
     CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2)
     {vec[0] = r0; vec[1] = r1; vec[2] = r2;}
     CMatrix3f(const CMatrix3f& other)

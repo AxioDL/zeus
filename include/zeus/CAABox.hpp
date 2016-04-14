@@ -200,7 +200,7 @@ public:
         }
     }
 
-    inline CAABox getTransformedAABox(const CTransform& xfrm)
+    inline CAABox getTransformedAABox(const CTransform& xfrm) const
     {
         CAABox box;
         CVector3f point = xfrm * getPoint(0);
@@ -251,7 +251,7 @@ public:
                 m_min.z <= other.z && other.z <= m_max.z);
     }
 
-    inline CVector3f closestPointAlongVector(const CVector3f& other)
+    inline CVector3f closestPointAlongVector(const CVector3f& other) const
     {
         CVector3f center = this->center();
         return {(other.x < center.x ? m_min.x : m_max.x),
@@ -259,7 +259,7 @@ public:
                 (other.z < center.z ? m_min.z : m_max.z)};
     }
 
-    inline CVector3f furthestPointAlongVector(const CVector3f& other)
+    inline CVector3f furthestPointAlongVector(const CVector3f& other) const
     {
         CVector3f center = this->center();
         return {(other.x < center.x ? m_max.x : m_min.x),
@@ -267,7 +267,7 @@ public:
                 (other.z < center.z ? m_max.z : m_min.z)};
     }
 
-    inline CVector3f getPoint(const int point)
+    inline CVector3f getPoint(const int point) const
     {
         int zOff = point & 4;
         int yOff = (point * 2) & 4;

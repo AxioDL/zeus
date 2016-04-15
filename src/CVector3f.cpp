@@ -11,8 +11,8 @@ const CVector3f CVector3f::skNegOne = CVector3f(-1.0);
 const CVector3f CVector3f::skZero;
 
 const CVector3f kUpVec(0.0, 0.0, 1.0);
-const CVector3f kRadToDegVec(180.0f / M_PI);
-const CVector3f kDegToRadVec(M_PI / 180.0f);
+const CVector3f kRadToDegVec(180.0f / M_PIF);
+const CVector3f kDegToRadVec(M_PIF / 180.0f);
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {

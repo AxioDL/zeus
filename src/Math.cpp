@@ -160,7 +160,7 @@ float fastArcCosF(float val)
      * the approximation below won't provide any benefit,
      * and we simply fall back to the standard implementation
      */
-    if (std::fabs(val) >= 0.925000011920929)
+    if (std::fabs(val) >= 0.925000011920929f)
         return std::acos(val);
 
     /* Fast Arc Cosine approximation using Taylor Polynomials
@@ -215,47 +215,47 @@ int ceilingPowerOfTwo(int x)
 
 float fastCosF(float val)
 {
-    if (std::fabs(val) > M_PI)
+    if (std::fabs(val) > M_PIF)
     {
         float rVal = float(uint32_t(val));
-        val = -((rVal * val) - 6.2831855);
-        if (val <= M_PI && val < -M_PI)
-            val += 6.2831855;
+        val = -((rVal * val) - 6.2831855f);
+        if (val <= M_PIF && val < -M_PIF)
+            val += 6.2831855f;
         else
-            val -= 6.2831855;
+            val -= 6.2831855f;
     }
 
     float sq = val * val;
     float b = sq * sq;
-    val = sq + -0.4999803;
-    val = (b * val) + 0.041620344;
+    val = sq + -0.4999803f;
+    val = (b * val) + 0.041620344f;
     b = b * sq;
-    val = (b * val) + -0.0013636103;
+    val = (b * val) + -0.0013636103f;
     b = b * sq;
-    val = (b * val) + 0.000020169435;
+    val = (b * val) + 0.000020169435f;
     return val;
 }
 
 float fastSinF(float val)
 {
-    if (std::fabs(val) > M_PI)
+    if (std::fabs(val) > M_PIF)
     {
         float rVal = float(uint32_t(val));
-        val = -((rVal * val) - 6.2831855);
-        if (val <= M_PI && val < -M_PI)
-            val += 6.2831855;
+        val = -((rVal * val) - 6.2831855f);
+        if (val <= M_PIF && val < -M_PIF)
+            val += 6.2831855f;
         else
-            val -= 6.2831855;
+            val -= 6.2831855f;
     }
 
     float sq = val * val;
-    float ret = val * 0.99980587;
+    float ret = val * 0.99980587f;
     val = val * sq;
-    ret = (val * ret) + -0.16621658;
+    ret = (val * ret) + -0.16621658f;
     val = val * sq;
-    ret = (val * ret) + 0.0080871079;
+    ret = (val * ret) + 0.0080871079f;
     val = val * sq;
-    ret = (val * ret) + -0.00015297699;
+    ret = (val * ret) + -0.00015297699f;
     return ret;
 }
 
@@ -263,7 +263,7 @@ float getCatmullRomSplinePoint(float a, float b, float c, float d, float t)
 {
     if (t <= 0.0f)
         return b;
-    if (t >= 1.0)
+    if (t >= 1.0f)
         return c;
 
     const float t2 = t  * t;
@@ -279,7 +279,7 @@ CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const
 {
     if (t <= 0.0f)
         return b;
-    if (t >= 1.0)
+    if (t >= 1.0f)
         return c;
 
     const float t2 = t  * t;

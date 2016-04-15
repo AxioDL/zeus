@@ -6,6 +6,7 @@
 
 #undef M_PI
 #define M_PI		3.14159265358979323846	/* pi */
+#define M_PIF		3.14159265358979323846f	/* pi */
 #undef M_PI_2
 #define M_PI_2		1.57079632679489661923	/* pi/2 */
 #undef M_PI_4
@@ -55,10 +56,10 @@ inline T max(T a, T b) { return a > b ? a : b; }
 
 template<typename T>
 inline T clamp(T a, T val, T b) {return max<T>(a, min<T>(b, val));}
-inline float radToDeg(float rad) {return rad * 180.f / M_PI;}
-inline float degToRad(float deg) {return deg * M_PI / 180.f;}
-inline double radToDeg(double rad) {return rad * 180.0 / M_PI;}
-inline double degToRad(double deg) {return deg * M_PI / 180.0;}
+inline float radToDeg(float rad) {return rad * (180.f / M_PIF);}
+inline float degToRad(float deg) {return deg * (M_PIF / 180.f);}
+inline double radToDeg(double rad) {return rad * (180.0 / M_PI);}
+inline double degToRad(double deg) {return deg * (M_PI / 180.0);}
 
 CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary);
 

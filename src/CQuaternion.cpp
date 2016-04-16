@@ -3,6 +3,8 @@
 
 namespace zeus
 {
+CQuaternion const CQuaternion::skNoRotation;
+
 void CQuaternion::fromVector3f(const CVector3f& vec)
 {
     float cosX = std::cos(0.5f * vec.x);
@@ -215,22 +217,22 @@ CQuaternion CQuaternion::exp() const
     return ret;
 }
 
-float CQuaternion::dot(const CQuaternion& b)
+float CQuaternion::dot(const CQuaternion& b) const
 {
     return x * b.x + y * b.y + z * b.z + w * b.w;
 }
 
-CQuaternion CQuaternion::lerp(CQuaternion& a,  CQuaternion& b, double t)
+CQuaternion CQuaternion::lerp(const CQuaternion& a,  const CQuaternion& b, double t)
 {
     return (a + t * (b - a));
 }
 
-CQuaternion CQuaternion::nlerp(CQuaternion& a, CQuaternion& b, double t)
+CQuaternion CQuaternion::nlerp(const CQuaternion& a, const CQuaternion& b, double t)
 {
     return lerp(a, b, t).normalized();
 }
 
-CQuaternion CQuaternion::slerp(CQuaternion& a, CQuaternion& b, double t)
+CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, double t)
 {
     if (t <= 0.0f)
         return a;

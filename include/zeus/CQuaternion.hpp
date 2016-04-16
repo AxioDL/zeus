@@ -180,11 +180,11 @@ public:
 
     CQuaternion exp() const;
 
-    float dot(const CQuaternion& quat);
+    float dot(const CQuaternion& quat) const;
 
-    static CQuaternion lerp(CQuaternion& a, CQuaternion& b, double t);
-    static CQuaternion slerp(CQuaternion& a, CQuaternion& b, double t);
-    static CQuaternion nlerp(CQuaternion& a, CQuaternion& b, double t);
+    static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
+    static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
+    static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
 
     inline float roll() const
     {
@@ -209,6 +209,8 @@ public:
         __m128 mVec128;
         struct { float w, x, y, z; };
     };
+
+    static const CQuaternion skNoRotation;
 };
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);

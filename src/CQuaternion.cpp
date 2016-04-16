@@ -3,7 +3,7 @@
 
 namespace zeus
 {
-CQuaternion const CQuaternion::skNoRotation;
+const CQuaternion CQuaternion::skNoRotation;
 
 void CQuaternion::fromVector3f(const CVector3f& vec)
 {

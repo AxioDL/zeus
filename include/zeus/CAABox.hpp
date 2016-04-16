@@ -40,6 +40,7 @@ public:
     };
 
     static const CAABox skInvertedBox;
+    static const CAABox skNullBox;
 
     CVector3f m_min;
     CVector3f m_max;

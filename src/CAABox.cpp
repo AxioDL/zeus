@@ -1,2 +1,10 @@
 #include "zeus/CAABox.hpp"
-const zeus::CAABox zeus::CAABox::skInvertedBox = CAABox();
+#include "zeus/CVector3f.hpp"
+
+namespace zeus
+{
+
+const CAABox CAABox::skInvertedBox = CAABox();
+const CAABox CAABox::skNullBox = CAABox(CVector3f::skZero, CVector3f::skZero);
+
+}

@@ -20,6 +20,16 @@ public:
 #if ZE_ATHENA_TYPES
     CTransform(const atVec4f* mtx)
     : m_basis(mtx[0], mtx[1], mtx[2]), m_origin(mtx[0].vec[3], mtx[1].vec[3], mtx[2].vec[3]) {}
+
+    void read34RowMajor(athena::io::IStreamReader& r)
+    {
+        atVec4f r0 = r.readVec4fBig();
+        atVec4f r1 = r.readVec4fBig();
+        atVec4f r2 = r.readVec4fBig();
+        m_basis = CMatrix3f(r0, r1, r2);
+        m_basis.transpose();
+        m_origin = CVector3f(r0.vec[3], r1.vec[3], r2.vec[3]);
+    }
 #endif
 
     static inline CTransform Identity()
@@ -178,7 +188,7 @@ public:
         return ret;
     }
 
-    inline CTransform getRotation() { CTransform ret = *this; ret.m_origin.zeroOut(); return ret; }
+    inline CTransform getRotation() const { CTransform ret = *this; ret.m_origin.zeroOut(); return ret; }
     void setRotation(const CMatrix3f& mat)   { m_basis = mat; }
     void setRotation(const CTransform& xfrm) { setRotation(xfrm.m_basis); }
 

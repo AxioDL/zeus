@@ -73,6 +73,13 @@ public:
         z = input.readFloatBig();
         v[3] = 0.0f;
     }
+
+    static CVector3f ReadBig(athena::io::IStreamReader& input)
+    {
+        CVector3f ret;
+        ret.readBig(input);
+        return ret;
+    }
 #endif
 
     CVector3f(float xyz) {splat(xyz);}

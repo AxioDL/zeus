@@ -6,41 +6,40 @@
 
 namespace zeus
 {
-struct alignas(16) CMRay
+struct CMRay
 {
-    CMRay(const CVector3f& start, const CVector3f& end, float dir)
+    CMRay(const CVector3f& start, const CVector3f& end, float d)
         : start(start),
-          dir(dir),
-          unk3(1.0 / dir),
-          unk4(end)
+          end(end),
+          d(d),
+          invD(1.f/d)
     {
-        unk1 = start + (dir * end);
-        unk2 = (unk1 - start);
+        normal = start + (d * end);
+        delta = normal - start;
     }
 
-    CMRay(const CVector3f &start, const CVector3f &end, float dir, float unk)
+    CMRay(const CVector3f& start, const CVector3f& norm, float d, float invD)
         : start(start),
-          dir(dir),
-          unk3(unk),
-          unk4(end)
+          normal(norm),
+          d(d),
+          invD(invD)
     {
-        unk1 = start + (dir * end);
-        unk2 = (unk1 - start);
+        delta = normal - start;
+        end = invD * delta;
     }
 
-    CMRay GetInvUnscaledTransformRay(const CTransform& xfrm)
+    CMRay getInvUnscaledTransformRay(const CTransform& xfrm)
     {
         CTransform inv = xfrm.inverse();
-
-        return CMRay(newStart, newEnd, dir, unk3);
+        return CMRay(inv * start, inv * normal, d, invD);
     }
 
     CVector3f start;
-    CVector3f unk1;
-    CVector3f unk2;
-    float dir;
-    float unk3;
-    CVector3f unk4;
+    CVector3f normal;
+    CVector3f delta;
+    float d;
+    float invD;
+    CVector3f end;
 };
 }
 

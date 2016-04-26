@@ -329,19 +329,20 @@ public:
     }
     static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
-    inline bool canBeNormalized() const
-    {
-        const float epsilon = 1.1920929e-7f;
-        if (std::fabs(x) >= epsilon || std::fabs(y) >= epsilon)
-            return true;
-        return false;
-    }
-
     inline bool isNormalized() const
-    { return !canBeNormalized(); }
+    { return std::fabs(1.f - magSquared()) < 0.01f; }
+
+    inline bool canBeNormalized() const
+    { return !isNormalized(); }
 
     inline bool isZero() const
     { return magSquared() <= 1.1920929e-7f; }
+
+    inline bool isEqu(const CVector2f& other, float epsilon=1.1920929e-7f)
+    {
+        const CVector2f diffVec = other - *this;
+        return (diffVec.x <= epsilon && diffVec.y <= epsilon);
+    }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

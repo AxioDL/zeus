@@ -16,7 +16,7 @@ int main()
     zeus::detectCPU();
     assert(!CAABox({100, 100, 100}, {100, 100, 100}).invalid());
     assert(CAABox().invalid());
-    CVector3f vec{320, 632162.f, 800.f};
+    CVector3f vec{320.f, 1.f, 0.66568f};
     assert(vec.canBeNormalized());
     assert(!vec.isZero());
     assert(CVector3f().isZero());
@@ -55,7 +55,7 @@ int main()
     std::cout << " Test 1 " << ( aabb.intersects(s1) ? "succeeded" : "failed" ) << std::endl;
     std::cout << " Test 2 " << ( aabb.intersects(s2) ? "succeeded" : "failed" ) << std::endl;
     std::cout << " Test 3 " << ( aabb.intersects(s3) ? "succeeded" : "failed" ) << std::endl;
-    CLine line({-89.120926f, 59.328712f, 3.265882f}, CUnitVector3f({-90.120926f, 59.328712f, 3.265882f}));
+    CLineSeg line({-89.120926f, 59.328712f, 3.265882f}, {-90.120926f, 59.328712f, 3.265882f});
 
     CColor ctest1;
     ctest1.fromHSV(0, 255/255.f, .5);

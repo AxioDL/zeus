@@ -357,16 +357,17 @@ public:
         return lerp(a, b, t).normalized();
     }
 
-    inline bool canBeNormalized() const
-    {
-        const float epsilon = 1.1920929e-7f;
-        if (std::fabs(x) >= epsilon || std::fabs(y) >= epsilon || std::fabs(z) >= epsilon || std::fabs(w) >= epsilon)
-            return true;
-        return false;
-    }
-
     inline bool isNormalized() const
-    { return !canBeNormalized(); }
+    { return std::fabs(1.f - magSquared()) < 0.01f; }
+
+    inline bool canBeNormalized() const
+    { return !isNormalized(); }
+
+    inline bool isEqu(const CVector4f& other, float epsilon=1.1920929e-7f)
+    {
+        const CVector4f diffVec = other - *this;
+        return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon && diffVec.w <= epsilon);
+    }
 
     inline float& operator[](size_t idx) {return (&x)[idx];}
     inline const float& operator[](size_t idx) const {return (&x)[idx];}

@@ -6,11 +6,16 @@
 
 namespace zeus
 {
-const CVector3f CVector3f::skOne = CVector3f(1.0);
-const CVector3f CVector3f::skNegOne = CVector3f(-1.0);
+const CVector3f CVector3f::skOne = CVector3f(1.f);
+const CVector3f CVector3f::skNegOne = CVector3f(-1.f);
 const CVector3f CVector3f::skZero;
 
-const CVector3f kUpVec(0.0, 0.0, 1.0);
+const CVector3f kUpVec(0.f, 0.f, 1.f);
+const CVector3f kDownVec(0.f, 0.f, -1.f);
+const CVector3f kForwardVec(0.f, 1.f, 0.f);
+const CVector3f kBackVec(0.f, -1.f, 0.f);
+const CVector3f kRightVec(1.f, 0.f, 0.f);
+const CVector3f kLeftVector(-1.f, 0.f, 0.f);
 const CVector3f kRadToDegVec(180.0f / M_PIF);
 const CVector3f kDegToRadVec(M_PIF / 180.0f);
 

@@ -15,7 +15,7 @@
 #include "zeus/CUnitVector.hpp"
 #include "zeus/CRectangle.hpp"
 #include "zeus/CPlane.hpp"
-#include "zeus/CLine.hpp"
+#include "zeus/CLineSeg.hpp"
 #include "zeus/CAABox.hpp"
 #include "zeus/COBBox.hpp"
 #include "zeus/CSphere.hpp"

@@ -269,6 +269,7 @@ public:
         return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
 #endif
     }
+
     inline float magSquared() const
     {
 #if __SSE__
@@ -287,6 +288,7 @@ public:
         return x*x + y*y + z*z;
 #endif
     }
+
     inline float magnitude() const
     { return sqrtF(magSquared()); }
     
@@ -316,18 +318,12 @@ public:
     static inline CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t)
     { return lerp(a, b, t).normalized(); }
     static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
-    //static CVector3f slerp(const CVector3f& a, const CVector3f& b, const CRelAngle& angle);
-
-    inline bool canBeNormalized() const
-    {
-        const float epsilon = 1.1920929e-7f;
-        if (std::fabs(x) >= epsilon || std::fabs(y) >= epsilon || std::fabs(z) >= epsilon)
-            return true;
-        return false;
-    }
 
     inline bool isNormalized() const
-    { return !canBeNormalized(); }
+    { return std::fabs(1.f - magSquared()) < 0.01f; }
+
+    inline bool canBeNormalized() const
+    { return !isNormalized(); }
 
     inline bool isZero() const
     { return magSquared() <= 1.1920929e-7f; }
@@ -355,7 +351,7 @@ public:
 
     inline bool isEqu(const CVector3f& other, float epsilon=1.1920929e-7f)
     {
-        CVector3f diffVec = other - *this;
+        const CVector3f diffVec = other - *this;
         return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon);
     }
 
@@ -409,6 +405,11 @@ static inline CVector3f operator/(float lhs, const CVector3f& rhs)
 }
 
 extern const CVector3f kUpVec;
+extern const CVector3f kDownVec;
+extern const CVector3f kRightVec;
+extern const CVector3f kLeftVec;
+extern const CVector3f kForwardVec;
+extern const CVector3f kBackVec;
 extern const CVector3f kRadToDegVec;
 extern const CVector3f kDegToRadVec;
 inline CVector3f radToDeg(const CVector3f& rad) {return rad * kRadToDegVec;}

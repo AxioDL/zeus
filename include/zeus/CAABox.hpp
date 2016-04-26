@@ -2,11 +2,10 @@
 #define CAABOX_HPP
 
 #include "zeus/CVector3f.hpp"
-#include "CUnitVector.hpp"
 #include "zeus/CTransform.hpp"
 #include "zeus/CPlane.hpp"
-#include "CLine.hpp"
-#include "CSphere.hpp"
+#include "zeus/CLineSeg.hpp"
+#include "zeus/CSphere.hpp"
 #include "zeus/Math.hpp"
 #if ZE_ATHENA_TYPES
 #include <athena/IStreamReader.hpp>
@@ -155,49 +154,49 @@ public:
 
     CVector3f volume() const {return (m_max - m_min) * 0.5f;}
 
-    inline CLine getEdge(EBoxEdgeId id)
+    inline CLineSeg getEdge(EBoxEdgeId id)
     {
         switch (id)
         {
             case EBoxEdgeId::UnknownEdge0:
-                return CLine({m_min.x, m_min.y, m_min.z},
-                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+                return CLineSeg({m_min.x, m_min.y, m_min.z},
+                                {m_min.x, m_min.y, m_max.z});
             case EBoxEdgeId::UnknownEdge1:
-                return CLine({m_max.x, m_min.y, m_min.z},
-                             CUnitVector3f({m_min.x, m_min.y, m_min.z}));
+                return CLineSeg({m_max.x, m_min.y, m_min.z},
+                                {m_min.x, m_min.y, m_min.z});
             case EBoxEdgeId::UnknownEdge2:
-                return CLine({m_max.x, m_min.y, m_max.z},
-                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+                return CLineSeg({m_max.x, m_min.y, m_max.z},
+                                {m_max.x, m_min.y, m_max.z});
             case EBoxEdgeId::UnknownEdge3:
-                return CLine({m_min.x, m_min.y, m_max.z},
-                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+                return CLineSeg({m_min.x, m_min.y, m_max.z},
+                                {m_max.x, m_min.y, m_max.z});
             case EBoxEdgeId::UnknownEdge4:
-                return CLine({m_max.x, m_max.y, m_min.z},
-                             CUnitVector3f({m_max.x, m_max.y, m_max.z}));
+                return CLineSeg({m_max.x, m_max.y, m_min.z},
+                                {m_max.x, m_max.y, m_max.z});
             case EBoxEdgeId::UnknownEdge5:
-                return CLine({m_min.x, m_max.y, m_min.z},
-                             CUnitVector3f({m_max.x, m_max.y, m_min.z}));
+                return CLineSeg({m_min.x, m_max.y, m_min.z},
+                                {m_max.x, m_max.y, m_min.z});
             case EBoxEdgeId::UnknownEdge6:
-                return CLine({m_min.x, m_max.y, m_max.z},
-                             CUnitVector3f({m_min.x, m_max.y, m_min.z}));
+                return CLineSeg({m_min.x, m_max.y, m_max.z},
+                                {m_min.x, m_max.y, m_min.z});
             case EBoxEdgeId::UnknownEdge7:
-                return CLine({m_max.x, m_max.y, m_max.z},
-                             CUnitVector3f({m_min.x, m_max.y, m_max.z}));
+                return CLineSeg({m_max.x, m_max.y, m_max.z},
+                                {m_min.x, m_max.y, m_max.z});
             case EBoxEdgeId::UnknownEdge8:
-                return CLine({m_min.x, m_max.y, m_max.z},
-                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+                return CLineSeg({m_min.x, m_max.y, m_max.z},
+                                {m_min.x, m_min.y, m_max.z});
             case EBoxEdgeId::UnknownEdge9:
-                return CLine({m_min.x, m_max.y, m_min.z},
-                             CUnitVector3f({m_min.x, m_min.y, m_min.z}));
+                return CLineSeg({m_min.x, m_max.y, m_min.z},
+                                {m_min.x, m_min.y, m_min.z});
             case EBoxEdgeId::UnknownEdge10:
-                return CLine({m_max.x, m_max.y, m_min.z},
-                             CUnitVector3f({m_max.x, m_min.y, m_min.z}));
+                return CLineSeg({m_max.x, m_max.y, m_min.z},
+                                {m_max.x, m_min.y, m_min.z});
             case EBoxEdgeId::UnknownEdge11:
-                return CLine({m_max.x, m_max.y, m_max.z},
-                             CUnitVector3f({m_max.x, m_min.y, m_max.z}));
+                return CLineSeg({m_max.x, m_max.y, m_max.z},
+                                {m_max.x, m_min.y, m_max.z});
             default:
-                return CLine({m_min.x, m_min.y, m_min.z},
-                             CUnitVector3f({m_min.x, m_min.y, m_max.z}));
+                return CLineSeg({m_min.x, m_min.y, m_min.z},
+                                {m_min.x, m_min.y, m_max.z});
         }
     }
 

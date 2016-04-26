@@ -47,7 +47,7 @@ add_library(zeus
     include/zeus/CFrustum.hpp
     include/zeus/CAABox.hpp
     include/zeus/COBBox.hpp
-    include/zeus/CLine.hpp
+    include/zeus/CLineSeg.hpp
     include/zeus/CSphere.hpp
     include/zeus/CUnitVector.hpp
     include/zeus/CMRay.hpp)

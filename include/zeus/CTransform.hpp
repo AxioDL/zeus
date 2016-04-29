@@ -14,21 +14,21 @@ class alignas(16) CTransform
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    CTransform() : m_basis(false) {}
+    CTransform() : basis(false) {}
     CTransform(const CMatrix3f& basis, const CVector3f& offset=CVector3f::skZero) :
-    m_basis(basis), m_origin(offset) {}
+    basis(basis), origin(offset) {}
 #if ZE_ATHENA_TYPES
     CTransform(const atVec4f* mtx)
-    : m_basis(mtx[0], mtx[1], mtx[2]), m_origin(mtx[0].vec[3], mtx[1].vec[3], mtx[2].vec[3]) {}
+    : basis(mtx[0], mtx[1], mtx[2]), origin(mtx[0].vec[3], mtx[1].vec[3], mtx[2].vec[3]) {}
 
     void read34RowMajor(athena::io::IStreamReader& r)
     {
         atVec4f r0 = r.readVec4fBig();
         atVec4f r1 = r.readVec4fBig();
         atVec4f r2 = r.readVec4fBig();
-        m_basis = CMatrix3f(r0, r1, r2);
-        m_basis.transpose();
-        m_origin = CVector3f(r0.vec[3], r1.vec[3], r2.vec[3]);
+        basis = CMatrix3f(r0, r1, r2);
+        basis.transpose();
+        origin = CVector3f(r0.vec[3], r1.vec[3], r2.vec[3]);
     }
 #endif
 
@@ -38,12 +38,12 @@ public:
     }
 
     inline CTransform operator*(const CTransform& rhs) const
-    {return CTransform(m_basis * rhs.m_basis, m_origin + (m_basis * rhs.m_origin));}
+    {return CTransform(basis * rhs.basis, origin + (basis * rhs.origin));}
 
     inline CTransform inverse() const
     {
-        CMatrix3f inv = m_basis.inverted();
-        return CTransform(inv, inv * -m_origin);
+        CMatrix3f inv = basis.inverted();
+        return CTransform(inv, inv * -origin);
     }
 
     static inline CTransform Translate(const CVector3f& position)
@@ -55,23 +55,23 @@ public:
 
     inline CTransform operator+(const CVector3f& other)
     {
-        return CTransform(m_basis, m_origin + other);
+        return CTransform(basis, origin + other);
     }
 
     inline CTransform& operator+=(const CVector3f& other)
     {
-        m_origin += other;
+        origin += other;
         return *this;
     }
 
     inline CTransform operator-(const CVector3f& other)
     {
-        return CTransform(m_basis, m_origin - other);
+        return CTransform(basis, origin - other);
     }
 
     inline CTransform& operator-=(const CVector3f& other)
     {
-        m_origin -= other;
+        origin -= other;
         return *this;
     }
 
@@ -109,15 +109,15 @@ public:
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
 
-        zeus::CVector3f b2 = m_basis[2] * sinT;
-        zeus::CVector3f b1 = m_basis[1] * sinT;
+        zeus::CVector3f b2 = basis[2] * sinT;
+        zeus::CVector3f b1 = basis[1] * sinT;
         zeus::CVector3f cosV(cosT);
 
-        m_basis[1] *= cosV;
-        m_basis[2] *= cosV;
+        basis[1] *= cosV;
+        basis[2] *= cosV;
 
-        m_basis[1] += b2;
-        m_basis[2] -= b1;
+        basis[1] += b2;
+        basis[2] -= b1;
     }
 
     inline void rotateLocalY(float theta)
@@ -125,15 +125,15 @@ public:
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
 
-        zeus::CVector3f b0 = m_basis[0] * sinT;
-        zeus::CVector3f b2 = m_basis[2] * sinT;
+        zeus::CVector3f b0 = basis[0] * sinT;
+        zeus::CVector3f b2 = basis[2] * sinT;
         zeus::CVector3f cosV(cosT);
 
-        m_basis[0] *= cosV;
-        m_basis[2] *= cosV;
+        basis[0] *= cosV;
+        basis[2] *= cosV;
 
-        m_basis[2] += b0;
-        m_basis[0] -= b2;
+        basis[2] += b0;
+        basis[0] -= b2;
     }
 
     inline void rotateLocalZ(float theta)
@@ -141,20 +141,20 @@ public:
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
 
-        zeus::CVector3f b0 = m_basis[0] * sinT;
-        zeus::CVector3f b1 = m_basis[1] * sinT;
+        zeus::CVector3f b0 = basis[0] * sinT;
+        zeus::CVector3f b1 = basis[1] * sinT;
         zeus::CVector3f cosV(cosT);
 
-        m_basis[0] *= cosV;
-        m_basis[1] *= cosV;
+        basis[0] *= cosV;
+        basis[1] *= cosV;
 
-        m_basis[0] += b1;
-        m_basis[1] -= b0;
+        basis[0] += b1;
+        basis[1] -= b0;
     }
 
     inline CVector3f transposeRotate(const CVector3f& in) const
     {
-        return CVector3f(m_basis[0].dot(in), m_basis[1].dot(in), m_basis[2].dot(in));
+        return CVector3f(basis[0].dot(in), basis[1].dot(in), basis[2].dot(in));
     }
 
     inline void scaleBy(float factor)
@@ -184,26 +184,26 @@ public:
     inline CTransform multiplyIgnoreTranslation(const CTransform& xfrm)
     {
         CTransform ret;
-        ret.m_basis = m_basis * xfrm.m_basis;
+        ret.basis = basis * xfrm.basis;
         return ret;
     }
 
-    inline CTransform getRotation() const { CTransform ret = *this; ret.m_origin.zeroOut(); return ret; }
-    void setRotation(const CMatrix3f& mat)   { m_basis = mat; }
-    void setRotation(const CTransform& xfrm) { setRotation(xfrm.m_basis); }
+    inline CTransform getRotation() const { CTransform ret = *this; ret.origin.zeroOut(); return ret; }
+    void setRotation(const CMatrix3f& mat)   { basis = mat; }
+    void setRotation(const CTransform& xfrm) { setRotation(xfrm.basis); }
 
     /**
      * @brief buildMatrix3f Returns the stored matrix
      * buildMatrix3f is here for compliance with Retro's Math API
      * @return The Matrix (Neo, you are the one)
      */
-    inline CMatrix3f buildMatrix3f() { return m_basis; }
+    inline CMatrix3f buildMatrix3f() { return basis; }
 
-    inline CVector3f operator*(const CVector3f& other) const {return m_origin + m_basis * other;}
+    inline CVector3f operator*(const CVector3f& other) const {return origin + basis * other;}
 
     inline CMatrix4f toMatrix4f() const
     {
-        CMatrix4f ret(m_basis[0], m_basis[1], m_basis[2], m_origin);
+        CMatrix4f ret(basis[0], basis[1], basis[2], origin);
         ret[0][3] = 0.0f;
         ret[1][3] = 0.0f;
         ret[2][3] = 0.0f;
@@ -214,31 +214,31 @@ public:
     static inline CTransform fromColumns(const CVector3f& m0, const CVector3f& m1, const CVector3f& m2, const CVector3f& m3)
     {
         CTransform ret;
-        ret.m_basis[0][0] = m0[0];
-        ret.m_basis[0][1] = m1[0];
-        ret.m_basis[0][2] = m2[0];
-        ret.m_origin[0]   = m3[0];
-        ret.m_basis[1][0] = m0[1];
-        ret.m_basis[1][1] = m1[1];
-        ret.m_basis[1][2] = m2[1];
-        ret.m_origin[1]   = m3[1];
-        ret.m_basis[2][0] = m0[2];
-        ret.m_basis[2][1] = m1[2];
-        ret.m_basis[2][2] = m2[2];
-        ret.m_origin[2]   = m3[2];
+        ret.basis[0][0] = m0[0];
+        ret.basis[0][1] = m1[0];
+        ret.basis[0][2] = m2[0];
+        ret.origin[0]   = m3[0];
+        ret.basis[1][0] = m0[1];
+        ret.basis[1][1] = m1[1];
+        ret.basis[1][2] = m2[1];
+        ret.origin[1]   = m3[1];
+        ret.basis[2][0] = m0[2];
+        ret.basis[2][1] = m1[2];
+        ret.basis[2][2] = m2[2];
+        ret.origin[2]   = m3[2];
         return ret;
     }
 
     inline void orthonormalize()
     {
-        m_basis[0].normalize();
-        m_basis[2] = m_basis[0].cross(m_basis[1]);
-        m_basis[2].normalize();
-        m_basis[1] = m_basis[2].cross(m_basis[0]);
+        basis[0].normalize();
+        basis[2] = basis[0].cross(basis[1]);
+        basis[2].normalize();
+        basis[1] = basis[2].cross(basis[0]);
     }
 
-    CMatrix3f m_basis;
-    CVector3f m_origin;
+    CMatrix3f basis;
+    CVector3f origin;
 };
 
 static inline CTransform CTransformFromScaleVector(const CVector3f& scale)

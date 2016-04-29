@@ -17,16 +17,16 @@ enum class EProjType
 };
 struct SProjOrtho
 {
-    float m_top, m_bottom, m_left, m_right, m_near, m_far;
+    float top, bottom, left, right, near, far;
     SProjOrtho(float p_top=1.0f, float p_bottom=-1.0f, float p_left=-1.0f, float p_right=1.0f,
                float p_near=1.0f, float p_far=-1.0f) :
-    m_top(p_top), m_bottom(p_bottom), m_left(p_left), m_right(p_right), m_near(p_near), m_far(p_far) {}
+    top(p_top), bottom(p_bottom), left(p_left), right(p_right), near(p_near), far(p_far) {}
 };
 struct SProjPersp
 {
-    float m_fov, m_aspect, m_near, m_far;
+    float fov, aspect, near, far;
     SProjPersp(float p_fov=degToRad(55.0f), float p_aspect=1.0f, float p_near=0.1f, float p_far=4096.f) :
-    m_fov(p_fov), m_aspect(p_aspect), m_near(p_near), m_far(p_far) {}
+    fov(p_fov), aspect(p_aspect), near(p_near), far(p_far) {}
 };
 extern const SProjOrtho kOrthoIdentity;
 

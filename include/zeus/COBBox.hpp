@@ -14,8 +14,8 @@ public:
 #if ZE_ATHENA_TYPES
     void readBig(athena::io::IStreamReader& in)
     {
-        m_transform.read34RowMajor(in);
-        m_extents.readBig(in);
+        transform.read34RowMajor(in);
+        extents.readBig(in);
     }
     static COBBox ReadBig(athena::io::IStreamReader& in)
     {
@@ -26,16 +26,16 @@ public:
 
 #endif
 
-    CTransform m_transform;
-    CVector3f  m_extents;
+    CTransform transform;
+    CVector3f  extents;
 
     COBBox()
     {}
 
     COBBox(const CAABox& aabb)
-        : m_extents(aabb.volume())
+        : extents(aabb.volume())
     {
-        m_transform.m_origin = aabb.center();
+        transform.origin = aabb.center();
     }
 
     COBBox(const CTransform& xf, const CVector3f& point)
@@ -47,7 +47,7 @@ public:
     {
         CAABox ret = CAABox::skInvertedBox;
 
-        CTransform trans = transform * m_transform;
+        CTransform trans = transform * transform;
         static const CVector3f basis[8] ={
             { 1.0,  1.0,  1.0},
             { 1.0,  1.0, -1.0},
@@ -58,22 +58,22 @@ public:
             {-1.0,  1.0, -1.0},
             {-1.0,  1.0,  1.0}
         };
-        CVector3f p = m_extents * basis[0];
+        CVector3f p = extents * basis[0];
 
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[1];
+        p = extents * basis[1];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[2];
+        p = extents * basis[2];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[3];
+        p = extents * basis[3];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[4];
+        p = extents * basis[4];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[5];
+        p = extents * basis[5];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[6];
+        p = extents * basis[6];
         ret.accumulateBounds(trans * p);
-        p = m_extents * basis[7];
+        p = extents * basis[7];
         ret.accumulateBounds(trans * p);
 
         return ret;

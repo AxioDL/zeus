@@ -8,7 +8,7 @@ namespace zeus
 {
 class CFrustum
 {
-    CPlane m_planes[6];
+    CPlane planes[6];
 public:
     
     inline void updatePlanes(const CTransform& modelview, const CProjection& projection)
@@ -20,22 +20,22 @@ public:
 #if __SSE__
         
         /* Left */
-        m_planes[0].mVec128 = _mm_add_ps(mvp_rm.vec[0].mVec128, mvp_rm.vec[3].mVec128);
+        planes[0].mVec128 = _mm_add_ps(mvp_rm.vec[0].mVec128, mvp_rm.vec[3].mVec128);
         
         /* Right */
-        m_planes[1].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[0].mVec128), mvp_rm.vec[3].mVec128);
+        planes[1].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[0].mVec128), mvp_rm.vec[3].mVec128);
         
         /* Bottom */
-        m_planes[2].mVec128 = _mm_add_ps(mvp_rm.vec[1].mVec128, mvp_rm.vec[3].mVec128);
+        planes[2].mVec128 = _mm_add_ps(mvp_rm.vec[1].mVec128, mvp_rm.vec[3].mVec128);
         
         /* Top */
-        m_planes[3].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[1].mVec128), mvp_rm.vec[3].mVec128);
+        planes[3].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[1].mVec128), mvp_rm.vec[3].mVec128);
         
         /* Near */
-        m_planes[4].mVec128 = _mm_add_ps(mvp_rm.vec[2].mVec128, mvp_rm.vec[3].mVec128);
+        planes[4].mVec128 = _mm_add_ps(mvp_rm.vec[2].mVec128, mvp_rm.vec[3].mVec128);
         
         /* Far */
-        m_planes[5].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[2].mVec128), mvp_rm.vec[3].mVec128);
+        planes[5].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[2].mVec128), mvp_rm.vec[3].mVec128);
         
 #else
         /* Left */
@@ -76,12 +76,12 @@ public:
         
 #endif
         
-        m_planes[0].normalize();
-        m_planes[1].normalize();
-        m_planes[2].normalize();
-        m_planes[3].normalize();
-        m_planes[4].normalize();
-        m_planes[5].normalize();
+        planes[0].normalize();
+        planes[1].normalize();
+        planes[2].normalize();
+        planes[3].normalize();
+        planes[4].normalize();
+        planes[5].normalize();
         
     }
     
@@ -90,31 +90,31 @@ public:
         CVector3f vmin, vmax;
         int i;
         for (i=0 ; i<6 ; ++i) {
-            const CPlane& plane = m_planes[i];
+            const CPlane& plane = planes[i];
             
             /* X axis */
             if (plane.a >= 0) {
-                vmin[0] = aabb.m_min[0];
-                vmax[0] = aabb.m_max[0];
+                vmin[0] = aabb.min[0];
+                vmax[0] = aabb.max[0];
             } else {
-                vmin[0] = aabb.m_max[0];
-                vmax[0] = aabb.m_min[0];
+                vmin[0] = aabb.max[0];
+                vmax[0] = aabb.min[0];
             }
             /* Y axis */
             if (plane.b >= 0) {
-                vmin[1] = aabb.m_min[1];
-                vmax[1] = aabb.m_max[1];
+                vmin[1] = aabb.min[1];
+                vmax[1] = aabb.max[1];
             } else {
-                vmin[1] = aabb.m_max[1];
-                vmax[1] = aabb.m_min[1];
+                vmin[1] = aabb.max[1];
+                vmax[1] = aabb.min[1];
             }
             /* Z axis */
             if (plane.c >= 0) {
-                vmin[2] = aabb.m_min[2];
-                vmax[2] = aabb.m_max[2];
+                vmin[2] = aabb.min[2];
+                vmax[2] = aabb.max[2];
             } else {
-                vmin[2] = aabb.m_max[2];
-                vmax[2] = aabb.m_min[2];
+                vmin[2] = aabb.max[2];
+                vmax[2] = aabb.min[2];
             }
             float dadot = plane.vec.dot(vmax);
             if (dadot + plane.d < 0)

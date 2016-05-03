@@ -43,7 +43,7 @@ public:
 
     }
 
-    CAABox calculateAABox(const CTransform& transform = CTransform())
+    CAABox calculateAABox(const CTransform& transform = CTransform()) const
     {
         CAABox ret = CAABox::skInvertedBox;
 

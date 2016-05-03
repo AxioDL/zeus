@@ -15,7 +15,7 @@ const CVector3f kDownVec(0.f, 0.f, -1.f);
 const CVector3f kForwardVec(0.f, 1.f, 0.f);
 const CVector3f kBackVec(0.f, -1.f, 0.f);
 const CVector3f kRightVec(1.f, 0.f, 0.f);
-const CVector3f kLeftVector(-1.f, 0.f, 0.f);
+const CVector3f kLeftVec(-1.f, 0.f, 0.f);
 const CVector3f kRadToDegVec(180.0f / M_PIF);
 const CVector3f kDegToRadVec(M_PIF / 180.0f);
 

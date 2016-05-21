@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
+#undef near
+#undef far
 
 namespace zeus
 {
@@ -15,10 +17,12 @@ enum class EProjType
     Orthographic = 1,
     Perspective = 2
 };
-struct SProjOrtho
+
+class SProjOrtho
 {
+public:
     float top, bottom, left, right, near, far;
-    SProjOrtho(float p_top=1.0f, float p_bottom=-1.0f, float p_left=-1.0f, float p_right=1.0f,
+    explicit SProjOrtho(float p_top=1.0f, float p_bottom=-1.0f, float p_left=-1.0f, float p_right=1.0f,
                float p_near=1.0f, float p_far=-1.0f) :
     top(p_top), bottom(p_bottom), left(p_left), right(p_right), near(p_near), far(p_far) {}
 };

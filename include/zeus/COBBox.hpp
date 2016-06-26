@@ -4,6 +4,7 @@
 #include "zeus/CTransform.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/CAABox.hpp"
+#include "zeus/CMRay.hpp"
 
 namespace zeus
 {
@@ -38,9 +39,10 @@ public:
         transform.origin = aabb.center();
     }
 
-    COBBox(const CTransform& xf, const CVector3f& point)
+    COBBox(const CTransform& xf, const CVector3f& extents)
+        : transform(xf),
+          extents(extents)
     {
-
     }
 
     CAABox calculateAABox(const CTransform& transform = CTransform()) const

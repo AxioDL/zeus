@@ -28,9 +28,9 @@ struct CMRay
         end = invD * delta;
     }
 
-    CMRay getInvUnscaledTransformRay(const CTransform& xfrm)
+    CMRay getInvUnscaledTransformRay(const CTransform& xfrm) const
     {
-        CTransform inv = xfrm.inverse();
+        const CTransform inv = xfrm.inverse();
         return CMRay(inv * start, inv * normal, d, invD);
     }
 

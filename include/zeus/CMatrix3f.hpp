@@ -137,7 +137,9 @@ public:
     static const CMatrix3f skIdentityMatrix3f;
     
     void transpose();
+    void transposeSSE3();
     CMatrix3f transposed() const;
+    CMatrix3f transposedSSE3() const;
 
     inline void invert() {*this = inverted();}
     CMatrix3f inverted() const;

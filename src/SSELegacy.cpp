@@ -63,7 +63,7 @@ CMatrix3f CMatrix3f::transposedSSE3() const
 
 CMatrix4f CMatrix4f::transposedSSE3() const
 {
-    CMatrix3f ret;
+    CMatrix4f ret;
 #if __SSE__
     __m128 T0 = _mm_unpacklo_ps(vec[0].mVec128, vec[1].mVec128);
     __m128 T2 = _mm_unpacklo_ps(vec[2].mVec128, vec[3].mVec128);

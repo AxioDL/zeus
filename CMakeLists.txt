@@ -26,23 +26,24 @@ if(NOT MSVC)
 set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS "-msse4.1 -msse4.2 -std=c++14")
 string(REPLACE "-flto" "" CUSTOM_FLAGS ${CMAKE_CXX_FLAGS})
 set(CUSTOM_FLAGS "${CUSTOM_FLAGS} -O3 -msse3 -std=c++14")
-else()
-string(REPLACE "/GL" "" CUSTOM_FLAGS ${CMAKE_CXX_FLAGS})
-endif()
+set(SSE_LEGACY_OBJ ${CMAKE_CURRENT_BINARY_DIR}/src/SSELegacy.o)
 separate_arguments(CUSTOM_FLAGS UNIX_COMMAND ${CUSTOM_FLAGS})
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/src/SSELegacy.o
+    OUTPUT ${SSE_LEGACY_OBJ}
     COMMAND ${CMAKE_CXX_COMPILER}
     ARGS ${CUSTOM_FLAGS} -c ${CMAKE_CURRENT_SOURCE_DIR}/src/SSELegacy.cpp
-                         -o ${CMAKE_CURRENT_BINARY_DIR}/src/SSELegacy.o
+                         -o ${SSE_LEGACY_OBJ}
                          -I ${CMAKE_CURRENT_SOURCE_DIR}/include
                          -I ${ATHENA_INCLUDE_DIR}
-
     MAIN_DEPENDENCY src/SSELegacy.cpp)
+
+else()
+set(SSE_LEGACY_OBJ src/SSELegacy.cpp)
+endif()
 
 add_library(zeus
     ${SOURCES}
-    ${CMAKE_CURRENT_BINARY_DIR}/src/SSELegacy.o
+    ${SSE_LEGACY_OBJ}
 
     include/zeus/Math.hpp
     include/zeus/CQuaternion.hpp

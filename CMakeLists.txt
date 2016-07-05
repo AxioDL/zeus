@@ -25,7 +25,12 @@ set(SOURCES
 if(NOT MSVC)
 set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS "-msse4.1 -msse4.2 -std=c++14")
 string(REPLACE "-flto" "" CUSTOM_FLAGS ${CMAKE_CXX_FLAGS})
-set(CUSTOM_FLAGS "${CUSTOM_FLAGS} -O3 -msse3 -std=c++14")
+if (CMAKE_OSX_DEPLOYMENT_TARGET AND NOT CMAKE_OSX_DEPLOYMENT_TARGET STREQUAL "")
+    set(CUSTOM_FLAGS "${CUSTOM_FLAGS} -mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET} -O3 -msse3 -std=c++14")
+else()
+    set(CUSTOM_FLAGS "${CUSTOM_FLAGS} -O3 -msse3 -std=c++14")
+endif()
+
 set(SSE_LEGACY_OBJ ${CMAKE_CURRENT_BINARY_DIR}/SSELegacy.o)
 separate_arguments(CUSTOM_FLAGS UNIX_COMMAND ${CUSTOM_FLAGS})
 add_custom_command(

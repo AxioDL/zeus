@@ -10,8 +10,8 @@
 #include <iostream>
 
 #if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
-#define COLOR(rgba) (unsigned)( ( (rgba) & 0x000000FF ) << 24 | ( (rgba) & 0x0000FF00 ) <<  8 \
-                    | ( (rgba) & 0x00FF0000 ) >>  8 | ( (rgba) & 0xFF000000 ) >> 24 )
+#define COLOR(rgba)                                                                                                            \
+    (unsigned)(((rgba)&0x000000FF) << 24 | ((rgba)&0x0000FF00) << 8 | ((rgba)&0x00FF0000) >> 8 | ((rgba)&0xFF000000) >> 24)
 #else
 #define COLOR(rgba) rgba
 #endif
@@ -20,10 +20,9 @@ namespace zeus
 {
 typedef uint8_t Comp8;
 typedef uint32_t Comp32;
-constexpr float OneOver255 = 1.f/255.f;
+constexpr float OneOver255 = 1.f / 255.f;
 
-typedef union
-{
+typedef union {
     struct
     {
         Comp8 r, g, b, a;
@@ -55,11 +54,19 @@ public:
 
     CColor() : r(1.0f), g(1.0f), b(1.0f), a(1.0f) {}
     CColor(float rgb, float a = 1.0) { splat(rgb, a); }
-    CColor(float r, float g, float b, float a = 1.0f) {v[0] = r; v[1] = g; v[2] = b; v[3] = a; }
+    CColor(float r, float g, float b, float a = 1.0f)
+    {
+        v[0] = r;
+        v[1] = g;
+        v[2] = b;
+        v[3] = a;
+    }
 #if ZE_ATHENA_TYPES
     CColor(const atVec4f& vec)
 #if __SSE__ || __GEKKO_PS__
-        : mVec128(vec.mVec128){}
+    : mVec128(vec.mVec128)
+    {
+    }
 #else
     {
         r = vec.vec[0], g = vec.vec[1], b = vec.vec[2], a = vec.vec[3];
@@ -90,10 +97,8 @@ public:
     }
 #endif
 
-    inline bool operator==(const CColor& rhs) const
-    { return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a); }
-    inline bool operator!=(const CColor& rhs) const
-    { return !(*this == rhs); }
+    inline bool operator==(const CColor& rhs) const { return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a); }
+    inline bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
     inline CColor operator+(const CColor& rhs) const
     {
 #if __SSE__
@@ -167,7 +172,10 @@ public:
 #if __SSE__
         mVec128 = _mm_add_ps(mVec128, rhs.mVec128);
 #else
-        r += rhs.r; g += rhs.g; b += rhs.b; a += rhs.a;
+        r += rhs.r;
+        g += rhs.g;
+        b += rhs.b;
+        a += rhs.a;
 #endif
         return *this;
     }
@@ -176,25 +184,34 @@ public:
 #if __SSE__
         mVec128 = _mm_sub_ps(mVec128, rhs.mVec128);
 #else
-        r -= rhs.r; g -= rhs.g; b -= rhs.b; a -= rhs.a;
+        r -= rhs.r;
+        g -= rhs.g;
+        b -= rhs.b;
+        a -= rhs.a;
 #endif
         return *this;
     }
-    inline const CColor& operator *=(const CColor& rhs)
+    inline const CColor& operator*=(const CColor& rhs)
     {
 #if __SSE__
         mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
 #else
-        r *= rhs.r; g *= rhs.g; b *= rhs.b; a *= rhs.a;
+        r *= rhs.r;
+        g *= rhs.g;
+        b *= rhs.b;
+        a *= rhs.a;
 #endif
         return *this;
     }
-    inline const CColor& operator /=(const CColor& rhs)
+    inline const CColor& operator/=(const CColor& rhs)
     {
 #if __SSE__
         mVec128 = _mm_div_ps(mVec128, rhs.mVec128);
 #else
-        r /= rhs.r; g /= rhs.g; b /= rhs.b; a /= rhs.a;
+        r /= rhs.r;
+        g /= rhs.g;
+        b /= rhs.b;
+        a /= rhs.a;
 #endif
         return *this;
     }
@@ -229,19 +246,10 @@ public:
         return r * r + g * g + b * b + a * a;
 #endif
     }
-    inline float magnitude() const
-    {
-        return std::sqrt(magSquared());
-    }
-    static inline CColor lerp(const CColor& a, const CColor& b, float t)
-    {
-        return (a + (b - a) * t);
-    }
-    static inline CColor nlerp(const CColor& a, const CColor& b, float t)
-    {
-        return lerp(a, b, t).normalized();
-    }
-    inline float& operator[](const size_t& idx) {return (&r)[idx];}
+    inline float magnitude() const { return std::sqrt(magSquared()); }
+    static inline CColor lerp(const CColor& a, const CColor& b, float t) { return (a + (b - a) * t); }
+    static inline CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
+    inline float& operator[](const size_t& idx) { return (&r)[idx]; }
     inline const float& operator[](const size_t& idx) const { return (&r)[idx]; }
     inline void splat(float rgb, float a)
     {
@@ -249,12 +257,14 @@ public:
         TVectorUnion splat = {{rgb, rgb, rgb, a}};
         mVec128 = splat.mVec128;
 #else
-        v[0] = rgb; v[1] = rgb; v[2] = rgb; v[3] = a;
+        v[0] = rgb;
+        v[1] = rgb;
+        v[2] = rgb;
+        v[3] = a;
 #endif
     }
 
-    union
-    {
+    union {
         struct
         {
             float r, g, b, a;
@@ -313,13 +323,11 @@ public:
      */
     void toHSV(float& h, float& s, float& v) const;
 
-
     void fromHSL(float h, float s, float l, float _a = 1.0);
 
     void toHSL(float& h, float& s, float& l);
 
-    CColor toGrayscale()
-    { return {sqrtF((r * r + g * g + b * b) / 3), a}; }
+    CColor toGrayscale() { return {sqrtF((r * r + g * g + b * b) / 3), a}; }
 
     /**
      * @brief Clamps to GPU-safe RGBA values [0,1]
@@ -372,6 +380,5 @@ static inline CColor operator/(float lhs, const CColor& rhs)
     return CColor(lhs / rhs.r, lhs / rhs.g, lhs / rhs.b, lhs / rhs.a);
 #endif
 }
-
 }
 #endif // CCOLOR_HPP

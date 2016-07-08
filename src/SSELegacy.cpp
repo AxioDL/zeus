@@ -96,5 +96,4 @@ CMatrix4f CMatrix4f::transposedSSE3() const
 #endif
     return ret;
 }
-
 }

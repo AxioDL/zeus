@@ -14,8 +14,7 @@ namespace zeus
 class CVector2i
 {
 public:
-    union
-    {
+    union {
         struct
         {
             int x, y;
@@ -25,7 +24,6 @@ public:
     CVector2i() = default;
     CVector2i(int xin, int yin) : x(xin), y(yin) {}
 };
-
 }
 
 #endif // CVECTOR2i_HPP

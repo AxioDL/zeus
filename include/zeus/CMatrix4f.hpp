@@ -23,10 +23,8 @@ public:
             m[3][3] = 1.0;
         }
     }
-    CMatrix4f(float m00, float m01, float m02, float m03,
-              float m10, float m11, float m12, float m13,
-              float m20, float m21, float m22, float m23,
-              float m30, float m31, float m32, float m33)
+    CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21,
+              float m22, float m23, float m30, float m31, float m32, float m33)
     {
         m[0][0] = m00, m[1][0] = m01, m[2][0] = m02, m[3][0] = m03;
         m[0][1] = m10, m[1][1] = m11, m[2][1] = m12, m[3][1] = m13;
@@ -42,12 +40,27 @@ public:
         m[3][3] = 1.0f;
     }
     CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3)
-    {vec[0] = r0; vec[1] = r1; vec[2] = r2; vec[3] = r3;}
+    {
+        vec[0] = r0;
+        vec[1] = r1;
+        vec[2] = r2;
+        vec[3] = r3;
+    }
     CMatrix4f(const CMatrix4f& other)
-    {vec[0] = other.vec[0]; vec[1] = other.vec[1]; vec[2] = other.vec[2]; vec[3] = other.vec[3];}
+    {
+        vec[0] = other.vec[0];
+        vec[1] = other.vec[1];
+        vec[2] = other.vec[2];
+        vec[3] = other.vec[3];
+    }
 #if __SSE__
     CMatrix4f(const __m128& r0, const __m128& r1, const __m128& r2, const __m128& r3)
-    {vec[0].mVec128 = r0; vec[1].mVec128 = r1; vec[2].mVec128 = r2; vec[3].mVec128 = r3;}
+    {
+        vec[0].mVec128 = r0;
+        vec[1].mVec128 = r1;
+        vec[2].mVec128 = r2;
+        vec[3].mVec128 = r3;
+    }
 #endif
     CMatrix4f(const CMatrix3f& other)
     {
@@ -76,11 +89,10 @@ public:
 
         return CVector4f(res.mVec128);
 #else
-        return CVector4f(
-                   m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
-                   m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
-                   m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],
-                   m[0][3] * other.v[0] + m[1][3] * other.v[1] + m[2][3] * other.v[2] + m[3][3] * other.v[3]);
+        return CVector4f(m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
+                         m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
+                         m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],
+                         m[0][3] * other.v[0] + m[1][3] * other.v[1] + m[2][3] * other.v[2] + m[3][3] * other.v[3]);
 #endif
     }
 
@@ -105,8 +117,7 @@ public:
         return xfVec.toVec3f() / xfVec.w;
     }
 
-    union
-    {
+    union {
         float m[4][4];
         struct
         {
@@ -120,14 +131,16 @@ static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
 #if __SSE__
     unsigned i;
 
-    for (i = 0 ; i < 4 ; ++i)
+    for (i = 0; i < 4; ++i)
     {
-        ret.vec[i].mVec128 =
-            _mm_add_ps(_mm_add_ps(_mm_add_ps(
-                                      _mm_mul_ps(lhs.vec[0].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(0, 0, 0, 0))),
-                                      _mm_mul_ps(lhs.vec[1].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(1, 1, 1, 1)))),
-                                  _mm_mul_ps(lhs.vec[2].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(2, 2, 2, 2)))),
-                       _mm_mul_ps(lhs.vec[3].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(3, 3, 3, 3))));
+        ret.vec[i].mVec128 = _mm_add_ps(
+            _mm_add_ps(_mm_add_ps(_mm_mul_ps(lhs.vec[0].mVec128,
+                                             _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(0, 0, 0, 0))),
+                                  _mm_mul_ps(lhs.vec[1].mVec128,
+                                             _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(1, 1, 1, 1)))),
+                       _mm_mul_ps(lhs.vec[2].mVec128,
+                                  _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(2, 2, 2, 2)))),
+            _mm_mul_ps(lhs.vec[3].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(3, 3, 3, 3))));
     }
 
 #else
@@ -156,4 +169,3 @@ static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
 }
 
 #endif // CMATRIX4F
-

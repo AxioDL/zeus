@@ -8,21 +8,13 @@ namespace zeus
 {
 struct CMRay
 {
-    CMRay(const CVector3f& start, const CVector3f& end, float d)
-        : start(start),
-          end(end),
-          d(d),
-          invD(1.f/d)
+    CMRay(const CVector3f& start, const CVector3f& end, float d) : start(start), end(end), d(d), invD(1.f / d)
     {
         normal = start + (d * end);
         delta = normal - start;
     }
 
-    CMRay(const CVector3f& start, const CVector3f& norm, float d, float invD)
-        : start(start),
-          normal(norm),
-          d(d),
-          invD(invD)
+    CMRay(const CVector3f& start, const CVector3f& norm, float d, float invD) : start(start), normal(norm), d(d), invD(invD)
     {
         delta = normal - start;
         end = invD * delta;

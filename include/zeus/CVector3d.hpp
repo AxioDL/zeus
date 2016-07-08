@@ -36,16 +36,23 @@ public:
     CVector3d(double xyz) { splat(xyz); }
 
     CVector3d(const CVector3f& vec)
-    { v[0] = vec[0]; v[1] = vec[1]; v[2] = vec[2]; }
+    {
+        v[0] = vec[0];
+        v[1] = vec[1];
+        v[2] = vec[2];
+    }
 
     CVector3d(double x, double y, double z)
     {
 #if __SSE__
-        TDblVectorUnion splat {x, y, z, 0.0};
+        TDblVectorUnion splat{x, y, z, 0.0};
         mVec128[0] = splat.mVec128[0];
         mVec128[1] = splat.mVec128[1];
 #else
-        v[0] = x; v[1] = y; v[2] = z; v[3] = 0.0;
+        v[0] = x;
+        v[1] = y;
+        v[2] = z;
+        v[3] = 0.0;
 #endif
     }
 
@@ -74,13 +81,15 @@ public:
         result.mVec128[1] = _mm_mul_pd(mVec128[1], mVec128[1]);
         return result.v[0] + result.v[1] + result.v[2];
 #else
-        return x*x + y*y + z*z;
+        return x * x + y * y + z * z;
 #endif
     }
 
     double magnitude() const { return sqrt(magSquared()); }
     inline CVector3d cross(const CVector3d& rhs) const
-    { return {y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x}; }
+    {
+        return {y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x};
+    }
 
     double dot(const CVector3d& rhs) const
     {
@@ -111,7 +120,6 @@ public:
         return {x * mag, y * mag, z * mag};
     }
 
-
     void splat(double xyz)
     {
 #if __SSE__
@@ -119,7 +127,10 @@ public:
         mVec128[0] = splat.mVec128[0];
         mVec128[1] = splat.mVec128[1];
 #else
-        v[0] = xyz; v[1] = xyz; v[2] = xyz; v[3] = 0.0;
+        v[0] = xyz;
+        v[1] = xyz;
+        v[2] = xyz;
+        v[3] = 0.0;
 #endif
     }
 
@@ -129,13 +140,18 @@ public:
         _mm_xor_pd(mVec128[0], mVec128[0]);
         _mm_xor_pd(mVec128[1], mVec128[1]);
 #else
-        v[0] = 0.0; v[1] = 0.0; v[2] = 0.0; v[3] = 0.0;
+        v[0] = 0.0;
+        v[1] = 0.0;
+        v[2] = 0.0;
+        v[3] = 0.0;
 #endif
     }
 
-    union
-    {
-        struct {double x, y, z; };
+    union {
+        struct
+        {
+            double x, y, z;
+        };
         double v[4];
 #if __SSE__
         __m128d mVec128[2];
@@ -143,11 +159,10 @@ public:
     };
 };
 
-
 static inline CVector3d operator+(double lhs, const CVector3d& rhs)
 {
 #if __SSE__
-    TDblVectorUnion splat { lhs, lhs, lhs, 0 };
+    TDblVectorUnion splat{lhs, lhs, lhs, 0};
     splat.mVec128[0] = _mm_add_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_add_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};
@@ -171,7 +186,7 @@ static inline CVector3d operator+(const CVector3d& lhs, const CVector3d& rhs)
 static inline CVector3d operator*(double lhs, const CVector3d& rhs)
 {
 #if __SSE__
-    TDblVectorUnion splat { lhs, lhs, lhs, 0 };
+    TDblVectorUnion splat{lhs, lhs, lhs, 0};
     splat.mVec128[0] = _mm_mul_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_mul_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};
@@ -207,7 +222,7 @@ static inline CVector3d operator/(const CVector3d& lhs, const CVector3d& rhs)
 static inline CVector3d operator/(double lhs, const CVector3d& rhs)
 {
 #if __SSE__
-    TDblVectorUnion splat { lhs, lhs, lhs, 0 };
+    TDblVectorUnion splat{lhs, lhs, lhs, 0};
     splat.mVec128[0] = _mm_div_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_div_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};

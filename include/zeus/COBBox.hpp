@@ -28,38 +28,21 @@ public:
 #endif
 
     CTransform transform;
-    CVector3f  extents;
+    CVector3f extents;
 
-    COBBox()
-    {}
+    COBBox() {}
 
-    COBBox(const CAABox& aabb)
-        : extents(aabb.volume())
-    {
-        transform.origin = aabb.center();
-    }
+    COBBox(const CAABox& aabb) : extents(aabb.volume()) { transform.origin = aabb.center(); }
 
-    COBBox(const CTransform& xf, const CVector3f& extents)
-        : transform(xf),
-          extents(extents)
-    {
-    }
+    COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
 
     CAABox calculateAABox(const CTransform& transform = CTransform()) const
     {
         CAABox ret = CAABox::skInvertedBox;
 
         CTransform trans = transform * transform;
-        static const CVector3f basis[8] ={
-            { 1.0,  1.0,  1.0},
-            { 1.0,  1.0, -1.0},
-            { 1.0, -1.0,  1.0},
-            { 1.0, -1.0, -1.0},
-            {-1.0, -1.0, -1.0},
-            {-1.0, -1.0,  1.0},
-            {-1.0,  1.0, -1.0},
-            {-1.0,  1.0,  1.0}
-        };
+        static const CVector3f basis[8] = {{1.0, 1.0, 1.0},    {1.0, 1.0, -1.0},  {1.0, -1.0, 1.0},  {1.0, -1.0, -1.0},
+                                           {-1.0, -1.0, -1.0}, {-1.0, -1.0, 1.0}, {-1.0, 1.0, -1.0}, {-1.0, 1.0, 1.0}};
         CVector3f p = extents * basis[0];
 
         ret.accumulateBounds(trans * p);

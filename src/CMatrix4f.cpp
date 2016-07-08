@@ -42,5 +42,4 @@ CMatrix4f CMatrix4f::transposed() const
 #endif
     return ret;
 }
-
 }

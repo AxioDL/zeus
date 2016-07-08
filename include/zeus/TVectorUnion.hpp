@@ -3,16 +3,14 @@
 
 namespace zeus
 {
-typedef union
-{
+typedef union {
     float v[4];
 #if __SSE__
     __m128 mVec128;
 #endif
 } TVectorUnion;
 
-typedef union
-{
+typedef union {
     double v[4];
 #if __SSE__
     __m128d mVec128[2];
@@ -21,4 +19,3 @@ typedef union
 }
 
 #endif // TVECTORUNION
-

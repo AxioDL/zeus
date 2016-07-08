@@ -42,11 +42,11 @@ void detectCPU()
         {
             getCpuInfo(i, regs);
             // Interpret CPU brand string and cache information.
-            if  (i == 0x80000002)
+            if (i == 0x80000002)
                 memcpy((char*)g_cpuFeatures.cpuBrand, regs, sizeof(regs));
-            else if( i == 0x80000003 )
+            else if (i == 0x80000003)
                 memcpy((char*)g_cpuFeatures.cpuBrand + 16, regs, sizeof(regs));
-            else if( i == 0x80000004 )
+            else if (i == 0x80000004)
                 memcpy((char*)g_cpuFeatures.cpuBrand + 32, regs, sizeof(regs));
         }
     }
@@ -54,33 +54,31 @@ void detectCPU()
     getCpuInfo(1, regs);
 
     memset((bool*)&g_cpuFeatures.AESNI, ((regs[2] & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE1,  ((regs[3] & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE2,  ((regs[3] & 0x04000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE3,  ((regs[2] & 0x00000001) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE1, ((regs[3] & 0x02000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE2, ((regs[3] & 0x04000000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.SSE3, ((regs[2] & 0x00000001) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSSE3, ((regs[2] & 0x00000200) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
-
 
     isInit = true;
 #endif
 }
 
-
 const CPUInfo& cpuFeatures() { return g_cpuFeatures; }
 
 CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up)
 {
-    CVector3f vLook,vRight,vUp;
-    
+    CVector3f vLook, vRight, vUp;
+
     vLook = lookPos - pos;
     if (vLook.magnitude() < FLT_EPSILON)
         vLook = {0.f, 1.f, 0.f};
     vLook.normalize();
-    
+
     vRight = vLook.cross(up);
     vRight.normalize();
-    
+
     vUp = vRight.cross(vLook);
 
     CMatrix3f rmBasis(vRight, vLook, vUp);
@@ -89,11 +87,9 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
 
 CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
 {
-    const float oneMinusTime= (1.0 - t);
-    return (a * oneMinusTime * oneMinusTime) +
-            (b * 3.f * t * oneMinusTime) +
-            (c * 3.f * t * t * oneMinusTime) +
-            (d * t * t * t);
+    const float oneMinusTime = (1.0 - t);
+    return (a * oneMinusTime * oneMinusTime) + (b * 3.f * t * oneMinusTime) + (c * 3.f * t * t * oneMinusTime) +
+           (d * t * t * t);
 }
 
 double sqrtD(double val)
@@ -109,17 +105,15 @@ double sqrtD(double val)
     }
     double q;
 #if __SSE__
-    union
-    {
+    union {
         __m128d v;
         double d[2];
-    } qv = { val };
+    } qv = {val};
     qv.v = _mm_sqrt_sd(qv.v, qv.v);
     q = qv.d[0];
 #else
     // le sigh, let's use Carmack's inverse square -.-
-    union
-    {
+    union {
         double v;
         int i;
     } p;
@@ -266,13 +260,11 @@ float getCatmullRomSplinePoint(float a, float b, float c, float d, float t)
     if (t >= 1.0f)
         return c;
 
-    const float t2 = t  * t;
+    const float t2 = t * t;
     const float t3 = t2 * t;
 
-    return (a * (-0.5f * t3 + t2 - 0.5f * t) +
-            b * ( 1.5f * t3 + -2.5f * t2 + 1.0f) +
-            c * (-1.5f * t3 +  2.0f * t2 + 0.5f * t) +
-            d * ( 0.5f * t3 -  0.5f * t2));
+    return (a * (-0.5f * t3 + t2 - 0.5f * t) + b * (1.5f * t3 + -2.5f * t2 + 1.0f) + c * (-1.5f * t3 + 2.0f * t2 + 0.5f * t) +
+            d * (0.5f * t3 - 0.5f * t2));
 }
 
 CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
@@ -282,13 +274,11 @@ CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const
     if (t >= 1.0f)
         return c;
 
-    const float t2 = t  * t;
+    const float t2 = t * t;
     const float t3 = t2 * t;
 
-    return (a * (-0.5f * t3 + t2 - 0.5f * t) +
-            b * ( 1.5f * t3 + -2.5f * t2 + 1.0f) +
-            c * (-1.5f * t3 +  2.0f * t2 + 0.5f * t) +
-            d * ( 0.5f * t3 -  0.5f * t2));
+    return (a * (-0.5f * t3 + t2 - 0.5f * t) + b * (1.5f * t3 + -2.5f * t2 + 1.0f) + c * (-1.5f * t3 + 2.0f * t2 + 0.5f * t) +
+            d * (0.5f * t3 - 0.5f * t2));
 }
 
 CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
@@ -319,6 +309,7 @@ CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, 
 }
 
 CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
-{ return bary.x * p0 + bary.y * p1 + bary.z * p2; }
-
+{
+    return bary.x * p0 + bary.y * p1 + bary.z * p2;
+}
 }

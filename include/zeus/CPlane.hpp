@@ -27,7 +27,9 @@ public:
 #if __SSE__
         mVec128 = point.mVec128;
 #else
-        a = point[0]; b = point[1]; c = point[2];
+        a = point[0];
+        b = point[1];
+        c = point[2];
 #endif
         d = displacement;
     }
@@ -38,7 +40,7 @@ public:
         float dis = (-(vec.y - d)) / mag;
         return clamp(0.0f, dis, 1.0f);
     }
-    
+
     inline void normalize()
     {
         float nd = d;
@@ -47,9 +49,8 @@ public:
         vec *= mag;
         d = nd * mag;
     }
-    
-    union
-    {
+
+    union {
         struct
         {
             float a, b, c, d;

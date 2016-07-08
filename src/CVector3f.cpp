@@ -50,7 +50,7 @@ CVector3f CVector3f::slerp(const CVector3f& a, const CVector3f& b, float t)
         const double sign = (prod < 0.0f) ? -1.0f : 1.0f;
 
         const double theta = acos(sign * prod);
-        const double s1 = sin (sign * t * theta);
+        const double s1 = sin(sign * t * theta);
         const double d = 1.0 / sin(theta);
         const double s0 = sin((1.0 - t) * theta);
 

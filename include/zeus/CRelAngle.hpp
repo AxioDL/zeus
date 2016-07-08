@@ -23,10 +23,7 @@ public:
         z = degToRad(angles.z);
     }
 
-    CRelAngle(float x, float y, float z)
-        : CRelAngle(CVector3f{x, y, z})
-    {
-    }
+    CRelAngle(float x, float y, float z) : CRelAngle(CVector3f{x, y, z}) {}
 };
 }
 

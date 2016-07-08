@@ -5,9 +5,11 @@
 // This is only for testing, do NOT do this normally
 using namespace zeus;
 
-union Color
-{
-    struct { zeus::Comp8 r, g, b, a; };
+union Color {
+    struct
+    {
+        zeus::Comp8 r, g, b, a;
+    };
     zeus::Comp32 rgba;
 };
 
@@ -26,7 +28,7 @@ int main()
     blarg = clamp(0.f, blarg, 1.f);
     CAABox test{{-100, -100, -100}, {100, 100, 100}};
     CAABox test2{{-100, -100, -100}, {100, 100, 100}};
-    CAABox test3{{-50, -50, -50},  {50, 50, 50}};
+    CAABox test3{{-50, -50, -50}, {50, 50, 50}};
     CAABox test4{{-50, -50, -105}, {50, 50, 105}};
     CVector3f point(-90, 67, -105);
     CVector3f closestPoint = test.closestPointAlongVector(point);
@@ -47,18 +49,18 @@ int main()
     std::cout << min(2, 1) << std::endl;
     std::cout << max(1, 3) << std::endl;
     std::cout << max(2, 1) << std::endl;
-    std::cout << clamp(-50,  100, 50) << std::endl;
+    std::cout << clamp(-50, 100, 50) << std::endl;
     std::cout << clamp(-50, -100, 50) << std::endl;
     std::cout << powF(6.66663489, 2) << std::endl;
     std::cout << invSqrtF(1) << std::endl;
     std::cout << floorPowerOfTwo(256) << std::endl;
-    std::cout << " Test 1 " << ( aabb.intersects(s1) ? "succeeded" : "failed" ) << std::endl;
-    std::cout << " Test 2 " << ( aabb.intersects(s2) ? "succeeded" : "failed" ) << std::endl;
-    std::cout << " Test 3 " << ( aabb.intersects(s3) ? "succeeded" : "failed" ) << std::endl;
+    std::cout << " Test 1 " << (aabb.intersects(s1) ? "succeeded" : "failed") << std::endl;
+    std::cout << " Test 2 " << (aabb.intersects(s2) ? "succeeded" : "failed") << std::endl;
+    std::cout << " Test 3 " << (aabb.intersects(s3) ? "succeeded" : "failed") << std::endl;
     CLineSeg line({-89.120926f, 59.328712f, 3.265882f}, {-90.120926f, 59.328712f, 3.265882f});
 
     CColor ctest1;
-    ctest1.fromHSV(0, 255/255.f, .5);
+    ctest1.fromHSV(0, 255 / 255.f, .5);
     float h, s, v;
     ctest1.toHSV(h, s, v);
     std::cout << (int)ctest1.r << " " << (int)ctest1.g << " " << (int)ctest1.b << " " << (int)ctest1.a << std::endl;

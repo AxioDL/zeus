@@ -21,10 +21,8 @@ public:
 
     inline bool intersects(const CRectangle& rect) const
     {
-        return !(     position.x > rect.position.x + rect.size.x ||
-                 rect.position.x >      position.x +      size.x ||
-                      position.y > rect.position.y + rect.size.y ||
-                 rect.position.y >      position.y +      size.y);
+        return !(position.x > rect.position.x + rect.size.x || rect.position.x > position.x + size.x ||
+                 position.y > rect.position.y + rect.size.y || rect.position.y > position.y + size.y);
     }
 
     CVector2f position;

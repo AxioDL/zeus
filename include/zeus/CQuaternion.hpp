@@ -38,7 +38,10 @@ public:
 #if __SSE__
         mVec128 = vec.mVec128;
 #else
-        x = vec.vec[1]; y = vec.vec[2]; z = vec.vec[3]; w = vec.vec[0];
+        x = vec.vec[1];
+        y = vec.vec[2];
+        z = vec.vec[3];
+        w = vec.vec[0];
 #endif
     }
 
@@ -116,7 +119,10 @@ public:
 #if __SSE__
         mVec128 = vec.mVec128;
 #else
-        x = vec[1]; y = vec[2]; z = vec[3]; w = vec[0];
+        x = vec[1];
+        y = vec[2];
+        z = vec[3];
+        w = vec[0];
 #endif
     }
 
@@ -165,7 +171,6 @@ public:
     void rotateY(float angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
     void rotateZ(float angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
 
-
     CAxisAngle toAxisAngle();
 
     static inline CVector3f rotate(const CQuaternion& rotation, const CVector3f& v)
@@ -186,28 +191,21 @@ public:
     static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
 
-    inline float roll() const
-    {
-        return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z);
-    }
+    inline float roll() const { return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z); }
 
-    inline float pitch() const
-    {
-        return std::atan2(2.f * (y * z + w * x), w * w - x * x - y * y + z * z);
-    }
+    inline float pitch() const { return std::atan2(2.f * (y * z + w * x), w * w - x * x - y * y + z * z); }
 
-    inline float yaw() const
-    {
-        return std::asin(-2.f * (x * z - w * y));
-    }
+    inline float yaw() const { return std::asin(-2.f * (x * z - w * y)); }
 
-    inline float& operator[](size_t idx) {return (&w)[idx];}
-    inline const float& operator[](size_t idx) const {return (&w)[idx];}
+    inline float& operator[](size_t idx) { return (&w)[idx]; }
+    inline const float& operator[](size_t idx) const { return (&w)[idx]; }
 
-    union
-    {
+    union {
         __m128 mVec128;
-        struct { float w, x, y, z; };
+        struct
+        {
+            float w, x, y, z;
+        };
     };
 
     static const CQuaternion skNoRotation;

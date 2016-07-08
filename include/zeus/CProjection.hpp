@@ -22,21 +22,26 @@ class SProjOrtho
 {
 public:
     float top, bottom, left, right, near, far;
-    explicit SProjOrtho(float p_top=1.0f, float p_bottom=-1.0f, float p_left=-1.0f, float p_right=1.0f,
-               float p_near=1.0f, float p_far=-1.0f) :
-    top(p_top), bottom(p_bottom), left(p_left), right(p_right), near(p_near), far(p_far) {}
+    explicit SProjOrtho(float p_top = 1.0f, float p_bottom = -1.0f, float p_left = -1.0f, float p_right = 1.0f,
+                        float p_near = 1.0f, float p_far = -1.0f)
+    : top(p_top), bottom(p_bottom), left(p_left), right(p_right), near(p_near), far(p_far)
+    {
+    }
 };
 struct SProjPersp
 {
     float fov, aspect, near, far;
-    SProjPersp(float p_fov=degToRad(55.0f), float p_aspect=1.0f, float p_near=0.1f, float p_far=4096.f) :
-    fov(p_fov), aspect(p_aspect), near(p_near), far(p_far) {}
+    SProjPersp(float p_fov = degToRad(55.0f), float p_aspect = 1.0f, float p_near = 0.1f, float p_far = 4096.f)
+    : fov(p_fov), aspect(p_aspect), near(p_near), far(p_far)
+    {
+    }
 };
 extern const SProjOrtho kOrthoIdentity;
 
 class alignas(16) CProjection
 {
     void _updateCachedMatrix();
+
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
@@ -46,10 +51,10 @@ public:
         m_ortho = SProjOrtho();
         m_mtx = CMatrix4f::skIdentityMatrix4f;
     }
-    CProjection(const CProjection& other) {*this = other;}
-    CProjection(const SProjOrtho& ortho) {setOrtho(ortho);}
-    CProjection(const SProjPersp& persp) {setPersp(persp);}
-    
+    CProjection(const CProjection& other) { *this = other; }
+    CProjection(const SProjOrtho& ortho) { setOrtho(ortho); }
+    CProjection(const SProjPersp& persp) { setPersp(persp); }
+
     inline CProjection& operator=(const CProjection& other)
     {
         if (this != &other)
@@ -60,13 +65,21 @@ public:
         }
         return *this;
     }
-    
+
     inline void setOrtho(const SProjOrtho& ortho)
-    {m_projType = EProjType::Orthographic; m_ortho = ortho; _updateCachedMatrix();}
+    {
+        m_projType = EProjType::Orthographic;
+        m_ortho = ortho;
+        _updateCachedMatrix();
+    }
     inline void setPersp(const SProjPersp& persp)
-    {m_projType = EProjType::Perspective; m_persp = persp; _updateCachedMatrix();}
-    
-    inline EProjType getType() const {return m_projType;}
+    {
+        m_projType = EProjType::Perspective;
+        m_persp = persp;
+        _updateCachedMatrix();
+    }
+
+    inline EProjType getType() const { return m_projType; }
     inline const SProjOrtho& getOrtho() const
     {
         if (m_projType != EProjType::Orthographic)
@@ -85,17 +98,15 @@ public:
         }
         return m_persp;
     }
-    
-    inline const CMatrix4f& getCachedMatrix() const {return m_mtx;}
-    
-protected:
 
+    inline const CMatrix4f& getCachedMatrix() const { return m_mtx; }
+
+protected:
     /* Projection type */
     EProjType m_projType;
-    
+
     /* Projection intermediate */
-    union
-    {
+    union {
 #ifdef _MSC_VER
         struct
         {
@@ -113,7 +124,6 @@ protected:
 
     /* Cached projection matrix */
     CMatrix4f m_mtx;
-    
 };
 }
 

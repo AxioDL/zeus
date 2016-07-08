@@ -45,20 +45,12 @@ public:
     CVector3f max;
 
     // set default AABox to insane inverse min/max to allow for accumulation
-    inline CAABox()
-        : min(1e16f), max(-1e16f)
-    {}
-    
-    CAABox(const CVector3f& min, const CVector3f& max)
-        : min(min),
-          max(max)
-    {
-    }
+    inline CAABox() : min(1e16f), max(-1e16f) {}
 
-    CAABox(float minX, float minY, float minZ,
-                 float maxX, float maxY, float maxZ)
-        : min(minX, minY, minZ),
-          max(maxX, maxY, maxZ)
+    CAABox(const CVector3f& min, const CVector3f& max) : min(min), max(max) {}
+
+    CAABox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+    : min(minX, minY, minZ), max(maxX, maxY, maxZ)
     {
     }
 #if ZE_ATHENA_TYPES
@@ -89,11 +81,8 @@ public:
         return dist;
     }
 
-    float distanceFromPoint(const CVector3f &other) const
-    {
-        return sqrtF(distanceFromPointSquared(other));
-    }
-    
+    float distanceFromPoint(const CVector3f& other) const { return sqrtF(distanceFromPointSquared(other)); }
+
     inline bool intersects(const CAABox& other) const
     {
         bool x1 = (max[0] < other.min[0]);
@@ -121,26 +110,35 @@ public:
     {
         CVector3f vmin, vmax;
         /* X axis */
-        if (plane.a >= 0) {
+        if (plane.a >= 0)
+        {
             vmin[0] = min[0];
             vmax[0] = max[0];
-        } else {
+        }
+        else
+        {
             vmin[0] = max[0];
             vmax[0] = min[0];
         }
         /* Y axis */
-        if (plane.b >= 0) {
+        if (plane.b >= 0)
+        {
             vmin[1] = min[1];
             vmax[1] = max[1];
-        } else {
+        }
+        else
+        {
             vmin[1] = max[1];
             vmax[1] = min[1];
         }
         /* Z axis */
-        if (plane.c >= 0) {
+        if (plane.c >= 0)
+        {
             vmin[2] = min[2];
             vmax[2] = max[2];
-        } else {
+        }
+        else
+        {
             vmin[2] = max[2];
             vmax[2] = min[2];
         }
@@ -150,53 +148,40 @@ public:
         return true;
     }
 
-    CVector3f center() const {return (min + max) * 0.5f;}
+    CVector3f center() const { return (min + max) * 0.5f; }
 
-    CVector3f volume() const {return (max - min) * 0.5f;}
+    CVector3f volume() const { return (max - min) * 0.5f; }
 
     inline CLineSeg getEdge(EBoxEdgeId id)
     {
         switch (id)
         {
-            case EBoxEdgeId::UnknownEdge0:
-                return CLineSeg({min.x, min.y, min.z},
-                                {min.x, min.y, max.z});
-            case EBoxEdgeId::UnknownEdge1:
-                return CLineSeg({max.x, min.y, min.z},
-                                {min.x, min.y, min.z});
-            case EBoxEdgeId::UnknownEdge2:
-                return CLineSeg({max.x, min.y, max.z},
-                                {max.x, min.y, max.z});
-            case EBoxEdgeId::UnknownEdge3:
-                return CLineSeg({min.x, min.y, max.z},
-                                {max.x, min.y, max.z});
-            case EBoxEdgeId::UnknownEdge4:
-                return CLineSeg({max.x, max.y, min.z},
-                                {max.x, max.y, max.z});
-            case EBoxEdgeId::UnknownEdge5:
-                return CLineSeg({min.x, max.y, min.z},
-                                {max.x, max.y, min.z});
-            case EBoxEdgeId::UnknownEdge6:
-                return CLineSeg({min.x, max.y, max.z},
-                                {min.x, max.y, min.z});
-            case EBoxEdgeId::UnknownEdge7:
-                return CLineSeg({max.x, max.y, max.z},
-                                {min.x, max.y, max.z});
-            case EBoxEdgeId::UnknownEdge8:
-                return CLineSeg({min.x, max.y, max.z},
-                                {min.x, min.y, max.z});
-            case EBoxEdgeId::UnknownEdge9:
-                return CLineSeg({min.x, max.y, min.z},
-                                {min.x, min.y, min.z});
-            case EBoxEdgeId::UnknownEdge10:
-                return CLineSeg({max.x, max.y, min.z},
-                                {max.x, min.y, min.z});
-            case EBoxEdgeId::UnknownEdge11:
-                return CLineSeg({max.x, max.y, max.z},
-                                {max.x, min.y, max.z});
-            default:
-                return CLineSeg({min.x, min.y, min.z},
-                                {min.x, min.y, max.z});
+        case EBoxEdgeId::UnknownEdge0:
+            return CLineSeg({min.x, min.y, min.z}, {min.x, min.y, max.z});
+        case EBoxEdgeId::UnknownEdge1:
+            return CLineSeg({max.x, min.y, min.z}, {min.x, min.y, min.z});
+        case EBoxEdgeId::UnknownEdge2:
+            return CLineSeg({max.x, min.y, max.z}, {max.x, min.y, max.z});
+        case EBoxEdgeId::UnknownEdge3:
+            return CLineSeg({min.x, min.y, max.z}, {max.x, min.y, max.z});
+        case EBoxEdgeId::UnknownEdge4:
+            return CLineSeg({max.x, max.y, min.z}, {max.x, max.y, max.z});
+        case EBoxEdgeId::UnknownEdge5:
+            return CLineSeg({min.x, max.y, min.z}, {max.x, max.y, min.z});
+        case EBoxEdgeId::UnknownEdge6:
+            return CLineSeg({min.x, max.y, max.z}, {min.x, max.y, min.z});
+        case EBoxEdgeId::UnknownEdge7:
+            return CLineSeg({max.x, max.y, max.z}, {min.x, max.y, max.z});
+        case EBoxEdgeId::UnknownEdge8:
+            return CLineSeg({min.x, max.y, max.z}, {min.x, min.y, max.z});
+        case EBoxEdgeId::UnknownEdge9:
+            return CLineSeg({min.x, max.y, min.z}, {min.x, min.y, min.z});
+        case EBoxEdgeId::UnknownEdge10:
+            return CLineSeg({max.x, max.y, min.z}, {max.x, min.y, min.z});
+        case EBoxEdgeId::UnknownEdge11:
+            return CLineSeg({max.x, max.y, max.z}, {max.x, min.y, max.z});
+        default:
+            return CLineSeg({min.x, min.y, min.z}, {min.x, min.y, max.z});
         }
     }
 
@@ -246,24 +231,21 @@ public:
 
     inline bool pointInside(const CVector3f& other) const
     {
-        return (min.x <= other.x && other.x <= max.z &&
-                min.y <= other.y && other.y <= max.z &&
-                min.z <= other.z && other.z <= max.z);
+        return (min.x <= other.x && other.x <= max.z && min.y <= other.y && other.y <= max.z && min.z <= other.z &&
+                other.z <= max.z);
     }
 
     inline CVector3f closestPointAlongVector(const CVector3f& other) const
     {
         CVector3f center = this->center();
-        return {(other.x < center.x ? min.x : max.x),
-                (other.y < center.y ? min.y : max.y),
+        return {(other.x < center.x ? min.x : max.x), (other.y < center.y ? min.y : max.y),
                 (other.z < center.z ? min.z : max.z)};
     }
 
     inline CVector3f furthestPointAlongVector(const CVector3f& other) const
     {
         CVector3f center = this->center();
-        return {(other.x < center.x ? max.x : min.x),
-                (other.y < center.y ? max.y : min.y),
+        return {(other.x < center.x ? max.x : min.x), (other.y < center.y ? max.y : min.y),
                 (other.z < center.z ? max.z : min.z)};
     }
 
@@ -297,7 +279,7 @@ public:
         negX.max.x = midX;
         negX.min = min;
     }
-    
+
     inline void splitY(CAABox& posY, CAABox& negY) const
     {
         float midY = (max.y - min.y) * .5 + min.y;
@@ -308,7 +290,7 @@ public:
         negY.max.y = midY;
         negY.min = min;
     }
-    
+
     inline void splitZ(CAABox& posZ, CAABox& negZ) const
     {
         float midZ = (max.z - min.z) * .5 + min.z;
@@ -320,12 +302,11 @@ public:
         negZ.min = min;
     }
 
-
-    inline bool invalid() {return (max.x < min.x || max.y < min.y || max.z < min.z);}
+    inline bool invalid() { return (max.x < min.x || max.y < min.y || max.z < min.z); }
 };
 
-inline bool operator ==(const CAABox& left, const CAABox& right) {return (left.min == right.min && left.max == right.max);}
-inline bool operator !=(const CAABox& left, const CAABox& right) {return (left.min != right.min || left.max != right.max);}
+inline bool operator==(const CAABox& left, const CAABox& right) { return (left.min == right.min && left.max == right.max); }
+inline bool operator!=(const CAABox& left, const CAABox& right) { return (left.min != right.min || left.max != right.max); }
 }
 
 #endif // CAABOX_HPP

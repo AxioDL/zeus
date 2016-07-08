@@ -34,22 +34,14 @@ CQuaternion& CQuaternion::operator=(const CQuaternion& q)
     return *this;
 }
 
-CQuaternion CQuaternion::operator+(const CQuaternion& q) const
-{
-    return CQuaternion(w + q.w, x + q.x, y + q.y, z + q.z);
-}
+CQuaternion CQuaternion::operator+(const CQuaternion& q) const { return CQuaternion(w + q.w, x + q.x, y + q.y, z + q.z); }
 
-CQuaternion CQuaternion::operator-(const CQuaternion& q) const
-{
-    return CQuaternion(w - q.w, x - q.x, y - q.y, z - q.z);
-}
+CQuaternion CQuaternion::operator-(const CQuaternion& q) const { return CQuaternion(w - q.w, x - q.x, y - q.y, z - q.z); }
 
 CQuaternion CQuaternion::operator*(const CQuaternion& q) const
 {
-    return CQuaternion(w*q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z}),
-                       y * q.z - z * q.y + w * q.x + x*q.w,
-                       z * q.x - x * q.z + w * q.y + y*q.w,
-                       x * q.y - y * q.x + w * q.z + z*q.w);
+    return CQuaternion(w * q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z}), y * q.z - z * q.y + w * q.x + x * q.w,
+                       z * q.x - x * q.z + w * q.y + y * q.w, x * q.y - y * q.x + w * q.z + z * q.w);
 }
 
 CQuaternion CQuaternion::operator/(const CQuaternion& q) const
@@ -59,20 +51,11 @@ CQuaternion CQuaternion::operator/(const CQuaternion& q) const
     return *this * p;
 }
 
-CQuaternion CQuaternion::operator*(float scale) const
-{
-    return CQuaternion(w*scale, x*scale, y*scale, z*scale);
-}
+CQuaternion CQuaternion::operator*(float scale) const { return CQuaternion(w * scale, x * scale, y * scale, z * scale); }
 
-CQuaternion CQuaternion::operator/(float scale) const
-{
-    return CQuaternion(w/scale, x/scale, y/scale, z/scale);
-}
+CQuaternion CQuaternion::operator/(float scale) const { return CQuaternion(w / scale, x / scale, y / scale, z / scale); }
 
-CQuaternion CQuaternion::operator-() const
-{
-    return CQuaternion(-w, -x, -y, -z);
-}
+CQuaternion CQuaternion::operator-() const { return CQuaternion(-w, -x, -y, -z); }
 
 const CQuaternion& CQuaternion::operator+=(const CQuaternion& q)
 {
@@ -92,17 +75,17 @@ const CQuaternion& CQuaternion::operator-=(const CQuaternion& q)
     return *this;
 }
 
-const CQuaternion& CQuaternion::operator *=(const CQuaternion& q)
+const CQuaternion& CQuaternion::operator*=(const CQuaternion& q)
 {
-    w = w*q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z});
-    x = y * q.z - z * q.y + w * q.x + x*q.w;
-    y = z * q.x - x * q.z + w * q.y + y*q.w;
-    z = x * q.y - y * q.x + w * q.z + z*q.w;
+    w = w * q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z});
+    x = y * q.z - z * q.y + w * q.x + x * q.w;
+    y = z * q.x - x * q.z + w * q.y + y * q.w;
+    z = x * q.y - y * q.x + w * q.z + z * q.w;
 
     return *this;
 }
 
-const CQuaternion& CQuaternion::operator *=(float scale)
+const CQuaternion& CQuaternion::operator*=(float scale)
 {
     w *= scale;
     x *= scale;
@@ -120,25 +103,13 @@ const CQuaternion& CQuaternion::operator/=(float scale)
     return *this;
 }
 
-float CQuaternion::magnitude() const
-{
-    return std::sqrt(magSquared());
-}
+float CQuaternion::magnitude() const { return std::sqrt(magSquared()); }
 
-float CQuaternion::magSquared() const
-{
-    return w*w + x*x + y*y + z*z;
-}
+float CQuaternion::magSquared() const { return w * w + x * x + y * y + z * z; }
 
-void CQuaternion::normalize()
-{
-    *this /= magnitude();
-}
+void CQuaternion::normalize() { *this /= magnitude(); }
 
-CQuaternion CQuaternion::normalized() const
-{
-    return *this/magnitude();
-}
+CQuaternion CQuaternion::normalized() const { return *this / magnitude(); }
 
 void CQuaternion::invert()
 {
@@ -147,25 +118,22 @@ void CQuaternion::invert()
     z = -z;
 }
 
-CQuaternion CQuaternion::inverse() const
-{
-    return CQuaternion(w, -x, -y, -z);
-}
+CQuaternion CQuaternion::inverse() const { return CQuaternion(w, -x, -y, -z); }
 
 CAxisAngle CQuaternion::toAxisAngle()
 {
-//    CAxisAngle ret;
-//    ret.angle = std::acos(r);
+    //    CAxisAngle ret;
+    //    ret.angle = std::acos(r);
 
-//    float thetaInv = 1.0f/std::sin(ret.angle);
+    //    float thetaInv = 1.0f/std::sin(ret.angle);
 
-//    ret.axis.x = v.x * thetaInv;
-//    ret.axis.y = v.y * thetaInv;
-//    ret.axis.z = v.z * thetaInv;
+    //    ret.axis.x = v.x * thetaInv;
+    //    ret.axis.y = v.y * thetaInv;
+    //    ret.axis.z = v.z * thetaInv;
 
-//    ret.angle *= 2.f;
+    //    ret.angle *= 2.f;
 
-//    return ret;
+    //    return ret;
     return CAxisAngle();
 }
 
@@ -217,20 +185,11 @@ CQuaternion CQuaternion::exp() const
     return ret;
 }
 
-float CQuaternion::dot(const CQuaternion& b) const
-{
-    return x * b.x + y * b.y + z * b.z + w * b.w;
-}
+float CQuaternion::dot(const CQuaternion& b) const { return x * b.x + y * b.y + z * b.z + w * b.w; }
 
-CQuaternion CQuaternion::lerp(const CQuaternion& a,  const CQuaternion& b, double t)
-{
-    return (a + t * (b - a));
-}
+CQuaternion CQuaternion::lerp(const CQuaternion& a, const CQuaternion& b, double t) { return (a + t * (b - a)); }
 
-CQuaternion CQuaternion::nlerp(const CQuaternion& a, const CQuaternion& b, double t)
-{
-    return lerp(a, b, t).normalized();
-}
+CQuaternion CQuaternion::nlerp(const CQuaternion& a, const CQuaternion& b, double t) { return lerp(a, b, t).normalized(); }
 
 CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, double t)
 {

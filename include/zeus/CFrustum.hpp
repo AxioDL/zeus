@@ -3,6 +3,7 @@
 
 #include "zeus/CPlane.hpp"
 #include "zeus/CAABox.hpp"
+#include "zeus/CProjection.hpp"
 
 namespace zeus
 {

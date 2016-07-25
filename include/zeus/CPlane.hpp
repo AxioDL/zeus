@@ -50,6 +50,11 @@ public:
         d = nd * mag;
     }
 
+    float pointToPlaneDist(const zeus::CVector3f& pos) const
+    {
+        return pos.dot(vec) - d;
+    }
+
     union {
         struct
         {

@@ -88,8 +88,7 @@ public:
     inline bool aabbFrustumTest(const CAABox& aabb) const
     {
         CVector3f vmin, vmax;
-        int i;
-        for (i = 0; i < 6; ++i)
+        for (uint32_t i = 0; i < 6; ++i)
         {
             const CPlane& plane = planes[i];
 
@@ -128,6 +127,28 @@ public:
             }
             float dadot = plane.vec.dot(vmax);
             if (dadot + plane.d < 0)
+                return false;
+        }
+        return true;
+    }
+
+    inline bool sphereFrustumTest(const CSphere& sphere)
+    {
+        for (uint32_t i = 0 ; i<6 ; ++i)
+        {
+            float dadot = planes[i].vec.dot(sphere.position);
+            if ((dadot + planes[i].d + sphere.radius) < 0)
+                return false;
+        }
+        return true;
+    }
+
+    inline bool pointFrustumTest(const CVector3f& point)
+    {
+        for (uint32_t i = 0 ; i<6 ; ++i)
+        {
+            float dadot = planes[i].vec.dot(point);
+            if ((dadot + planes[i].d) < 0)
                 return false;
         }
         return true;

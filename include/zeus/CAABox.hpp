@@ -59,6 +59,13 @@ public:
         min.readBig(in);
         max.readBig(in);
     }
+    static inline CAABox ReadBoundingBoxBig(athena::io::IStreamReader &in)
+    {
+        CAABox ret;
+        ret.readBoundingBoxBig(in);
+        return ret;
+    }
+
 #endif
 
     float distanceFromPointSquared(const CVector3f& other) const

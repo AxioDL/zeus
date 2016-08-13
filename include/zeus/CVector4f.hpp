@@ -298,13 +298,13 @@ public:
     inline void normalize()
     {
         float mag = magnitude();
-        mag = 1.0 / mag;
+        mag = 1.f / mag;
         *this *= mag;
     }
     inline CVector4f normalized() const
     {
         float mag = magnitude();
-        mag = 1.0 / mag;
+        mag = 1.f / mag;
         return *this * mag;
     }
 

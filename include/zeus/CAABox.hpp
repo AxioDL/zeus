@@ -92,12 +92,12 @@ public:
 
     inline bool intersects(const CAABox& other) const
     {
-        bool x1 = (max[0] < other.min[0]);
-        bool x2 = (min[0] > other.max[0]);
-        bool y1 = (max[1] < other.min[1]);
-        bool y2 = (min[1] > other.max[1]);
-        bool z1 = (max[2] < other.min[2]);
-        bool z2 = (min[2] > other.max[2]);
+        bool x1 = (max[0] > other.min[0]);
+        bool x2 = (min[0] < other.max[0]);
+        bool y1 = (max[1] > other.min[1]);
+        bool y2 = (min[1] < other.max[1]);
+        bool z1 = (max[2] > other.min[2]);
+        bool z2 = (min[2] < other.max[2]);
         return x1 && x2 && y1 && y2 && z1 && z2;
     }
     bool intersects(const CSphere& other) const

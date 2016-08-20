@@ -8,6 +8,7 @@ class CRectangle
 {
 public:
     CRectangle() {}
+    CRectangle(float x, float y, float w, float h) : position(x, y), size(w, h) {}
 
     inline bool contains(const CVector2f& point) const
     {

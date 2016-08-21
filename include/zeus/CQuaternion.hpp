@@ -181,6 +181,8 @@ public:
         return {q.x, q.y, q.z};
     }
 
+    CVector3f transform(const CVector3f& v) const { return rotate(*this, v); }
+
     CQuaternion log() const;
 
     CQuaternion exp() const;

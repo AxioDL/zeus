@@ -213,6 +213,17 @@ public:
     static const CQuaternion skNoRotation;
 };
 
+class alignas(16) CNUQuaternion : public CQuaternion
+{
+public:
+    CNUQuaternion() = default;
+    CNUQuaternion(const CQuaternion& other)
+    {
+        *this = other;
+        normalize();
+    }
+};
+
 CQuaternion operator+(float lhs, const CQuaternion& rhs);
 CQuaternion operator-(float lhs, const CQuaternion& rhs);
 CQuaternion operator*(float lhs, const CQuaternion& rhs);

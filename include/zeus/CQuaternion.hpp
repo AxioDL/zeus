@@ -7,6 +7,7 @@
 #include "zeus/CVector4f.hpp"
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/Math.hpp"
+#include "zeus/CRelAngle.hpp"
 #if ZE_ATHENA_TYPES
 #include <athena/IStreamReader.hpp>
 #endif
@@ -162,18 +163,16 @@ public:
      * @param angle The magnitude of the rotation in radians
      * @return
      */
-    static inline CQuaternion fromAxisAngle(const CVector3f& axis, float angle)
+    static inline CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle)
     {
-        return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
+        return CQuaternion(std::cos(angle.asRadians() / 2.f), axis * std::sin(angle.asRadians() / 2.f));
     }
 
-    void rotateX(float angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
-    void rotateY(float angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
-    void rotateZ(float angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
+    void rotateX(const CRelAngle& angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
+    void rotateY(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
+    void rotateZ(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
 
-    CAxisAngle toAxisAngle();
-
-    static inline CVector3f rotate(const CQuaternion& rotation, const CVector3f& v)
+    static inline CVector3f rotate(const CQuaternion& rotation, const CAxisAngle& v)
     {
         CQuaternion q = rotation * v;
         q *= rotation.inverse();

@@ -120,23 +120,6 @@ void CQuaternion::invert()
 
 CQuaternion CQuaternion::inverse() const { return CQuaternion(w, -x, -y, -z); }
 
-CAxisAngle CQuaternion::toAxisAngle()
-{
-    //    CAxisAngle ret;
-    //    ret.angle = std::acos(r);
-
-    //    float thetaInv = 1.0f/std::sin(ret.angle);
-
-    //    ret.axis.x = v.x * thetaInv;
-    //    ret.axis.y = v.y * thetaInv;
-    //    ret.axis.z = v.z * thetaInv;
-
-    //    ret.angle *= 2.f;
-
-    //    return ret;
-    return CAxisAngle();
-}
-
 CQuaternion CQuaternion::log() const
 {
     float a = std::acos(w);

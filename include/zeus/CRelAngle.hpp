@@ -7,23 +7,33 @@
 namespace zeus
 {
 /**
- * @brief The CRelAngle class represents relative angles in radians
+ * @brief The CRelAngle class represents relative angle in radians
  */
-class alignas(16) CRelAngle : public CVector3f
+struct CRelAngle
 {
-public:
-    /**
-     * @brief CRelAngle
-     * @param angles In degrees
-     */
-    CRelAngle(const CVector3f& angles)
+    float angle = 0.f;
+
+    CRelAngle() = default;
+    CRelAngle(float angle) : angle(angle) {}
+    float asDegrees() const { return radToDeg(angle); }
+    float asRadians() const { return angle; }
+    float arcCosine() const { return std::acos(angle); }
+
+    static CRelAngle FromDegrees(float angle)
     {
-        x = degToRad(angles.x);
-        y = degToRad(angles.y);
-        z = degToRad(angles.z);
+        CRelAngle ret;
+        ret.angle = degToRad(angle);
+        return ret;
     }
 
-    CRelAngle(float x, float y, float z) : CRelAngle(CVector3f{x, y, z}) {}
+    operator float() { return angle; }
+    static CRelAngle FromRadians(float angle) { return CRelAngle(angle); }
+
+    bool operator <(const CRelAngle& other) const { return angle < other.angle; }
+    CRelAngle& operator +=(const CRelAngle& other) { angle += other.angle; return *this; }
+    CRelAngle& operator +=(float r) { angle += r; return *this; }
+    CRelAngle& operator *=(const CRelAngle& other) { angle *= other.angle; return *this; }
+    CRelAngle& operator *=(float r) { angle *= r; return *this;}
 };
 }
 

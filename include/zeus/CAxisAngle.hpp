@@ -12,12 +12,15 @@ struct alignas(16) CAxisAngle : CVector3f
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
     CAxisAngle() = default;
-    CAxisAngle(const CUnitVector3f& axis, float distance) : CVector3f(distance * axis) {}
+    CAxisAngle(float x, float y, float z) : CVector3f(x, y, z) {}
+    CAxisAngle(const CUnitVector3f& axis, float angle) : CVector3f(angle * axis) {}
 
     CAxisAngle(const CVector3f& axisAngle) : CVector3f(axisAngle) {}
 
-    float angle() { return magnitude(); }
-    const CVector3f& getVector() { return *this; }
+    float angle() const { return magnitude(); }
+    const CVector3f& getVector() const { return *this; }
+
+    static const CAxisAngle sIdentity;
 };
 }
 

@@ -7,6 +7,7 @@ endif()
 include_directories(include ${ATHENA_INCLUDE_DIR})
 
 set(SOURCES
+    src/CAxisAngle.cpp
     src/CVector3f.cpp
     src/Math.cpp
     src/CQuaternion.cpp

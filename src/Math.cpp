@@ -1,6 +1,7 @@
 #include "zeus/Math.hpp"
 #include "zeus/CTransform.hpp"
 #include "zeus/CVector3f.hpp"
+#include "zeus/CVector2f.hpp"
 #if _WIN32
 #include <intrin.h>
 #else
@@ -311,5 +312,19 @@ CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, 
 CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary)
 {
     return bary.x * p0 + bary.y * p1 + bary.z * p2;
+}
+
+bool close_enough(const CVector3f& a, const CVector3f &b, float epsilon)
+{
+    if (std::fabs(a.x - b.x) < epsilon && std::fabs(a.y - b.y) < epsilon && std::fabs(a.z - b.z) < epsilon)
+        return true;
+    return false;
+}
+
+bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon)
+{
+    if (std::fabs(a.x - b.x) < epsilon && std::fabs(a.y - b.y) < epsilon)
+        return true;
+    return false;
 }
 }

@@ -47,6 +47,7 @@ struct CPUInfo
 void detectCPU();
 const CPUInfo& cpuFeatures();
 class CVector3f;
+class CVector2f;
 class CTransform;
 
 template <typename T>
@@ -119,6 +120,15 @@ template <typename E>
 typename std::enable_if<std::is_enum<E>::value, int>::type PopCount(E e)
 {
     return PopCount(static_cast<typename std::underlying_type<E>::type>(e));
+}
+
+
+bool close_enough(const CVector3f &a, const CVector3f &b, float epsilon = 0.000099999997f);
+bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = 0.000099999997f);
+
+inline bool close_enough(float a, float b, double epsilon = 0.000009999999747378752)
+{
+    return std::fabs(a - b) < epsilon;
 }
 }
 

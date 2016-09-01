@@ -165,7 +165,7 @@ public:
      */
     static inline CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle)
     {
-        return CQuaternion(std::cos(angle.asRadians() / 2.f), axis * std::sin(angle.asRadians() / 2.f));
+        return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
     }
 
     void rotateX(const CRelAngle& angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }

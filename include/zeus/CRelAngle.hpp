@@ -26,7 +26,7 @@ struct CRelAngle
         return ret;
     }
 
-    operator float() { return angle; }
+    operator float() const { return angle; }
     static CRelAngle FromRadians(float angle) { return CRelAngle(angle); }
 
     bool operator <(const CRelAngle& other) const { return angle < other.angle; }
@@ -34,6 +34,8 @@ struct CRelAngle
     CRelAngle& operator +=(float r) { angle += r; return *this; }
     CRelAngle& operator *=(const CRelAngle& other) { angle *= other.angle; return *this; }
     CRelAngle& operator *=(float r) { angle *= r; return *this;}
+    CRelAngle& operator /=(const CRelAngle& other) { angle /= other.angle; return *this;}
+    CRelAngle& operator /=(float r) { angle /= r; return *this;}
 };
 }
 

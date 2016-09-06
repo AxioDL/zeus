@@ -227,6 +227,18 @@ public:
         basis[1] = basis[2].cross(basis[0]);
     }
 
+    void printMatrix() const
+    {
+        printf("%f %f %f %f\n"
+               "%f %f %f %f\n"
+               "%f %f %f %f\n"
+               "%f %f %f %f\n",
+               basis[0][0], basis[1][0], basis[2][0], origin[0],
+               basis[0][1], basis[1][1], basis[2][1], origin[1],
+               basis[0][2], basis[1][2], basis[2][2], origin[2],
+               0.f, 0.f, 0.f, 1.f);
+    }
+
     CMatrix3f basis;
     CVector3f origin;
 };

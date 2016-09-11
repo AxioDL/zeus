@@ -217,14 +217,14 @@ class alignas(16) CNUQuaternion : public CQuaternion
 public:
     CNUQuaternion() = default;
     CNUQuaternion(const CMatrix3f& mtx)
-        : CQuaternion(mtx)
+    : CQuaternion(mtx)
     {
         normalize();
     }
 
     CNUQuaternion(const CQuaternion& other)
+    : CQuaternion(other)
     {
-        *this = other;
         normalize();
     }
 };

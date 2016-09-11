@@ -23,11 +23,11 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[2][1] = 0.0f;
         m_mtx.m[3][1] = -(m_ortho.top + m_ortho.bottom) * tmp;
 
-        tmp = 1.0f / (m_ortho.far - m_ortho.near);
+        tmp = 1.0f / (m_ortho.zfar - m_ortho.znear);
         m_mtx.m[0][2] = 0.0f;
         m_mtx.m[1][2] = 0.0f;
         m_mtx.m[2][2] = -(1.0f) * tmp;
-        m_mtx.m[3][2] = -m_ortho.far * tmp;
+        m_mtx.m[3][2] = -m_ortho.zfar * tmp;
 
         m_mtx.m[0][3] = 0.0f;
         m_mtx.m[1][3] = 0.0f;
@@ -51,11 +51,11 @@ void CProjection::_updateCachedMatrix()
         m_mtx.m[2][1] = 0.0f;
         m_mtx.m[3][1] = 0.0f;
 
-        tmp = 1.0f / (m_persp.far - m_persp.near);
+        tmp = 1.0f / (m_persp.zfar - m_persp.znear);
         m_mtx.m[0][2] = 0.0f;
         m_mtx.m[1][2] = 0.0f;
-        m_mtx.m[2][2] = -m_persp.far * tmp;
-        m_mtx.m[3][2] = -(m_persp.far * m_persp.near) * tmp;
+        m_mtx.m[2][2] = -m_persp.zfar * tmp;
+        m_mtx.m[3][2] = -(m_persp.zfar * m_persp.znear) * tmp;
 
         m_mtx.m[0][3] = 0.0f;
         m_mtx.m[1][3] = 0.0f;

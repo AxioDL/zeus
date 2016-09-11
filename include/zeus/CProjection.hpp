@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
-#undef near
-#undef far
 
 namespace zeus
 {
@@ -21,18 +19,18 @@ enum class EProjType
 class SProjOrtho
 {
 public:
-    float top, bottom, left, right, near, far;
+    float top, bottom, left, right, znear, zfar;
     explicit SProjOrtho(float p_top = 1.0f, float p_bottom = -1.0f, float p_left = -1.0f, float p_right = 1.0f,
                         float p_near = 1.0f, float p_far = -1.0f)
-    : top(p_top), bottom(p_bottom), left(p_left), right(p_right), near(p_near), far(p_far)
+    : top(p_top), bottom(p_bottom), left(p_left), right(p_right), znear(p_near), zfar(p_far)
     {
     }
 };
 struct SProjPersp
 {
-    float fov, aspect, near, far;
+    float fov, aspect, znear, zfar;
     SProjPersp(float p_fov = degToRad(55.0f), float p_aspect = 1.0f, float p_near = 0.1f, float p_far = 4096.f)
-    : fov(p_fov), aspect(p_aspect), near(p_near), far(p_far)
+    : fov(p_fov), aspect(p_aspect), znear(p_near), zfar(p_far)
     {
     }
 };

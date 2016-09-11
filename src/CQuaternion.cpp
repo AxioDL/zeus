@@ -77,10 +77,12 @@ const CQuaternion& CQuaternion::operator-=(const CQuaternion& q)
 
 const CQuaternion& CQuaternion::operator*=(const CQuaternion& q)
 {
-    w = w * q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z});
-    x = y * q.z - z * q.y + w * q.x + x * q.w;
-    y = z * q.x - x * q.z + w * q.y + y * q.w;
-    z = x * q.y - y * q.x + w * q.z + z * q.w;
+    CQuaternion orig = *this;
+
+    w = orig.w * q.w - CVector3f(orig.x, orig.y, orig.z).dot({q.x, q.y, q.z});
+    x = orig.y * q.z - orig.z * q.y + orig.w * q.x + orig.x * q.w;
+    y = orig.z * q.x - orig.x * q.z + orig.w * q.y + orig.y * q.w;
+    z = orig.x * q.y - orig.y * q.x + orig.w * q.z + orig.z * q.w;
 
     return *this;
 }

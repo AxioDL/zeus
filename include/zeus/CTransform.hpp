@@ -5,7 +5,6 @@
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/CMatrix4f.hpp"
 #include "zeus/CVector3f.hpp"
-#include "zeus/CQuaternion.hpp"
 
 namespace zeus
 {
@@ -199,6 +198,21 @@ public:
         ret[2][3] = 0.0f;
         ret[3][3] = 1.0f;
         return ret;
+    }
+
+    inline CVector3f upVector() const
+    {
+        return { basis.m[2][0], basis.m[2][1], basis.m[2][2] };
+    }
+
+    inline CVector3f frontVector() const
+    {
+        return { basis.m[1][0], basis.m[1][1], basis.m[1][2] };
+    }
+
+    inline CVector3f rightVector() const
+    {
+        return { basis.m[0][0], basis.m[0][1], basis.m[0][2] };
     }
 
     static inline CTransform fromColumns(const CVector3f& m0, const CVector3f& m1, const CVector3f& m2, const CVector3f& m3)

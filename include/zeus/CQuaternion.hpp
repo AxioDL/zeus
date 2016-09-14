@@ -8,6 +8,7 @@
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/Math.hpp"
 #include "zeus/CRelAngle.hpp"
+#include "zeus/CTransform.hpp"
 #if ZE_ATHENA_TYPES
 #include <athena/IStreamReader.hpp>
 #endif
@@ -186,6 +187,7 @@ public:
 
     CQuaternion exp() const;
 
+    inline CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
     float dot(const CQuaternion& quat) const;
 
     static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);

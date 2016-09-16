@@ -15,6 +15,17 @@
 
 namespace zeus
 {
+
+static inline float normalize_angle(float angle)
+{
+    if (angle > M_PIF)
+        angle = -((2.f * angle) - M_PIF);
+    else if (angle < -M_PIF)
+        angle = 2.f * angle + M_PIF;
+
+    return angle;
+}
+
 class alignas(16) CQuaternion
 {
 #if __atdna__ && ZE_ATHENA_TYPES
@@ -179,6 +190,40 @@ public:
         q *= rotation.inverse();
 
         return {q.x, q.y, q.z};
+    }
+
+    static inline CQuaternion lookAt(const CUnitVector3f& target, const CUnitVector3f& up, const CRelAngle& c)
+    {
+        CQuaternion q = skNoRotation;
+        zeus::CVector3f upCpy = up;
+        zeus::CVector3f targetCpy = target;
+        upCpy.z = 0.f;
+        targetCpy.z = 0.f;
+        zeus::CVector3f tmp;
+        if (upCpy.magnitude() > 0.0009f && upCpy.magnitude() > 0.0009f)
+        {
+            targetCpy.normalize();
+            upCpy.normalize();
+
+            CRelAngle angleBetween = normalize_angle(std::atan2(targetCpy.x, targetCpy.y) - std::atan2(upCpy.x, upCpy.y));
+            CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, angleBetween, c);
+            CQuaternion tmpQ;
+            tmpQ.rotateZ(realAngle);
+            q = tmpQ;
+            CQuaternion q2 = (q * CQuaternion{0.f, targetCpy}) * -tmpQ;
+            tmp.x = q2.x;
+            tmp.y = q2.y;
+            tmp.z = q2.z;
+        }
+        else if (upCpy.magnitude() > 0.0009f)
+            tmp = targetCpy.normalized();
+        else if (upCpy.magnitude() > 0.0009f)
+            tmp = upCpy.normalized();
+        else
+            return skNoRotation;
+
+        CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, normalize_angle(std::acos(up.z) - std::acos(target.z)), c);
+        return CQuaternion::fromAxisAngle(tmp.cross(kUpVec), realAngle) * q;
     }
 
     CVector3f transform(const CVector3f& v) const { return rotate(*this, v); }

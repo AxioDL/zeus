@@ -267,7 +267,9 @@ public:
     }
     inline CVector3f cross(const CVector3f& rhs) const
     {
-        return CVector3f(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
+        return CVector3f(y * rhs.z - z * rhs.y,
+                         z * rhs.x - x * rhs.z,
+                         x * rhs.y - y * rhs.x);
     }
 
     inline float dot(const CVector3f& rhs) const

@@ -6,6 +6,7 @@
 #include "TVectorUnion.hpp"
 #if ZE_ATHENA_TYPES
 #include <athena/FileReader.hpp>
+#include <athena/FileWriter.hpp>
 #endif
 #include <iostream>
 
@@ -94,6 +95,20 @@ public:
         g = reader.readFloatBig();
         r = reader.readFloatBig();
         a = reader.readFloatBig();
+    }
+    inline void writeRGBABig(athena::io::IStreamWriter& writer) const
+    {
+        writer.writeFloatBig(r);
+        writer.writeFloatBig(g);
+        writer.writeFloatBig(b);
+        writer.writeFloatBig(a);
+    }
+    inline void writeBGRABig(athena::io::IStreamWriter& writer) const
+    {
+        writer.writeFloatBig(b);
+        writer.writeFloatBig(g);
+        writer.writeFloatBig(r);
+        writer.writeFloatBig(a);
     }
 #endif
 

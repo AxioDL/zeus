@@ -11,6 +11,7 @@
 namespace zeus
 {
 
+static bool isCPUInit = false;
 static CPUInfo g_cpuFeatures;
 
 void getCpuInfo(int level, int regs[4])
@@ -27,8 +28,7 @@ void getCpuInfo(int level, int regs[4])
 void detectCPU()
 {
 #if !GEKKO
-    static bool isInit = false;
-    if (isInit)
+    if (isCPUInit)
         return;
 
     int regs[4];
@@ -62,11 +62,11 @@ void detectCPU()
     memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
 
-    isInit = true;
+    isCPUInit = true;
 #endif
 }
 
-const CPUInfo& cpuFeatures() { return g_cpuFeatures; }
+const CPUInfo& cpuFeatures() { detectCPU(); return g_cpuFeatures; }
 
 CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up)
 {

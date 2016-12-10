@@ -105,6 +105,9 @@ int ceilingPowerOfTwo(int x);
 template <typename U>
 typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, int>::type PopCount(U x)
 {
+#if __GNUC__ >= 4
+    return __builtin_popcountll(x);
+#else
     const U m1 = U(0x5555555555555555);  // binary: 0101...
     const U m2 = U(0x3333333333333333);  // binary: 00110011..
     const U m4 = U(0x0f0f0f0f0f0f0f0f);  // binary:  4 zeros,  4 ones ...
@@ -114,6 +117,7 @@ typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, i
     x = (x & m2) + ((x >> 2) & m2);            // put count of each 4 bits into those 4 bits
     x = (x + (x >> 4)) & m4;                   // put count of each 8 bits into those 8 bits
     return (x * h01) >> ((sizeof(U) - 1) * 8); // returns left 8 bits of x + (x<<8) + (x<<16) + (x<<24) + ...
+#endif
 }
 
 template <typename E>

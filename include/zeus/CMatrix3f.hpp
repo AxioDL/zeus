@@ -157,6 +157,11 @@ public:
         return ret;
     }
 
+    inline bool operator==(const CMatrix3f& other) const
+    {
+        return vec[0] == other.vec[0] && vec[1] == other.vec[1] && vec[2] == other.vec[2];
+    }
+
     static const CMatrix3f skIdentityMatrix3f;
 
     void transpose();

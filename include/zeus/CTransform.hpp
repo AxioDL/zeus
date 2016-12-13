@@ -31,6 +31,11 @@ public:
 
     static inline CTransform Identity() { return CTransform(CMatrix3f::skIdentityMatrix3f); }
 
+    inline bool operator ==(const CTransform& other) const
+    {
+        return origin == other.origin && basis == other.basis;
+    }
+
     inline CTransform operator*(const CTransform& rhs) const
     {
         return CTransform(basis * rhs.basis, origin + (basis * rhs.origin));

@@ -70,6 +70,8 @@ public:
         const CTransform newXf = CTransform::Translate(box.center()) * xf;
         return COBBox(newXf, extents);
     }
+
+    bool OBBIntersectsBox(const COBBox& other);
 };
 }
 

@@ -85,6 +85,14 @@ public:
     CColor& operator=(const CVector4f& other);
 
 #if ZE_ATHENA_TYPES
+
+    static inline CColor ReadRGBABig(athena::io::IStreamReader& reader)
+    {
+        CColor ret;
+        ret.readRGBABig(reader);
+        return ret;
+    }
+
     inline void readRGBABig(athena::io::IStreamReader& reader)
     {
         r = reader.readFloatBig();

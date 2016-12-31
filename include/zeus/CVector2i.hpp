@@ -23,6 +23,23 @@ public:
     };
     CVector2i() = default;
     CVector2i(int xin, int yin) : x(xin), y(yin) {}
+
+    inline CVector2i operator+(const CVector2i& val) const
+    {
+        return CVector2i(x + val.x, y + val.y);
+    }
+    inline CVector2i operator-(const CVector2i& val) const
+    {
+        return CVector2i(x - val.x, y - val.y);
+    }
+    inline CVector2i operator*(const CVector2i& val) const
+    {
+        return CVector2i(x * val.x, y * val.y);
+    }
+    inline CVector2i operator/(const CVector2i& val) const
+    {
+        return CVector2i(x / val.x, y / val.y);
+    }
 };
 }
 

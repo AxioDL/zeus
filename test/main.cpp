@@ -36,7 +36,7 @@ int main()
     zeus::CAABox aabb1{208.9f, -83.9f, 17.7f, 211.9f, -80.9f, 25.7f};
     zeus::CVector3f center1 = aabb1.center();
     zeus::CVector3f extents1 = aabb1.extents() * 2.f;
-    zeus::CAABox aabb2{211.8f, -81.4f, 22.3f, 212.8, -80.4f, 25.0f};
+    zeus::CAABox aabb2{211.8f, -81.4f, 22.3f, 212.8f, -80.4f, 25.0f};
     zeus::CVector3f center2 = aabb2.center();
     zeus::CVector3f extents2 = aabb2.extents() * 2.f;
 

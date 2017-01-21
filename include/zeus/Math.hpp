@@ -51,21 +51,24 @@ class CVector2f;
 class CTransform;
 
 template <typename T>
-inline T min(T a, T b)
+inline T min(const T& a, const T& b)
 {
     return a < b ? a : b;
 }
 template <typename T>
-inline T max(T a, T b)
+inline T max(const T& a, const T& b)
 {
     return a > b ? a : b;
 }
+template <> CVector3f min(const CVector3f& a, const CVector3f& b);
+template <> CVector3f max(const CVector3f& a, const CVector3f& b);
 
 template <typename T>
-inline T clamp(T a, T val, T b)
+inline T clamp(const T& a, const T& val, const T& b)
 {
     return max<T>(a, min<T>(b, val));
 }
+
 inline float radToDeg(float rad) { return rad * (180.f / M_PIF); }
 inline float degToRad(float deg) { return deg * (M_PIF / 180.f); }
 inline double radToDeg(double rad) { return rad * (180.0 / M_PI); }

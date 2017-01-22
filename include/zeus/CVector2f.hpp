@@ -80,6 +80,13 @@ public:
         v[2] = 0.0f;
         v[3] = 0.0f;
     }
+
+    static CVector2f ReadBig(athena::io::IStreamReader& input)
+    {
+        CVector2f ret;
+        ret.readBig(input);
+        return ret;
+    }
 #endif
 
     CVector2f(float xy) { splat(xy); }

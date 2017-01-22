@@ -90,6 +90,13 @@ public:
         m[1][2] = input.readFloatBig();
         m[2][2] = input.readFloatBig();
     }
+
+    static CMatrix3f ReadBig(athena::io::IStreamReader& input)
+    {
+        CMatrix3f ret;
+        ret.readBig(input);
+        return ret;
+    }
 #endif
     CMatrix3f(const CVector3f& axis, float angle);
     CMatrix3f(const CQuaternion& quat);

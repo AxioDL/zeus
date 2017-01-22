@@ -59,7 +59,7 @@ public:
         min.readBig(in);
         max.readBig(in);
     }
-    static inline CAABox ReadBoundingBoxBig(athena::io::IStreamReader &in)
+    static inline CAABox ReadBoundingBoxBig(athena::io::IStreamReader& in)
     {
         CAABox ret;
         ret.readBoundingBoxBig(in);
@@ -100,9 +100,42 @@ public:
         bool z2 = (min[2] < other.max[2]);
         return x1 && x2 && y1 && y2 && z1 && z2;
     }
+
     bool intersects(const CSphere& other) const
     {
         return distanceFromPointSquared(other.position) <= other.radius * other.radius;
+    }
+
+    inline CAABox booleanIntersection(const CAABox& other) const
+    {
+        CVector3f minVec = CVector3f::skZero;
+        CVector3f maxVec = CVector3f::skZero;
+
+        for (int i = 0; i < 3; ++i)
+        {
+            if (min[i] <= other.min[i] && max[i] >= other.max[i])
+            {
+                minVec[i] = other.min[i];
+                maxVec[i] = other.max[i];
+            }
+            else if (other.min[i] <= min[i] && other.max[i] >= max[i])
+            {
+                minVec[i] = min[i];
+                maxVec[i] = max[i];
+            }
+            else if (other.min[i] <= min[i] && other.max[i] >= min[i])
+            {
+                minVec[i] = min[i];
+                maxVec[i] = other.max[i];
+            }
+            else if (other.min[i] <= max[i] && other.max[i] >= max[i])
+            {
+                minVec[i] = other.min[i];
+                maxVec[i] = max[i];
+            }
+        }
+
+        return {minVec, maxVec};
     }
 
     inline bool inside(const CAABox& other) const
@@ -157,7 +190,9 @@ public:
 
     CVector3f center() const { return (min + max) * 0.5f; }
 
-    CVector3f volume() const { return (max - min) * 0.5f; }
+    CVector3f extents() const { return (max - min) * 0.5f; }
+
+    float volume() const { return (max.x - min.x) * (max.y - min.y) * (max.z - min.z); }
 
     inline CLineSeg getEdge(EBoxEdgeId id)
     {
@@ -312,8 +347,14 @@ public:
     inline bool invalid() { return (max.x < min.x || max.y < min.y || max.z < min.z); }
 };
 
-inline bool operator==(const CAABox& left, const CAABox& right) { return (left.min == right.min && left.max == right.max); }
-inline bool operator!=(const CAABox& left, const CAABox& right) { return (left.min != right.min || left.max != right.max); }
+inline bool operator==(const CAABox& left, const CAABox& right)
+{
+    return (left.min == right.min && left.max == right.max);
+}
+inline bool operator!=(const CAABox& left, const CAABox& right)
+{
+    return (left.min != right.min || left.max != right.max);
+}
 }
 
 #endif // CAABOX_HPP

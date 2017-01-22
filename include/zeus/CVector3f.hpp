@@ -253,6 +253,7 @@ public:
 #endif
         return *this;
     }
+
     inline void normalize()
     {
         float mag = magnitude();

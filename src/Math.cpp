@@ -327,4 +327,14 @@ bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon)
         return true;
     return false;
 }
+
+template <> CVector3f min(const CVector3f& a, const CVector3f& b)
+{
+    return {min(a.x, b.x), min(a.y, b.y), min(a.z, b.z)};
+}
+
+template <> CVector3f max(const CVector3f& a, const CVector3f& b)
+{
+    return {max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)};
+}
 }

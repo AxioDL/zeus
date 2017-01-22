@@ -205,7 +205,8 @@ public:
             targetCpy.normalize();
             upCpy.normalize();
 
-            CRelAngle angleBetween = normalize_angle(std::atan2(targetCpy.x, targetCpy.y) - std::atan2(upCpy.x, upCpy.y));
+            CRelAngle angleBetween =
+                normalize_angle(std::atan2(targetCpy.x, targetCpy.y) - std::atan2(upCpy.x, upCpy.y));
             CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, angleBetween, c);
             CQuaternion tmpQ;
             tmpQ.rotateZ(realAngle);
@@ -233,6 +234,7 @@ public:
     CQuaternion exp() const;
 
     inline CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
+    inline CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
     float dot(const CQuaternion& quat) const;
 
     static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
@@ -248,7 +250,8 @@ public:
     inline float& operator[](size_t idx) { return (&w)[idx]; }
     inline const float& operator[](size_t idx) const { return (&w)[idx]; }
 
-    union {
+    union
+    {
         __m128 mVec128;
         struct
         {
@@ -263,17 +266,9 @@ class alignas(16) CNUQuaternion : public CQuaternion
 {
 public:
     CNUQuaternion() = default;
-    CNUQuaternion(const CMatrix3f& mtx)
-    : CQuaternion(mtx)
-    {
-        normalize();
-    }
+    CNUQuaternion(const CMatrix3f& mtx) : CQuaternion(mtx) { normalize(); }
 
-    CNUQuaternion(const CQuaternion& other)
-    : CQuaternion(other)
-    {
-        normalize();
-    }
+    CNUQuaternion(const CQuaternion& other) : CQuaternion(other) { normalize(); }
 };
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);

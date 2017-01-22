@@ -32,7 +32,7 @@ public:
 
     COBBox() {}
 
-    COBBox(const CAABox& aabb) : extents(aabb.volume()) { transform.origin = aabb.center(); }
+    COBBox(const CAABox& aabb) : extents(aabb.extents()) { transform.origin = aabb.center(); }
 
     COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
 

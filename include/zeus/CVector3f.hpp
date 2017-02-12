@@ -382,6 +382,17 @@ public:
     static const CVector3f skOne;
     static const CVector3f skNegOne;
     static const CVector3f skZero;
+    static const CVector3f skForward;
+    static const CVector3f skBack;
+    static const CVector3f skLeft;
+    static const CVector3f skRight;
+    static const CVector3f skUp;
+    static const CVector3f skDown;
+    static const CVector3f skRadToDegVec;
+    static const CVector3f skDegToRadVec;
+
+    static CVector3f radToDeg(const CVector3f& rad) { return rad * skRadToDegVec; }
+    static CVector3f degToRad(const CVector3f& deg) { return deg * skDegToRadVec; }
 };
 
 static inline CVector3f operator+(float lhs, const CVector3f& rhs)
@@ -424,16 +435,6 @@ static inline CVector3f operator/(float lhs, const CVector3f& rhs)
 #endif
 }
 
-extern const CVector3f kUpVec;
-extern const CVector3f kDownVec;
-extern const CVector3f kRightVec;
-extern const CVector3f kLeftVec;
-extern const CVector3f kForwardVec;
-extern const CVector3f kBackVec;
-extern const CVector3f kRadToDegVec;
-extern const CVector3f kDegToRadVec;
-inline CVector3f radToDeg(const CVector3f& rad) { return rad * kRadToDegVec; }
-inline CVector3f degToRad(const CVector3f& deg) { return deg * kDegToRadVec; }
 }
 
 #endif // CVECTOR3F_HPP

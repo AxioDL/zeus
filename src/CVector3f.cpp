@@ -6,18 +6,18 @@
 
 namespace zeus
 {
-const CVector3f CVector3f::skOne = CVector3f(1.f);
-const CVector3f CVector3f::skNegOne = CVector3f(-1.f);
+const CVector3f CVector3f::skOne(1.f);
+const CVector3f CVector3f::skNegOne(-1.f);
 const CVector3f CVector3f::skZero;
+const CVector3f CVector3f::skForward(0.f, 1.f, 0.f);
+const CVector3f CVector3f::skBack(0.f, -1.f, 0.f);
+const CVector3f CVector3f::skLeft(-1.f, 0.f, 0.f);
+const CVector3f CVector3f::skRight(1.f, 0.f, 0.f);
+const CVector3f CVector3f::skUp(0.f, 0.f, 1.f);
+const CVector3f CVector3f::skDown(0.f, 0.f, -1.f);
+const CVector3f CVector3f::skRadToDegVec(180.0f / M_PIF);
+const CVector3f CVector3f::skDegToRadVec(M_PIF / 180.0f);
 
-const CVector3f kUpVec(0.f, 0.f, 1.f);
-const CVector3f kDownVec(0.f, 0.f, -1.f);
-const CVector3f kForwardVec(0.f, 1.f, 0.f);
-const CVector3f kBackVec(0.f, -1.f, 0.f);
-const CVector3f kRightVec(1.f, 0.f, 0.f);
-const CVector3f kLeftVec(-1.f, 0.f, 0.f);
-const CVector3f kRadToDegVec(180.0f / M_PIF);
-const CVector3f kDegToRadVec(M_PIF / 180.0f);
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {

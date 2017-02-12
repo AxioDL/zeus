@@ -224,7 +224,7 @@ public:
             return skNoRotation;
 
         CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, normalize_angle(std::acos(up.z) - std::acos(target.z)), c);
-        return CQuaternion::fromAxisAngle(tmp.cross(kUpVec), realAngle) * q;
+        return CQuaternion::fromAxisAngle(tmp.cross(CVector3f::skUp), realAngle) * q;
     }
 
     CVector3f transform(const CVector3f& v) const { return rotate(*this, v); }

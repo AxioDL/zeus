@@ -266,7 +266,7 @@ static inline CTransform CTransformFromScaleVector(const CVector3f& scale) { ret
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
 CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin);
 CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
-CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up = kUpVec);
+CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up = CVector3f::skUp);
 }
 
 #endif // CTRANSFORM_HPP

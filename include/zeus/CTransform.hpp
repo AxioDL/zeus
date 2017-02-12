@@ -191,7 +191,7 @@ public:
      * buildMatrix3f is here for compliance with Retro's Math API
      * @return The Matrix (Neo, you are the one)
      */
-    inline CMatrix3f buildMatrix3f() const { return basis; }
+    inline const CMatrix3f& buildMatrix3f() const { return basis; }
 
     inline CVector3f operator*(const CVector3f& other) const { return origin + basis * other; }
 

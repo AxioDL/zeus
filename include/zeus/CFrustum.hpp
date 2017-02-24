@@ -12,10 +12,9 @@ class CFrustum
     CPlane planes[6];
 
 public:
-    inline void updatePlanes(const CTransform& modelview, const CProjection& projection)
+    inline void updatePlanes(const CMatrix4f& modelview, const CMatrix4f& projection)
     {
-        CMatrix4f mv = modelview.toMatrix4f();
-        CMatrix4f mvp = projection.getCachedMatrix() * mv;
+        CMatrix4f mvp = projection * modelview;
         CMatrix4f mvp_rm = mvp.transposed();
 
 #if __SSE__
@@ -83,6 +82,11 @@ public:
         planes[3].normalize();
         planes[4].normalize();
         planes[5].normalize();
+    }
+
+    inline void updatePlanes(const CTransform& modelview, const CProjection& projection)
+    {
+        updatePlanes(modelview.toMatrix4f(), projection.getCachedMatrix());
     }
 
     inline bool aabbFrustumTest(const CAABox& aabb) const

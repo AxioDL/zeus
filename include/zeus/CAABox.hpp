@@ -311,7 +311,7 @@ public:
         return ret;
     }
 
-    inline void splitX(CAABox& posX, CAABox& negX) const
+    inline void splitX(CAABox& negX, CAABox& posX) const
     {
         float midX = (max.x - min.x) * .5 + min.x;
         posX.max = max;
@@ -322,7 +322,7 @@ public:
         negX.min = min;
     }
 
-    inline void splitY(CAABox& posY, CAABox& negY) const
+    inline void splitY(CAABox& negY, CAABox& posY) const
     {
         float midY = (max.y - min.y) * .5 + min.y;
         posY.max = max;
@@ -333,7 +333,7 @@ public:
         negY.min = min;
     }
 
-    inline void splitZ(CAABox& posZ, CAABox& negZ) const
+    inline void splitZ(CAABox& negZ, CAABox& posZ) const
     {
         float midZ = (max.z - min.z) * .5 + min.z;
         posZ.max = max;

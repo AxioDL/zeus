@@ -46,6 +46,7 @@ CColor& CColor::operator=(const CVector4f& other)
 
     return *this;
 }
+
 void CColor::fromHSV(float h, float s, float v, float _a)
 {
     int i = int(h * 6);

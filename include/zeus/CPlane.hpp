@@ -16,9 +16,7 @@ public:
     CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
     CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
     {
-        CVector3f ab = b - a;
-        CVector3f ac = c - a;
-        vec = ab.cross(ac).normalized();
+        vec = (b - a).cross(c - a).normalized();
         d = -a.dot(vec);
     }
 
@@ -36,7 +34,7 @@ public:
 
     float clipLineSegment(const CVector3f& a, const CVector3f& b)
     {
-        float mag = ((b.z - a.z) * (((b.x - a.x) * ((b.y - a.y) * vec.y)) + vec.x)) + vec.z;
+        float mag = (b-a).dot(vec);
         float dis = (-(vec.y - d)) / mag;
         return clamp(0.0f, dis, 1.0f);
     }

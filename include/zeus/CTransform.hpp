@@ -29,6 +29,10 @@ public:
     }
 #endif
 
+    /* Column constructor */
+    CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
+    : basis(c0, c1, c2), origin(c3) {}
+
     static inline CTransform Identity() { return CTransform(CMatrix3f::skIdentityMatrix3f); }
 
     inline bool operator ==(const CTransform& other) const
@@ -218,24 +222,6 @@ public:
     inline CVector3f rightVector() const
     {
         return { basis.m[0][0], basis.m[0][1], basis.m[0][2] };
-    }
-
-    static inline CTransform fromColumns(const CVector3f& m0, const CVector3f& m1, const CVector3f& m2, const CVector3f& m3)
-    {
-        CTransform ret;
-        ret.basis[0][0] = m0[0];
-        ret.basis[0][1] = m1[0];
-        ret.basis[0][2] = m2[0];
-        ret.origin[0] = m3[0];
-        ret.basis[1][0] = m0[1];
-        ret.basis[1][1] = m1[1];
-        ret.basis[1][2] = m2[1];
-        ret.origin[1] = m3[1];
-        ret.basis[2][0] = m0[2];
-        ret.basis[2][1] = m1[2];
-        ret.basis[2][2] = m2[2];
-        ret.origin[2] = m3[2];
-        return ret;
     }
 
     inline void orthonormalize()

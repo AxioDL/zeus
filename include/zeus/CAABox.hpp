@@ -106,6 +106,12 @@ public:
         return distanceFromPointSquared(other.position) <= other.radius * other.radius;
     }
 
+    float intersectionRadius(const CSphere& other) const
+    {
+        float dist = distanceFromPoint(other.position);
+        return (dist < other.radius) ? dist : -1.f;
+    }
+
     inline CAABox booleanIntersection(const CAABox& other) const
     {
         CVector3f minVec = CVector3f::skZero;

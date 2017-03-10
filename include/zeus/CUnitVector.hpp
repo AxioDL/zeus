@@ -12,7 +12,7 @@ public:
 
     CUnitVector3f() : CVector3f(0, 1, 0) {}
     CUnitVector3f(float x, float y, float z) : CVector3f(x, y, z) {}
-    CUnitVector3f(const CVector3f& vec, bool doNormalize = false) : CVector3f(vec)
+    CUnitVector3f(const CVector3f& vec, bool doNormalize = true) : CVector3f(vec)
     {
         if (doNormalize && canBeNormalized())
             normalize();

@@ -1,4 +1,5 @@
 #include "zeus/CVector3f.hpp"
+#include "zeus/CVector3d.hpp"
 #include <memory.h>
 #include <cmath>
 #include <assert.h>
@@ -18,6 +19,17 @@ const CVector3f CVector3f::skDown(0.f, 0.f, -1.f);
 const CVector3f CVector3f::skRadToDegVec(180.0f / M_PIF);
 const CVector3f CVector3f::skDegToRadVec(M_PIF / 180.0f);
 
+CVector3f::CVector3f(const CVector3d& vec)
+{
+#if __SSE__
+    mVec128 = _mm_cvtpd_ps(vec.mVec128[0]);
+    v[2] = vec.v[2];
+#else
+    v[0] = vec.v[0];
+    v[1] = vec.v[1];
+    v[2] = vec.v[2];
+#endif
+}
 
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b)
 {

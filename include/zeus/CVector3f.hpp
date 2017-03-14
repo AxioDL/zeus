@@ -11,6 +11,7 @@
 
 namespace zeus
 {
+class CVector3d;
 class alignas(16) CVector3f
 {
 #if __atdna__
@@ -69,6 +70,8 @@ public:
 #endif
         return ret;
     }
+
+    CVector3f(const CVector3d& vec);
 
     void readBig(athena::io::IStreamReader& input)
     {
@@ -280,7 +283,7 @@ public:
 #if __SSE4_1__ || __SSE4_2__
         if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
         {
-            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0xF1);
+            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
             return result.v[0];
         }
 #endif

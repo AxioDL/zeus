@@ -53,6 +53,11 @@ public:
         return pos.dot(vec) - d;
     }
 
+    const CVector3f& normal() const { return vec; }
+
+    inline float& operator[](size_t idx) { return p[idx]; }
+    inline const float& operator[](size_t idx) const { return p[idx]; }
+
     union {
         struct
         {

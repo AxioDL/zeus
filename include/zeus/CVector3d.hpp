@@ -37,9 +37,15 @@ public:
 
     CVector3d(const CVector3f& vec)
     {
+#if __SSE__
+        mVec128[0] = _mm_cvtps_pd(vec.mVec128);
+        v[2] = vec[2];
+        v[3] = 0.0;
+#else
         v[0] = vec[0];
         v[1] = vec[1];
         v[2] = vec[2];
+#endif
     }
 
     CVector3d(double x, double y, double z)
@@ -72,9 +78,8 @@ public:
 #if __SSE4_1__ || __SSE4_2__
         if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
         {
-            result.mVec128[0] = _mm_dp_pd(mVec128[0], mVec128[0], 0x71);
-            result.mVec128[1] = _mm_dp_pd(mVec128[1], mVec128[1], 0x71);
-            return result.v[0] + result.v[2];
+            result.mVec128[0] = _mm_dp_pd(mVec128[0], mVec128[0], 0x31);
+            return result.v[0] + (v[2] * v[2]);
         }
 #endif
         result.mVec128[0] = _mm_mul_pd(mVec128[0], mVec128[0]);
@@ -99,9 +104,8 @@ public:
 #if __SSE4_1__ || __SSE4_2__
         if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
         {
-            result.mVec128[0] = _mm_dp_pd(mVec128[0], rhs.mVec128[0], 0x71);
-            result.mVec128[1] = _mm_dp_pd(mVec128[1], rhs.mVec128[1], 0x71);
-            return result.v[0] + result.v[2];
+            result.mVec128[0] = _mm_dp_pd(mVec128[0], rhs.mVec128[0], 0x31);
+            return result.v[0] + (v[2] * rhs.v[2]);
         }
 #endif
 
@@ -147,6 +151,48 @@ public:
 #endif
     }
 
+    inline CVector3d operator+(const CVector3d& rhs) const
+    {
+#if __SSE__
+        return CVector3d({_mm_add_pd(mVec128[0], rhs.mVec128[0]),
+                          _mm_add_pd(mVec128[1], rhs.mVec128[1])});
+#elif __GEKKO_PS__
+        return CVector3d(__mm_gekko_add_pd(mVec128, rhs.mVec128));
+#else
+        return CVector3d(x + rhs.x, y + rhs.y, z + rhs.z);
+#endif
+    }
+    inline CVector3d operator-(const CVector3d& rhs) const
+    {
+#if __SSE__
+        return CVector3d({_mm_sub_pd(mVec128[0], rhs.mVec128[0]),
+                          _mm_sub_pd(mVec128[1], rhs.mVec128[1])});
+#else
+        return CVector3d(x - rhs.x, y - rhs.y, z - rhs.z);
+#endif
+    }
+    inline CVector3d operator*(const CVector3d& rhs) const
+    {
+#if __SSE__
+        return CVector3d({_mm_mul_pd(mVec128[0], rhs.mVec128[0]),
+                          _mm_mul_pd(mVec128[1], rhs.mVec128[1])});
+#else
+        return CVector3d(x * rhs.x, y * rhs.y, z * rhs.z);
+#endif
+    }
+    inline CVector3d operator/(const CVector3d& rhs) const
+    {
+#if __SSE__
+        return CVector3d({_mm_div_pd(mVec128[0], rhs.mVec128[0]),
+                          _mm_div_pd(mVec128[1], rhs.mVec128[1])});
+#else
+        return CVector3d(x / rhs.x, y / rhs.y, z / rhs.z);
+#endif
+    }
+
+    inline double& operator[](size_t idx) { return v[idx]; }
+    inline const double& operator[](size_t idx) const { return v[idx]; }
+
     union {
         struct
         {
@@ -171,15 +217,15 @@ static inline CVector3d operator+(double lhs, const CVector3d& rhs)
 #endif
 }
 
-static inline CVector3d operator+(const CVector3d& lhs, const CVector3d& rhs)
+static inline CVector3d operator-(double lhs, const CVector3d& rhs)
 {
 #if __SSE__
-    TDblVectorUnion res;
-    res.mVec128[0] = _mm_add_pd(lhs.mVec128[0], rhs.mVec128[0]);
-    res.mVec128[1] = _mm_add_pd(lhs.mVec128[1], rhs.mVec128[1]);
-    return {res.mVec128};
+    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    splat.mVec128[0] = _mm_sub_pd(splat.mVec128[0], rhs.mVec128[0]);
+    splat.mVec128[1] = _mm_sub_pd(splat.mVec128[1], rhs.mVec128[1]);
+    return {splat.mVec128};
 #else
-    return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+    return {lhs - rhs.x, lhs - rhs.y, lhs - rhs.z};
 #endif
 }
 
@@ -192,30 +238,6 @@ static inline CVector3d operator*(double lhs, const CVector3d& rhs)
     return {splat.mVec128};
 #else
     return {lhs * rhs.x, lhs * rhs.y, lhs * rhs.z};
-#endif
-}
-
-static inline CVector3d operator*(const CVector3d& lhs, const CVector3d& rhs)
-{
-#if __SSE__
-    TDblVectorUnion splat;
-    splat.mVec128[0] = _mm_mul_pd(lhs.mVec128[0], rhs.mVec128[0]);
-    splat.mVec128[1] = _mm_mul_pd(lhs.mVec128[1], rhs.mVec128[1]);
-    return {splat.mVec128};
-#else
-    return {lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z};
-#endif
-}
-
-static inline CVector3d operator/(const CVector3d& lhs, const CVector3d& rhs)
-{
-#if __SSE__
-    TDblVectorUnion splat;
-    splat.mVec128[0] = _mm_div_pd(lhs.mVec128[0], rhs.mVec128[0]);
-    splat.mVec128[1] = _mm_div_pd(lhs.mVec128[1], rhs.mVec128[1]);
-    return {splat.mVec128};
-#else
-    return {lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z};
 #endif
 }
 

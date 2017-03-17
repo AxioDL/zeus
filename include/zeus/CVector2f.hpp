@@ -94,7 +94,7 @@ public:
     {
         v[0] = x;
         v[1] = y;
-        v[2] = 0;
+        v[2] = 0.0f;
         v[3] = 0.0f;
     }
     CVector2f(float x, float y) { assign(x, y); }
@@ -313,14 +313,7 @@ public:
 
     inline void zeroOut()
     {
-#if __SSE__
-        mVec128 = _mm_xor_ps(mVec128, mVec128);
-#else
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 0.0;
-        v[3] = 0.0;
-#endif
+        *this = CVector2f::skZero;
     }
 
     inline void splat(float xy)

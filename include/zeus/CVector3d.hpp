@@ -58,7 +58,6 @@ public:
         v[0] = x;
         v[1] = y;
         v[2] = z;
-        v[3] = 0.0;
 #endif
     }
 
@@ -140,15 +139,7 @@ public:
 
     void zeroOut()
     {
-#if __SSE__
-        _mm_xor_pd(mVec128[0], mVec128[0]);
-        _mm_xor_pd(mVec128[1], mVec128[1]);
-#else
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 0.0;
-        v[3] = 0.0;
-#endif
+        *this = skZero;
     }
 
     inline CVector3d operator+(const CVector3d& rhs) const
@@ -203,6 +194,8 @@ public:
         __m128d mVec128[2];
 #endif
     };
+
+    static const CVector3d skZero;
 };
 
 static inline CVector3d operator+(double lhs, const CVector3d& rhs)

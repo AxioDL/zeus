@@ -18,6 +18,7 @@ const CVector3f CVector3f::skUp(0.f, 0.f, 1.f);
 const CVector3f CVector3f::skDown(0.f, 0.f, -1.f);
 const CVector3f CVector3f::skRadToDegVec(180.0f / M_PIF);
 const CVector3f CVector3f::skDegToRadVec(M_PIF / 180.0f);
+const CVector3d CVector3d::skZero(0.0, 0.0, 0.0);
 
 CVector3f::CVector3f(const CVector3d& vec)
 {

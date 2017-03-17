@@ -317,14 +317,7 @@ public:
 
     inline void zeroOut()
     {
-#if __SSE__
-        mVec128 = _mm_xor_ps(mVec128, mVec128);
-#else
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 0.0;
-        v[3] = 0.0;
-#endif
+        *this = CVector3f::skZero;
     }
 
     inline void splat(float xyz)

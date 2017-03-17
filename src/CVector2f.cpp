@@ -8,7 +8,7 @@ namespace zeus
 {
 const CVector2f CVector2f::skOne = CVector2f(1.0);
 const CVector2f CVector2f::skNegOne = CVector2f(-1.0);
-const CVector2f CVector2f::skZero;
+const CVector2f CVector2f::skZero(0.f, 0.f);
 
 float CVector2f::getAngleDiff(const CVector2f& a, const CVector2f& b)
 {

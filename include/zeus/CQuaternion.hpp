@@ -235,7 +235,24 @@ public:
 
     inline CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
     inline CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
-    float dot(const CQuaternion& quat) const;
+    inline float dot(const CQuaternion& rhs) const
+    {
+#if __SSE__
+        TVectorUnion result;
+#if __SSE4_1__ || __SSE4_2__
+        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
+        {
+            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0xF1);
+            return result.v[0];
+        }
+#endif
+
+        result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
+        return result.v[0] + result.v[1] + result.v[2] + result.v[3];
+#else
+        return (x * rhs.x) + (y * rhs.y) + (z * rhs.z) + (w * rhs.w);
+#endif
+    }
 
     static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
@@ -246,6 +263,8 @@ public:
     inline float pitch() const { return std::atan2(2.f * (y * z + w * x), w * w - x * x - y * y + z * z); }
 
     inline float yaw() const { return std::asin(-2.f * (x * z - w * y)); }
+
+    CQuaternion buildEquivalent() const;
 
     inline float& operator[](size_t idx) { return (&w)[idx]; }
     inline const float& operator[](size_t idx) const { return (&w)[idx]; }

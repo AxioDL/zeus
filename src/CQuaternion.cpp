@@ -170,8 +170,6 @@ CQuaternion CQuaternion::exp() const
     return ret;
 }
 
-float CQuaternion::dot(const CQuaternion& b) const { return x * b.x + y * b.y + z * b.z + w * b.w; }
-
 CQuaternion CQuaternion::lerp(const CQuaternion& a, const CQuaternion& b, double t) { return (a + t * (b - a)); }
 
 CQuaternion CQuaternion::nlerp(const CQuaternion& a, const CQuaternion& b, double t) { return lerp(a, b, t).normalized(); }
@@ -221,5 +219,14 @@ CQuaternion operator-(float lhs, const CQuaternion& rhs)
 CQuaternion operator*(float lhs, const CQuaternion& rhs)
 {
     return CQuaternion(lhs * rhs.w, lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
+}
+
+CQuaternion CQuaternion::buildEquivalent() const
+{
+    float tmp = std::acos(clamp(-1.f, w, 1.f)) * 2.0;
+    if (std::fabs(tmp) < 1.0e-7)
+        return {-1.f, 0.f, 0.f, 0.f};
+    else
+        return CQuaternion::fromAxisAngle(CUnitVector3f(x, y, z), tmp + 2.0 * M_PI);
 }
 }

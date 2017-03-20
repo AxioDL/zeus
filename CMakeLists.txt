@@ -20,7 +20,8 @@ set(SOURCES
     src/CRectangle.cpp
     src/CVector4f.cpp
     src/CMatrix4f.cpp
-    src/CAABox.cpp)
+    src/CAABox.cpp
+    src/CEulerAngles.cpp)
 
 # SSELegacy.cpp compiled separately to escape the effects of link-time optimization
 if(NOT MSVC)
@@ -76,7 +77,8 @@ add_library(zeus
     include/zeus/CLineSeg.hpp
     include/zeus/CSphere.hpp
     include/zeus/CUnitVector.hpp
-    include/zeus/CMRay.hpp)
+    include/zeus/CMRay.hpp
+    include/zeus/CEulerAngles.hpp)
 
 add_subdirectory(test)
 

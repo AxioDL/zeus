@@ -351,6 +351,14 @@ public:
     }
 
     inline bool invalid() { return (max.x < min.x || max.y < min.y || max.z < min.z); }
+
+    inline float operator[](size_t idx) const
+    {
+        if (idx < 3)
+            return min[idx];
+        else
+            return max[idx-3];
+    }
 };
 
 inline bool operator==(const CAABox& left, const CAABox& right)

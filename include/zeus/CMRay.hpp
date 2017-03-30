@@ -8,30 +8,32 @@ namespace zeus
 {
 struct CMRay
 {
-    CMRay(const CVector3f& start, const CVector3f& end, float d) : start(start), d(d), invD(1.f / d), end(end)
+    CMRay(const CVector3f& start, const CVector3f& dirin, float len)
+    : start(start), length(len), invLength(1.f / len), dir(dirin)
     {
-        normal = start + (d * end);
-        delta = normal - start;
+        end = start + (len * dirin);
+        delta = dirin - start;
     }
 
-    CMRay(const CVector3f& start, const CVector3f& norm, float d, float invD) : start(start), normal(norm), d(d), invD(invD)
+    CMRay(const CVector3f& start, const CVector3f& end, float len, float invLen)
+    : start(start), end(end), length(len), invLength(invLen)
     {
-        delta = normal - start;
-        end = invD * delta;
+        delta = end - start;
+        dir = invLen * delta;
     }
 
     CMRay getInvUnscaledTransformRay(const CTransform& xfrm) const
     {
         const CTransform inv = xfrm.inverse();
-        return CMRay(inv * start, inv * normal, d, invD);
+        return CMRay(inv * start, inv * end, length, invLength);
     }
 
     CVector3f start; // x0
-    CVector3f normal; // xc
+    CVector3f end; // xc
     CVector3f delta; // x18
-    float d; // x24
-    float invD; // x28
-    CVector3f end; // x2c
+    float length; // x24
+    float invLength; // x28
+    CVector3f dir; // x2c
 };
 }
 

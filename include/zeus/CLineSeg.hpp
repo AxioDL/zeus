@@ -1,5 +1,5 @@
-#ifndef CLINE_HPP
-#define CLINE_HPP
+#ifndef CLINESEG_HPP
+#define CLINESEG_HPP
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
@@ -13,12 +13,12 @@ public:
     {
         CVector3f tmp = (end - start).normalized();
         if (tmp.x != 0 || tmp.y != 0 || tmp.z != 0)
-            normal = tmp.normalized();
+            dir = tmp.normalized();
         else
-            normal = CVector3f::skZero;
+            dir = CVector3f::skZero;
     }
 
-    CVector3f normal;
+    CVector3f dir;
     CVector3f start;
     CVector3f end;
 };

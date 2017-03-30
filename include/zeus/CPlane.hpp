@@ -12,7 +12,7 @@ class alignas(16) CPlane
 public:
     ZE_DECLARE_ALIGNED_ALLOCATOR();
 
-    inline CPlane() {}
+    inline CPlane() : a(1.f), d(0.f) {}
     CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
     CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
     {

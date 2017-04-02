@@ -187,6 +187,30 @@ public:
         vec[2] += other.vec[2] * scaleVec;
     }
 
+    static inline CMatrix3f RotateX(float theta)
+    {
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
+        return CMatrix3f(TVectorUnion{1.f, 0.f, 0.f, 0.f}, TVectorUnion{0.f, cosT, sinT, 0.f},
+                         TVectorUnion{0.f, -sinT, cosT, 0.f});
+    }
+
+    static inline CMatrix3f RotateY(float theta)
+    {
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
+        return CMatrix3f(TVectorUnion{cosT, 0.f, -sinT, 0.f}, TVectorUnion{0.f, 1.f, 0.f, 0.f},
+                         TVectorUnion{sinT, 0.f, cosT, 0.f});
+    }
+
+    static inline CMatrix3f RotateZ(float theta)
+    {
+        float sinT = std::sin(theta);
+        float cosT = std::cos(theta);
+        return CMatrix3f(TVectorUnion{cosT, sinT, 0.f, 0.f}, TVectorUnion{-sinT, cosT, 0.f, 0.f},
+                         TVectorUnion{0.f, 0.f, 1.f, 0.f});
+    }
+
     union {
         float m[3][4]; /* 4th row for union-alignment */
         struct

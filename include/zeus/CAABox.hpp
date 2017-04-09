@@ -297,6 +297,74 @@ public:
                 (other.z < center.z ? max.z : min.z)};
     }
 
+    inline float distanceBetween(const CAABox& other)
+    {
+        int intersects = 0;
+        if (max.x >= other.min.x && min.x <= other.max.x)
+            intersects |= 0x1;
+        if (max.y >= other.min.y && min.y <= other.max.y)
+            intersects |= 0x2;
+        if (max.z >= other.min.z && min.z <= other.max.z)
+            intersects |= 0x4;
+
+        float minX, maxX;
+        if (max.x < other.min.x)
+        {
+            minX = max.x;
+            maxX = other.min.x;
+        }
+        else
+        {
+            minX = min.x;
+            maxX = other.max.x;
+        }
+
+        float minY, maxY;
+        if (max.y < other.min.y)
+        {
+            minY = max.y;
+            maxY = other.min.y;
+        }
+        else
+        {
+            minY = min.y;
+            maxY = other.max.y;
+        }
+
+        float minZ, maxZ;
+        if (max.z < other.min.z)
+        {
+            minZ = max.z;
+            maxZ = other.min.z;
+        }
+        else
+        {
+            minZ = min.z;
+            maxZ = other.max.z;
+        }
+
+        switch (intersects)
+        {
+        case 0:
+            return zeus::CVector3f(maxX - minX, maxY - minY, maxZ - minZ).magnitude();
+        case 1:
+            return zeus::CVector2f(maxY - minY, maxZ - minZ).magnitude();
+        case 2:
+            return zeus::CVector2f(maxX - minX, maxZ - minZ).magnitude();
+        case 3:
+            return std::fabs(maxZ - minZ);
+        case 4:
+            return zeus::CVector2f(maxX - minX, maxY - minY).magnitude();
+        case 5:
+            return std::fabs(maxY - minY);
+        case 6:
+            return std::fabs(maxX - minX);
+        case 7:
+        default:
+            return 0.f;
+        }
+    }
+
     inline CVector3f getPoint(const int point) const
     {
         int zOff = point & 4;

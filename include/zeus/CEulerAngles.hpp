@@ -10,6 +10,7 @@ class CQuaternion;
 class CEulerAngles : public CVector3f
 {
 public:
+    CEulerAngles(float x, float y, float z) { assign(x, y, z); }
     CEulerAngles(const CQuaternion& quat);
 };
 

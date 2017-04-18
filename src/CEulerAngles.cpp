@@ -40,4 +40,38 @@ CEulerAngles::CEulerAngles(const CQuaternion& quat)
     }
 }
 
+CEulerAngles::CEulerAngles(const CTransform& xf)
+{
+    float xyMagSq = xf.basis[1][1] * xf.basis[1][1] + xf.basis[1][0] * xf.basis[1][0];
+    float f1 = 0.f;
+    if (xyMagSq > 0.f)
+    {
+        f1 = 1.f / std::sqrt(xyMagSq);
+        float f0;
+
+        for (int i=0 ; i<4 ; ++i)
+        {
+            f0 = f1 * f1;
+            f1 *= 0.5f;
+            f0 = 3.f - xyMagSq * f0;
+            f1 *= f0;
+        }
+
+        f1 = xyMagSq * f0;
+    }
+
+    if (std::fabs(f1) >= 0.00001)
+    {
+        x = -std::atan2(-xf.basis[1][2], f1);
+        y = -std::atan2(xf.basis[0][2], xf.basis[2][2]);
+        z = -std::atan2(xf.basis[1][0], xf.basis[1][1]);
+    }
+    else
+    {
+        x = -std::atan2(-xf.basis[1][2], f1);
+        y = -std::atan2(-xf.basis[2][0], xf.basis[0][0]);
+        z = 0.f;
+    }
+}
+
 }

@@ -256,6 +256,7 @@ public:
 
     static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
+    static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
 
     inline float roll() const { return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z); }

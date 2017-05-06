@@ -206,6 +206,11 @@ CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, doubl
     return a;
 }
 
+CQuaternion CQuaternion::slerpShort(const CQuaternion& a, const CQuaternion& b, double t)
+{
+    return zeus::CQuaternion::slerp((b.dot(a) >= 0.f) ? a : a.buildEquivalent(), b, t);
+}
+
 CQuaternion operator+(float lhs, const CQuaternion& rhs)
 {
     return CQuaternion(lhs + rhs.w, lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);

@@ -40,6 +40,14 @@ public:
     {
         return CVector2i(x / val.x, y / val.y);
     }
+    inline bool operator==(const CVector2i& other) const
+    {
+        return x == other.x && y == other.y;
+    }
+    inline bool operator!=(const CVector2i& other) const
+    {
+        return x != other.x || y != other.y;
+    }
 };
 }
 

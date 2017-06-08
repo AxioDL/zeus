@@ -71,8 +71,6 @@ public:
         return ret;
     }
 
-    CVector3f(const CVector3d& vec);
-
     void readBig(athena::io::IStreamReader& input)
     {
         x = input.readFloatBig();
@@ -88,6 +86,8 @@ public:
         return ret;
     }
 #endif
+
+    CVector3f(const CVector3d& vec);
 
     CVector3f(float xyz) { splat(xyz); }
     void assign(float x, float y, float z)

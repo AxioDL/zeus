@@ -58,6 +58,35 @@ public:
 #endif
     }
 
+    operator atVec4f()
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec[0] = w;
+        ret.vec[1] = x;
+        ret.vec[2] = y;
+        ret.vec[3] = z;
+#endif
+        return ret;
+    }
+    operator atVec4f() const
+    {
+        atVec4f ret;
+#if __SSE__
+        ret.mVec128 = mVec128;
+#else
+        ret.vec[0] = w;
+        ret.vec[1] = x;
+        ret.vec[2] = y;
+        ret.vec[3] = z;
+#endif
+        return ret;
+    }
+
+#endif
+    
     CQuaternion(const CMatrix3f& mat)
     {
         float trace = mat[0][0] + mat[1][1] + mat[2][2];
@@ -97,35 +126,7 @@ public:
             }
         }
     }
-
-    operator atVec4f()
-    {
-        atVec4f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec[0] = w;
-        ret.vec[1] = x;
-        ret.vec[2] = y;
-        ret.vec[3] = z;
-#endif
-        return ret;
-    }
-    operator atVec4f() const
-    {
-        atVec4f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec[0] = w;
-        ret.vec[1] = x;
-        ret.vec[2] = y;
-        ret.vec[3] = z;
-#endif
-        return ret;
-    }
-
-#endif
+    
     CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
     CQuaternion(const CVector4f& vec)
     {

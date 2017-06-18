@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR) # because of CMAKE_CXX_STANDARD
 project(zeus)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (NOT DEFINED ATHENA_INCLUDE_DIR)
     set(ATHENA_INCLUDE_DIR ../athena/include)
@@ -25,7 +28,7 @@ set(SOURCES
 
 # SSELegacy.cpp compiled separately to escape the effects of link-time optimization
 if(NOT MSVC)
-set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS "-msse4.1 -msse4.2 -std=c++14")
+set_source_files_properties(${SOURCES} PROPERTIES COMPILE_FLAGS "-msse4.1 -msse4.2")
 if(CUSTOM_FLAGS)
     string(REPLACE "-flto=thin" "" CUSTOM_FLAGS ${CMAKE_CXX_FLAGS})
 endif(CUSTOM_FLAGS)

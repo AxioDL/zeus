@@ -200,7 +200,7 @@ public:
 
     float volume() const { return (max.x - min.x) * (max.y - min.y) * (max.z - min.z); }
 
-    inline CLineSeg getEdge(EBoxEdgeId id)
+    inline CLineSeg getEdge(EBoxEdgeId id) const
     {
         switch (id)
         {

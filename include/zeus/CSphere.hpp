@@ -12,7 +12,7 @@ public:
 
     CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
 
-    inline CVector3f getSurfaceNormal(const CVector3f& coord) { return (position - coord).normalized(); }
+    inline CVector3f getSurfaceNormal(const CVector3f& coord) const { return (position - coord).normalized(); }
 
     inline bool intersects(const CSphere& other)
     {

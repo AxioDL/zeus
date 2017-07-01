@@ -367,13 +367,8 @@ public:
 
     inline CVector3f getPoint(const int point) const
     {
-        int zOff = point & 4;
-        int yOff = (point * 2) & 4;
-        int xOff = (point * 4) & 4;
-        float z = ((float*)(&min.x) + zOff)[2];
-        float y = ((float*)(&min.x) + yOff)[1];
-        float x = ((float*)(&min.x) + xOff)[0];
-        return CVector3f(x, y, z);
+        const CVector3f* vecs = &min;
+        return CVector3f(vecs[(point & 1) != 0].x, vecs[(point & 2) != 0].y, vecs[(point & 4) != 0].z);
     }
 
     inline CVector3f clampToBox(const CVector3f& vec)

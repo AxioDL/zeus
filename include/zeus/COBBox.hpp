@@ -71,7 +71,7 @@ public:
         return COBBox(newXf, extents);
     }
 
-    bool OBBIntersectsBox(const COBBox& other)
+    bool OBBIntersectsBox(const COBBox& other) const
     {
         CVector3f v = other.transform.origin - transform.origin;
         CVector3f T = CVector3f(v.dot(transform.basis[0]), v.dot(transform.basis[1]),

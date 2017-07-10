@@ -268,6 +268,9 @@ public:
 
     CQuaternion buildEquivalent() const;
 
+    zeus::CVector3f getImaginary() const { return {x, y, z}; }
+    void setImaginary(const zeus::CVector3f& i) { x = i.x; y = i.y; z = i.z; }
+
     inline float& operator[](size_t idx) { return (&w)[idx]; }
     inline const float& operator[](size_t idx) const { return (&w)[idx]; }
 

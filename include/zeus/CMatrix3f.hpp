@@ -211,6 +211,14 @@ public:
                          TVectorUnion{0.f, 0.f, 1.f, 0.f});
     }
 
+    float determinant() const
+    {
+        return
+        m[1][0] * (m[2][1] * m[0][2] - m[0][1] * m[2][2]) +
+        m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) +
+        m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
+    }
+
     union {
         float m[3][4]; /* 4th row for union-alignment */
         struct

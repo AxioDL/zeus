@@ -196,14 +196,51 @@ CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, doubl
         const double d = 1.0 / std::sin(theta);
         const double s0 = std::sin((1.0 - t) * theta);
 
-        ret.x = (float)(a.x * s0 + b.x * s1) * d;
-        ret.y = (float)(a.y * s0 + b.y * s1) * d;
-        ret.z = (float)(a.z * s0 + b.z * s1) * d;
-        ret.w = (float)(a.w * s0 + b.w * s1) * d;
+        ret.x = float((a.x * s0 + b.x * s1) * d);
+        ret.y = float((a.y * s0 + b.y * s1) * d);
+        ret.z = float((a.z * s0 + b.z * s1) * d);
+        ret.w = float((a.w * s0 + b.w * s1) * d);
 
         return ret;
     }
     return a;
+}
+
+CQuaternion CQuaternion::shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1)
+{
+    CVector3f v0N = v0;
+    CVector3f v1N = v1;
+
+    if (!v0N.isZero())
+        v0N.normalize();
+    if (!v1N.isZero())
+        v1N.normalize();
+
+    CVector3f cross = v0N.cross(v1N);
+
+    if (cross.magSquared() < 0.001f)
+    {
+        if (v0N.dot(v1N) > 0.f)
+            return CQuaternion::skNoRotation;
+        if (cross.canBeNormalized())
+            return CQuaternion(0.0f, cross.normalized());
+        return CQuaternion::skNoRotation;
+    }
+    else
+    {
+        float w = (1.f + zeus::clamp(-1.f, v0N.dot(v1N), 1.f)) * 2.f;
+        return CQuaternion(0.5f * w, cross * (1.f / std::sqrt(w)));
+    }
+}
+
+CQuaternion CQuaternion::clampedRotateTo(const zeus::CVector3f& v0, const zeus::CVector3f& v1,
+                                         const zeus::CRelAngle& angle)
+{
+    CQuaternion arc = shortestRotationArc(v0, v1);
+    if (angle >= 2.f * std::acos(arc.w))
+        return arc;
+
+    return fromAxisAngle(arc.getImaginary(), angle);
 }
 
 CQuaternion CQuaternion::slerpShort(const CQuaternion& a, const CQuaternion& b, double t)

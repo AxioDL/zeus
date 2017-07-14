@@ -259,6 +259,9 @@ public:
     static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
     static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
+    static CQuaternion shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1);
+    static CQuaternion clampedRotateTo(const zeus::CVector3f& v0, const zeus::CVector3f& v1,
+                                       const zeus::CRelAngle& angle);
 
     inline float roll() const { return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z); }
 

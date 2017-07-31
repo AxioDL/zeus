@@ -5,6 +5,7 @@
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/CMatrix4f.hpp"
 #include "zeus/CVector3f.hpp"
+#include "zeus/CUnitVector.hpp"
 #include <stdint.h>
 #include <stdio.h>
 
@@ -244,6 +245,20 @@ public:
                basis[0][1], basis[1][1], basis[2][1], origin[1],
                basis[0][2], basis[1][2], basis[2][2], origin[2],
                0.f, 0.f, 0.f, 1.f);
+    }
+
+    static zeus::CTransform MakeRotationsBasedOnY(const CUnitVector3f& uVec)
+    {
+        uint32_t i;
+        if (uVec.y < uVec.x || uVec.z < uVec.y || uVec.z < uVec.x)
+            i = 2;
+        else
+            i = 1;
+
+        CVector3f v = CVector3f::skZero;
+        v[i] = 1.f;
+        CUnitVector3f newUVec(uVec.cross(v));
+        return {newUVec, uVec, uVec.cross(newUVec), CVector3f::skZero};
     }
 
     CMatrix3f basis;

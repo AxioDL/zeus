@@ -10,6 +10,7 @@ namespace zeus
 class CFrustum
 {
     CPlane planes[6];
+    bool valid = false;
 
 public:
     inline void updatePlanes(const CMatrix4f& modelview, const CMatrix4f& projection)
@@ -82,6 +83,8 @@ public:
         planes[3].normalize();
         planes[4].normalize();
         planes[5].normalize();
+
+        valid = true;
     }
 
     inline void updatePlanes(const CTransform& modelview, const CProjection& projection)
@@ -91,6 +94,9 @@ public:
 
     inline bool aabbFrustumTest(const CAABox& aabb) const
     {
+        if (!valid)
+            return true;
+
         CVector3f vmin, vmax;
         for (uint32_t i = 0; i < 6; ++i)
         {
@@ -138,6 +144,9 @@ public:
 
     inline bool sphereFrustumTest(const CSphere& sphere)
     {
+        if (!valid)
+            return true;
+
         for (uint32_t i = 0 ; i<6 ; ++i)
         {
             float dadot = planes[i].vec.dot(sphere.position);
@@ -149,6 +158,9 @@ public:
 
     inline bool pointFrustumTest(const CVector3f& point)
     {
+        if (!valid)
+            return true;
+
         for (uint32_t i = 0 ; i<6 ; ++i)
         {
             float dadot = planes[i].vec.dot(point);

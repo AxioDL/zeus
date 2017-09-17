@@ -3,6 +3,7 @@
 
 #include "zeus/CVector3f.hpp"
 #include "zeus/Math.hpp"
+#include <cmath>
 
 namespace zeus
 {
@@ -15,10 +16,11 @@ struct CRelAngle
 
     static float MakeRelativeAngle(float angle)
     {
-        float ret = angle - std::floor(angle / (2.f * M_PIF)) * (2.f * M_PIF);
+        float absAngle = std::fabs(angle);
+        float ret = absAngle - std::floor(absAngle / (2.f * M_PIF)) * (2.f * M_PIF);
         if (ret < 0.f)
             ret += 2.f * M_PIF;
-        return ret;
+        return std::copysign(ret, angle);
     }
 
     CRelAngle() = default;

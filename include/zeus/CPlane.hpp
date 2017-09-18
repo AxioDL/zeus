@@ -48,10 +48,12 @@ public:
         d = nd * mag;
     }
 
-    float pointToPlaneDist(const zeus::CVector3f& pos) const
+    float pointToPlaneDist(const CVector3f& pos) const
     {
         return pos.dot(vec) - d;
     }
+
+    bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
 
     const CVector3f& normal() const { return vec; }
 

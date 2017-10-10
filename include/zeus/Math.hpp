@@ -52,12 +52,12 @@ class CVector2f;
 class CTransform;
 
 template <typename T>
-inline T min(const T& a, const T& b)
+inline constexpr T min(const T& a, const T& b)
 {
     return a < b ? a : b;
 }
 template <typename T>
-inline T max(const T& a, const T& b)
+inline constexpr T max(const T& a, const T& b)
 {
     return a > b ? a : b;
 }
@@ -65,15 +65,15 @@ template <> CVector3f min(const CVector3f& a, const CVector3f& b);
 template <> CVector3f max(const CVector3f& a, const CVector3f& b);
 
 template <typename T>
-inline T clamp(const T& a, const T& val, const T& b)
+inline constexpr T clamp(const T& a, const T& val, const T& b)
 {
     return max<T>(a, min<T>(b, val));
 }
 
-inline float radToDeg(float rad) { return rad * (180.f / M_PIF); }
-inline float degToRad(float deg) { return deg * (M_PIF / 180.f); }
-inline double radToDeg(double rad) { return rad * (180.0 / M_PI); }
-inline double degToRad(double deg) { return deg * (M_PI / 180.0); }
+inline constexpr float radToDeg(float rad) { return rad * (180.f / M_PIF); }
+inline constexpr float degToRad(float deg) { return deg * (M_PIF / 180.f); }
+inline constexpr double radToDeg(double rad) { return rad * (180.0 / M_PI); }
+inline constexpr double degToRad(double deg) { return deg * (M_PI / 180.0); }
 
 CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary);
 

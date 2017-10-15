@@ -233,7 +233,7 @@ CQuaternion CQuaternion::shortestRotationArc(const zeus::CVector3f& v0, const ze
     }
 }
 
-CQuaternion CQuaternion::clampedRotateTo(const zeus::CVector3f& v0, const zeus::CVector3f& v1,
+CQuaternion CQuaternion::clampedRotateTo(const zeus::CUnitVector3f& v0, const zeus::CUnitVector3f& v1,
                                          const zeus::CRelAngle& angle)
 {
     CQuaternion arc = shortestRotationArc(v0, v1);

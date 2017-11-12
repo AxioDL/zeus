@@ -26,6 +26,9 @@ static inline float normalize_angle(float angle)
     return angle;
 }
 
+class CNUQuaternion;
+
+/** Unit quaternion, used for all quaternion arithmetic */
 class alignas(16) CQuaternion
 {
 #if __atdna__ && ZE_ATHENA_TYPES
@@ -163,10 +166,10 @@ public:
     const CQuaternion& operator*=(const CQuaternion& q);
     const CQuaternion& operator*=(float scale);
     const CQuaternion& operator/=(float scale);
-    float magnitude() const;
-    float magSquared() const;
-    void normalize();
-    CQuaternion normalized() const;
+    float magnitude() const { return std::sqrt(magSquared()); }
+    float magSquared() const { return w * w + x * x + y * y + z * z; }
+    void normalize() { *this /= magnitude(); }
+    CQuaternion normalized() const { return *this / magnitude(); }
     void invert();
     CQuaternion inverse() const;
 
@@ -228,7 +231,11 @@ public:
         return CQuaternion::fromAxisAngle(tmp.cross(CVector3f::skUp), realAngle) * q;
     }
 
-    CVector3f transform(const CVector3f& v) const { return rotate(*this, v); }
+    CVector3f transform(const CVector3f& v) const
+    {
+        CQuaternion r(0.f, v);
+        return (*this * r * inverse()).getImaginary();
+    }
 
     CQuaternion log() const;
 
@@ -289,19 +296,68 @@ public:
     };
 
     static const CQuaternion skNoRotation;
+
+    static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
 };
 
-class alignas(16) CNUQuaternion : public CQuaternion
+/** Non-unit quaternion, no guarantee that it's normalized.
+ *  Converting to CQuaternion will perform normalize operation.
+ */
+class alignas(16) CNUQuaternion
 {
 public:
-    CNUQuaternion() = default;
-    CNUQuaternion(const CMatrix3f& mtx) : CQuaternion(mtx) { normalize(); }
+    CNUQuaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
+    CNUQuaternion(float wi, float xi, float yi, float zi) : w(wi), x(xi), y(yi), z(zi) {}
+    CNUQuaternion(float win, const zeus::CVector3f& vec) { w = win; x = vec.x; y = vec.y; z = vec.z; }
+    CNUQuaternion(const CQuaternion& other) { w = other.w; x = other.x; y = other.y; z = other.z; }
+    CNUQuaternion(const CMatrix3f& mtx) : CNUQuaternion(CQuaternion(mtx)) {}
+    static inline CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle)
+    {
+        return CNUQuaternion(CQuaternion::fromAxisAngle(axis, angle));
+    }
 
-    CNUQuaternion(const CQuaternion& other) : CQuaternion(other) { normalize(); }
+    float magnitude() const { return std::sqrt(magSquared()); }
+    float magSquared() const { return w * w + x * x + y * y + z * z; }
+    void normalize()
+    {
+        float magDiv = 1.f / magnitude();
+        w *= magDiv;
+        x *= magDiv;
+        y *= magDiv;
+        z *= magDiv;
+    }
+    CNUQuaternion normalized() const
+    {
+        float magDiv = 1.f / magnitude();
+        return { w * magDiv, x * magDiv, y * magDiv, z * magDiv };
+    }
+
+    CNUQuaternion operator*(const CNUQuaternion& q) const;
+    CNUQuaternion operator*(float f) const;
+    const CNUQuaternion& operator+=(const CNUQuaternion& q);
+
+    inline float& operator[](size_t idx) { return (&w)[idx]; }
+    inline const float& operator[](size_t idx) const { return (&w)[idx]; }
+
+    union
+    {
+        __m128 mVec128;
+        struct
+        {
+            float w, x, y, z;
+        };
+    };
 };
+
+inline CQuaternion CQuaternion::fromNUQuaternion(const CNUQuaternion& q)
+{
+    auto norm = q.normalized();
+    return { norm.w, norm.x, norm.y, norm.z };
+}
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);
 CQuaternion operator-(float lhs, const CQuaternion& rhs);
 CQuaternion operator*(float lhs, const CQuaternion& rhs);
+CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
 }
 #endif // CQUATERNION_HPP

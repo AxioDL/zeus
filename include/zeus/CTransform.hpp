@@ -74,7 +74,7 @@ public:
         return *this;
     }
 
-    inline zeus::CVector3f rotate(const CVector3f& vec) const { return *this * vec; }
+    inline zeus::CVector3f rotate(const CVector3f& vec) const { return basis * vec; }
 
     static inline CTransform RotateX(float theta)
     {

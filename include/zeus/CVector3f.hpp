@@ -341,7 +341,10 @@ public:
 
     inline bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 
-    inline bool canBeNormalized() const { return !isNormalized(); }
+    inline bool canBeNormalized() const
+    {
+        return (x < FLT_EPSILON || y < FLT_EPSILON || z < FLT_EPSILON);
+    }
 
     inline bool isZero() const { return magSquared() <= 1.1920929e-7f; }
 

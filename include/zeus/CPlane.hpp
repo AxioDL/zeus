@@ -44,7 +44,7 @@ public:
         float nd = d;
         float mag = vec.magnitude();
         mag = 1.f / mag;
-        vec *= mag;
+        vec = vec * mag;
         d = nd * mag;
     }
 

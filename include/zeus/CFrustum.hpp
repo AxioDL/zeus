@@ -16,64 +16,63 @@ public:
     inline void updatePlanes(const CMatrix4f& modelview, const CMatrix4f& projection)
     {
         CMatrix4f mvp = projection * modelview;
-        CMatrix4f mvp_rm = mvp.transposed();
 
 #if __SSE__
 
         /* Left */
-        planes[0].mVec128 = _mm_add_ps(mvp_rm.vec[0].mVec128, mvp_rm.vec[3].mVec128);
+        planes[0].mVec128 = _mm_add_ps(mvp.vec[0].mVec128, mvp.vec[3].mVec128);
 
         /* Right */
-        planes[1].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[0].mVec128), mvp_rm.vec[3].mVec128);
+        planes[1].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp.vec[0].mVec128), mvp.vec[3].mVec128);
 
         /* Bottom */
-        planes[2].mVec128 = _mm_add_ps(mvp_rm.vec[1].mVec128, mvp_rm.vec[3].mVec128);
+        planes[2].mVec128 = _mm_add_ps(mvp.vec[1].mVec128, mvp.vec[3].mVec128);
 
         /* Top */
-        planes[3].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[1].mVec128), mvp_rm.vec[3].mVec128);
+        planes[3].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp.vec[1].mVec128), mvp.vec[3].mVec128);
 
         /* Near */
-        planes[4].mVec128 = _mm_add_ps(mvp_rm.vec[2].mVec128, mvp_rm.vec[3].mVec128);
+        planes[4].mVec128 = _mm_add_ps(mvp.vec[2].mVec128, mvp.vec[3].mVec128);
 
         /* Far */
-        planes[5].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp_rm.vec[2].mVec128), mvp_rm.vec[3].mVec128);
+        planes[5].mVec128 = _mm_add_ps(_mm_sub_ps(CVector3f::skZero.mVec128, mvp.vec[2].mVec128), mvp.vec[3].mVec128);
 
 #else
         /* Left */
-        m_planes[0].a = mvp_rm.m[0][0] + mvp_rm.m[3][0];
-        m_planes[0].b = mvp_rm.m[0][1] + mvp_rm.m[3][1];
-        m_planes[0].c = mvp_rm.m[0][2] + mvp_rm.m[3][2];
-        m_planes[0].d = mvp_rm.m[0][3] + mvp_rm.m[3][3];
+        planes[0].a = mvp.m[0][0] + mvp.m[3][0];
+        planes[0].b = mvp.m[0][1] + mvp.m[3][1];
+        planes[0].c = mvp.m[0][2] + mvp.m[3][2];
+        planes[0].d = mvp.m[0][3] + mvp.m[3][3];
 
         /* Right */
-        m_planes[1].a = -mvp_rm.m[0][0] + mvp_rm.m[3][0];
-        m_planes[1].b = -mvp_rm.m[0][1] + mvp_rm.m[3][1];
-        m_planes[1].c = -mvp_rm.m[0][2] + mvp_rm.m[3][2];
-        m_planes[1].d = -mvp_rm.m[0][3] + mvp_rm.m[3][3];
+        planes[1].a = -mvp.m[0][0] + mvp.m[3][0];
+        planes[1].b = -mvp.m[0][1] + mvp.m[3][1];
+        planes[1].c = -mvp.m[0][2] + mvp.m[3][2];
+        planes[1].d = -mvp.m[0][3] + mvp.m[3][3];
 
         /* Bottom */
-        m_planes[2].a = mvp_rm.m[1][0] + mvp_rm.m[3][0];
-        m_planes[2].b = mvp_rm.m[1][1] + mvp_rm.m[3][1];
-        m_planes[2].c = mvp_rm.m[1][2] + mvp_rm.m[3][2];
-        m_planes[2].d = mvp_rm.m[1][3] + mvp_rm.m[3][3];
+        planes[2].a = mvp.m[1][0] + mvp.m[3][0];
+        planes[2].b = mvp.m[1][1] + mvp.m[3][1];
+        planes[2].c = mvp.m[1][2] + mvp.m[3][2];
+        planes[2].d = mvp.m[1][3] + mvp.m[3][3];
 
         /* Top */
-        m_planes[3].a = -mvp_rm.m[1][0] + mvp_rm.m[3][0];
-        m_planes[3].b = -mvp_rm.m[1][1] + mvp_rm.m[3][1];
-        m_planes[3].c = -mvp_rm.m[1][2] + mvp_rm.m[3][2];
-        m_planes[3].d = -mvp_rm.m[1][3] + mvp_rm.m[3][3];
+        planes[3].a = -mvp.m[1][0] + mvp.m[3][0];
+        planes[3].b = -mvp.m[1][1] + mvp.m[3][1];
+        planes[3].c = -mvp.m[1][2] + mvp.m[3][2];
+        planes[3].d = -mvp.m[1][3] + mvp.m[3][3];
 
         /* Near */
-        m_planes[4].a = mvp_rm.m[2][0] + mvp_rm.m[3][0];
-        m_planes[4].b = mvp_rm.m[2][1] + mvp_rm.m[3][1];
-        m_planes[4].c = mvp_rm.m[2][2] + mvp_rm.m[3][2];
-        m_planes[4].d = mvp_rm.m[2][3] + mvp_rm.m[3][3];
+        planes[4].a = mvp.m[2][0] + mvp.m[3][0];
+        planes[4].b = mvp.m[2][1] + mvp.m[3][1];
+        planes[4].c = mvp.m[2][2] + mvp.m[3][2];
+        planes[4].d = mvp.m[2][3] + mvp.m[3][3];
 
         /* Far */
-        m_planes[5].a = -mvp_rm.m[2][0] + mvp_rm.m[3][0];
-        m_planes[5].b = -mvp_rm.m[2][1] + mvp_rm.m[3][1];
-        m_planes[5].c = -mvp_rm.m[2][2] + mvp_rm.m[3][2];
-        m_planes[5].d = -mvp_rm.m[2][3] + mvp_rm.m[3][3];
+        planes[5].a = -mvp.m[2][0] + mvp.m[3][0];
+        planes[5].b = -mvp.m[2][1] + mvp.m[3][1];
+        planes[5].c = -mvp.m[2][2] + mvp.m[3][2];
+        planes[5].d = -mvp.m[2][3] + mvp.m[3][3];
 
 #endif
 
@@ -97,46 +96,17 @@ public:
         if (!valid)
             return true;
 
-        CVector3f vmin, vmax;
+        CVector3f center = aabb.center();
+        CVector3f extents = aabb.extents();
+
         for (uint32_t i = 0; i < 6; ++i)
         {
             const CPlane& plane = planes[i];
 
-            /* X axis */
-            if (plane.a >= 0)
-            {
-                vmin[0] = aabb.min[0];
-                vmax[0] = aabb.max[0];
-            }
-            else
-            {
-                vmin[0] = aabb.max[0];
-                vmax[0] = aabb.min[0];
-            }
-            /* Y axis */
-            if (plane.b >= 0)
-            {
-                vmin[1] = aabb.min[1];
-                vmax[1] = aabb.max[1];
-            }
-            else
-            {
-                vmin[1] = aabb.max[1];
-                vmax[1] = aabb.min[1];
-            }
-            /* Z axis */
-            if (plane.c >= 0)
-            {
-                vmin[2] = aabb.min[2];
-                vmax[2] = aabb.max[2];
-            }
-            else
-            {
-                vmin[2] = aabb.max[2];
-                vmax[2] = aabb.min[2];
-            }
-            float dadot = plane.vec.dot(vmax);
-            if (dadot + plane.d < 0)
+            float m = plane.vec.dot(center) + plane.d;
+            float n = extents.dot({std::fabs(plane.a), std::fabs(plane.b), std::fabs(plane.c)});
+
+            if (m + n < 0)
                 return false;
         }
         return true;

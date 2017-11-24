@@ -283,8 +283,8 @@ public:
 
     CRelAngle angleFrom(const zeus::CQuaternion& other);
 
-    inline float& operator[](size_t idx) { return (&w)[idx]; }
-    inline const float& operator[](size_t idx) const { return (&w)[idx]; }
+    inline float& operator[](size_t idx) { assert(idx < 4); return (&w)[idx]; }
+    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&w)[idx]; }
 
     union
     {
@@ -336,8 +336,8 @@ public:
     CNUQuaternion operator*(float f) const;
     const CNUQuaternion& operator+=(const CNUQuaternion& q);
 
-    inline float& operator[](size_t idx) { return (&w)[idx]; }
-    inline const float& operator[](size_t idx) const { return (&w)[idx]; }
+    inline float& operator[](size_t idx) { assert(idx < 4); return (&w)[idx]; }
+    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&w)[idx]; }
 
     union
     {

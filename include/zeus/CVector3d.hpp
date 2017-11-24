@@ -185,8 +185,8 @@ public:
 #endif
     }
 
-    inline double& operator[](size_t idx) { return v[idx]; }
-    inline const double& operator[](size_t idx) const { return v[idx]; }
+    inline double& operator[](size_t idx) { assert(idx < 3); return v[idx]; }
+    inline const double& operator[](size_t idx) const { assert(idx < 3); return v[idx]; }
 
     union {
         struct

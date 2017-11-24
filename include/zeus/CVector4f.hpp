@@ -376,8 +376,8 @@ public:
         return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon && diffVec.w <= epsilon);
     }
 
-    inline float& operator[](size_t idx) { return (&x)[idx]; }
-    inline const float& operator[](size_t idx) const { return (&x)[idx]; }
+    inline float& operator[](size_t idx) { assert(idx < 4); return (&x)[idx]; }
+    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&x)[idx]; }
 
     static const CVector4f skOne;
     static const CVector4f skNegOne;

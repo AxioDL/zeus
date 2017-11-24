@@ -417,6 +417,7 @@ public:
 
     inline float operator[](size_t idx) const
     {
+        assert(idx < 6);
         if (idx < 3)
             return min[idx];
         else

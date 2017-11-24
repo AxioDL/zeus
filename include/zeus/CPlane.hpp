@@ -57,8 +57,8 @@ public:
 
     const CVector3f& normal() const { return vec; }
 
-    inline float& operator[](size_t idx) { return p[idx]; }
-    inline const float& operator[](size_t idx) const { return p[idx]; }
+    inline float& operator[](size_t idx) { assert(idx < 4); return p[idx]; }
+    inline const float& operator[](size_t idx) const { assert(idx < 4); return p[idx]; }
 
     union {
         struct

@@ -9,6 +9,7 @@
 #include <athena/FileWriter.hpp>
 #endif
 #include <iostream>
+#include <assert.h>
 
 #undef min
 #undef max
@@ -275,8 +276,8 @@ public:
     inline float magnitude() const { return std::sqrt(magSquared()); }
     static inline CColor lerp(const CColor& a, const CColor& b, float t) { return (a + (b - a) * t); }
     static inline CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
-    inline float& operator[](const size_t& idx) { return (&r)[idx]; }
-    inline const float& operator[](const size_t& idx) const { return (&r)[idx]; }
+    inline float& operator[](const size_t& idx) { assert(idx < 4); return (&r)[idx]; }
+    inline const float& operator[](const size_t& idx) const { assert(idx < 4); return (&r)[idx]; }
     inline void splat(float rgb, float a)
     {
 #if __SSE__

@@ -17,6 +17,7 @@ set(SOURCES
     src/CMatrix3f.cpp
     src/CProjection.cpp
     src/CPlane.cpp
+    src/CFrustum.cpp
     src/CTransform.cpp
     src/CColor.cpp
     src/CVector2f.cpp

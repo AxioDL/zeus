@@ -93,39 +93,67 @@ public:
     CQuaternion(const CMatrix3f& mat)
     {
         float trace = mat[0][0] + mat[1][1] + mat[2][2];
-        if (trace > 0)
+        if (trace >= 0.f)
         {
-            float s = 0.5f / std::sqrt(trace + 1.0f);
-            w = 0.25f / s;
+            float st = std::sqrt(trace + 1.0f);
+            float s = 0.5f / st;
+            w = 0.5f * st;
             x = (mat[1][2] - mat[2][1]) * s;
             y = (mat[2][0] - mat[0][2]) * s;
             z = (mat[0][1] - mat[1][0]) * s;
         }
         else
         {
-            if (mat[0][0] > mat[1][1] && mat[0][0] > mat[2][2])
+            int idx = 0;
+            if (mat[1][1] > mat[0][0])
             {
-                float s = 2.0f * std::sqrt(1.0f + mat[0][0] - mat[1][1] - mat[2][2]);
-                w = (mat[1][2] - mat[2][1]) / s;
-                x = 0.25f * s;
-                y = (mat[1][0] + mat[0][1]) / s;
-                z = (mat[2][0] + mat[0][2]) / s;
+                idx = 1;
+                if (mat[2][2] > mat[1][1])
+                    idx = 2;
             }
-            else if (mat[1][1] > mat[2][2])
+            else if (mat[2][2] > mat[0][0])
             {
-                float s = 2.0f * std::sqrt(1.0f + mat[1][1] - mat[0][0] - mat[2][2]);
-                w = (mat[2][0] - mat[0][2]) / s;
-                x = (mat[1][0] + mat[0][1]) / s;
-                y = 0.25f * s;
-                z = (mat[2][1] + mat[1][2]) / s;
+                idx = 2;
             }
-            else
+
+            switch (idx)
             {
-                float s = 2.0f * std::sqrt(1.0f + mat[2][2] - mat[0][0] - mat[1][1]);
-                w = (mat[0][1] - mat[1][0]) / s;
-                x = (mat[2][0] + mat[0][2]) / s;
-                y = (mat[2][1] + mat[1][2]) / s;
-                z = 0.25f * s;
+            case 0:
+            {
+                float st = std::sqrt(mat[0][0] - (mat[1][1] + mat[2][2]) + 1.f);
+                float s = 0.5f / st;
+                w = (mat[1][2] - mat[2][1]) * s;
+                x = 0.5f * st;
+                y = (mat[1][0] + mat[0][1]) * s;
+                z = (mat[2][0] + mat[0][2]) * s;
+                break;
+            }
+            case 1:
+            {
+                float st = std::sqrt(mat[1][1] - (mat[2][2] + mat[0][0]) + 1.f);
+                float s = 0.5f / st;
+                w = (mat[2][0] - mat[0][2]) * s;
+                x = (mat[1][0] + mat[0][1]) * s;
+                y = 0.5f * st;
+                z = (mat[2][1] + mat[1][2]) * s;
+                break;
+            }
+            case 2:
+            {
+                float st = std::sqrt(mat[2][2] - (mat[0][0] + mat[1][1]) + 1.f);
+                float s = 0.5f / st;
+                w = (mat[0][1] - mat[1][0]) * s;
+                x = (mat[2][0] + mat[0][2]) * s;
+                y = (mat[2][1] + mat[1][2]) * s;
+                z = 0.5f * st;
+                break;
+            }
+            default:
+                w = 0.f;
+                x = 0.f;
+                y = 0.f;
+                z = 0.f;
+                break;
             }
         }
     }

@@ -12,7 +12,8 @@ namespace zeus
 {
 
 static bool isCPUInit = false;
-static CPUInfo g_cpuFeatures;
+static CPUInfo g_cpuFeatures = {};
+static CPUInfo g_missingFeatures = {};
 
 void getCpuInfo(int level, int regs[4])
 {
@@ -67,6 +68,64 @@ void detectCPU()
 }
 
 const CPUInfo& cpuFeatures() { detectCPU(); return g_cpuFeatures; }
+
+std::pair<bool, const CPUInfo&> validateCPU()
+{
+    detectCPU();
+    bool ret = true;
+
+#if __SSE4A__
+    if (!g_cpuFeatures.SSE4a)
+    {
+        *(bool*) &g_missingFeatures.SSE4a = true;
+        ret = false;
+    }
+#endif
+#if __SSE4_2__
+    if (!g_cpuFeatures.SSE42)
+    {
+        *(bool*) &g_missingFeatures.SSE42 = true;
+        ret = false;
+    }
+#endif
+#if __SSE4_1__
+    if (!g_cpuFeatures.SSE41)
+    {
+        *(bool*) &g_missingFeatures.SSE41 = true;
+        ret = false;
+    }
+#endif
+#if __SSSE3__
+    if (!g_cpuFeatures.SSSE3)
+    {
+        *(bool*) &g_missingFeatures.SSSE3 = true;
+        ret = false;
+    }
+#endif
+#if __SSE3__
+    if (!g_cpuFeatures.SSE3)
+    {
+        *(bool*) &g_missingFeatures.SSE3 = true;
+        ret = false;
+    }
+#endif
+#if __SSE2__
+    if (!g_cpuFeatures.SSE2)
+    {
+        *(bool*) &g_missingFeatures.SSE2 = true;
+        ret = false;
+    }
+#endif
+#if __SSE__
+    if (!g_cpuFeatures.SSE1)
+    {
+        *(bool*) &g_missingFeatures.SSE1 = true;
+        ret = false;
+    }
+#endif
+
+    return {ret, g_missingFeatures};
+}
 
 CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up)
 {

@@ -48,6 +48,7 @@ struct CPUInfo
  */
 void detectCPU();
 const CPUInfo& cpuFeatures();
+std::pair<bool, const CPUInfo&> validateCPU();
 class CVector3f;
 class CVector2f;
 class CTransform;

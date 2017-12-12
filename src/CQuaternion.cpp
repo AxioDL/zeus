@@ -48,10 +48,10 @@ CQuaternion CQuaternion::operator*(const CQuaternion& q) const
 
 CNUQuaternion CNUQuaternion::operator*(const CNUQuaternion& q) const
 {
-    return CQuaternion(w * q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z}),
-                       y * q.z - z * q.y + w * q.x + x * q.w,
-                       z * q.x - x * q.z + w * q.y + y * q.w,
-                       x * q.y - y * q.x + w * q.z + z * q.w);
+    return CNUQuaternion(w * q.w - CVector3f(x, y, z).dot({q.x, q.y, q.z}),
+                         y * q.z - z * q.y + w * q.x + x * q.w,
+                         z * q.x - x * q.z + w * q.y + y * q.w,
+                         x * q.y - y * q.x + w * q.z + z * q.w);
 }
 
 CQuaternion CQuaternion::operator/(const CQuaternion& q) const

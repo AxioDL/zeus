@@ -33,11 +33,6 @@ CMatrix3f::CMatrix3f(const CQuaternion& quat)
 void CMatrix3f::transpose()
 {
 #if __SSE__
-    if (!cpuFeatures().SSE41)
-    {
-        transposeSSE3();
-        return;
-    }
     __m128 zero = _mm_xor_ps(vec[0].mVec128, vec[0].mVec128);
     __m128 T0 = _mm_unpacklo_ps(vec[0].mVec128, vec[1].mVec128);
     __m128 T2 = _mm_unpacklo_ps(vec[2].mVec128, zero);
@@ -66,8 +61,6 @@ void CMatrix3f::transpose()
 CMatrix3f CMatrix3f::transposed() const
 {
 #if __SSE__
-    if (!cpuFeatures().SSE41)
-        return transposedSSE3();
     __m128 zero = _mm_xor_ps(vec[0].mVec128, vec[0].mVec128);
     __m128 T0 = _mm_unpacklo_ps(vec[0].mVec128, vec[1].mVec128);
     __m128 T2 = _mm_unpacklo_ps(vec[2].mVec128, zero);

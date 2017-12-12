@@ -9,8 +9,6 @@ CMatrix4f CMatrix4f::transposed() const
 {
     CMatrix4f ret;
 #if __SSE__
-    if (!cpuFeatures().SSE41)
-        return transposedSSE3();
     __m128 T0 = _mm_unpacklo_ps(vec[0].mVec128, vec[1].mVec128);
     __m128 T2 = _mm_unpacklo_ps(vec[2].mVec128, vec[3].mVec128);
     __m128 T1 = _mm_unpackhi_ps(vec[0].mVec128, vec[1].mVec128);

@@ -259,16 +259,13 @@ public:
     {
 #if __SSE__
         TVectorUnion result;
-#if __SSE4_1__ || __SSE4_2__
-        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
-        {
-            result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
-            return result.v[0];
-        }
-#endif
-
+#if __SSE4_1__
+        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
+        return result.v[0];
+#else
         result.mVec128 = _mm_mul_ps(mVec128, mVec128);
         return result.v[0] + result.v[1] + result.v[2] + result.v[3];
+#endif
 #else
         return r * r + g * g + b * b + a * a;
 #endif
@@ -295,15 +292,13 @@ public:
     {
 #if __SSE__
         TVectorUnion result;
-#if __SSE4_1__ || __SSE4_2__
-        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
-        {
-            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
-            return result.v[0];
-        }
-#endif
+#if __SSE4_1__
+        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
+        return result.v[0];
+#else
         result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
         return result.v[0] + result.v[1] + result.v[2];
+#endif
 #else
         return (r * rhs.r) + (g * rhs.g) + (b * rhs.b);
 #endif

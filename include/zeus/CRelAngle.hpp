@@ -17,6 +17,8 @@ struct CRelAngle
     static float MakeRelativeAngle(float angle)
     {
         float absAngle = std::fabs(angle);
+        if (absAngle == 2.f * M_PIF)
+            return std::copysign(absAngle, angle);
         float ret = absAngle - std::floor(absAngle / (2.f * M_PIF)) * (2.f * M_PIF);
         if (ret < 0.f)
             ret += 2.f * M_PIF;

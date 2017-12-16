@@ -19,9 +19,9 @@ namespace zeus
 static inline float normalize_angle(float angle)
 {
     if (angle > M_PIF)
-        angle = -((2.f * angle) - M_PIF);
+        angle -= 2.f * M_PIF;
     else if (angle < -M_PIF)
-        angle = 2.f * angle + M_PIF;
+        angle += 2.f * M_PIF;
 
     return angle;
 }
@@ -90,74 +90,7 @@ public:
 
 #endif
     
-    CQuaternion(const CMatrix3f& mat)
-    {
-        float trace = mat[0][0] + mat[1][1] + mat[2][2];
-        if (trace >= 0.f)
-        {
-            float st = std::sqrt(trace + 1.0f);
-            float s = 0.5f / st;
-            w = 0.5f * st;
-            x = (mat[1][2] - mat[2][1]) * s;
-            y = (mat[2][0] - mat[0][2]) * s;
-            z = (mat[0][1] - mat[1][0]) * s;
-        }
-        else
-        {
-            int idx = 0;
-            if (mat[1][1] > mat[0][0])
-            {
-                idx = 1;
-                if (mat[2][2] > mat[1][1])
-                    idx = 2;
-            }
-            else if (mat[2][2] > mat[0][0])
-            {
-                idx = 2;
-            }
-
-            switch (idx)
-            {
-            case 0:
-            {
-                float st = std::sqrt(mat[0][0] - (mat[1][1] + mat[2][2]) + 1.f);
-                float s = 0.5f / st;
-                w = (mat[1][2] - mat[2][1]) * s;
-                x = 0.5f * st;
-                y = (mat[1][0] + mat[0][1]) * s;
-                z = (mat[2][0] + mat[0][2]) * s;
-                break;
-            }
-            case 1:
-            {
-                float st = std::sqrt(mat[1][1] - (mat[2][2] + mat[0][0]) + 1.f);
-                float s = 0.5f / st;
-                w = (mat[2][0] - mat[0][2]) * s;
-                x = (mat[1][0] + mat[0][1]) * s;
-                y = 0.5f * st;
-                z = (mat[2][1] + mat[1][2]) * s;
-                break;
-            }
-            case 2:
-            {
-                float st = std::sqrt(mat[2][2] - (mat[0][0] + mat[1][1]) + 1.f);
-                float s = 0.5f / st;
-                w = (mat[0][1] - mat[1][0]) * s;
-                x = (mat[2][0] + mat[0][2]) * s;
-                y = (mat[2][1] + mat[1][2]) * s;
-                z = 0.5f * st;
-                break;
-            }
-            default:
-                w = 0.f;
-                x = 0.f;
-                y = 0.f;
-                z = 0.f;
-                break;
-            }
-        }
-    }
-    
+    CQuaternion(const CMatrix3f& mat);
     CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
     CQuaternion(const CVector4f& vec)
     {
@@ -224,40 +157,7 @@ public:
         return {q.x, q.y, q.z};
     }
 
-    static inline CQuaternion lookAt(const CUnitVector3f& target, const CUnitVector3f& up, const CRelAngle& c)
-    {
-        CQuaternion q = skNoRotation;
-        zeus::CVector3f upCpy = up;
-        zeus::CVector3f targetCpy = target;
-        upCpy.z = 0.f;
-        targetCpy.z = 0.f;
-        zeus::CVector3f tmp;
-        if (upCpy.magnitude() > 0.0009f && upCpy.magnitude() > 0.0009f)
-        {
-            targetCpy.normalize();
-            upCpy.normalize();
-
-            CRelAngle angleBetween =
-                normalize_angle(std::atan2(targetCpy.x, targetCpy.y) - std::atan2(upCpy.x, upCpy.y));
-            CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, angleBetween, c);
-            CQuaternion tmpQ;
-            tmpQ.rotateZ(realAngle);
-            q = tmpQ;
-            CQuaternion q2 = (q * CQuaternion{0.f, targetCpy}) * -tmpQ;
-            tmp.x = q2.x;
-            tmp.y = q2.y;
-            tmp.z = q2.z;
-        }
-        else if (upCpy.magnitude() > 0.0009f)
-            tmp = targetCpy.normalized();
-        else if (upCpy.magnitude() > 0.0009f)
-            tmp = upCpy.normalized();
-        else
-            return skNoRotation;
-
-        CRelAngle realAngle = zeus::clamp<CRelAngle>(-c, normalize_angle(std::acos(up.z) - std::acos(target.z)), c);
-        return CQuaternion::fromAxisAngle(tmp.cross(CVector3f::skUp), realAngle) * q;
-    }
+    static CQuaternion lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng);
 
     CVector3f transform(const CVector3f& v) const
     {

@@ -119,7 +119,7 @@ public:
     CVector3d asNormalized()
     {
         double mag = magnitude();
-        mag /= 1.0;
+        mag = 1.0 / mag;
         return {x * mag, y * mag, z * mag};
     }
 
@@ -148,8 +148,6 @@ public:
         const __m128d tmpVec128[2] = {_mm_add_pd(mVec128[0], rhs.mVec128[0]),
                                       _mm_add_pd(mVec128[1], rhs.mVec128[1])};
         return CVector3d(tmpVec128);
-#elif __GEKKO_PS__
-        return CVector3d(__mm_gekko_add_pd(mVec128, rhs.mVec128));
 #else
         return CVector3d(x + rhs.x, y + rhs.y, z + rhs.z);
 #endif
@@ -157,8 +155,8 @@ public:
     inline CVector3d operator-(const CVector3d& rhs) const
     {
 #if __SSE__
-        const __m128d tmpVec128[2] = {_mm_add_pd(mVec128[0], rhs.mVec128[0]),
-                                      _mm_add_pd(mVec128[1], rhs.mVec128[1])};
+        const __m128d tmpVec128[2] = {_mm_sub_pd(mVec128[0], rhs.mVec128[0]),
+                                      _mm_sub_pd(mVec128[1], rhs.mVec128[1])};
         return CVector3d(tmpVec128);
 #else
         return CVector3d(x - rhs.x, y - rhs.y, z - rhs.z);
@@ -167,8 +165,8 @@ public:
     inline CVector3d operator*(const CVector3d& rhs) const
     {
 #if __SSE__
-        const __m128d tmpVec128[2] = {_mm_add_pd(mVec128[0], rhs.mVec128[0]),
-                                      _mm_add_pd(mVec128[1], rhs.mVec128[1])};
+        const __m128d tmpVec128[2] = {_mm_mul_pd(mVec128[0], rhs.mVec128[0]),
+                                      _mm_mul_pd(mVec128[1], rhs.mVec128[1])};
         return CVector3d(tmpVec128);
 #else
         return CVector3d(x * rhs.x, y * rhs.y, z * rhs.z);
@@ -177,8 +175,8 @@ public:
     inline CVector3d operator/(const CVector3d& rhs) const
     {
 #if __SSE__
-        const __m128d tmpVec128[2] = {_mm_add_pd(mVec128[0], rhs.mVec128[0]),
-                                      _mm_add_pd(mVec128[1], rhs.mVec128[1])};
+        const __m128d tmpVec128[2] = {_mm_div_pd(mVec128[0], rhs.mVec128[0]),
+                                      _mm_div_pd(mVec128[1], rhs.mVec128[1])};
         return CVector3d(tmpVec128);
 #else
         return CVector3d(x / rhs.x, y / rhs.y, z / rhs.z);

@@ -9,18 +9,18 @@ namespace zeus
 class CLineSeg
 {
 public:
-    CLineSeg(const CVector3f& start, const CVector3f& end) : start(start), end(end)
+    CLineSeg(const CVector3f& start, const CVector3f& end) : x0_start(start), x18_end(end)
     {
         CVector3f tmp = (end - start).normalized();
         if (tmp.x != 0 || tmp.y != 0 || tmp.z != 0)
-            dir = tmp.normalized();
+            xc_dir = tmp.normalized();
         else
-            dir = CVector3f::skZero;
+            xc_dir = CVector3f::skZero;
     }
 
-    CVector3f dir;
-    CVector3f start;
-    CVector3f end;
+    CVector3f x0_start;
+    CVector3f xc_dir;
+    CVector3f x18_end;
 };
 }
 

@@ -20,18 +20,18 @@ public:
 
     enum class EBoxEdgeId
     {
-        UnknownEdge0,
-        UnknownEdge1,
-        UnknownEdge2,
-        UnknownEdge3,
-        UnknownEdge4,
-        UnknownEdge5,
-        UnknownEdge6,
-        UnknownEdge7,
-        UnknownEdge8,
-        UnknownEdge9,
-        UnknownEdge10,
-        UnknownEdge11
+        Z0,
+        X0,
+        Z1,
+        X1,
+        Z2,
+        X2,
+        Z3,
+        X3,
+        Y0,
+        Y1,
+        Y2,
+        Y3
     };
 
     enum class EBoxFaceID
@@ -154,44 +154,23 @@ public:
 
     inline bool insidePlane(const CPlane& plane) const
     {
-        CVector3f vmin, vmax;
+        CVector3f vmax;
         /* X axis */
         if (plane.a >= 0)
-        {
-            vmin[0] = min[0];
             vmax[0] = max[0];
-        }
         else
-        {
-            vmin[0] = max[0];
             vmax[0] = min[0];
-        }
         /* Y axis */
         if (plane.b >= 0)
-        {
-            vmin[1] = min[1];
             vmax[1] = max[1];
-        }
         else
-        {
-            vmin[1] = max[1];
             vmax[1] = min[1];
-        }
         /* Z axis */
         if (plane.c >= 0)
-        {
-            vmin[2] = min[2];
             vmax[2] = max[2];
-        }
         else
-        {
-            vmin[2] = max[2];
             vmax[2] = min[2];
-        }
-        float dadot = plane.vec.dot(vmax);
-        if (dadot + plane.d < 0)
-            return false;
-        return true;
+        return plane.vec.dot(vmax) + plane.d >= 0.f;
     }
 
     CVector3f center() const { return (min + max) * 0.5f; }
@@ -204,32 +183,30 @@ public:
     {
         switch (id)
         {
-        case EBoxEdgeId::UnknownEdge0:
-            return CLineSeg({min.x, min.y, min.z}, {min.x, min.y, max.z});
-        case EBoxEdgeId::UnknownEdge1:
-            return CLineSeg({max.x, min.y, min.z}, {min.x, min.y, min.z});
-        case EBoxEdgeId::UnknownEdge2:
-            return CLineSeg({max.x, min.y, max.z}, {max.x, min.y, max.z});
-        case EBoxEdgeId::UnknownEdge3:
-            return CLineSeg({min.x, min.y, max.z}, {max.x, min.y, max.z});
-        case EBoxEdgeId::UnknownEdge4:
-            return CLineSeg({max.x, max.y, min.z}, {max.x, max.y, max.z});
-        case EBoxEdgeId::UnknownEdge5:
-            return CLineSeg({min.x, max.y, min.z}, {max.x, max.y, min.z});
-        case EBoxEdgeId::UnknownEdge6:
-            return CLineSeg({min.x, max.y, max.z}, {min.x, max.y, min.z});
-        case EBoxEdgeId::UnknownEdge7:
-            return CLineSeg({max.x, max.y, max.z}, {min.x, max.y, max.z});
-        case EBoxEdgeId::UnknownEdge8:
-            return CLineSeg({min.x, max.y, max.z}, {min.x, min.y, max.z});
-        case EBoxEdgeId::UnknownEdge9:
-            return CLineSeg({min.x, max.y, min.z}, {min.x, min.y, min.z});
-        case EBoxEdgeId::UnknownEdge10:
-            return CLineSeg({max.x, max.y, min.z}, {max.x, min.y, min.z});
-        case EBoxEdgeId::UnknownEdge11:
-            return CLineSeg({max.x, max.y, max.z}, {max.x, min.y, max.z});
-        default:
-            return CLineSeg({min.x, min.y, min.z}, {min.x, min.y, max.z});
+        case EBoxEdgeId::Z0:
+            return CLineSeg({min.x, min.y, max.z}, {min.x, min.y, min.z});
+        case EBoxEdgeId::X0:
+            return CLineSeg({min.x, min.y, min.z}, {max.x, min.y, min.z});
+        case EBoxEdgeId::Z1:
+            return CLineSeg({max.x, min.y, min.z}, {max.x, min.y, max.z});
+        case EBoxEdgeId::X1:
+            return CLineSeg({max.x, min.y, max.z}, {min.x, min.y, max.z});
+        case EBoxEdgeId::Z2:
+            return CLineSeg({max.x, max.y, max.z}, {max.x, max.y, min.z});
+        case EBoxEdgeId::X2:
+            return CLineSeg({max.x, max.y, min.z}, {min.x, max.y, min.z});
+        case EBoxEdgeId::Z3:
+            return CLineSeg({min.x, max.y, min.z}, {min.x, max.y, max.z});
+        case EBoxEdgeId::X3:
+            return CLineSeg({min.x, max.y, max.z}, {max.x, max.y, max.z});
+        case EBoxEdgeId::Y0:
+            return CLineSeg({min.x, min.y, max.z}, {min.x, max.y, max.z});
+        case EBoxEdgeId::Y1:
+            return CLineSeg({min.x, min.y, min.z}, {min.x, max.y, min.z});
+        case EBoxEdgeId::Y2:
+            return CLineSeg({max.x, min.y, min.z}, {max.x, max.y, min.z});
+        case EBoxEdgeId::Y3:
+            return CLineSeg({max.x, min.y, max.z}, {max.x, max.y, max.z});
         }
     }
 

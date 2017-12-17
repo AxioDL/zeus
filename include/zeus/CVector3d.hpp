@@ -74,16 +74,14 @@ public:
     {
 #if __SSE__
         TDblVectorUnion result;
-#if __SSE4_1__ || __SSE4_2__
-        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
-        {
-            result.mVec128[0] = _mm_dp_pd(mVec128[0], mVec128[0], 0x31);
-            return result.v[0] + (v[2] * v[2]);
-        }
-#endif
+#if __SSE4_1__
+        result.mVec128[0] = _mm_dp_pd(mVec128[0], mVec128[0], 0x31);
+        return result.v[0] + (v[2] * v[2]);
+#else
         result.mVec128[0] = _mm_mul_pd(mVec128[0], mVec128[0]);
         result.mVec128[1] = _mm_mul_pd(mVec128[1], mVec128[1]);
         return result.v[0] + result.v[1] + result.v[2];
+#endif
 #else
         return x * x + y * y + z * z;
 #endif
@@ -97,20 +95,16 @@ public:
 
     double dot(const CVector3d& rhs) const
     {
-
 #if __SSE__
         TDblVectorUnion result;
-#if __SSE4_1__ || __SSE4_2__
-        if (cpuFeatures().SSE41 || cpuFeatures().SSE42)
-        {
-            result.mVec128[0] = _mm_dp_pd(mVec128[0], rhs.mVec128[0], 0x31);
-            return result.v[0] + (v[2] * rhs.v[2]);
-        }
-#endif
-
+#if __SSE4_1__
+        result.mVec128[0] = _mm_dp_pd(mVec128[0], rhs.mVec128[0], 0x31);
+        return result.v[0] + (v[2] * rhs.v[2]);
+#else
         result.mVec128[0] = _mm_mul_pd(mVec128[0], rhs.mVec128[0]);
         result.mVec128[1] = _mm_mul_pd(mVec128[1], rhs.mVec128[1]);
         return result.v[0] + result.v[1] + result.v[2];
+#endif
 #else
         return (x * rhs.x) + (y * rhs.y) + (z * rhs.z);
 #endif

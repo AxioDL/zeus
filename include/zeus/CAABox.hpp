@@ -45,9 +45,11 @@ public:
     CVector3f max;
 
     // set default AABox to insane inverse min/max to allow for accumulation
-    inline CAABox() : min(1e16f), max(-1e16f) {}
+    CAABox() : CAABox(1e16f, -1e16f) {}
 
     CAABox(const CVector3f& min, const CVector3f& max) : min(min), max(max) {}
+
+    CAABox(float min, float max) : min(CVector3f(min)), max(CVector3f(max)) {}
 
     CAABox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
     : min(minX, minY, minZ), max(maxX, maxY, maxZ)

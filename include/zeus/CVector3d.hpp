@@ -33,7 +33,7 @@ public:
     }
 #endif
 
-    CVector3d(double xyz) { splat(xyz); }
+    explicit CVector3d(double xyz) { splat(xyz); }
 
     CVector3d(const CVector3f& vec)
     {
@@ -63,11 +63,7 @@ public:
 
     CVector3f asCVector3f()
     {
-        CVector3f ret;
-        ret.x = float(x);
-        ret.y = float(y);
-        ret.z = float(z);
-        return ret;
+        return CVector3f(float(x), float(y), float(z));
     }
 
     double magSquared() const

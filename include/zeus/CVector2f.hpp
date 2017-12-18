@@ -89,7 +89,7 @@ public:
     }
 #endif
 
-    CVector2f(float xy) { splat(xy); }
+    explicit CVector2f(float xy) { splat(xy); }
     void assign(float x, float y)
     {
         v[0] = x;
@@ -262,7 +262,7 @@ public:
     {
         float mag = magnitude();
         mag = 1.f / mag;
-        *this *= mag;
+        *this *= CVector2f(mag);
     }
 
     inline CVector2f normalized() const

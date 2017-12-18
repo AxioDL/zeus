@@ -89,7 +89,7 @@ public:
 
     CVector3f(const CVector3d& vec);
 
-    CVector3f(float xyz) { splat(xyz); }
+    explicit CVector3f(float xyz) { splat(xyz); }
     void assign(float x, float y, float z)
     {
         v[0] = x;
@@ -261,7 +261,7 @@ public:
     {
         float mag = magnitude();
         mag = 1.f / mag;
-        *this *= mag;
+        *this *= CVector3f(mag);
     }
     inline CVector3f normalized() const
     {
@@ -354,7 +354,7 @@ public:
 
         length = std::sqrt(length);
         float scalar = newLength / length;
-        *this *= scalar;
+        *this *= CVector3f(scalar);
     }
 
     inline CVector3f scaledToLength(float newLength) const

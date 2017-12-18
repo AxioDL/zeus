@@ -50,10 +50,10 @@ int main()
     assert(test3.inside(test));
     assert(!test4.inside(test));
 
-    CAABox aabb({-1}, {1});
-    CSphere s1({0}, 1);
-    CSphere s2({1, 0, 0}, 1);
-    CSphere s3({3, 0, 0}, 1);
+    CAABox aabb(-1.f, 1.f);
+    CSphere s1(zeus::CVector3f(0.f), 1);
+    CSphere s2(zeus::CVector3f(1.f, 0.f, 0.f), 1);
+    CSphere s3(zeus::CVector3f(3.f, 0.f, 0.f), 1);
 
     std::cout << min(1, 3) << std::endl;
     std::cout << min(2, 1) << std::endl;

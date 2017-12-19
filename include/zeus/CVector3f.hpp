@@ -338,7 +338,9 @@ public:
 
     inline bool canBeNormalized() const
     {
-        return (x < FLT_EPSILON || y < FLT_EPSILON || z < FLT_EPSILON);
+        if (std::isinf(x) || std::isinf(y) || std::isinf(z))
+            return false;
+        return std::fabs(x) >= FLT_EPSILON || std::fabs(y) >= FLT_EPSILON || std::fabs(z) >= FLT_EPSILON;
     }
 
     inline bool isZero() const { return magSquared() <= 1.1920929e-7f; }

@@ -12,6 +12,9 @@ typedef union {
 
 typedef union {
     double v[4];
+#if __AVX__
+    __m256d mVec256;
+#endif
 #if __SSE__
     __m128d mVec128[2];
 #endif

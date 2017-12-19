@@ -363,7 +363,12 @@ public:
 
     inline bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 
-    inline bool canBeNormalized() const { return !isNormalized(); }
+    inline bool canBeNormalized() const
+    {
+        if (std::isinf(x) || std::isinf(y) || std::isinf(z) || std::isinf(w))
+            return false;
+        return std::fabs(x) >= FLT_EPSILON || std::fabs(y) >= FLT_EPSILON || std::fabs(z) >= FLT_EPSILON || std::fabs(w) >= FLT_EPSILON;
+    }
 
     inline bool isEqu(const CVector4f& other, float epsilon = 1.1920929e-7f)
     {

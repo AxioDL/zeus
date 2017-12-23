@@ -186,6 +186,7 @@ public:
         switch (id)
         {
         case EBoxEdgeId::Z0:
+        default:
             return CLineSeg({min.x, min.y, max.z}, {min.x, min.y, min.z});
         case EBoxEdgeId::X0:
             return CLineSeg({min.x, min.y, min.z}, {max.x, min.y, min.z});

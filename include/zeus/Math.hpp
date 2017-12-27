@@ -30,10 +30,10 @@
 namespace zeus
 {
 
-#if MSVC
-#if defined(_M_X86)
+#if _MSC_VER
+#if defined(_M_IX86)
 #define ZEUS_ARCH_X86 1
-#elif defined(_M_X86_64)
+#elif defined(_M_X64)
 #define ZEUS_ARCH_X86_64 1
 #endif
 #else

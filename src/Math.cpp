@@ -15,13 +15,24 @@ static bool isCPUInit = false;
 static CPUInfo g_cpuFeatures = {};
 static CPUInfo g_missingFeatures = {};
 
-void getCpuInfo(int level, int regs[4])
+void getCpuInfo(int eax, int regs[4])
 {
 #if !GEKKO
 #if _WIN32
-    __cpuid(regs, level);
+    __cpuid(regs, eax);
 #else
-    __cpuid(level, regs[0], regs[1], regs[2], regs[3]);
+    __cpuid(eax, regs[0], regs[1], regs[2], regs[3]);
+#endif
+#endif
+}
+
+void getCpuInfoEx(int eax, int ecx, int regs[4])
+{
+#if !GEKKO
+#if _WIN32
+    __cpuidex(regs, eax, ecx);
+#else
+    __cpuid_count(eax, ecx, regs[0], regs[1], regs[2], regs[3]);
 #endif
 #endif
 }
@@ -62,6 +73,11 @@ void detectCPU()
     memset((bool*)&g_cpuFeatures.SSSE3, ((regs[2] & 0x00000200) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
     memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
+    memset((bool*)&g_cpuFeatures.AVX, ((regs[2] & 0x10000000) != 0), 1);
+
+    getCpuInfoEx(7, 0, regs);
+
+    memset((bool*)&g_cpuFeatures.AVX2, ((regs[1] & 0x00000020) != 0), 1);
 
     isCPUInit = true;
 #endif
@@ -74,6 +90,20 @@ std::pair<bool, const CPUInfo&> validateCPU()
     detectCPU();
     bool ret = true;
 
+#if __AVX2__
+    if (!g_cpuFeatures.AVX2)
+    {
+        *(bool*) &g_missingFeatures.AVX2 = true;
+        ret = false;
+    }
+#endif
+#if __AVX__
+    if (!g_cpuFeatures.AVX)
+    {
+        *(bool*) &g_missingFeatures.AVX = true;
+        ret = false;
+    }
+#endif
 #if __SSE4A__
     if (!g_cpuFeatures.SSE4a)
     {

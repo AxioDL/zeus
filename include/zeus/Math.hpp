@@ -29,10 +29,26 @@
 
 namespace zeus
 {
+
+#if MSVC
+#if defined(_M_X86)
+#define ZEUS_ARCH_X86 1
+#elif defined(_M_X86_64)
+#define ZEUS_ARCH_X86_64 1
+#endif
+#else
+#if defined(__i386__)
+#define ZEUS_ARCH_X86 1
+#elif defined(__x86_64__)
+#define ZEUS_ARCH_X86_64 1
+#endif
+#endif
+
 struct CPUInfo
 {
     const char cpuBrand[48] = {0};
     const char cpuVendor[32] = {0};
+#if ZEUS_ARCH_X86_64 || ZEUS_ARCH_X86
     const bool isIntel = false;
     const bool SSE1 = false;
     const bool SSE2 = false;
@@ -42,6 +58,9 @@ struct CPUInfo
     const bool SSE42 = false;
     const bool SSE4a = false;
     const bool AESNI = false;
+    const bool AVX = false;
+    const bool AVX2 = false;
+#endif
 };
 /**
  * Detects CPU capabilities and returns true if SSE4.1 or SSE4.2 is available
@@ -49,6 +68,9 @@ struct CPUInfo
 void detectCPU();
 const CPUInfo& cpuFeatures();
 std::pair<bool, const CPUInfo&> validateCPU();
+void getCpuInfo(int eax, int regs[4]);
+void getCpuInfoEx(int eax, int ecx, int regs[4]);
+
 class CVector3f;
 class CVector2f;
 class CTransform;

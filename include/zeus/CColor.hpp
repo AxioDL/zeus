@@ -9,7 +9,7 @@
 #include <athena/FileWriter.hpp>
 #endif
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 #undef min
 #undef max

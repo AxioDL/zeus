@@ -1,7 +1,7 @@
 #ifndef MATH_HPP
 #define MATH_HPP
 
-#include <float.h>
+#include <cfloat>
 #undef min
 #undef max
 

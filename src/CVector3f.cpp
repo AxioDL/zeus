@@ -2,7 +2,7 @@
 #include "zeus/CVector3d.hpp"
 #include <memory.h>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include "zeus/Math.hpp"
 
 namespace zeus

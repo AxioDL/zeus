@@ -6,8 +6,8 @@
 #include "zeus/CMatrix4f.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/CUnitVector.hpp"
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 
 namespace zeus
 {

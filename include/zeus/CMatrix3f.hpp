@@ -3,8 +3,8 @@
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 /* Column-major matrix class */
 namespace zeus

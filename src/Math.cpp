@@ -45,6 +45,7 @@ void detectCPU()
 
     int regs[4];
     getCpuInfo(0, regs);
+    int highestFeature = regs[0];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor) = regs[1];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = regs[3];
     *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = regs[2];
@@ -64,20 +65,24 @@ void detectCPU()
         }
     }
 
-    getCpuInfo(1, regs);
+    if (highestFeature >= 1)
+    {
+        getCpuInfo(1, regs);
+        memset((bool*)&g_cpuFeatures.AESNI, ((regs[2] & 0x02000000) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSE1, ((regs[3] & 0x02000000) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSE2, ((regs[3] & 0x04000000) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSE3, ((regs[2] & 0x00000001) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSSE3, ((regs[2] & 0x00000200) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
+        memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
+        memset((bool*)&g_cpuFeatures.AVX, ((regs[2] & 0x10000000) != 0), 1);
+    }
 
-    memset((bool*)&g_cpuFeatures.AESNI, ((regs[2] & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE1, ((regs[3] & 0x02000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE2, ((regs[3] & 0x04000000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE3, ((regs[2] & 0x00000001) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSSE3, ((regs[2] & 0x00000200) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE41, ((regs[2] & 0x00080000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.SSE42, ((regs[2] & 0x00100000) != 0), 1);
-    memset((bool*)&g_cpuFeatures.AVX, ((regs[2] & 0x10000000) != 0), 1);
-
-    getCpuInfoEx(7, 0, regs);
-
-    memset((bool*)&g_cpuFeatures.AVX2, ((regs[1] & 0x00000020) != 0), 1);
+    if (highestFeature >= 7)
+    {
+        getCpuInfoEx(7, 0, regs);
+        memset((bool*)&g_cpuFeatures.AVX2, ((regs[1] & 0x00000020) != 0), 1);
+    }
 
     isCPUInit = true;
 #endif

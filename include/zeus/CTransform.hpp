@@ -214,17 +214,17 @@ public:
 
     inline CVector3f upVector() const
     {
-        return { basis.m[2][0], basis.m[2][1], basis.m[2][2] };
+        return basis.vec[2];
     }
 
     inline CVector3f frontVector() const
     {
-        return { basis.m[1][0], basis.m[1][1], basis.m[1][2] };
+        return basis.vec[1];
     }
 
     inline CVector3f rightVector() const
     {
-        return { basis.m[0][0], basis.m[0][1], basis.m[0][2] };
+        return basis.vec[0];
     }
 
     inline void orthonormalize()

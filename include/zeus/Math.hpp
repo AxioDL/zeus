@@ -162,6 +162,11 @@ inline bool close_enough(float a, float b, double epsilon = 0.000009999999747378
 {
     return std::fabs(a - b) < epsilon;
 }
+
+inline bool close_enough(double a, double b, double epsilon = 0.000009999999747378752)
+{
+    return std::fabs(a - b) < epsilon;
+}
 }
 
 #endif // MATH_HPP

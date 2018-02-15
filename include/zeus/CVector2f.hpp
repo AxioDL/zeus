@@ -212,7 +212,7 @@ public:
     inline CVector2f operator/(float val) const
     {
 #if __SSE__
-        TVectorUnion splat = {{val, val, val, 0.0f}};
+        TVectorUnion splat = {{val, val, 0.0f, 0.0f}};
         return CVector2f(_mm_div_ps(mVec128, splat.mVec128));
 #else
         return CVector2f(x / val, y / val);
@@ -255,6 +255,50 @@ public:
 #else
         x /= rhs.x;
         y /= rhs.y;
+#endif
+        return *this;
+    }
+    inline const CVector2f& operator+=(float rhs)
+    {
+#if __SSE__
+        TVectorUnion splat = {{rhs, rhs, 0.f, 0.0f}};
+        mVec128 = _mm_add_ps(mVec128, splat.mVec128);
+#else
+        x += rhs;
+        y += rhs;
+#endif
+        return *this;
+    }
+    inline const CVector2f& operator-=(float rhs)
+    {
+#if __SSE__
+        TVectorUnion splat = {{rhs, rhs, 0.f, 0.0f}};
+        mVec128 = _mm_sub_ps(mVec128, splat.mVec128);
+#else
+        x -= rhs;
+        y -= rhs;
+#endif
+        return *this;
+    }
+    inline const CVector2f& operator*=(float rhs)
+    {
+#if __SSE__
+        TVectorUnion splat = {{rhs, rhs, 0.f, 0.0f}};
+        mVec128 = _mm_mul_ps(mVec128, splat.mVec128);
+#else
+        x *= rhs;
+        y *= rhs;
+#endif
+        return *this;
+    }
+    inline const CVector2f& operator/=(float rhs)
+    {
+#if __SSE__
+        TVectorUnion splat = {{rhs, rhs, 0.f, 0.0f}};
+        mVec128 = _mm_div_ps(mVec128, splat.mVec128);
+#else
+        x /= rhs;
+        y /= rhs;
 #endif
         return *this;
     }

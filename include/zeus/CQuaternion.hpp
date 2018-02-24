@@ -61,31 +61,13 @@ public:
 #endif
     }
 
-    operator atVec4f()
+    operator atVec4f&()
     {
-        atVec4f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec[0] = w;
-        ret.vec[1] = x;
-        ret.vec[2] = y;
-        ret.vec[3] = z;
-#endif
-        return ret;
+        return *reinterpret_cast<atVec4f*>(v);
     }
-    operator atVec4f() const
+    operator const atVec4f&() const
     {
-        atVec4f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec[0] = w;
-        ret.vec[1] = x;
-        ret.vec[2] = y;
-        ret.vec[3] = z;
-#endif
-        return ret;
+        return *reinterpret_cast<const atVec4f*>(v);
     }
 
 #endif
@@ -218,6 +200,7 @@ public:
         {
             float w, x, y, z;
         };
+        float v[4];
     };
 
     static const CQuaternion skNoRotation;

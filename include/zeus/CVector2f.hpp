@@ -52,25 +52,13 @@ public:
     }
 #endif
 
-    operator atVec2f()
+    operator atVec2f&()
     {
-        atVec2f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec = v;
-#endif
-        return ret;
+        return *reinterpret_cast<atVec2f*>(v);
     }
-    operator atVec2f() const
+    operator const atVec2f&() const
     {
-        atVec2f ret;
-#if __SSE__
-        ret.mVec128 = mVec128;
-#else
-        ret.vec = v;
-#endif
-        return ret;
+        return *reinterpret_cast<const atVec2f*>(v);
     }
 
     void readBig(athena::io::IStreamReader& input)

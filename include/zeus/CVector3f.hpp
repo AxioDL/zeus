@@ -247,14 +247,12 @@ public:
 
     inline void normalize()
     {
-        float mag = magnitude();
-        mag = 1.f / mag;
+        float mag = 1.f / magnitude();
         *this *= CVector3f(mag);
     }
     inline CVector3f normalized() const
     {
-        float mag = magnitude();
-        mag = 1.f / mag;
+        float mag = 1.f / magnitude();
         return *this * mag;
     }
     inline CVector3f cross(const CVector3f& rhs) const
@@ -297,6 +295,16 @@ public:
     }
 
     inline float magnitude() const { return sqrtF(magSquared()); }
+
+    inline bool isNotInf() const
+    {
+        return !(isinf(x) || isinf(y) || isinf(z));
+    }
+
+    inline bool isMagnitudeSafe() const
+    {
+        return isNotInf() && magSquared() >= 9.9999994e-29;
+    }
 
     inline void zeroOut()
     {

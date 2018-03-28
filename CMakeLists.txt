@@ -21,7 +21,6 @@ set(SOURCES
     src/CTransform.cpp
     src/CColor.cpp
     src/CVector2f.cpp
-    src/CRectangle.cpp
     src/CVector4f.cpp
     src/CMatrix4f.cpp
     src/CAABox.cpp

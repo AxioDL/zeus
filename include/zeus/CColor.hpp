@@ -122,6 +122,13 @@ public:
         writer.writeFloatBig(r);
         writer.writeFloatBig(a);
     }
+    inline void writeRGBA8(athena::io::IStreamWriter& writer) const
+    {
+        writer.writeUByte(this->r * 255);
+        writer.writeUByte(this->g * 255);
+        writer.writeUByte(this->b * 255);
+        writer.writeUByte(this->a * 255);
+    }
 #endif
 
     inline bool operator==(const CColor& rhs) const { return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a); }

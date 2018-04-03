@@ -298,7 +298,7 @@ public:
 
     inline bool isNotInf() const
     {
-        return !(isinf(x) || isinf(y) || isinf(z));
+        return !(std::isinf(x) || std::isinf(y) || std::isinf(z));
     }
 
     inline bool isMagnitudeSafe() const

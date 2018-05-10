@@ -87,6 +87,18 @@ public:
     }
     CVector3f(float x, float y, float z) { assign(x, y, z); }
 
+    CVector3f(const float* floats)
+    {
+#if __SSE__
+        mVec128 = _mm_loadu_ps(floats);
+#else
+        x = floats[0];
+        y = floats[1];
+        z = floats[2];
+#endif
+        v[3] = 0.0f;
+    }
+
     CVector3f(const CVector2f& other)
     {
         x = other.x;

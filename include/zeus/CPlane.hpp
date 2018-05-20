@@ -17,7 +17,7 @@ public:
     CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
     {
         vec = (b - a).cross(c - a).normalized();
-        d = -a.dot(vec);
+        d = a.dot(vec);
     }
 
     CPlane(const CVector3f& point, float displacement)

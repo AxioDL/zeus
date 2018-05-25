@@ -63,10 +63,10 @@ public:
     CVector3d(double x, double y, double z)
     {
 #if __AVX__
-        TDblVectorUnion splat{x, y, z, 0.0};
+        TDblVectorUnion splat{{x, y, z, 0.0}};
         mVec256 = splat.mVec256;
 #elif __SSE__
-        TDblVectorUnion splat{x, y, z, 0.0};
+        TDblVectorUnion splat{{x, y, z, 0.0}};
         mVec128[0] = splat.mVec128[0];
         mVec128[1] = splat.mVec128[1];
 #else
@@ -136,10 +136,10 @@ public:
     void splat(double xyz)
     {
 #if __AVX__
-        TDblVectorUnion splat = {xyz, xyz, xyz, 0.0};
+        TDblVectorUnion splat = {{xyz, xyz, xyz, 0.0}};
         mVec256 = splat.mVec256;
 #elif __SSE__
-        TDblVectorUnion splat = {xyz, xyz, xyz, 0.0};
+        TDblVectorUnion splat = {{xyz, xyz, xyz, 0.0}};
         mVec128[0] = splat.mVec128[0];
         mVec128[1] = splat.mVec128[1];
 #else
@@ -227,10 +227,10 @@ public:
 static inline CVector3d operator+(double lhs, const CVector3d& rhs)
 {
 #if __AVX__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     return _mm256_add_pd(splat.mVec256, rhs.mVec256);
 #elif __SSE__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     splat.mVec128[0] = _mm_add_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_add_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};
@@ -242,10 +242,10 @@ static inline CVector3d operator+(double lhs, const CVector3d& rhs)
 static inline CVector3d operator-(double lhs, const CVector3d& rhs)
 {
 #if __AVX__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     return _mm256_sub_pd(splat.mVec256, rhs.mVec256);
 #elif __SSE__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     splat.mVec128[0] = _mm_sub_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_sub_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};
@@ -257,10 +257,10 @@ static inline CVector3d operator-(double lhs, const CVector3d& rhs)
 static inline CVector3d operator*(double lhs, const CVector3d& rhs)
 {
 #if __AVX__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     return _mm256_mul_pd(splat.mVec256, rhs.mVec256);
 #elif __SSE__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     splat.mVec128[0] = _mm_mul_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_mul_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};
@@ -272,10 +272,10 @@ static inline CVector3d operator*(double lhs, const CVector3d& rhs)
 static inline CVector3d operator/(double lhs, const CVector3d& rhs)
 {
 #if __AVX__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     return _mm256_div_pd(splat.mVec256, rhs.mVec256);
 #elif __SSE__
-    TDblVectorUnion splat{lhs, lhs, lhs, 0};
+    TDblVectorUnion splat{{lhs, lhs, lhs, 0}};
     splat.mVec128[0] = _mm_div_pd(splat.mVec128[0], rhs.mVec128[0]);
     splat.mVec128[1] = _mm_div_pd(splat.mVec128[1], rhs.mVec128[1]);
     return {splat.mVec128};

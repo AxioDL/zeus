@@ -191,24 +191,27 @@ public:
     {
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
-        return CMatrix3f(TVectorUnion{1.f, 0.f, 0.f, 0.f}, TVectorUnion{0.f, cosT, sinT, 0.f},
-                         TVectorUnion{0.f, -sinT, cosT, 0.f});
+        return CMatrix3f(TVectorUnion{{1.f, 0.f, 0.f, 0.f}},
+                         TVectorUnion{{0.f, cosT, sinT, 0.f}},
+                         TVectorUnion{{0.f, -sinT, cosT, 0.f}});
     }
 
     static inline CMatrix3f RotateY(float theta)
     {
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
-        return CMatrix3f(TVectorUnion{cosT, 0.f, -sinT, 0.f}, TVectorUnion{0.f, 1.f, 0.f, 0.f},
-                         TVectorUnion{sinT, 0.f, cosT, 0.f});
+        return CMatrix3f(TVectorUnion{{cosT, 0.f, -sinT, 0.f}},
+                         TVectorUnion{{0.f, 1.f, 0.f, 0.f}},
+                         TVectorUnion{{sinT, 0.f, cosT, 0.f}});
     }
 
     static inline CMatrix3f RotateZ(float theta)
     {
         float sinT = std::sin(theta);
         float cosT = std::cos(theta);
-        return CMatrix3f(TVectorUnion{cosT, sinT, 0.f, 0.f}, TVectorUnion{-sinT, cosT, 0.f, 0.f},
-                         TVectorUnion{0.f, 0.f, 1.f, 0.f});
+        return CMatrix3f(TVectorUnion{{cosT, sinT, 0.f, 0.f}},
+                         TVectorUnion{{-sinT, cosT, 0.f, 0.f}},
+                         TVectorUnion{{0.f, 0.f, 1.f, 0.f}});
     }
 
     float determinant() const
@@ -228,7 +231,7 @@ public:
     };
 };
 
-static CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs)
+static inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs)
 {
 #if __SSE__
     unsigned i;

@@ -31,18 +31,18 @@ int main()
     CAABox test3{{-50, -50, -50}, {50, 50, 50}};
     CAABox test4{{-50, -50, -105}, {50, 50, 105}};
     CVector3f point(-90, 67, -105);
-    CVector3f closestPoint = test.closestPointAlongVector(point);
-    CVector3d doubleVec(100, -100, -200);
+    test.closestPointAlongVector(point);
+    CVector3d(100, -100, -200);
     zeus::CAABox aabb1{208.9f, -83.9f, 17.7f, 211.9f, -80.9f, 25.7f};
-    zeus::CVector3f center1 = aabb1.center();
-    zeus::CVector3f extents1 = aabb1.extents() * 2.f;
+    aabb1.center();
+    aabb1.extents() * 2.f;
     zeus::CAABox aabb2{211.8f, -81.4f, 22.3f, 212.8f, -80.4f, 25.0f};
-    zeus::CVector3f center2 = aabb2.center();
-    zeus::CVector3f extents2 = aabb2.extents() * 2.f;
+    aabb2.center();
+    aabb2.extents() * 2.f;
 
-    zeus::CAABox diffAABB = aabb1.booleanIntersection(aabb2);
-    zeus::CVector3f centerDiff = aabb2.center();
-    zeus::CVector3f extentsDiff = aabb2.extents() * 2.f;
+    aabb1.booleanIntersection(aabb2);
+    aabb2.center();
+    aabb2.extents() * 2.f;
 
     assert(t.isEqu(t));
     assert(test.inside(test));
@@ -67,7 +67,7 @@ int main()
     std::cout << " Test 1 " << (aabb.intersects(s1) ? "succeeded" : "failed") << std::endl;
     std::cout << " Test 2 " << (aabb.intersects(s2) ? "succeeded" : "failed") << std::endl;
     std::cout << " Test 3 " << (aabb.intersects(s3) ? "succeeded" : "failed") << std::endl;
-    CLineSeg line({-89.120926f, 59.328712f, 3.265882f}, {-90.120926f, 59.328712f, 3.265882f});
+    CLineSeg({-89.120926f, 59.328712f, 3.265882f}, {-90.120926f, 59.328712f, 3.265882f});
 
     CColor ctest1;
     ctest1.fromHSV(0, 255 / 255.f, .5);

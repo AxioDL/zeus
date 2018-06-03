@@ -374,7 +374,7 @@ public:
 
     void toHSL(float& h, float& s, float& l);
 
-    CColor toGrayscale() { return {sqrtF((r * r + g * g + b * b) / 3), a}; }
+    CColor toGrayscale() { return {std::sqrt((r * r + g * g + b * b) / 3), a}; }
 
     /**
      * @brief Clamps to GPU-safe RGBA values [0,1]

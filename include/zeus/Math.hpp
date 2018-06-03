@@ -107,26 +107,13 @@ CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const
 CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
                                         float t);
 
-inline float powF(float a, float b) { return std::pow(a, b); }
-inline float floorF(float val) { return std::floor(val); }
-inline float ceilingF(float val)
-{
-    float tmp = std::floor(val);
-    return (tmp == val ? tmp : tmp + 1.0);
-}
-
 // Since round(double) doesn't exist in some <cmath> implementations
 // we'll define our own
-inline double round(double val) { return (val < 0.0 ? ceilingF(val - 0.5) : floorF(val + 0.5)); }
+inline double round(double val) { return (val < 0.0 ? std::ceil(val - 0.5) : std::ceil(val + 0.5)); }
 inline double powD(float a, float b) { return std::exp(b * std::log(a)); }
 
-double sqrtD(double val);
-inline double invSqrtD(double val) { return 1.0 / sqrtD(val); }
-inline float invSqrtF(float val) { return float(1.0 / sqrtD(val)); }
-inline float sqrtF(float val) { return float(sqrtD(val)); }
-float fastArcCosF(float val);
-float fastCosF(float val);
-float fastSinF(float val);
+inline double invSqrtD(double val) { return 1.0 / std::sqrt(val); }
+inline float invSqrtF(float val) { return float(1.0 / std::sqrt(val)); }
 int floorPowerOfTwo(int x);
 int ceilingPowerOfTwo(int x);
 

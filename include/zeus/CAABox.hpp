@@ -90,7 +90,7 @@ public:
         return dist;
     }
 
-    float distanceFromPoint(const CVector3f& other) const { return sqrtF(distanceFromPointSquared(other)); }
+    float distanceFromPoint(const CVector3f& other) const { return std::sqrt(distanceFromPointSquared(other)); }
 
     inline bool intersects(const CAABox& other) const
     {

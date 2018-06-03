@@ -337,7 +337,7 @@ public:
         return x * x + y * y;
 #endif
     }
-    inline float magnitude() const { return sqrtF(magSquared()); }
+    inline float magnitude() const { return std::sqrt(magSquared()); }
 
     inline void zeroOut()
     {

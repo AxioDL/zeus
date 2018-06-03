@@ -306,7 +306,7 @@ public:
 #endif
     }
 
-    inline float magnitude() const { return sqrtF(magSquared()); }
+    inline float magnitude() const { return std::sqrt(magSquared()); }
 
     inline bool isNotInf() const
     {

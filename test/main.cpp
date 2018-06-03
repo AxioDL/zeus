@@ -61,7 +61,6 @@ int main()
     std::cout << max(2, 1) << std::endl;
     std::cout << clamp(-50, 100, 50) << std::endl;
     std::cout << clamp(-50, -100, 50) << std::endl;
-    std::cout << powF(6.66663489, 2) << std::endl;
     std::cout << invSqrtF(1) << std::endl;
     std::cout << floorPowerOfTwo(256) << std::endl;
     std::cout << " Test 1 " << (aabb.intersects(s1) ? "succeeded" : "failed") << std::endl;

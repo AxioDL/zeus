@@ -265,16 +265,16 @@ public:
 
     inline CVector3f closestPointAlongVector(const CVector3f& other) const
     {
-        CVector3f center = this->center();
-        return {(other.x < center.x ? min.x : max.x), (other.y < center.y ? min.y : max.y),
-                (other.z < center.z ? min.z : max.z)};
+        return {(other.x >= 0.f ? min.x : max.x),
+                (other.y >= 0.f ? min.y : max.y),
+                (other.z >= 0.f ? min.z : max.z)};
     }
 
     inline CVector3f furthestPointAlongVector(const CVector3f& other) const
     {
-        CVector3f center = this->center();
-        return {(other.x < center.x ? max.x : min.x), (other.y < center.y ? max.y : min.y),
-                (other.z < center.z ? max.z : min.z)};
+        return {(other.x >= 0.f ? max.x : min.x),
+                (other.y >= 0.f ? max.y : min.y),
+                (other.z >= 0.f ? max.z : min.z)};
     }
 
     inline float distanceBetween(const CAABox& other)

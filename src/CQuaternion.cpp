@@ -309,8 +309,8 @@ CQuaternion CQuaternion::shortestRotationArc(const zeus::CVector3f& v0, const ze
     }
     else
     {
-        float w = (1.f + zeus::clamp(-1.f, v0N.dot(v1N), 1.f)) * 2.f;
-        return CQuaternion(0.5f * w, cross * (1.f / std::sqrt(w)));
+        float w = std::sqrt((1.f + zeus::clamp(-1.f, v0N.dot(v1N), 1.f)) * 2.f);
+        return CQuaternion(0.5f * w, cross * (1.f / w));
     }
 }
 

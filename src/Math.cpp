@@ -180,11 +180,12 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
     return CTransform(rmBasis, pos);
 }
 
-CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t)
+CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b,
+                         const CVector3f& c, const CVector3f& d, float t)
 {
-    const float oneMinusTime = (1.0 - t);
-    return (a * oneMinusTime * oneMinusTime) + (b * 3.f * t * oneMinusTime) + (c * 3.f * t * t * oneMinusTime) +
-           (d * t * t * t);
+    const float omt = 1.f - t;
+    return ((a * omt + b * t) * omt + (b * omt + c * t) * t) * omt +
+           ((b * omt + c * t) * omt + (c * omt + d * t) * t) * t;
 }
 
 int floorPowerOfTwo(int x)

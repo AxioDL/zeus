@@ -106,7 +106,9 @@ public:
     double magnitude() const { return sqrt(magSquared()); }
     inline CVector3d cross(const CVector3d& rhs) const
     {
-        return {y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x};
+        return {y * rhs.z - z * rhs.y,
+                z * rhs.x - x * rhs.z,
+                x * rhs.y - y * rhs.x};
     }
 
     double dot(const CVector3d& rhs) const

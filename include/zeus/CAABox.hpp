@@ -259,8 +259,9 @@ public:
 
     inline bool pointInside(const CVector3f& other) const
     {
-        return (min.x <= other.x && other.x <= max.z && min.y <= other.y && other.y <= max.z && min.z <= other.z &&
-                other.z <= max.z);
+        return (min.x <= other.x && other.x <= max.x &&
+                min.y <= other.y && other.y <= max.y &&
+                min.z <= other.z && other.z <= max.z);
     }
 
     inline CVector3f closestPointAlongVector(const CVector3f& other) const

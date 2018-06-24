@@ -117,6 +117,13 @@ public:
         return xfVec.toVec3f() / xfVec.w;
     }
 
+    inline CVector3f multiplyOneOverW(const CVector3f& point, float& wOut) const
+    {
+        CVector4f xfVec = *this * point;
+        wOut = xfVec.w;
+        return xfVec.toVec3f() / xfVec.w;
+    }
+
     union {
         float m[4][4];
         struct

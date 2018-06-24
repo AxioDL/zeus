@@ -89,6 +89,13 @@ public:
         w = 1.0f;
     }
 
+    static CVector4f ToClip(const zeus::CVector3f& v, float w)
+    {
+        CVector4f ret(v * w);
+        ret.w = w;
+        return ret;
+    }
+
     inline CVector3f toVec3f() const
     {
 #if __SSE__

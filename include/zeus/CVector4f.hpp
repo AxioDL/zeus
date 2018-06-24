@@ -77,7 +77,7 @@ public:
     CVector4f(float x, float y, float z, float w) { assign(x, y, z, w); }
     CVector4f(const CColor& other);
 
-    CVector4f(const CVector3f& other)
+    CVector4f(const CVector3f& other, float wIn = 1.f)
     {
 #if __SSE__
         mVec128 = other.mVec128;
@@ -86,14 +86,12 @@ public:
         y = other.y;
         z = other.z;
 #endif
-        w = 1.0f;
+        w = wIn;
     }
 
     static CVector4f ToClip(const zeus::CVector3f& v, float w)
     {
-        CVector4f ret(v * w);
-        ret.w = w;
-        return ret;
+        return CVector4f(v * w, w);
     }
 
     inline CVector3f toVec3f() const

@@ -1,5 +1,4 @@
-#ifndef COBBOX_HPP
-#define COBBOX_HPP
+#pragma once
 
 #include "zeus/CTransform.hpp"
 #include "zeus/CVector3f.hpp"
@@ -183,4 +182,3 @@ public:
 };
 }
 
-#endif

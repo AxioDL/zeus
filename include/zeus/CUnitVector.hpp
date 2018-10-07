@@ -1,5 +1,4 @@
-#ifndef CUNITVECTOR_HPP
-#define CUNITVECTOR_HPP
+#pragma once
 
 #include "zeus/CVector3f.hpp"
 
@@ -23,4 +22,3 @@ public:
     }
 };
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef CEULERANGES_HPP
-#define CEULERANGES_HPP
+#pragma once
 
 #include "zeus/CVector3f.hpp"
 
@@ -17,4 +16,3 @@ public:
 
 }
 
-#endif // CEULERANGES_HPP

@@ -1,5 +1,4 @@
-#ifndef CMRAY_HPP
-#define CMRAY_HPP
+#pragma once
 #include "zeus/CVector3f.hpp"
 #include "zeus/CTransform.hpp"
 #include "zeus/Math.hpp"
@@ -37,4 +36,3 @@ struct CMRay
 };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef CRECTANGLE_HPP
-#define CRECTANGLE_HPP
+#pragma once
 #include "zeus/CVector2f.hpp"
 
 namespace zeus
@@ -31,4 +30,3 @@ public:
 };
 }
 
-#endif // CRECTANGLE_HPP

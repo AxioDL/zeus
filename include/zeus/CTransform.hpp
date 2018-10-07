@@ -1,5 +1,4 @@
-#ifndef CTRANSFORM_HPP
-#define CTRANSFORM_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CMatrix3f.hpp"
@@ -279,4 +278,3 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
 CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up = CVector3f::skUp);
 }
 
-#endif // CTRANSFORM_HPP

@@ -1,5 +1,4 @@
-#ifndef CSPHERE_HPP
-#define CSPHERE_HPP
+#pragma once
 
 #include "zeus/CVector3f.hpp"
 
@@ -25,4 +24,3 @@ public:
 };
 }
 
-#endif

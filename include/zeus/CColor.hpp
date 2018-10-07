@@ -1,5 +1,4 @@
-#ifndef CCOLOR_HPP
-#define CCOLOR_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/Math.hpp"
@@ -428,4 +427,3 @@ static inline CColor operator/(float lhs, const CColor& rhs)
 #endif
 }
 }
-#endif // CCOLOR_HPP

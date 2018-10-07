@@ -1,5 +1,4 @@
-#ifndef CVECTOR3D_HPP
-#define CVECTOR3D_HPP
+#pragma once
 
 #include <athena/Types.hpp>
 #include "Global.hpp"
@@ -287,4 +286,3 @@ static inline CVector3d operator/(double lhs, const CVector3d& rhs)
 }
 }
 
-#endif

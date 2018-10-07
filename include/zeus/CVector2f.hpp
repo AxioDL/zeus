@@ -1,5 +1,4 @@
-#ifndef CVECTOR2f_HPP
-#define CVECTOR2f_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/Math.hpp"
@@ -429,4 +428,3 @@ static inline CVector2f operator/(float lhs, const CVector2f& rhs)
 }
 }
 
-#endif // CVECTOR2F_HPP

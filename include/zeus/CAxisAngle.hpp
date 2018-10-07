@@ -1,5 +1,4 @@
-#ifndef CAXISANGLE_H
-#define CAXISANGLE_H
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
@@ -24,4 +23,3 @@ struct alignas(16) CAxisAngle : CVector3f
 };
 }
 
-#endif // CAXISANGLE_H

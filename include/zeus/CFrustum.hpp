@@ -1,5 +1,4 @@
-#ifndef CFRUSTUM_HPP
-#define CFRUSTUM_HPP
+#pragma once
 
 #include "zeus/CPlane.hpp"
 #include "zeus/CAABox.hpp"
@@ -21,4 +20,3 @@ public:
     bool pointFrustumTest(const CVector3f& point) const;
 };
 }
-#endif // CFRUSTUM_HPP

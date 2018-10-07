@@ -1,5 +1,4 @@
-#ifndef CRELANGLE_HPP
-#define CRELANGLE_HPP
+#pragma once
 
 #include "zeus/CVector3f.hpp"
 #include "zeus/Math.hpp"
@@ -53,4 +52,3 @@ struct CRelAngle
 };
 }
 
-#endif // CRELANGLE_HPP

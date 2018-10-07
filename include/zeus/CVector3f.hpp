@@ -1,5 +1,4 @@
-#ifndef CVECTOR3F_HPP
-#define CVECTOR3F_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/Math.hpp"
@@ -441,4 +440,3 @@ static inline CVector3f operator/(float lhs, const CVector3f& rhs)
 
 }
 
-#endif // CVECTOR3F_HPP

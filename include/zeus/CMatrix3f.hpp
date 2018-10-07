@@ -1,5 +1,4 @@
-#ifndef CMATRIX3F_HPP
-#define CMATRIX3F_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
@@ -258,4 +257,3 @@ static inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs)
 }
 }
 
-#endif // CMATRIX3F_HPP

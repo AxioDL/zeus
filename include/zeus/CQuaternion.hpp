@@ -1,5 +1,4 @@
-#ifndef CQUATERNION_HPP
-#define CQUATERNION_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "CAxisAngle.hpp"
@@ -268,4 +267,3 @@ CQuaternion operator-(float lhs, const CQuaternion& rhs);
 CQuaternion operator*(float lhs, const CQuaternion& rhs);
 CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
 }
-#endif // CQUATERNION_HPP

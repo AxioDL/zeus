@@ -1,5 +1,4 @@
-#ifndef CPLANE_HPP
-#define CPLANE_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
@@ -74,4 +73,3 @@ public:
 };
 }
 
-#endif // CPLANE_HPP

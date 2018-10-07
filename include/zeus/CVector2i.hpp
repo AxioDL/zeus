@@ -1,5 +1,4 @@
-#ifndef CVECTOR2i_HPP
-#define CVECTOR2i_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/Math.hpp"
@@ -51,4 +50,3 @@ public:
 };
 }
 
-#endif // CVECTOR2i_HPP

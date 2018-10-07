@@ -1,5 +1,4 @@
-#ifndef __MATHLIB_HPP
-#define __MATHLIB_HPP
+#pragma once
 
 #include "zeus/CAxisAngle.hpp"
 #include "zeus/CRelAngle.hpp"
@@ -25,4 +24,3 @@
 #include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
 
-#endif // __MATHLIB_HPP

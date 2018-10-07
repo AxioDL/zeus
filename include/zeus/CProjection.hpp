@@ -1,5 +1,4 @@
-#ifndef CPROJECTION_HPP
-#define CPROJECTION_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CMatrix4f.hpp"
@@ -125,4 +124,3 @@ protected:
 };
 }
 
-#endif // CMATRIX3F_HPP

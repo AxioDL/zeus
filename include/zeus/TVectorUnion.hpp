@@ -1,5 +1,4 @@
-#ifndef TVECTORUNION
-#define TVECTORUNION
+#pragma once
 
 namespace zeus
 {
@@ -21,4 +20,3 @@ typedef union {
 } TDblVectorUnion;
 }
 
-#endif // TVECTORUNION

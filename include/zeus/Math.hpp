@@ -1,5 +1,4 @@
-#ifndef MATH_HPP
-#define MATH_HPP
+#pragma once
 
 #include <cfloat>
 #undef min
@@ -156,4 +155,3 @@ inline bool close_enough(double a, double b, double epsilon = 0.0000099999997473
 }
 }
 
-#endif // MATH_HPP

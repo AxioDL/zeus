@@ -1,5 +1,4 @@
-#ifndef CAABOX_HPP
-#define CAABOX_HPP
+#pragma once
 
 #include "zeus/CVector3f.hpp"
 #include "zeus/CTransform.hpp"
@@ -416,4 +415,3 @@ inline bool operator!=(const CAABox& left, const CAABox& right)
 }
 }
 
-#endif // CAABOX_HPP

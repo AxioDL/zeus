@@ -1,5 +1,4 @@
-#ifndef CVECTOR4F_HPP
-#define CVECTOR4F_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "TVectorUnion.hpp"
@@ -418,4 +417,3 @@ static inline CVector4f operator/(float lhs, const CVector4f& rhs)
 }
 }
 
-#endif // CVECTOR4F_HPP

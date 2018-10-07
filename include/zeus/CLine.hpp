@@ -1,5 +1,4 @@
-#ifndef CLINE_HPP
-#define CLINE_HPP
+#pragma once
 
 #include "Global.hpp"
 #include "zeus/CVector3f.hpp"
@@ -15,4 +14,3 @@ public:
 };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef CMATRIX4F
-#define CMATRIX4F
+#pragma once
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/CVector4f.hpp"
 #include "zeus/CVector3f.hpp"
@@ -175,4 +174,3 @@ static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
 }
 }
 
-#endif // CMATRIX4F

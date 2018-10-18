@@ -11,7 +11,7 @@ struct CMRay
     : start(start), length(len), invLength(1.f / len), dir(dirin)
     {
         end = start + (len * dirin);
-        delta = dirin - start;
+        delta = end - start;
     }
 
     CMRay(const CVector3f& start, const CVector3f& end, float len, float invLen)

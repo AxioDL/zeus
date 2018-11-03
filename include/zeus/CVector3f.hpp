@@ -198,15 +198,16 @@ public:
     }
     inline CVector3f operator/(float val) const
     {
+        float ooval = 1.f / val;
 #if __SSE__ || __GEKKO_PS__
-        TVectorUnion splat = {{val, val, val, 0.0f}};
+        TVectorUnion splat = {{ooval, ooval, ooval, 0.0f}};
 #endif
 #if __SSE__
-        return CVector3f(_mm_div_ps(mVec128, splat.mVec128));
+        return CVector3f(_mm_mul_ps(mVec128, splat.mVec128));
 #elif __GEKKO_PS__
-        return CVector3f(_mm_gekko_div_ps(mVec128, splat.mVec128));
+        return CVector3f(_mm_gekko_mul_ps(mVec128, splat.mVec128));
 #else
-        return CVector3f(x / val, y / val, z / val);
+        return CVector3f(x * ooval, y * ooval, z * ooval);
 #endif
     }
     inline const CVector3f& operator+=(const CVector3f& rhs)

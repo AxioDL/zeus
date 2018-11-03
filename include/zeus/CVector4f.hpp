@@ -232,11 +232,12 @@ public:
     }
     inline CVector4f operator/(float val) const
     {
+        float ooval = 1.f / val;
 #if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CVector4f(_mm_div_ps(mVec128, splat.mVec128));
+        TVectorUnion splat = {{ooval, ooval, ooval, ooval}};
+        return CVector4f(_mm_mul_ps(mVec128, splat.mVec128));
 #else
-        return CVector4f(x / val, y / val, z / val, w / val);
+        return CVector4f(x * ooval, y * ooval, z * ooval, w * ooval);
 #endif
     }
     inline const CVector4f& operator+=(const CVector4f& rhs)

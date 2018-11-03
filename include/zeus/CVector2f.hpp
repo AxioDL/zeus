@@ -198,11 +198,12 @@ public:
     }
     inline CVector2f operator/(float val) const
     {
+        float ooval = 1.f / val;
 #if __SSE__
-        TVectorUnion splat = {{val, val, 0.0f, 0.0f}};
-        return CVector2f(_mm_div_ps(mVec128, splat.mVec128));
+        TVectorUnion splat = {{ooval, ooval, 0.0f, 0.0f}};
+        return CVector2f(_mm_mul_ps(mVec128, splat.mVec128));
 #else
-        return CVector2f(x / val, y / val);
+        return CVector2f(x * ooval, y * ooval);
 #endif
     }
     inline const CVector2f& operator+=(const CVector2f& rhs)
@@ -280,12 +281,13 @@ public:
     }
     inline const CVector2f& operator/=(float rhs)
     {
+        float oorhs = 1.f / rhs;
 #if __SSE__
-        TVectorUnion splat = {{rhs, rhs, 0.f, 0.0f}};
-        mVec128 = _mm_div_ps(mVec128, splat.mVec128);
+        TVectorUnion splat = {{oorhs, oorhs, 0.f, 0.0f}};
+        mVec128 = _mm_mul_ps(mVec128, splat.mVec128);
 #else
-        x /= rhs;
-        y /= rhs;
+        x *= oorhs;
+        y *= oorhs;
 #endif
         return *this;
     }

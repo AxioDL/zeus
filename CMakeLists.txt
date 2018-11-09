@@ -24,6 +24,7 @@ set(SOURCES
     src/CVector4f.cpp
     src/CMatrix4f.cpp
     src/CAABox.cpp
+    src/COBBox.cpp
     src/CEulerAngles.cpp)
 
 add_library(zeus

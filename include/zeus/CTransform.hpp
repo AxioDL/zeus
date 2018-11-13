@@ -183,7 +183,7 @@ public:
                                     TVectorUnion{{0.f, 0.f, factor, 0.f}}));
     }
 
-    inline CTransform multiplyIgnoreTranslation(const CTransform& xfrm)
+    inline CTransform multiplyIgnoreTranslation(const CTransform& xfrm) const
     {
         CTransform ret;
         ret.basis = basis * xfrm.basis;

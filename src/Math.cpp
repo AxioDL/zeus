@@ -167,14 +167,20 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
     CVector3f vLook, vRight, vUp;
 
     vLook = lookPos - pos;
-    if (vLook.magnitude() < FLT_EPSILON)
+    if (vLook.magnitude() <= FLT_EPSILON)
         vLook = {0.f, 1.f, 0.f};
-    vLook.normalize();
+    else
+        vLook.normalize();
 
-    vRight = vLook.cross(up);
-    vRight.normalize();
-
-    vUp = vRight.cross(vLook);
+    vUp = up - vLook * clamp(-1.f, up.dot(vLook), 1.f);
+    if (vUp.magnitude() <= FLT_EPSILON)
+    {
+        vUp = CVector3f(0.f, 0.f, 1.f) - vLook * vLook.z;
+        if (vUp.magnitude() <= FLT_EPSILON)
+            vUp = CVector3f(0.f, 1.f, 0.f) - vLook * vLook.y;
+    }
+    vUp.normalize();
+    vRight = vLook.cross(vUp);
 
     CMatrix3f rmBasis(vRight, vLook, vUp);
     return CTransform(rmBasis, pos);

@@ -35,7 +35,7 @@ public:
 
     COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
 
-    CAABox calculateAABox(const CTransform& transform = CTransform()) const;
+    CAABox calculateAABox(const CTransform& worldXf = CTransform()) const;
 
     static COBBox FromAABox(const CAABox& box, const CTransform& xf)
     {

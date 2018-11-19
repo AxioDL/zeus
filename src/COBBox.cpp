@@ -3,15 +3,14 @@
 namespace zeus
 {
 
-CAABox COBBox::calculateAABox(const CTransform& transform) const
+CAABox COBBox::calculateAABox(const CTransform& worldXf) const
 {
     CAABox ret = CAABox::skInvertedBox;
 
-    CTransform trans = transform * transform;
+    CTransform trans = worldXf * transform;
     static const CVector3f basis[8] = {{1.f, 1.f, 1.f},    {1.f, 1.f, -1.f},  {1.f, -1.f, 1.f},  {1.f, -1.f, -1.f},
                                        {-1.f, -1.f, -1.f}, {-1.f, -1.f, 1.f}, {-1.f, 1.f, -1.f}, {-1.f, 1.f, 1.f}};
     CVector3f p = extents * basis[0];
-
     ret.accumulateBounds(trans * p);
     p = extents * basis[1];
     ret.accumulateBounds(trans * p);

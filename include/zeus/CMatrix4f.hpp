@@ -1,176 +1,116 @@
 #pragma once
+
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/CVector4f.hpp"
 #include "zeus/CVector3f.hpp"
 
-namespace zeus
-{
-class alignas(16) CMatrix4f
-{
+namespace zeus {
+class CMatrix4f {
 public:
-    static const CMatrix4f skIdentityMatrix4f;
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
-    explicit CMatrix4f(bool zero = false)
-    {
-        memset(m, 0, sizeof(m));
+  static const CMatrix4f skIdentityMatrix4f;
 
-        if (!zero)
-        {
-            m[0][0] = 1.0;
-            m[1][1] = 1.0;
-            m[2][2] = 1.0;
-            m[3][3] = 1.0;
-        }
+  explicit CMatrix4f(bool zero = false) {
+    if (!zero) {
+      m[0][0] = 1.0;
+      m[1][1] = 1.0;
+      m[2][2] = 1.0;
+      m[3][3] = 1.0;
     }
-    CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21,
-              float m22, float m23, float m30, float m31, float m32, float m33)
-    {
-        m[0][0] = m00, m[1][0] = m01, m[2][0] = m02, m[3][0] = m03;
-        m[0][1] = m10, m[1][1] = m11, m[2][1] = m12, m[3][1] = m13;
-        m[0][2] = m20, m[1][2] = m21, m[2][2] = m22, m[3][2] = m23;
-        m[0][3] = m30, m[1][3] = m31, m[2][3] = m32, m[3][3] = m33;
-    }
-    CMatrix4f(const CVector3f& scaleVec)
-    {
-        memset(m, 0, sizeof(m));
-        m[0][0] = scaleVec[0];
-        m[1][1] = scaleVec[1];
-        m[2][2] = scaleVec[2];
-        m[3][3] = 1.0f;
-    }
-    CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3)
-    {
-        vec[0] = r0;
-        vec[1] = r1;
-        vec[2] = r2;
-        vec[3] = r3;
-    }
-    CMatrix4f(const CMatrix4f& other)
-    {
-        vec[0] = other.vec[0];
-        vec[1] = other.vec[1];
-        vec[2] = other.vec[2];
-        vec[3] = other.vec[3];
-    }
-#if __SSE__
-    CMatrix4f(const __m128& r0, const __m128& r1, const __m128& r2, const __m128& r3)
-    {
-        vec[0].mVec128 = r0;
-        vec[1].mVec128 = r1;
-        vec[2].mVec128 = r2;
-        vec[3].mVec128 = r3;
-    }
-#endif
-    CMatrix4f(const CMatrix3f& other)
-    {
-        memset(m, 0, sizeof(m));
-        vec[0] = other.vec[0];
-        vec[1] = other.vec[1];
-        vec[2] = other.vec[2];
-        vec[3] = CVector4f(0, 0, 0, 1.0f);
-    }
-    inline CMatrix4f& operator=(const CMatrix4f& other)
-    {
-        vec[0] = other.vec[0];
-        vec[1] = other.vec[1];
-        vec[2] = other.vec[2];
-        vec[3] = other.vec[3];
-        return *this;
-    }
-    inline CVector4f operator*(const CVector4f& other) const
-    {
-#if __SSE__
-        TVectorUnion res;
-        res.mVec128 = _mm_add_ps(_mm_add_ps(_mm_mul_ps(vec[0].mVec128, ze_splat_ps(other.mVec128, 0)),
-                                            _mm_mul_ps(vec[1].mVec128, ze_splat_ps(other.mVec128, 1))),
-                                 _mm_add_ps(_mm_mul_ps(vec[2].mVec128, ze_splat_ps(other.mVec128, 2)),
-                                            _mm_mul_ps(vec[3].mVec128, ze_splat_ps(other.mVec128, 3))));
+  }
 
-        return CVector4f(res.mVec128);
-#else
-        return CVector4f(m[0][0] * other.v[0] + m[1][0] * other.v[1] + m[2][0] * other.v[2] + m[3][0] * other.v[3],
-                         m[0][1] * other.v[0] + m[1][1] * other.v[1] + m[2][1] * other.v[2] + m[3][1] * other.v[3],
-                         m[0][2] * other.v[0] + m[1][2] * other.v[1] + m[2][2] * other.v[2] + m[3][2] * other.v[3],
-                         m[0][3] * other.v[0] + m[1][3] * other.v[1] + m[2][3] * other.v[2] + m[3][3] * other.v[3]);
-#endif
-    }
+  CMatrix4f(float m00, float m01, float m02, float m03,
+            float m10, float m11, float m12, float m13,
+            float m20, float m21, float m22, float m23,
+            float m30, float m31, float m32, float m33)
+  : m{{m00, m10, m20, m30},
+      {m01, m11, m21, m31},
+      {m02, m12, m22, m32},
+      {m03, m13, m23, m33}} {}
 
-    inline CVector4f& operator[](int i)
-    {
-        assert(0 <= i && i < 4);
-        return vec[i];
-    }
+  CMatrix4f(const CVector3f& scaleVec) {
+    m[0][0] = scaleVec[0];
+    m[1][1] = scaleVec[1];
+    m[2][2] = scaleVec[2];
+    m[3][3] = 1.0f;
+  }
 
-    inline const CVector4f& operator[](int i) const
-    {
-        assert(0 <= i && i < 4);
-        return vec[i];
-    }
+  CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3) {
+    m[0] = r0;
+    m[1] = r1;
+    m[2] = r2;
+    m[3] = r3;
+  }
 
-    CMatrix4f transposed() const;
-    CMatrix4f transposedSSE3() const;
+  CMatrix4f(const CMatrix4f& other) {
+    m[0] = other.m[0];
+    m[1] = other.m[1];
+    m[2] = other.m[2];
+    m[3] = other.m[3];
+  }
+  
+  CMatrix4f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2, const simd<float>& r3) {
+    m[0].mSimd = r0;
+    m[1].mSimd = r1;
+    m[2].mSimd = r2;
+    m[3].mSimd = r3;
+  }
 
-    inline CVector3f multiplyOneOverW(const CVector3f& point) const
-    {
-        CVector4f xfVec = *this * point;
-        return xfVec.toVec3f() / xfVec.w;
-    }
+  CMatrix4f(const CMatrix3f& other) {
+    m[0] = other.m[0];
+    m[1] = other.m[1];
+    m[2] = other.m[2];
+    m[3] = CVector4f(0.f, 0.f, 0.f, 1.0f);
+  }
 
-    inline CVector3f multiplyOneOverW(const CVector3f& point, float& wOut) const
-    {
-        CVector4f xfVec = *this * point;
-        wOut = xfVec.w;
-        return xfVec.toVec3f() / xfVec.w;
-    }
+  CMatrix4f& operator=(const CMatrix4f& other) {
+    m[0] = other.m[0];
+    m[1] = other.m[1];
+    m[2] = other.m[2];
+    m[3] = other.m[3];
+    return *this;
+  }
 
-    union {
-        float m[4][4];
-        struct
-        {
-            CVector4f vec[4];
-        };
-    };
+  CVector4f operator*(const CVector4f& other) const {
+    return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() +
+           m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
+           m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>() +
+           m[3].mSimd * other.mSimd.shuffle<3, 3, 3, 3>();
+  }
+
+  CVector4f& operator[](size_t i) {
+    assert(i < 4);
+    return m[i];
+  }
+
+  const CVector4f& operator[](size_t i) const {
+    assert(i < 4);
+    return m[i];
+  }
+
+  CMatrix4f transposed() const;
+
+  CVector3f multiplyOneOverW(const CVector3f& point) const {
+    CVector4f xfVec = *this * point;
+    return xfVec.toVec3f() / xfVec.w();
+  }
+
+  CVector3f multiplyOneOverW(const CVector3f& point, float& wOut) const {
+    CVector4f xfVec = *this * point;
+    wOut = xfVec.w();
+    return xfVec.toVec3f() / xfVec.w();
+  }
+
+  CVector4f m[4];
 };
-static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs)
-{
-    CMatrix4f ret;
-#if __SSE__
-    unsigned i;
 
-    for (i = 0; i < 4; ++i)
-    {
-        ret.vec[i].mVec128 = _mm_add_ps(
-            _mm_add_ps(_mm_add_ps(_mm_mul_ps(lhs.vec[0].mVec128,
-                                             _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(0, 0, 0, 0))),
-                                  _mm_mul_ps(lhs.vec[1].mVec128,
-                                             _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(1, 1, 1, 1)))),
-                       _mm_mul_ps(lhs.vec[2].mVec128,
-                                  _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(2, 2, 2, 2)))),
-            _mm_mul_ps(lhs.vec[3].mVec128, _mm_shuffle_ps(rhs.vec[i].mVec128, rhs.vec[i].mVec128, _MM_SHUFFLE(3, 3, 3, 3))));
-    }
-
-#else
-    ret.m[0][0] = lhs.m[0][0] * rhs.m[0][0] + lhs.m[1][0] * rhs.m[0][1] + lhs.m[2][0] * rhs.m[0][2] + lhs.m[3][0] * rhs.m[0][3];
-    ret.m[1][0] = lhs.m[0][0] * rhs.m[1][0] + lhs.m[1][0] * rhs.m[1][1] + lhs.m[2][0] * rhs.m[1][2] + lhs.m[3][0] * rhs.m[1][3];
-    ret.m[2][0] = lhs.m[0][0] * rhs.m[2][0] + lhs.m[1][0] * rhs.m[2][1] + lhs.m[2][0] * rhs.m[2][2] + lhs.m[3][0] * rhs.m[2][3];
-    ret.m[3][0] = lhs.m[0][0] * rhs.m[3][0] + lhs.m[1][0] * rhs.m[3][1] + lhs.m[2][0] * rhs.m[3][2] + lhs.m[3][0] * rhs.m[3][3];
-
-    ret.m[0][1] = lhs.m[0][1] * rhs.m[0][0] + lhs.m[1][1] * rhs.m[0][1] + lhs.m[2][1] * rhs.m[0][2] + lhs.m[3][1] * rhs.m[0][3];
-    ret.m[1][1] = lhs.m[0][1] * rhs.m[1][0] + lhs.m[1][1] * rhs.m[1][1] + lhs.m[2][1] * rhs.m[1][2] + lhs.m[3][1] * rhs.m[1][3];
-    ret.m[2][1] = lhs.m[0][1] * rhs.m[2][0] + lhs.m[1][1] * rhs.m[2][1] + lhs.m[2][1] * rhs.m[2][2] + lhs.m[3][1] * rhs.m[2][3];
-    ret.m[3][1] = lhs.m[0][1] * rhs.m[3][0] + lhs.m[1][1] * rhs.m[3][1] + lhs.m[2][1] * rhs.m[3][2] + lhs.m[3][1] * rhs.m[3][3];
-
-    ret.m[0][2] = lhs.m[0][2] * rhs.m[0][0] + lhs.m[1][2] * rhs.m[0][1] + lhs.m[2][2] * rhs.m[0][2] + lhs.m[3][2] * rhs.m[0][3];
-    ret.m[1][2] = lhs.m[0][2] * rhs.m[1][0] + lhs.m[1][2] * rhs.m[1][1] + lhs.m[2][2] * rhs.m[1][2] + lhs.m[3][2] * rhs.m[1][3];
-    ret.m[2][2] = lhs.m[0][2] * rhs.m[2][0] + lhs.m[1][2] * rhs.m[2][1] + lhs.m[2][2] * rhs.m[2][2] + lhs.m[3][2] * rhs.m[2][3];
-    ret.m[3][2] = lhs.m[0][2] * rhs.m[3][0] + lhs.m[1][2] * rhs.m[3][1] + lhs.m[2][2] * rhs.m[3][2] + lhs.m[3][2] * rhs.m[3][3];
-
-    ret.m[0][3] = lhs.m[0][3] * rhs.m[0][0] + lhs.m[1][3] * rhs.m[0][1] + lhs.m[2][3] * rhs.m[0][2] + lhs.m[3][3] * rhs.m[0][3];
-    ret.m[1][3] = lhs.m[0][3] * rhs.m[1][0] + lhs.m[1][3] * rhs.m[1][1] + lhs.m[2][3] * rhs.m[1][2] + lhs.m[3][3] * rhs.m[1][3];
-    ret.m[2][3] = lhs.m[0][3] * rhs.m[2][0] + lhs.m[1][3] * rhs.m[2][1] + lhs.m[2][3] * rhs.m[2][2] + lhs.m[3][3] * rhs.m[2][3];
-    ret.m[3][3] = lhs.m[0][3] * rhs.m[3][0] + lhs.m[1][3] * rhs.m[3][1] + lhs.m[2][3] * rhs.m[2][2] + lhs.m[3][3] * rhs.m[3][3];
-#endif
-    return ret;
+static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
+  simd<float> v[4];
+  for (int i = 0; i < 4; ++i)
+    v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() +
+           lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
+           lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>() +
+           lhs.m[3].mSimd * rhs[i].mSimd.shuffle<3, 3, 3, 3>();
+  return CMatrix4f(v[0], v[1], v[2], v[3]);
 }
 }
 

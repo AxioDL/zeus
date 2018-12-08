@@ -2,25 +2,20 @@
 
 #include "zeus/CVector3f.hpp"
 
-namespace zeus
-{
-class alignas(16) CSphere
-{
+namespace zeus {
+class CSphere {
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
+  CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
 
-    CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
+  CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
 
-    inline CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
+  bool intersects(const CSphere& other) {
+    float dist = (position - other.position).magnitude();
+    return dist < (radius + other.radius);
+  }
 
-    inline bool intersects(const CSphere& other)
-    {
-        float dist = (position - other.position).magnitude();
-        return dist < (radius + other.radius);
-    }
-
-    CVector3f position;
-    float radius;
+  CVector3f position;
+  float radius;
 };
 }
 

@@ -2,11 +2,15 @@
 
 #include "Global.hpp"
 #include "zeus/Math.hpp"
-#include "TVectorUnion.hpp"
+#include "CVector4f.hpp"
+
 #if ZE_ATHENA_TYPES
-#include <athena/FileReader.hpp>
-#include <athena/FileWriter.hpp>
+
+#include "athena/FileReader.hpp"
+#include "athena/FileWriter.hpp"
+
 #endif
+
 #include <iostream>
 #include <cassert>
 
@@ -20,410 +24,315 @@
 #define COLOR(rgba) rgba
 #endif
 
-namespace zeus
-{
+namespace zeus {
 typedef uint8_t Comp8;
 typedef uint32_t Comp32;
 constexpr float OneOver255 = 1.f / 255.f;
 
 typedef union {
-    struct
-    {
-        Comp8 r, g, b, a;
-    };
-    Comp32 rgba;
+  struct {
+    Comp8 r, g, b, a;
+  };
+  Comp32 rgba;
 } RGBA32;
 
 class CVector4f;
 
-class alignas(16) CColor
-{
+class CColor {
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
+  simd<float> mSimd;
+  static const CColor skRed;
+  static const CColor skBlack;
+  static const CColor skBlue;
+  static const CColor skGreen;
+  static const CColor skGrey;
+  static const CColor skOrange;
+  static const CColor skPurple;
+  static const CColor skYellow;
+  static const CColor skWhite;
+  static const CColor skClear;
 
-    static const CColor skRed;
-    static const CColor skBlack;
-    static const CColor skBlue;
-    static const CColor skGreen;
-    static const CColor skGrey;
-    static const CColor skOrange;
-    static const CColor skPurple;
-    static const CColor skYellow;
-    static const CColor skWhite;
-    static const CColor skClear;
+  CColor() : mSimd(1.f) {}
 
-#if __SSE__
-    CColor(const __m128& mVec128) : mVec128(mVec128) {}
-#endif
+  CColor(float rgb, float a = 1.0) { splat(rgb, a); }
 
-    CColor() : r(1.0f), g(1.0f), b(1.0f), a(1.0f) {}
-    CColor(float rgb, float a = 1.0) { splat(rgb, a); }
-    CColor(float r, float g, float b, float a = 1.0f)
-    {
-        v[0] = r;
-        v[1] = g;
-        v[2] = b;
-        v[3] = a;
-    }
-#if ZE_ATHENA_TYPES
-    CColor(const atVec4f& vec)
-#if __SSE__ || __GEKKO_PS__
-    : mVec128(vec.mVec128)
-    {
-    }
-#else
-    {
-        r = vec.vec[0], g = vec.vec[1], b = vec.vec[2], a = vec.vec[3];
-    }
-#endif
-#endif
-
-    CColor(Comp32 rgba) { fromRGBA32(rgba); }
-    CColor(const Comp8* rgba) { fromRGBA8(rgba[0], rgba[1], rgba[2], rgba[3]); }
-
-    CColor(const CVector4f& other);
-    CColor& operator=(const CVector4f& other);
+  CColor(float r, float g, float b, float a = 1.0f) : mSimd(r, g, b, a) {}
 
 #if ZE_ATHENA_TYPES
 
-    static inline CColor ReadRGBABig(athena::io::IStreamReader& reader)
-    {
-        CColor ret;
-        ret.readRGBABig(reader);
-        return ret;
-    }
+  CColor(const atVec4f& vec) : mSimd(vec.simd) {}
 
-    inline void readRGBABig(athena::io::IStreamReader& reader)
-    {
-        r = reader.readFloatBig();
-        g = reader.readFloatBig();
-        b = reader.readFloatBig();
-        a = reader.readFloatBig();
-    }
-    inline void readBGRABig(athena::io::IStreamReader& reader)
-    {
-        b = reader.readFloatBig();
-        g = reader.readFloatBig();
-        r = reader.readFloatBig();
-        a = reader.readFloatBig();
-    }
-    inline void writeRGBABig(athena::io::IStreamWriter& writer) const
-    {
-        writer.writeFloatBig(r);
-        writer.writeFloatBig(g);
-        writer.writeFloatBig(b);
-        writer.writeFloatBig(a);
-    }
-    inline void writeBGRABig(athena::io::IStreamWriter& writer) const
-    {
-        writer.writeFloatBig(b);
-        writer.writeFloatBig(g);
-        writer.writeFloatBig(r);
-        writer.writeFloatBig(a);
-    }
-    inline void writeRGBA8(athena::io::IStreamWriter& writer) const
-    {
-        writer.writeUByte(this->r * 255);
-        writer.writeUByte(this->g * 255);
-        writer.writeUByte(this->b * 255);
-        writer.writeUByte(this->a * 255);
-    }
 #endif
 
-    inline bool operator==(const CColor& rhs) const { return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a); }
-    inline bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
-    inline CColor operator+(const CColor& rhs) const
-    {
-#if __SSE__
-        return CColor(_mm_add_ps(mVec128, rhs.mVec128));
-#else
-        return CColor(r + rhs.r, g + rhs.g, b + rhs.b, a + rhs.a);
-#endif
-    }
-    inline CColor operator-(const CColor& rhs) const
-    {
-#if __SSE__
-        return CColor(_mm_sub_ps(mVec128, rhs.mVec128));
-#else
-        return CColor(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
-#endif
-    }
-    inline CColor operator*(const CColor& rhs) const
-    {
-#if __SSE__
-        return CColor(_mm_mul_ps(mVec128, rhs.mVec128));
-#else
-        return CColor(r * rhs.r, g * rhs.g, b * rhs.b, a * rhs.a);
-#endif
-    }
-    inline CColor operator/(const CColor& rhs) const
-    {
-#if __SSE__
-        return CColor(_mm_div_ps(mVec128, rhs.mVec128));
-#else
-        return CColor(r / rhs.r, g / rhs.g, b / rhs.b, a / rhs.a);
-#endif
-    }
-    inline CColor operator+(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CColor(_mm_add_ps(mVec128, splat.mVec128));
-#else
-        return CColor(r + val, g + val, b + val, a + val);
-#endif
-    }
-    inline CColor operator-(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CColor(_mm_sub_ps(mVec128, splat.mVec128));
-#else
-        return CColor(r - val, g - val, b - val, a - val);
-#endif
-    }
-    inline CColor operator*(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CColor(_mm_mul_ps(mVec128, splat.mVec128));
-#else
-        return CColor(r * val, g * val, b * val, a * val);
-#endif
-    }
-    inline CColor operator/(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CColor(_mm_div_ps(mVec128, splat.mVec128));
-#else
-        return CColor(r / val, g / val, b / val, a / val);
-#endif
-    }
-    inline const CColor& operator+=(const CColor& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_add_ps(mVec128, rhs.mVec128);
-#else
-        r += rhs.r;
-        g += rhs.g;
-        b += rhs.b;
-        a += rhs.a;
-#endif
-        return *this;
-    }
-    inline const CColor& operator-=(const CColor& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_sub_ps(mVec128, rhs.mVec128);
-#else
-        r -= rhs.r;
-        g -= rhs.g;
-        b -= rhs.b;
-        a -= rhs.a;
-#endif
-        return *this;
-    }
-    inline const CColor& operator*=(const CColor& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
-#else
-        r *= rhs.r;
-        g *= rhs.g;
-        b *= rhs.b;
-        a *= rhs.a;
-#endif
-        return *this;
-    }
-    inline const CColor& operator/=(const CColor& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_div_ps(mVec128, rhs.mVec128);
-#else
-        r /= rhs.r;
-        g /= rhs.g;
-        b /= rhs.b;
-        a /= rhs.a;
-#endif
-        return *this;
-    }
-    inline void normalize()
-    {
-        float mag = magnitude();
-        mag = 1.f / mag;
-        *this *= mag;
-    }
-    inline CColor normalized() const
-    {
-        float mag = magnitude();
-        mag = 1.f / mag;
-        return *this * mag;
-    }
+  CColor(Comp32 rgba) { fromRGBA32(rgba); }
 
-    inline float magSquared() const
-    {
-#if __SSE__
-        TVectorUnion result;
-#if __SSE4_1__
-        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
-        return result.v[0];
-#else
-        result.mVec128 = _mm_mul_ps(mVec128, mVec128);
-        return result.v[0] + result.v[1] + result.v[2] + result.v[3];
+  CColor(const Comp8* rgba) { fromRGBA8(rgba[0], rgba[1], rgba[2], rgba[3]); }
+
+  CColor(const CVector4f& other) : mSimd(other.mSimd) {}
+
+  template <typename T>
+  CColor(const simd<T>& s) : mSimd(s) {}
+
+  CColor& operator=(const CVector4f& other) {
+    mSimd = other.mSimd;
+    return *this;
+  }
+
+#if ZE_ATHENA_TYPES
+
+  static CColor ReadRGBABig(athena::io::IStreamReader& reader) {
+    CColor ret;
+    ret.readRGBABig(reader);
+    return ret;
+  }
+
+  void readRGBABig(athena::io::IStreamReader& reader) {
+    simd_floats f;
+    f[0] = reader.readFloatBig();
+    f[1] = reader.readFloatBig();
+    f[2] = reader.readFloatBig();
+    f[3] = reader.readFloatBig();
+    mSimd.copy_from(f);
+  }
+
+  void readBGRABig(athena::io::IStreamReader& reader) {
+    simd_floats f;
+    f[2] = reader.readFloatBig();
+    f[1] = reader.readFloatBig();
+    f[0] = reader.readFloatBig();
+    f[3] = reader.readFloatBig();
+    mSimd.copy_from(f);
+  }
+
+  void writeRGBABig(athena::io::IStreamWriter& writer) const {
+    simd_floats f(mSimd);
+    writer.writeFloatBig(f[0]);
+    writer.writeFloatBig(f[1]);
+    writer.writeFloatBig(f[2]);
+    writer.writeFloatBig(f[3]);
+  }
+
+  void writeBGRABig(athena::io::IStreamWriter& writer) const {
+    simd_floats f(mSimd);
+    writer.writeFloatBig(f[2]);
+    writer.writeFloatBig(f[1]);
+    writer.writeFloatBig(f[0]);
+    writer.writeFloatBig(f[3]);
+  }
+
+  void writeRGBA8(athena::io::IStreamWriter& writer) const {
+    simd_floats f(mSimd);
+    writer.writeUByte(atUint8(f[0] * 255));
+    writer.writeUByte(atUint8(f[1] * 255));
+    writer.writeUByte(atUint8(f[2] * 255));
+    writer.writeUByte(atUint8(f[3] * 255));
+  }
+
 #endif
-#else
-        return r * r + g * g + b * b + a * a;
-#endif
-    }
-    inline float magnitude() const { return std::sqrt(magSquared()); }
-    static inline CColor lerp(const CColor& a, const CColor& b, float t) { return (a + (b - a) * t); }
-    static inline CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
-    inline float& operator[](const size_t& idx) { assert(idx < 4); return (&r)[idx]; }
-    inline const float& operator[](const size_t& idx) const { assert(idx < 4); return (&r)[idx]; }
-    inline void splat(float rgb, float a)
-    {
-#if __SSE__
-        TVectorUnion splat = {{rgb, rgb, rgb, a}};
-        mVec128 = splat.mVec128;
-#else
-        v[0] = rgb;
-        v[1] = rgb;
-        v[2] = rgb;
-        v[3] = a;
-#endif
-    }
 
-    inline float rgbDot(const CColor& rhs) const
-    {
-#if __SSE__
-        TVectorUnion result;
-#if __SSE4_1__
-        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0x71);
-        return result.v[0];
-#else
-        result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
-        return result.v[0] + result.v[1] + result.v[2];
-#endif
-#else
-        return (r * rhs.r) + (g * rhs.g) + (b * rhs.b);
-#endif
-    }
+  bool operator==(const CColor& rhs) const {
+    return (r() == rhs.r() && g() == rhs.g() && b() == rhs.b() && a() == rhs.a());
+  }
 
-    union {
-        struct
-        {
-            float r, g, b, a;
-        };
-        float v[4];
-#if __SSE__
-        __m128 mVec128;
-#endif
-    };
+  bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
 
-    void fromRGBA8(Comp8 r, Comp8 g, Comp8 b, Comp8 a)
-    {
-        this->r = r * OneOver255;
-        this->g = g * OneOver255;
-        this->b = b * OneOver255;
-        this->a = a * OneOver255;
-    }
+  CColor operator+(const CColor& rhs) const {
+    return mSimd + rhs.mSimd;
+  }
 
-    void fromRGBA32(Comp32 rgba)
-    {
-        static RGBA32 tmp;
-        tmp.rgba = COLOR(rgba);
-        fromRGBA8(tmp.r, tmp.g, tmp.b, tmp.a);
-    }
+  CColor operator-(const CColor& rhs) const {
+    return mSimd - rhs.mSimd;
+  }
 
-    /*!
-     * \brief Converts a CColor to RGBA8
-     * \param r
-     * \param g
-     * \param b
-     * \param a
-     */
-    void toRGBA8(Comp8& r, Comp8& g, Comp8& b, Comp8& a)
-    {
-        r = this->r * 255;
-        g = this->g * 255;
-        b = this->b * 255;
-        a = this->a * 255;
-    }
+  CColor operator*(const CColor& rhs) const {
+    return mSimd * rhs.mSimd;
+  }
 
-    /**
-     * @brief Assigns rgba from hsv
-     * @param h[0-1] The hue percentagee of the color.
-     * @param s[0-1] The saturation percentage of the color.
-     * @param v[0-1] The value percentage of the color.
-     * @param a[0-1] The alpha percentage of the color.
-     */
-    void fromHSV(float h, float s, float v, float _a = 1.0);
+  CColor operator/(const CColor& rhs) const {
+    return mSimd / rhs.mSimd;
+  }
 
-    /**
-     * @brief Converts rgba to hsv
-     * @param h[0-1] The hue percentagee of the color.
-     * @param s[0-1] The saturation percentage of the color.
-     * @param v[0-1] The value percentage of the color.
-     * @param a[0-1] The alpha percentage of the color.
-     */
-    void toHSV(float& h, float& s, float& v) const;
+  CColor operator+(float val) const {
+    return mSimd + simd<float>(val);
+  }
 
-    void fromHSL(float h, float s, float l, float _a = 1.0);
+  CColor operator-(float val) const {
+    return mSimd - simd<float>(val);
+  }
 
-    void toHSL(float& h, float& s, float& l);
+  CColor operator*(float val) const {
+    return mSimd * simd<float>(val);
+  }
 
-    CColor toGrayscale() { return {std::sqrt((r * r + g * g + b * b) / 3), a}; }
+  CColor operator/(float val) const {
+    return mSimd / simd<float>(val);
+  }
 
-    /**
-     * @brief Clamps to GPU-safe RGBA values [0,1]
-     */
-    void Clamp()
-    {
-        this->r = std::min(1.f, std::max(0.f, this->r));
-        this->g = std::min(1.f, std::max(0.f, this->g));
-        this->b = std::min(1.f, std::max(0.f, this->b));
-        this->a = std::min(1.f, std::max(0.f, this->a));
-    }
+  const CColor& operator+=(const CColor& rhs) {
+    mSimd += rhs.mSimd;
+    return *this;
+  }
+
+  const CColor& operator-=(const CColor& rhs) {
+    mSimd -= rhs.mSimd;
+    return *this;
+  }
+
+  const CColor& operator*=(const CColor& rhs) {
+    mSimd *= rhs.mSimd;
+    return *this;
+  }
+
+  const CColor& operator/=(const CColor& rhs) {
+    mSimd /= rhs.mSimd;
+    return *this;
+  }
+
+  const CColor& operator+=(float rhs) {
+    mSimd += simd<float>(rhs);
+    return *this;
+  }
+
+  const CColor& operator-=(float rhs) {
+    mSimd -= simd<float>(rhs);
+    return *this;
+  }
+
+  const CColor& operator*=(float rhs) {
+    mSimd *= simd<float>(rhs);
+    return *this;
+  }
+
+  const CColor& operator/=(float rhs) {
+    mSimd /= simd<float>(rhs);
+    return *this;
+  }
+
+  void normalize() {
+    float mag = magnitude();
+    mag = 1.f / mag;
+    *this *= mag;
+  }
+
+  CColor normalized() const {
+    float mag = magnitude();
+    mag = 1.f / mag;
+    return *this * mag;
+  }
+
+  float magSquared() const {
+    return mSimd.dot4(mSimd);
+  }
+
+  float magnitude() const { return std::sqrt(magSquared()); }
+
+  static CColor lerp(const CColor& a, const CColor& b, float t) {
+    return zeus::simd<float>(1.f - t) * a.mSimd + b.mSimd * zeus::simd<float>(t);
+  }
+
+  static CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
+
+  simd<float>::reference operator[](const size_t& idx) {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float operator[](const size_t& idx) const {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  void splat(float rgb, float a) {
+    mSimd = simd<float>(rgb);
+    mSimd[3] = a;
+  }
+
+  float rgbDot(const CColor& rhs) const {
+    return mSimd.dot3(rhs.mSimd);
+  }
+
+  void fromRGBA8(const Comp8 ri, const Comp8 gi, const Comp8 bi, const Comp8 ai) {
+    mSimd = simd<float>(ri * OneOver255, gi * OneOver255, bi * OneOver255, ai * OneOver255);
+  }
+
+  void fromRGBA32(Comp32 rgba) {
+    static RGBA32 tmp;
+    tmp.rgba = COLOR(rgba);
+    fromRGBA8(tmp.r, tmp.g, tmp.b, tmp.a);
+  }
+
+  /*!
+   * \brief Converts a CColor to RGBA8
+   * \param r
+   * \param g
+   * \param b
+   * \param a
+   */
+  void toRGBA8(Comp8& ro, Comp8& go, Comp8& bo, Comp8& ao) const {
+    ro = Comp8(r() * 255);
+    go = Comp8(g() * 255);
+    bo = Comp8(b() * 255);
+    ao = Comp8(a() * 255);
+  }
+
+  /**
+   * @brief Assigns rgba from hsv
+   * @param h[0-1] The hue percentagee of the color.
+   * @param s[0-1] The saturation percentage of the color.
+   * @param v[0-1] The value percentage of the color.
+   * @param a[0-1] The alpha percentage of the color.
+   */
+  void fromHSV(float h, float s, float v, float _a = 1.0);
+
+  /**
+   * @brief Converts rgba to hsv
+   * @param h[0-1] The hue percentagee of the color.
+   * @param s[0-1] The saturation percentage of the color.
+   * @param v[0-1] The value percentage of the color.
+   * @param a[0-1] The alpha percentage of the color.
+   */
+  void toHSV(float& h, float& s, float& v) const;
+
+  void fromHSL(float h, float s, float l, float _a = 1.0);
+
+  void toHSL(float& h, float& s, float& l) const;
+
+  CColor toGrayscale() const { return {std::sqrt((r() * r() + g() * g() + b() * b()) / 3), a()}; }
+
+  /**
+   * @brief Clamps to GPU-safe RGBA values [0,1]
+   */
+  void Clamp() {
+    r() = std::min(1.f, std::max(0.f, float(r())));
+    g() = std::min(1.f, std::max(0.f, float(g())));
+    b() = std::min(1.f, std::max(0.f, float(b())));
+    a() = std::min(1.f, std::max(0.f, float(a())));
+  }
+
+  float r() const { return mSimd[0]; }
+  float g() const { return mSimd[1]; }
+  float b() const { return mSimd[2]; }
+  float a() const { return mSimd[3]; }
+
+  simd<float>::reference r() { return mSimd[0]; }
+  simd<float>::reference g() { return mSimd[1]; }
+  simd<float>::reference b() { return mSimd[2]; }
+  simd<float>::reference a() { return mSimd[3]; }
 };
 
-static inline CColor operator+(float lhs, const CColor& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CColor(_mm_add_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CColor(lhs + rhs.r, lhs + rhs.g, lhs + rhs.b, lhs + rhs.a);
-#endif
+static inline CColor operator+(float lhs, const CColor& rhs) {
+  return simd<float>(lhs) + rhs.mSimd;
 }
 
-static inline CColor operator-(float lhs, const CColor& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CColor(_mm_sub_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CColor(lhs - rhs.r, lhs - rhs.g, lhs - rhs.b, lhs - rhs.a);
-#endif
+static inline CColor operator-(float lhs, const CColor& rhs) {
+  return simd<float>(lhs) - rhs.mSimd;
 }
 
-static inline CColor operator*(float lhs, const CColor& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CColor(_mm_mul_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CColor(lhs * rhs.r, lhs * rhs.g, lhs * rhs.b, lhs * rhs.a);
-#endif
+static inline CColor operator*(float lhs, const CColor& rhs) {
+  return simd<float>(lhs) * rhs.mSimd;
 }
 
-static inline CColor operator/(float lhs, const CColor& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CColor(_mm_div_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CColor(lhs / rhs.r, lhs / rhs.g, lhs / rhs.b, lhs / rhs.a);
-#endif
+static inline CColor operator/(float lhs, const CColor& rhs) {
+  return simd<float>(lhs) / rhs.mSimd;
 }
 }

@@ -30,6 +30,9 @@ int main()
     CAABox test2{{-100, -100, -100}, {100, 100, 100}};
     CAABox test3{{-50, -50, -50}, {50, 50, 50}};
     CAABox test4{{-50, -50, -105}, {50, 50, 105}};
+    CVector2f point2(-90, 67);
+    CVector2f point3(-90, 67);
+    CVector3f point4 = point2 + point3;
     CVector3f point(-90, 67, -105);
     test.closestPointAlongVector(point);
     CVector3d(100, -100, -200);
@@ -72,7 +75,7 @@ int main()
     ctest1.fromHSV(0, 255 / 255.f, .5);
     float h, s, v;
     ctest1.toHSV(h, s, v);
-    std::cout << (int)ctest1.r << " " << (int)ctest1.g << " " << (int)ctest1.b << " " << (int)ctest1.a << std::endl;
-    std::cout << h << " " << s << " " << v << " " << (float)(ctest1.a / 255.f) << std::endl;
+    std::cout << (int)ctest1.r() << " " << (int)ctest1.g() << " " << (int)ctest1.b() << " " << (int)ctest1.a() << std::endl;
+    std::cout << h << " " << s << " " << v << " " << (float)(ctest1.a() / 255.f) << std::endl;
     return 0;
 }

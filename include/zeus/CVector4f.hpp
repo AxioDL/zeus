@@ -1,420 +1,261 @@
 #pragma once
 
 #include "Global.hpp"
-#include "TVectorUnion.hpp"
 #include "zeus/CVector3f.hpp"
+
 #if ZE_ATHENA_TYPES
-#include <athena/IStreamReader.hpp>
+
+#include "athena/IStreamReader.hpp"
+
 #endif
+
 #include "zeus/Math.hpp"
 #include <cfloat>
 #include <cassert>
 
-namespace zeus
-{
+namespace zeus {
 class CColor;
-class alignas(16) CVector4f
-{
-#if __atdna__
-    float clangVec __attribute__((__vector_size__(16)));
-#endif
+
+class CVector4f {
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
-    union {
-        struct
-        {
-            float x, y, z, w;
-        };
-        float v[4];
-#if __SSE__
-        __m128 mVec128;
-#endif
-    };
+  zeus::simd<float> mSimd;
 
-    inline CVector4f() { zeroOut(); }
-#if __SSE__
-    CVector4f(const __m128& mVec128) : mVec128(mVec128) {}
-#endif
+  CVector4f() : mSimd(0.f) {}
+
+  template <typename T>
+  CVector4f(const simd<T>& s) : mSimd(s) {}
+
 #if ZE_ATHENA_TYPES
-    CVector4f(const atVec4f& vec)
-#if __SSE__
-    : mVec128(vec.mVec128)
-    {
-    }
-#else
-    {
-        x = vec.vec[0], y = vec.vec[1], z = vec.vec[2], w = vec.vec[3];
-    }
+
+  CVector4f(const atVec4f& vec) : mSimd(vec.simd) {}
+
+  operator atVec4f&() {
+    return *reinterpret_cast<atVec4f*>(this);
+  }
+
+  operator const atVec4f&() const {
+    return *reinterpret_cast<const atVec4f*>(this);
+  }
+
+  void readBig(athena::io::IStreamReader& input) {
+    simd_floats f;
+    f[0] = input.readFloatBig();
+    f[1] = input.readFloatBig();
+    f[2] = input.readFloatBig();
+    f[3] = input.readFloatBig();
+    mSimd.copy_from(f);
+  }
+
 #endif
 
-    operator atVec4f&()
-    {
-        return *reinterpret_cast<atVec4f*>(v);
-    }
-    operator const atVec4f&() const
-    {
-        return *reinterpret_cast<const atVec4f*>(v);
-    }
+  explicit CVector4f(float xyzw) : mSimd(xyzw) {}
 
-    void readBig(athena::io::IStreamReader& input)
-    {
-        x = input.readFloatBig();
-        y = input.readFloatBig();
-        z = input.readFloatBig();
-        w = input.readFloatBig();
-    }
-#endif
+  void assign(float x, float y, float z, float w) {
+    mSimd = simd<float>(x, y, z, w);
+  }
 
-    explicit CVector4f(float xyzw) { splat(xyzw); }
-    void assign(float x, float y, float z, float w)
-    {
-        v[0] = x;
-        v[1] = y;
-        v[2] = z;
-        v[3] = w;
-    }
-    CVector4f(float x, float y, float z, float w) { assign(x, y, z, w); }
-    CVector4f(const CColor& other);
+  CVector4f(float x, float y, float z, float w) : mSimd(x, y, z, w) {}
 
-    CVector4f(const CVector3f& other, float wIn = 1.f)
-    {
-#if __SSE__
-        mVec128 = other.mVec128;
-#else
-        x = other.x;
-        y = other.y;
-        z = other.z;
-#endif
-        w = wIn;
-    }
+  CVector4f(const CColor& other);
 
-    static CVector4f ToClip(const zeus::CVector3f& v, float w)
-    {
-        return CVector4f(v * w, w);
-    }
+  CVector4f(const CVector3f& other, float wIn = 1.f) : mSimd(other.mSimd) {
+    mSimd[3] = wIn;
+  }
 
-    inline CVector3f toVec3f() const
-    {
-#if __SSE__
-        return CVector3f(mVec128);
-#else
-        return CVector3f(x, y, z);
-#endif
-    }
+  static CVector4f ToClip(const zeus::CVector3f& v, float w) {
+    return CVector4f(v * w, w);
+  }
 
-    CVector4f& operator=(const CColor& other);
-    inline bool operator==(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmpeq_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 && vec.v[1] != 0 && vec.v[2] != 0 && vec.v[3] != 0);
-#else
-        return (x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w);
-#endif
-    }
-    inline bool operator!=(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmpneq_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 && vec.v[1] != 0 && vec.v[2] != 0 && vec.v[3] != 0);
-#else
-        return !(*this == rhs);
-#endif
-    }
-    inline bool operator<(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmplt_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 || vec.v[1] != 0 || vec.v[2] != 0 || vec.v[3] != 0);
-#else
-        return (x < rhs.x || y < rhs.y || z < rhs.z || w < rhs.w);
-#endif
-    }
-    inline bool operator<=(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmple_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 || vec.v[1] != 0 || vec.v[2] != 0 || vec.v[3] != 0);
-#else
-        return (x <= rhs.x || y <= rhs.y || z <= rhs.z || w <= rhs.w);
-#endif
-    }
-    inline bool operator>(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmpgt_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 || vec.v[1] != 0 || vec.v[2] != 0 || vec.v[3] != 0);
-#else
-        return (x > rhs.x || y > rhs.y || z > rhs.z || w > rhs.w);
-#endif
-    }
-    inline bool operator>=(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion vec;
-        vec.mVec128 = _mm_cmpge_ps(mVec128, rhs.mVec128);
-        return (vec.v[0] != 0 || vec.v[1] != 0 || vec.v[2] != 0 || vec.v[3] != 0);
-#else
-        return (x >= rhs.x || y >= rhs.y || z >= rhs.z || w >= rhs.w);
-#endif
-    }
-    inline CVector4f operator+(const CVector4f& rhs) const
-    {
-#if __SSE__
-        return CVector4f(_mm_add_ps(mVec128, rhs.mVec128));
-#else
-        return CVector4f(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
-#endif
-    }
-    inline CVector4f operator-(const CVector4f& rhs) const
-    {
-#if __SSE__
-        return CVector4f(_mm_sub_ps(mVec128, rhs.mVec128));
-#else
-        return CVector4f(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
-#endif
-    }
-    inline CVector4f operator-() const
-    {
-#if __SSE__
-        return CVector4f(_mm_sub_ps(_mm_xor_ps(mVec128, mVec128), mVec128));
-#else
-        return CVector4f(-x, -y, -z, -w);
-#endif
-    }
-    inline CVector4f operator*(const CVector4f& rhs) const
-    {
-#if __SSE__
-        return CVector4f(_mm_mul_ps(mVec128, rhs.mVec128));
-#else
-        return CVector4f(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w);
-#endif
-    }
-    inline CVector4f operator/(const CVector4f& rhs) const
-    {
-#if __SSE__
-        return CVector4f(_mm_div_ps(mVec128, rhs.mVec128));
-#else
-        return CVector4f(x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w);
-#endif
-    }
-    inline CVector4f operator+(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CVector4f(_mm_add_ps(mVec128, splat.mVec128));
-#else
-        return CVector4f(x + val, y + val, z + val, w + val);
-#endif
-    }
-    inline CVector4f operator-(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CVector4f(_mm_sub_ps(mVec128, splat.mVec128));
-#else
-        return CVector4f(x - val, y - val, z - val, w - val);
-#endif
-    }
-    inline CVector4f operator*(float val) const
-    {
-#if __SSE__
-        TVectorUnion splat = {{val, val, val, val}};
-        return CVector4f(_mm_mul_ps(mVec128, splat.mVec128));
-#else
-        return CVector4f(x * val, y * val, z * val, w * val);
-#endif
-    }
-    inline CVector4f operator/(float val) const
-    {
-        float ooval = 1.f / val;
-#if __SSE__
-        TVectorUnion splat = {{ooval, ooval, ooval, ooval}};
-        return CVector4f(_mm_mul_ps(mVec128, splat.mVec128));
-#else
-        return CVector4f(x * ooval, y * ooval, z * ooval, w * ooval);
-#endif
-    }
-    inline const CVector4f& operator+=(const CVector4f& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_add_ps(mVec128, rhs.mVec128);
-#else
-        x += rhs.x;
-        y += rhs.y;
-        z += rhs.z;
-        w += rhs.w;
-#endif
-        return *this;
-    }
-    inline const CVector4f& operator-=(const CVector4f& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_sub_ps(mVec128, rhs.mVec128);
-#else
-        x -= rhs.x;
-        y -= rhs.y;
-        z -= rhs.z;
-        w -= rhs.w;
-#endif
-        return *this;
-    }
-    inline const CVector4f& operator*=(const CVector4f& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
-#else
-        x *= rhs.x;
-        y *= rhs.y;
-        z *= rhs.z;
-        w *= rhs.w;
-#endif
-        return *this;
-    }
-    inline const CVector4f& operator/=(const CVector4f& rhs)
-    {
-#if __SSE__
-        mVec128 = _mm_div_ps(mVec128, rhs.mVec128);
-#else
-        x /= rhs.x;
-        y /= rhs.y;
-        z /= rhs.z;
-        w /= rhs.w;
-#endif
-        return *this;
-    }
-    inline void normalize()
-    {
-        float mag = magnitude();
-        mag = 1.f / mag;
-        *this *= CVector4f(mag);
-    }
-    inline CVector4f normalized() const
-    {
-        float mag = magnitude();
-        mag = 1.f / mag;
-        return *this * mag;
-    }
+  CVector3f toVec3f() const {
+    return CVector3f(mSimd);
+  }
 
-    inline float dot(const CVector4f& rhs) const
-    {
-#if __SSE__
-        TVectorUnion result;
-#if __SSE4_1__
-        result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0xF1);
-        return result.v[0];
-#else
-        result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
-        return result.v[0] + result.v[1] + result.v[2] + result.v[3];
-#endif
-#else
-        return (x * rhs.x) + (y * rhs.y) + (z * rhs.z) + (w * rhs.w);
-#endif
-    }
-    inline float magSquared() const
-    {
-#if __SSE__
-        TVectorUnion result;
-#if __SSE4_1__
-        result.mVec128 = _mm_dp_ps(mVec128, mVec128, 0xF1);
-        return result.v[0];
-#else
-        result.mVec128 = _mm_mul_ps(mVec128, mVec128);
-        return result.v[0] + result.v[1] + result.v[2];
-#endif
-#else
-        return x * x + y * y + z * z + w * w;
-#endif
-    }
-    inline float magnitude() const { return std::sqrt(magSquared()); }
+  CVector4f& operator=(const CColor& other);
 
-    inline void zeroOut()
-    {
-        *this = CVector4f::skZero;
-    }
+  bool operator==(const CVector4f& rhs) const {
+    auto eq_mask = mSimd == rhs.mSimd;
+    return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
+  }
 
-    inline void splat(float xyzw)
-    {
-#if __SSE__
-        TVectorUnion splat = {{xyzw, xyzw, xyzw, xyzw}};
-        mVec128 = splat.mVec128;
-#else
-        v[0] = xyz;
-        v[1] = xyz;
-        v[2] = xyz;
-        v[3] = xyzw;
-#endif
-    }
+  bool operator!=(const CVector4f& rhs) const {
+    auto eq_mask = mSimd != rhs.mSimd;
+    return eq_mask[0] || eq_mask[1] || eq_mask[2] || eq_mask[3];
+  }
 
-    static inline CVector4f lerp(const CVector4f& a, const CVector4f& b, float t) { return (a + (b - a) * t); }
-    static inline CVector4f nlerp(const CVector4f& a, const CVector4f& b, float t) { return lerp(a, b, t).normalized(); }
+  bool operator<(const CVector4f& rhs) const {
+    auto eq_mask = mSimd < rhs.mSimd;
+    return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
+  }
 
-    inline bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
+  bool operator<=(const CVector4f& rhs) const {
+    auto eq_mask = mSimd <= rhs.mSimd;
+    return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
+  }
 
-    inline bool canBeNormalized() const
-    {
-        if (std::isinf(x) || std::isinf(y) || std::isinf(z) || std::isinf(w))
-            return false;
-        return std::fabs(x) >= FLT_EPSILON || std::fabs(y) >= FLT_EPSILON || std::fabs(z) >= FLT_EPSILON || std::fabs(w) >= FLT_EPSILON;
-    }
+  bool operator>(const CVector4f& rhs) const {
+    auto eq_mask = mSimd > rhs.mSimd;
+    return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
+  }
 
-    inline bool isEqu(const CVector4f& other, float epsilon = 1.1920929e-7f)
-    {
-        const CVector4f diffVec = other - *this;
-        return (diffVec.x <= epsilon && diffVec.y <= epsilon && diffVec.z <= epsilon && diffVec.w <= epsilon);
-    }
+  bool operator>=(const CVector4f& rhs) const {
+    auto eq_mask = mSimd >= rhs.mSimd;
+    return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
+  }
 
-    inline float& operator[](size_t idx) { assert(idx < 4); return (&x)[idx]; }
-    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&x)[idx]; }
+  CVector4f operator+(const CVector4f& rhs) const {
+    return mSimd + rhs.mSimd;
+  }
 
-    static const CVector4f skOne;
-    static const CVector4f skNegOne;
-    static const CVector4f skZero;
+  CVector4f operator-(const CVector4f& rhs) const {
+    return mSimd - rhs.mSimd;
+  }
+
+  CVector4f operator-() const {
+    return -mSimd;
+  }
+
+  CVector4f operator*(const CVector4f& rhs) const {
+    return mSimd * rhs.mSimd;
+  }
+
+  CVector4f operator/(const CVector4f& rhs) const {
+    return mSimd / rhs.mSimd;
+  }
+
+  CVector4f operator+(float val) const {
+    return mSimd + zeus::simd<float>(val);
+  }
+
+  CVector4f operator-(float val) const {
+    return mSimd - zeus::simd<float>(val);
+  }
+
+  CVector4f operator*(float val) const {
+    return mSimd * zeus::simd<float>(val);
+  }
+
+  CVector4f operator/(float val) const {
+    float ooval = 1.f / val;
+    return mSimd * zeus::simd<float>(ooval);
+  }
+
+  const CVector4f& operator+=(const CVector4f& rhs) {
+    mSimd += rhs.mSimd;
+    return *this;
+  }
+
+  const CVector4f& operator-=(const CVector4f& rhs) {
+    mSimd -= rhs.mSimd;
+    return *this;
+  }
+
+  const CVector4f& operator*=(const CVector4f& rhs) {
+    mSimd *= rhs.mSimd;
+    return *this;
+  }
+
+  const CVector4f& operator/=(const CVector4f& rhs) {
+    mSimd /= rhs.mSimd;
+    return *this;
+  }
+
+  void normalize() {
+    float mag = magnitude();
+    mag = 1.f / mag;
+    *this *= CVector4f(mag);
+  }
+
+  CVector4f normalized() const {
+    float mag = magnitude();
+    mag = 1.f / mag;
+    return *this * mag;
+  }
+
+  float dot(const CVector4f& rhs) const {
+    return mSimd.dot4(rhs.mSimd);
+  }
+
+  float magSquared() const {
+    return mSimd.dot4(mSimd);
+  }
+
+  float magnitude() const {
+    return std::sqrt(magSquared());
+  }
+
+  void zeroOut() {
+    *this = CVector4f::skZero;
+  }
+
+  void splat(float xyzw) {
+    mSimd = zeus::simd<float>(xyzw);
+  }
+
+  static CVector4f lerp(const CVector4f& a, const CVector4f& b, float t) {
+    return zeus::simd<float>(1.f - t) * a.mSimd + b.mSimd * zeus::simd<float>(t);
+  }
+
+  static CVector4f nlerp(const CVector4f& a, const CVector4f& b, float t) {
+    return lerp(a, b, t).normalized();
+  }
+
+  bool isNormalized() const {
+    return std::fabs(1.f - magSquared()) < 0.01f;
+  }
+
+  bool canBeNormalized() const {
+    if (std::isinf(x()) || std::isinf(y()) || std::isinf(z()) || std::isinf(w()))
+      return false;
+    return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON ||
+           std::fabs(z()) >= FLT_EPSILON || std::fabs(w()) >= FLT_EPSILON;
+  }
+
+  bool isEqu(const CVector4f& other, float epsilon = FLT_EPSILON) {
+    const CVector4f diffVec = other - *this;
+    return (diffVec.x() <= epsilon && diffVec.y() <= epsilon &&
+            diffVec.z() <= epsilon && diffVec.w() <= epsilon);
+  }
+
+  zeus::simd<float>::reference operator[](size_t idx) {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float operator[](size_t idx) const {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float x() const { return mSimd[0]; }
+  float y() const { return mSimd[1]; }
+  float z() const { return mSimd[2]; }
+  float w() const { return mSimd[3]; }
+
+  simd<float>::reference x() { return mSimd[0]; }
+  simd<float>::reference y() { return mSimd[1]; }
+  simd<float>::reference z() { return mSimd[2]; }
+  simd<float>::reference w() { return mSimd[3]; }
+
+  static const CVector4f skOne;
+  static const CVector4f skNegOne;
+  static const CVector4f skZero;
 };
 
-static inline CVector4f operator+(float lhs, const CVector4f& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CVector4f(_mm_add_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CVector4f(lhs + rhs.x, lhs + rhs.y, lhs + rhs.z, lhs + rhs.w);
-#endif
+static CVector4f operator+(float lhs, const CVector4f& rhs) {
+  return zeus::simd<float>(lhs) + rhs.mSimd;
 }
 
-static inline CVector4f operator-(float lhs, const CVector4f& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CVector4f(_mm_sub_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CVector4f(lhs - rhs.x, lhs - rhs.y, lhs - rhs.z, lhs - rhs.w);
-#endif
+static CVector4f operator-(float lhs, const CVector4f& rhs) {
+  return zeus::simd<float>(lhs) - rhs.mSimd;
 }
 
-static inline CVector4f operator*(float lhs, const CVector4f& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CVector4f(_mm_mul_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CVector4f(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z, lhs * rhs.w);
-#endif
+static CVector4f operator*(float lhs, const CVector4f& rhs) {
+  return zeus::simd<float>(lhs) * rhs.mSimd;
 }
 
-static inline CVector4f operator/(float lhs, const CVector4f& rhs)
-{
-#if __SSE__
-    TVectorUnion splat = {{lhs, lhs, lhs, lhs}};
-    return CVector4f(_mm_div_ps(splat.mVec128, rhs.mVec128));
-#else
-    return CVector4f(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z, lhs / rhs.w);
-#endif
+static CVector4f operator/(float lhs, const CVector4f& rhs) {
+  return zeus::simd<float>(lhs) / rhs.mSimd;
 }
+
 }
 

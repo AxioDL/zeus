@@ -40,7 +40,6 @@ add_library(zeus
     include/zeus/CColor.hpp
     include/zeus/Global.hpp
     include/zeus/zeus.hpp
-    include/zeus/TVectorUnion.hpp
     include/zeus/CVector2i.hpp
     include/zeus/CVector2f.hpp
     include/zeus/CVector3f.hpp
@@ -56,7 +55,11 @@ add_library(zeus
     include/zeus/CSphere.hpp
     include/zeus/CUnitVector.hpp
     include/zeus/CMRay.hpp
-    include/zeus/CEulerAngles.hpp)
+    include/zeus/CEulerAngles.hpp
+    include/zeus/simd/simd.hpp
+    include/zeus/simd/simd_sse.hpp
+    include/zeus/simd/simd_avx.hpp
+    include/zeus/simd/parallelism_v2_simd.hpp)
 
 add_subdirectory(test)
 

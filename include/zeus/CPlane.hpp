@@ -4,72 +4,67 @@
 #include "zeus/CVector3f.hpp"
 #include "zeus/Math.hpp"
 
-namespace zeus
-{
-class alignas(16) CPlane
-{
+namespace zeus {
+class CPlane {
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
+  CPlane() : mSimd(1.0, 0.f, 0.f, 0.f) {}
 
-    inline CPlane() : a(1.f), b(0.f), c(0.f), d(0.f) {}
-    CPlane(float a, float b, float c, float d) : a(a), b(b), c(c), d(d) {}
-    CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c)
-    {
-        vec = (b - a).cross(c - a).normalized();
-        d = a.dot(vec);
-    }
+  CPlane(float a, float b, float c, float d) : mSimd(a, b, c, d) {}
 
-    CPlane(const CVector3f& point, float displacement)
-    {
-#if __SSE__
-        mVec128 = point.mVec128;
-#else
-        a = point[0];
-        b = point[1];
-        c = point[2];
-#endif
-        d = displacement;
-    }
+  CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c) {
+    mSimd = (b - a).cross(c - a).normalized().mSimd;
+    mSimd[3] = a.dot(normal());
+  }
 
-    float clipLineSegment(const CVector3f& a, const CVector3f& b)
-    {
-        float mag = (b-a).dot(vec);
-        float dis = (-(vec.y - d)) / mag;
-        return clamp(0.0f, dis, 1.0f);
-    }
+  CPlane(const CVector3f& point, float displacement) {
+    mSimd = point.mSimd;
+    mSimd[3] = displacement;
+  }
 
-    inline void normalize()
-    {
-        float nd = d;
-        float mag = vec.magnitude();
-        mag = 1.f / mag;
-        vec = vec * mag;
-        d = nd * mag;
-    }
+  float clipLineSegment(const CVector3f& a, const CVector3f& b) {
+    float mag = (b - a).dot(normal());
+    float dis = (-(y() - d())) / mag;
+    return clamp(0.0f, dis, 1.0f);
+  }
 
-    float pointToPlaneDist(const CVector3f& pos) const
-    {
-        return pos.dot(vec) - d;
-    }
+  void normalize() {
+    float nd = d();
+    auto norm = normal();
+    float mag = norm.magnitude();
+    mag = 1.f / mag;
+    mSimd = (norm * mag).mSimd;
+    mSimd[3] = nd * mag;
+  }
 
-    bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
+  float pointToPlaneDist(const CVector3f& pos) const {
+    return pos.dot(normal()) - d();
+  }
 
-    const CVector3f& normal() const { return vec; }
+  bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
 
-    inline float& operator[](size_t idx) { assert(idx < 4); return p[idx]; }
-    inline const float& operator[](size_t idx) const { assert(idx < 4); return p[idx]; }
+  CVector3f normal() const { return mSimd; }
 
-    union {
-        struct
-        {
-            float a, b, c, d;
-        };
-        float p[4];
-        CVector3f vec;
-#ifdef __SSE__
-        __m128 mVec128;
-#endif
-    };
+  zeus::simd<float>::reference operator[](size_t idx) {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float operator[](size_t idx) const {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float x() const { return mSimd[0]; }
+  float y() const { return mSimd[1]; }
+  float z() const { return mSimd[2]; }
+  float d() const { return mSimd[3]; }
+
+  simd<float>::reference x() { return mSimd[0]; }
+  simd<float>::reference y() { return mSimd[1]; }
+  simd<float>::reference z() { return mSimd[2]; }
+  simd<float>::reference d() { return mSimd[3]; }
+
+  zeus::simd<float> mSimd;
 };
 }
 

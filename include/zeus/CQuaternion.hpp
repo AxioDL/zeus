@@ -8,262 +8,303 @@
 #include "zeus/Math.hpp"
 #include "zeus/CRelAngle.hpp"
 #include "zeus/CTransform.hpp"
+
 #if ZE_ATHENA_TYPES
+
 #include <athena/IStreamReader.hpp>
+
 #endif
 
-namespace zeus
-{
+namespace zeus {
 
-static inline float normalize_angle(float angle)
-{
-    if (angle > M_PIF)
-        angle -= 2.f * M_PIF;
-    else if (angle < -M_PIF)
-        angle += 2.f * M_PIF;
+static float normalize_angle(float angle) {
+  if (angle > M_PIF)
+    angle -= 2.f * M_PIF;
+  else if (angle < -M_PIF)
+    angle += 2.f * M_PIF;
 
-    return angle;
+  return angle;
 }
 
 class CNUQuaternion;
 
 /** Unit quaternion, used for all quaternion arithmetic */
-class alignas(16) CQuaternion
-{
-#if __atdna__ && ZE_ATHENA_TYPES
-    float clangVec __attribute__((__vector_size__(16)));
-#endif
+class CQuaternion {
 public:
-    ZE_DECLARE_ALIGNED_ALLOCATOR();
+  CQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
 
-    CQuaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
-    CQuaternion(float wi, float xi, float yi, float zi) : w(wi), x(xi), y(yi), z(zi) {}
-    CQuaternion(float xi, float yi, float zi) { fromVector3f(CVector3f(xi, yi, zi)); }
-    CQuaternion(float wi, const CVector3f& vec) : w(wi), x(vec.x), y(vec.y), z(vec.z) {}
+  CQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
+
+  CQuaternion(float xi, float yi, float zi) { fromVector3f(CVector3f(xi, yi, zi)); }
+
+  CQuaternion(float wi, const CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) {
+    mSimd[0] = wi;
+  }
+
+  template <typename T>
+  CQuaternion(const simd<T>& s) : mSimd(s) {}
+
 #if ZE_ATHENA_TYPES
-    inline void readBig(athena::io::IStreamReader& input)
-    {
-        w = input.readFloatBig();
-        x = input.readFloatBig();
-        y = input.readFloatBig();
-        z = input.readFloatBig();
-    }
-    CQuaternion(const atVec4f& vec)
-    {
-#if __SSE__
-        mVec128 = vec.mVec128;
-#else
-        x = vec.vec[1];
-        y = vec.vec[2];
-        z = vec.vec[3];
-        w = vec.vec[0];
-#endif
-    }
 
-    operator atVec4f&()
-    {
-        return *reinterpret_cast<atVec4f*>(v);
-    }
-    operator const atVec4f&() const
-    {
-        return *reinterpret_cast<const atVec4f*>(v);
-    }
+  void readBig(athena::io::IStreamReader& input) {
+    simd_floats f;
+    f[0] = input.readFloatBig();
+    f[1] = input.readFloatBig();
+    f[2] = input.readFloatBig();
+    f[3] = input.readFloatBig();
+    mSimd.copy_from(f);
+  }
+
+  CQuaternion(const atVec4f& vec) : mSimd(vec.simd) {}
+
+  operator atVec4f&() {
+    return *reinterpret_cast<atVec4f*>(this);
+  }
+
+  operator const atVec4f&() const {
+    return *reinterpret_cast<const atVec4f*>(this);
+  }
 
 #endif
-    
-    CQuaternion(const CMatrix3f& mat);
-    CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
-    CQuaternion(const CVector4f& vec)
-    {
-#if __SSE__
-        mVec128 = vec.mVec128;
-#else
-        x = vec[1];
-        y = vec[2];
-        z = vec[3];
-        w = vec[0];
-#endif
-    }
 
-    CQuaternion(const CVector3f& vecA, const CVector3f& vecB)
-    {
-        CVector3f vecAN = vecA.normalized();
-        CVector3f vecBN = vecB.normalized();
-        CVector3f w = vecAN.cross(vecBN);
-        *this = CQuaternion(1.f + vecAN.dot(vecBN), w.x, w.y, w.z).normalized();
-    }
+  CQuaternion(const CMatrix3f& mat);
 
-    void fromVector3f(const CVector3f& vec);
+  CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
 
-    CQuaternion& operator=(const CQuaternion& q);
-    CQuaternion operator+(const CQuaternion& q) const;
-    CQuaternion operator-(const CQuaternion& q) const;
-    CQuaternion operator*(const CQuaternion& q) const;
-    CQuaternion operator/(const CQuaternion& q) const;
-    CQuaternion operator*(float scale) const;
-    CQuaternion operator/(float scale) const;
-    CQuaternion operator-() const;
-    const CQuaternion& operator+=(const CQuaternion& q);
-    const CQuaternion& operator-=(const CQuaternion& q);
-    const CQuaternion& operator*=(const CQuaternion& q);
-    const CQuaternion& operator*=(float scale);
-    const CQuaternion& operator/=(float scale);
-    float magnitude() const { return std::sqrt(magSquared()); }
-    float magSquared() const { return w * w + x * x + y * y + z * z; }
-    void normalize() { *this /= magnitude(); }
-    CQuaternion normalized() const { return *this / magnitude(); }
-    void invert();
-    CQuaternion inverse() const;
+  CQuaternion(const CVector4f& vec) : mSimd(vec.mSimd) {}
 
-    /**
-     * @brief Set the rotation using axis angle notation
-     * @param axis The axis to rotate around
-     * @param angle The magnitude of the rotation in radians
-     * @return
-     */
-    static inline CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle)
-    {
-        return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
-    }
+  CQuaternion(const CVector3f& vecA, const CVector3f& vecB) {
+    CVector3f vecAN = vecA.normalized();
+    CVector3f vecBN = vecB.normalized();
+    CVector3f w = vecAN.cross(vecBN);
+    *this = CQuaternion(1.f + vecAN.dot(vecBN), w).normalized();
+  }
 
-    void rotateX(const CRelAngle& angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
-    void rotateY(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
-    void rotateZ(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
+  void fromVector3f(const CVector3f& vec);
 
-    static inline CVector3f rotate(const CQuaternion& rotation, const CAxisAngle& v)
-    {
-        CQuaternion q = rotation * v;
-        q *= rotation.inverse();
+  CQuaternion& operator=(const CQuaternion& q);
 
-        return {q.x, q.y, q.z};
-    }
+  CQuaternion operator+(const CQuaternion& q) const;
 
-    static CQuaternion lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng);
+  CQuaternion operator-(const CQuaternion& q) const;
 
-    CVector3f transform(const CVector3f& v) const
-    {
-        CQuaternion r(0.f, v);
-        return (*this * r * inverse()).getImaginary();
-    }
+  CQuaternion operator*(const CQuaternion& q) const;
 
-    CQuaternion log() const;
+  CQuaternion operator/(const CQuaternion& q) const;
 
-    CQuaternion exp() const;
+  CQuaternion operator*(float scale) const;
 
-    inline CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
-    inline CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
-    inline float dot(const CQuaternion& rhs) const
-    {
-#if __SSE__
-        TVectorUnion result;
-#if __SSE4_1__
-            result.mVec128 = _mm_dp_ps(mVec128, rhs.mVec128, 0xF1);
-            return result.v[0];
-#else
-        result.mVec128 = _mm_mul_ps(mVec128, rhs.mVec128);
-        return result.v[0] + result.v[1] + result.v[2] + result.v[3];
-#endif
-#else
-        return (x * rhs.x) + (y * rhs.y) + (z * rhs.z) + (w * rhs.w);
-#endif
-    }
+  CQuaternion operator/(float scale) const;
 
-    static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
-    static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
-    static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
-    static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
-    static CQuaternion shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1);
-    static CQuaternion clampedRotateTo(const zeus::CUnitVector3f& v0, const zeus::CUnitVector3f& v1,
-                                       const zeus::CRelAngle& angle);
+  CQuaternion operator-() const;
 
-    inline float roll() const { return std::atan2(2.f * (x * y + w * z), w * w + x * x - y * y - z * z); }
+  const CQuaternion& operator+=(const CQuaternion& q);
 
-    inline float pitch() const { return std::atan2(2.f * (y * z + w * x), w * w - x * x - y * y + z * z); }
+  const CQuaternion& operator-=(const CQuaternion& q);
 
-    inline float yaw() const { return std::asin(-2.f * (x * z - w * y)); }
+  const CQuaternion& operator*=(const CQuaternion& q);
 
-    CQuaternion buildEquivalent() const;
+  const CQuaternion& operator*=(float scale);
 
-    zeus::CVector3f getImaginary() const { return {x, y, z}; }
-    void setImaginary(const zeus::CVector3f& i) { x = i.x; y = i.y; z = i.z; }
+  const CQuaternion& operator/=(float scale);
 
-    CRelAngle angleFrom(const zeus::CQuaternion& other);
+  float magnitude() const { return std::sqrt(magSquared()); }
 
-    inline float& operator[](size_t idx) { assert(idx < 4); return (&w)[idx]; }
-    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&w)[idx]; }
+  float magSquared() const { return mSimd.dot4(mSimd); }
 
-    union
-    {
-        __m128 mVec128;
-        struct
-        {
-            float w, x, y, z;
-        };
-        float v[4];
-    };
+  void normalize() { *this /= magnitude(); }
 
-    static const CQuaternion skNoRotation;
+  CQuaternion normalized() const { return *this / magnitude(); }
 
-    static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
+  void invert();
+
+  CQuaternion inverse() const;
+
+  /**
+   * @brief Set the rotation using axis angle notation
+   * @param axis The axis to rotate around
+   * @param angle The magnitude of the rotation in radians
+   * @return
+   */
+  static CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
+    return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
+  }
+
+  void rotateX(const CRelAngle& angle) { *this *= fromAxisAngle({1.0f, 0.0f, 0.0f}, angle); }
+
+  void rotateY(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 1.0f, 0.0f}, angle); }
+
+  void rotateZ(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
+
+  static CVector3f rotate(const CQuaternion& rotation, const CAxisAngle& v) {
+    CQuaternion q = rotation * v;
+    q *= rotation.inverse();
+
+    return {q.mSimd.shuffle<1, 2, 3, 3>()};
+  }
+
+  static CQuaternion lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng);
+
+  CVector3f transform(const CVector3f& v) const {
+    CQuaternion r(0.f, v);
+    return (*this * r * inverse()).getImaginary();
+  }
+
+  CQuaternion log() const;
+
+  CQuaternion exp() const;
+
+  CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
+
+  CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
+
+  float dot(const CQuaternion& rhs) const {
+    return mSimd.dot4(rhs.mSimd);
+  }
+
+  static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
+
+  static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
+
+  static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
+
+  static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
+
+  static CQuaternion shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1);
+
+  static CQuaternion clampedRotateTo(const zeus::CUnitVector3f& v0, const zeus::CUnitVector3f& v1,
+                                     const zeus::CRelAngle& angle);
+
+  float roll() const {
+    simd_floats f(mSimd);
+    return std::atan2(2.f * (f[1] * f[2] + f[0] * f[3]), f[0] * f[0] + f[1] * f[1] - f[2] * f[2] - f[3] * f[3]);
+  }
+
+  float pitch() const {
+    simd_floats f(mSimd);
+    return std::atan2(2.f * (f[2] * f[3] + f[0] * f[1]), f[0] * f[0] - f[1] * f[1] - f[2] * f[2] + f[3] * f[3]);
+  }
+
+  float yaw() const {
+    simd_floats f(mSimd);
+    return std::asin(-2.f * (f[1] * f[3] - f[0] * f[2]));
+  }
+
+  CQuaternion buildEquivalent() const;
+
+  zeus::CVector3f getImaginary() const { return mSimd.shuffle<1, 2, 3, 3>(); }
+
+  void setImaginary(const zeus::CVector3f& i) {
+    x() = i.x();
+    y() = i.y();
+    z() = i.z();
+  }
+
+  CRelAngle angleFrom(const zeus::CQuaternion& other);
+
+  simd<float>::reference operator[](size_t idx) {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float operator[](size_t idx) const {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float w() const { return mSimd[0]; }
+  float x() const { return mSimd[1]; }
+  float y() const { return mSimd[2]; }
+  float z() const { return mSimd[3]; }
+
+  simd<float>::reference w() { return mSimd[0]; }
+  simd<float>::reference x() { return mSimd[1]; }
+  simd<float>::reference y() { return mSimd[2]; }
+  simd<float>::reference z() { return mSimd[3]; }
+
+  simd<float> mSimd;
+
+  static const CQuaternion skNoRotation;
+
+  static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
 };
 
 /** Non-unit quaternion, no guarantee that it's normalized.
  *  Converting to CQuaternion will perform normalize operation.
  */
-class alignas(16) CNUQuaternion
-{
+class CNUQuaternion {
 public:
-    CNUQuaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
-    CNUQuaternion(float wi, float xi, float yi, float zi) : w(wi), x(xi), y(yi), z(zi) {}
-    CNUQuaternion(float win, const zeus::CVector3f& vec) { w = win; x = vec.x; y = vec.y; z = vec.z; }
-    CNUQuaternion(const CQuaternion& other) { w = other.w; x = other.x; y = other.y; z = other.z; }
-    CNUQuaternion(const CMatrix3f& mtx) : CNUQuaternion(CQuaternion(mtx)) {}
-    static inline CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle)
-    {
-        return CNUQuaternion(CQuaternion::fromAxisAngle(axis, angle));
-    }
+  CNUQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
 
-    float magnitude() const { return std::sqrt(magSquared()); }
-    float magSquared() const { return w * w + x * x + y * y + z * z; }
-    void normalize()
-    {
-        float magDiv = 1.f / magnitude();
-        w *= magDiv;
-        x *= magDiv;
-        y *= magDiv;
-        z *= magDiv;
-    }
-    CNUQuaternion normalized() const
-    {
-        float magDiv = 1.f / magnitude();
-        return { w * magDiv, x * magDiv, y * magDiv, z * magDiv };
-    }
+  CNUQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
 
-    CNUQuaternion operator*(const CNUQuaternion& q) const;
-    CNUQuaternion operator*(float f) const;
-    const CNUQuaternion& operator+=(const CNUQuaternion& q);
+  CNUQuaternion(float win, const zeus::CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) {
+    w() = win;
+  }
 
-    inline float& operator[](size_t idx) { assert(idx < 4); return (&w)[idx]; }
-    inline const float& operator[](size_t idx) const { assert(idx < 4); return (&w)[idx]; }
+  CNUQuaternion(const CQuaternion& other) : mSimd(other.mSimd) {}
 
-    union
-    {
-        __m128 mVec128;
-        struct
-        {
-            float w, x, y, z;
-        };
-    };
+  CNUQuaternion(const CMatrix3f& mtx) : CNUQuaternion(CQuaternion(mtx)) {}
+
+  CNUQuaternion(const simd<float>& s) : mSimd(s) {}
+
+  static CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
+    return CNUQuaternion(CQuaternion::fromAxisAngle(axis, angle));
+  }
+
+  float magnitude() const { return std::sqrt(magSquared()); }
+
+  float magSquared() const { return mSimd.dot4(mSimd); }
+
+  void normalize() {
+    float magDiv = 1.f / magnitude();
+    mSimd *= magDiv;
+  }
+
+  CNUQuaternion normalized() const {
+    float magDiv = 1.f / magnitude();
+    return mSimd * simd<float>(magDiv);
+  }
+
+  CNUQuaternion operator*(const CNUQuaternion& q) const;
+
+  CNUQuaternion operator*(float f) const;
+
+  const CNUQuaternion& operator+=(const CNUQuaternion& q);
+
+  zeus::simd<float>::reference operator[](size_t idx) {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float operator[](size_t idx) const {
+    assert(idx < 4);
+    return mSimd[idx];
+  }
+
+  float w() const { return mSimd[0]; }
+  float x() const { return mSimd[1]; }
+  float y() const { return mSimd[2]; }
+  float z() const { return mSimd[3]; }
+
+  simd<float>::reference w() { return mSimd[0]; }
+  simd<float>::reference x() { return mSimd[1]; }
+  simd<float>::reference y() { return mSimd[2]; }
+  simd<float>::reference z() { return mSimd[3]; }
+
+  simd<float> mSimd;
 };
 
-inline CQuaternion CQuaternion::fromNUQuaternion(const CNUQuaternion& q)
-{
-    auto norm = q.normalized();
-    return { norm.w, norm.x, norm.y, norm.z };
+inline CQuaternion CQuaternion::fromNUQuaternion(const CNUQuaternion& q) {
+  auto norm = q.normalized();
+  return norm.mSimd;
 }
 
 CQuaternion operator+(float lhs, const CQuaternion& rhs);
+
 CQuaternion operator-(float lhs, const CQuaternion& rhs);
+
 CQuaternion operator*(float lhs, const CQuaternion& rhs);
+
 CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
 }

@@ -14,7 +14,7 @@ public:
 
   template <typename T>
   CVector3d(const simd<T>& s) : mSimd(s) {}
-  
+
 #if ZE_ATHENA_TYPES
   CVector3d(const atVec3d& vec) : mSimd(vec.simd) {}
 #endif
@@ -25,27 +25,17 @@ public:
 
   CVector3d(double x, double y, double z) : mSimd(x, y, z) {}
 
-  CVector3f asCVector3f() {
-    return mSimd;
-  }
+  CVector3f asCVector3f() { return mSimd; }
 
-  double magSquared() const {
-    return mSimd.dot3(mSimd);
-  }
+  double magSquared() const { return mSimd.dot3(mSimd); }
 
-  double magnitude() const {
-    return sqrt(magSquared());
-  }
+  double magnitude() const { return sqrt(magSquared()); }
 
   CVector3d cross(const CVector3d& rhs) const {
-    return {y() * rhs.z() - z() * rhs.y(),
-            z() * rhs.x() - x() * rhs.z(),
-            x() * rhs.y() - y() * rhs.x()};
+    return {y() * rhs.z() - z() * rhs.y(), z() * rhs.x() - x() * rhs.z(), x() * rhs.y() - y() * rhs.x()};
   }
 
-  double dot(const CVector3d& rhs) const {
-    return mSimd.dot3(rhs.mSimd);
-  }
+  double dot(const CVector3d& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
   CVector3d asNormalized() {
     double mag = magnitude();
@@ -53,29 +43,17 @@ public:
     return mSimd * zeus::simd<double>(mag);
   }
 
-  void splat(double xyz) {
-    mSimd = zeus::simd<double>(xyz);
-  }
+  void splat(double xyz) { mSimd = zeus::simd<double>(xyz); }
 
-  void zeroOut() {
-    *this = skZero;
-  }
+  void zeroOut() { *this = skZero; }
 
-  CVector3d operator+(const CVector3d& rhs) const {
-    return mSimd + rhs.mSimd;
-  }
+  CVector3d operator+(const CVector3d& rhs) const { return mSimd + rhs.mSimd; }
 
-  CVector3d operator-(const CVector3d& rhs) const {
-    return mSimd - rhs.mSimd;
-  }
+  CVector3d operator-(const CVector3d& rhs) const { return mSimd - rhs.mSimd; }
 
-  CVector3d operator*(const CVector3d& rhs) const {
-    return mSimd * rhs.mSimd;
-  }
+  CVector3d operator*(const CVector3d& rhs) const { return mSimd * rhs.mSimd; }
 
-  CVector3d operator/(const CVector3d& rhs) const {
-    return mSimd / rhs.mSimd;
-  }
+  CVector3d operator/(const CVector3d& rhs) const { return mSimd / rhs.mSimd; }
 
   zeus::simd<double>::reference operator[](size_t idx) {
     assert(idx < 3);
@@ -98,21 +76,12 @@ public:
   static const CVector3d skZero;
 };
 
-static inline CVector3d operator+(double lhs, const CVector3d& rhs) {
-  return zeus::simd<double>(lhs) + rhs.mSimd;
-}
+static inline CVector3d operator+(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) + rhs.mSimd; }
 
-static inline CVector3d operator-(double lhs, const CVector3d& rhs) {
-  return zeus::simd<double>(lhs) - rhs.mSimd;
-}
+static inline CVector3d operator-(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) - rhs.mSimd; }
 
-static inline CVector3d operator*(double lhs, const CVector3d& rhs) {
-  return zeus::simd<double>(lhs) * rhs.mSimd;
-}
+static inline CVector3d operator*(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) * rhs.mSimd; }
 
-static inline CVector3d operator/(double lhs, const CVector3d& rhs) {
-  return zeus::simd<double>(lhs) / rhs.mSimd;
-}
+static inline CVector3d operator/(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) / rhs.mSimd; }
 
-}
-
+} // namespace zeus

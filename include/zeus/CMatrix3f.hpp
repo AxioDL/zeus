@@ -11,7 +11,6 @@ class CQuaternion;
 
 class CMatrix3f {
 public:
-
   explicit CMatrix3f(bool zero = false) {
     m[0] = simd<float>(0.f);
     m[1] = simd<float>(0.f);
@@ -23,12 +22,8 @@ public:
     }
   }
 
-  CMatrix3f(float m00, float m01, float m02,
-            float m10, float m11, float m12,
-            float m20, float m21, float m22)
-  : m{{m00, m10, m20},
-      {m01, m11, m21},
-      {m02, m12, m22}} {}
+  CMatrix3f(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
+  : m{{m00, m10, m20}, {m01, m11, m21}, {m02, m12, m22}} {}
 
   CMatrix3f(const CVector3f& scaleVec) {
     m[0] = simd<float>(0.f);
@@ -99,8 +94,7 @@ public:
   }
 
   CVector3f operator*(const CVector3f& other) const {
-    return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() +
-           m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
+    return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
            m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>();
   }
 
@@ -147,32 +141,27 @@ public:
   static CMatrix3f RotateX(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
-    return CMatrix3f(simd<float>{1.f, 0.f, 0.f, 0.f},
-                     simd<float>{0.f, cosT, sinT, 0.f},
+    return CMatrix3f(simd<float>{1.f, 0.f, 0.f, 0.f}, simd<float>{0.f, cosT, sinT, 0.f},
                      simd<float>{0.f, -sinT, cosT, 0.f});
   }
 
   static CMatrix3f RotateY(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
-    return CMatrix3f(simd<float>{cosT, 0.f, -sinT, 0.f},
-                     simd<float>{0.f, 1.f, 0.f, 0.f},
+    return CMatrix3f(simd<float>{cosT, 0.f, -sinT, 0.f}, simd<float>{0.f, 1.f, 0.f, 0.f},
                      simd<float>{sinT, 0.f, cosT, 0.f});
   }
 
   static CMatrix3f RotateZ(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
-    return CMatrix3f(simd<float>{cosT, sinT, 0.f, 0.f},
-                     simd<float>{-sinT, cosT, 0.f, 0.f},
+    return CMatrix3f(simd<float>{cosT, sinT, 0.f, 0.f}, simd<float>{-sinT, cosT, 0.f, 0.f},
                      simd<float>{0.f, 0.f, 1.f, 0.f});
   }
 
   float determinant() const {
-    return
-      m[1][0] * (m[2][1] * m[0][2] - m[0][1] * m[2][2]) +
-      m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) +
-      m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
+    return m[1][0] * (m[2][1] * m[0][2] - m[0][1] * m[2][2]) + m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) +
+           m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
   }
 
   CVector3f m[3];
@@ -181,10 +170,8 @@ public:
 static inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
   simd<float> v[3];
   for (int i = 0; i < 3; ++i)
-    v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() +
-           lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
+    v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
            lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>();
   return CMatrix3f(v[0], v[1], v[2]);
 }
-}
-
+} // namespace zeus

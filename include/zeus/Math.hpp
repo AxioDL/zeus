@@ -21,7 +21,7 @@
 #undef M_SQRT2
 #define M_SQRT2 1.41421356237309504880 /* sqrt(2) */
 #undef M_SQRT1_2
-#define M_SQRT1_2 0.70710678118654752440 /* 1/sqrt(2) */
+#define M_SQRT1_2 0.70710678118654752440   /* 1/sqrt(2) */
 #define M_SQRT1_2F 0.70710678118654752440f /* 1/sqrt(2) */
 
 #include <cmath>
@@ -80,23 +80,23 @@ class CVector2f;
 
 class CTransform;
 
-template<typename T>
+template <typename T>
 inline constexpr T min(const T& a, const T& b) {
   return a < b ? a : b;
 }
 
-template<typename T>
+template <typename T>
 inline constexpr T max(const T& a, const T& b) {
   return a > b ? a : b;
 }
 
-template<>
+template <>
 CVector3f min(const CVector3f& a, const CVector3f& b);
 
-template<>
+template <>
 CVector3f max(const CVector3f& a, const CVector3f& b);
 
-template<typename T>
+template <typename T>
 inline constexpr T clamp(const T& a, const T& val, const T& b) {
   return max<T>(a, min<T>(b, val));
 }
@@ -115,8 +115,8 @@ CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f
 
 float getCatmullRomSplinePoint(float a, float b, float c, float d, float t);
 
-CVector3f
-getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t);
+CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
+                                   float t);
 
 CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
                                         float t);
@@ -135,7 +135,7 @@ int floorPowerOfTwo(int x);
 
 int ceilingPowerOfTwo(int x);
 
-template<typename U>
+template <typename U>
 typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, int>::type PopCount(U x) {
 #if __GNUC__ >= 4
   return __builtin_popcountll(x);
@@ -152,11 +152,10 @@ typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, i
 #endif
 }
 
-template<typename E>
+template <typename E>
 typename std::enable_if<std::is_enum<E>::value, int>::type PopCount(E e) {
   return PopCount(static_cast<typename std::underlying_type<E>::type>(e));
 }
-
 
 bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = 0.000099999997f);
 
@@ -169,5 +168,4 @@ inline bool close_enough(float a, float b, double epsilon = 0.000009999999747378
 inline bool close_enough(double a, double b, double epsilon = 0.000009999999747378752) {
   return std::fabs(a - b) < epsilon;
 }
-}
-
+} // namespace zeus

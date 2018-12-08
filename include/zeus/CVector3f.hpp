@@ -23,13 +23,9 @@ public:
 
   CVector3f(const atVec3f& vec) : mSimd(vec.simd) {}
 
-  operator atVec3f&() {
-    return *reinterpret_cast<atVec3f*>(this);
-  }
+  operator atVec3f&() { return *reinterpret_cast<atVec3f*>(this); }
 
-  operator const atVec3f&() const {
-    return *reinterpret_cast<const atVec3f*>(this);
-  }
+  operator const atVec3f&() const { return *reinterpret_cast<const atVec3f*>(this); }
 
   void readBig(athena::io::IStreamReader& input) {
     simd_floats f;
@@ -52,9 +48,7 @@ public:
 
   explicit CVector3f(float xyz) : mSimd(xyz) {}
 
-  void assign(float x, float y, float z) {
-    mSimd = zeus::simd<float>(x, y, z);
-  }
+  void assign(float x, float y, float z) { mSimd = zeus::simd<float>(x, y, z); }
 
   CVector3f(float x, float y, float z) : mSimd(x, y, z) {}
 
@@ -66,9 +60,7 @@ public:
     mSimd[3] = 0.0f;
   }
 
-  CVector2f toVec2f() const {
-    return CVector2f(mSimd);
-  }
+  CVector2f toVec2f() const { return CVector2f(mSimd); }
 
   bool operator==(const CVector3f& rhs) const {
     return mSimd[0] == rhs.mSimd[0] && mSimd[1] == rhs.mSimd[1] && mSimd[2] == rhs.mSimd[2];
@@ -76,37 +68,21 @@ public:
 
   bool operator!=(const CVector3f& rhs) const { return !(*this == rhs); }
 
-  CVector3f operator+(const CVector3f& rhs) const {
-    return mSimd + rhs.mSimd;
-  }
+  CVector3f operator+(const CVector3f& rhs) const { return mSimd + rhs.mSimd; }
 
-  CVector3f operator-(const CVector3f& rhs) const {
-    return mSimd - rhs.mSimd;
-  }
+  CVector3f operator-(const CVector3f& rhs) const { return mSimd - rhs.mSimd; }
 
-  CVector3f operator-() const {
-    return -mSimd;
-  }
+  CVector3f operator-() const { return -mSimd; }
 
-  CVector3f operator*(const CVector3f& rhs) const {
-    return mSimd * rhs.mSimd;
-  }
+  CVector3f operator*(const CVector3f& rhs) const { return mSimd * rhs.mSimd; }
 
-  CVector3f operator/(const CVector3f& rhs) const {
-    return mSimd / rhs.mSimd;
-  }
+  CVector3f operator/(const CVector3f& rhs) const { return mSimd / rhs.mSimd; }
 
-  CVector3f operator+(float val) const {
-    return mSimd + zeus::simd<float>(val);
-  }
+  CVector3f operator+(float val) const { return mSimd + zeus::simd<float>(val); }
 
-  CVector3f operator-(float val) const {
-    return mSimd - zeus::simd<float>(val);
-  }
+  CVector3f operator-(float val) const { return mSimd - zeus::simd<float>(val); }
 
-  CVector3f operator*(float val) const {
-    return mSimd * zeus::simd<float>(val);
-  }
+  CVector3f operator*(float val) const { return mSimd * zeus::simd<float>(val); }
 
   CVector3f operator/(float val) const {
     float ooval = 1.f / val;
@@ -144,38 +120,22 @@ public:
   }
 
   CVector3f cross(const CVector3f& rhs) const {
-    return CVector3f(y() * rhs.z() - z() * rhs.y(),
-                     z() * rhs.x() - x() * rhs.z(),
-                     x() * rhs.y() - y() * rhs.x());
+    return CVector3f(y() * rhs.z() - z() * rhs.y(), z() * rhs.x() - x() * rhs.z(), x() * rhs.y() - y() * rhs.x());
   }
 
-  float dot(const CVector3f& rhs) const {
-    return mSimd.dot3(rhs.mSimd);
-  }
+  float dot(const CVector3f& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
-  float magSquared() const {
-    return mSimd.dot3(mSimd);
-  }
+  float magSquared() const { return mSimd.dot3(mSimd); }
 
-  float magnitude() const {
-    return std::sqrt(magSquared());
-  }
+  float magnitude() const { return std::sqrt(magSquared()); }
 
-  bool isNotInf() const {
-    return !(std::isinf(x()) || std::isinf(y()) || std::isinf(z()));
-  }
+  bool isNotInf() const { return !(std::isinf(x()) || std::isinf(y()) || std::isinf(z())); }
 
-  bool isMagnitudeSafe() const {
-    return isNotInf() && magSquared() >= 9.9999994e-29;
-  }
+  bool isMagnitudeSafe() const { return isNotInf() && magSquared() >= 9.9999994e-29; }
 
-  void zeroOut() {
-    *this = CVector3f::skZero;
-  }
+  void zeroOut() { *this = CVector3f::skZero; }
 
-  void splat(float xyz) {
-    mSimd = zeus::simd<float>(xyz);
-  }
+  void splat(float xyz) { mSimd = zeus::simd<float>(xyz); }
 
   static float getAngleDiff(const CVector3f& a, const CVector3f& b);
 
@@ -183,15 +143,11 @@ public:
     return zeus::simd<float>(1.f - t) * a.mSimd + b.mSimd * zeus::simd<float>(t);
   }
 
-  static CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t) {
-    return lerp(a, b, t).normalized();
-  }
+  static CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t) { return lerp(a, b, t).normalized(); }
 
   static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
 
-  bool isNormalized() const {
-    return std::fabs(1.f - magSquared()) < 0.01f;
-  }
+  bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 
   bool canBeNormalized() const {
     if (std::isinf(x()) || std::isinf(y()) || std::isinf(z()))
@@ -199,9 +155,7 @@ public:
     return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON || std::fabs(z()) >= FLT_EPSILON;
   }
 
-  bool isZero() const {
-    return magSquared() <= FLT_EPSILON;
-  }
+  bool isZero() const { return magSquared() <= FLT_EPSILON; }
 
   void scaleToLength(float newLength) {
     float length = magSquared();
@@ -261,21 +215,12 @@ public:
   static CVector3f degToRad(const CVector3f& deg) { return deg * skDegToRadVec; }
 };
 
-static inline CVector3f operator+(float lhs, const CVector3f& rhs) {
-  return zeus::simd<float>(lhs) + rhs.mSimd;
-}
+static inline CVector3f operator+(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 
-static inline CVector3f operator-(float lhs, const CVector3f& rhs) {
-  return zeus::simd<float>(lhs) - rhs.mSimd;
-}
+static inline CVector3f operator-(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
 
-static inline CVector3f operator*(float lhs, const CVector3f& rhs) {
-  return zeus::simd<float>(lhs) * rhs.mSimd;
-}
+static inline CVector3f operator*(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
 
-static inline CVector3f operator/(float lhs, const CVector3f& rhs) {
-  return zeus::simd<float>(lhs) / rhs.mSimd;
-}
+static inline CVector3f operator/(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
 
-}
-
+} // namespace zeus

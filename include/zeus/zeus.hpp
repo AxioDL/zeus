@@ -23,4 +23,3 @@
 #include "zeus/CColor.hpp"
 #include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
-

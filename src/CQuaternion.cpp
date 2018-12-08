@@ -83,13 +83,9 @@ CQuaternion& CQuaternion::operator=(const CQuaternion& q) {
   return *this;
 }
 
-CQuaternion CQuaternion::operator+(const CQuaternion& q) const {
-  return mSimd + q.mSimd;
-}
+CQuaternion CQuaternion::operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
 
-CQuaternion CQuaternion::operator-(const CQuaternion& q) const {
-  return mSimd - q.mSimd;
-}
+CQuaternion CQuaternion::operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
 
 CQuaternion CQuaternion::operator*(const CQuaternion& q) const {
   return CQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
@@ -111,17 +107,11 @@ CQuaternion CQuaternion::operator/(const CQuaternion& q) const {
   return *this * p;
 }
 
-CQuaternion CQuaternion::operator*(float scale) const {
-  return mSimd * simd<float>(scale);
-}
+CQuaternion CQuaternion::operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-CNUQuaternion CNUQuaternion::operator*(float scale) const {
-  return mSimd * simd<float>(scale);
-}
+CNUQuaternion CNUQuaternion::operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-CQuaternion CQuaternion::operator/(float scale) const {
-  return mSimd / simd<float>(scale);
-}
+CQuaternion CQuaternion::operator/(float scale) const { return mSimd / simd<float>(scale); }
 
 CQuaternion CQuaternion::operator-() const { return -mSimd; }
 
@@ -163,9 +153,7 @@ const CQuaternion& CQuaternion::operator/=(float scale) {
 
 static const simd<float> InvertQuat(1.f, -1.f, -1.f, -1.f);
 
-void CQuaternion::invert() {
-  mSimd *= InvertQuat;
-}
+void CQuaternion::invert() { mSimd *= InvertQuat; }
 
 CQuaternion CQuaternion::inverse() const { return mSimd * InvertQuat; }
 
@@ -269,21 +257,13 @@ CQuaternion CQuaternion::slerpShort(const CQuaternion& a, const CQuaternion& b, 
   return zeus::CQuaternion::slerp((b.dot(a) >= 0.f) ? a : a.buildEquivalent(), b, t);
 }
 
-CQuaternion operator+(float lhs, const CQuaternion& rhs) {
-  return simd<float>(lhs) + rhs.mSimd;
-}
+CQuaternion operator+(float lhs, const CQuaternion& rhs) { return simd<float>(lhs) + rhs.mSimd; }
 
-CQuaternion operator-(float lhs, const CQuaternion& rhs) {
-  return simd<float>(lhs) - rhs.mSimd;
-}
+CQuaternion operator-(float lhs, const CQuaternion& rhs) { return simd<float>(lhs) - rhs.mSimd; }
 
-CQuaternion operator*(float lhs, const CQuaternion& rhs) {
-  return simd<float>(lhs) * rhs.mSimd;
-}
+CQuaternion operator*(float lhs, const CQuaternion& rhs) { return simd<float>(lhs) * rhs.mSimd; }
 
-CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs) {
-  return simd<float>(lhs) * rhs.mSimd;
-}
+CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs) { return simd<float>(lhs) * rhs.mSimd; }
 
 CQuaternion CQuaternion::buildEquivalent() const {
   float tmp = std::acos(clamp(-1.f, w(), 1.f)) * 2.f;
@@ -309,7 +289,7 @@ CQuaternion CQuaternion::lookAt(const CUnitVector3f& source, const CUnitVector3f
     destNoZ.normalize();
 
     float angleBetween =
-      normalize_angle(std::atan2(destNoZ.x(), destNoZ.y()) - std::atan2(sourceNoZ.x(), sourceNoZ.y()));
+        normalize_angle(std::atan2(destNoZ.x(), destNoZ.y()) - std::atan2(sourceNoZ.x(), sourceNoZ.y()));
     float realAngle = zeus::clamp(-maxAng.asRadians(), angleBetween, maxAng.asRadians());
     CQuaternion tmpQ;
     tmpQ.rotateZ(-realAngle);
@@ -322,9 +302,9 @@ CQuaternion CQuaternion::lookAt(const CUnitVector3f& source, const CUnitVector3f
   else
     return skNoRotation;
 
-  float realAngle =
-    zeus::clamp(-maxAng.asRadians(), normalize_angle(std::acos(dest.z()) - std::acos(source.z())), maxAng.asRadians());
+  float realAngle = zeus::clamp(-maxAng.asRadians(), normalize_angle(std::acos(dest.z()) - std::acos(source.z())),
+                                maxAng.asRadians());
   return CQuaternion::fromAxisAngle(tmp.cross(CVector3f::skUp), -realAngle) * q;
 }
 
-}
+} // namespace zeus

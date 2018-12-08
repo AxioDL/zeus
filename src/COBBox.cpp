@@ -6,14 +6,8 @@ CAABox COBBox::calculateAABox(const CTransform& worldXf) const {
   CAABox ret = CAABox::skInvertedBox;
 
   CTransform trans = worldXf * transform;
-  static const CVector3f basis[8] = {{1.f,  1.f,  1.f},
-                                     {1.f,  1.f,  -1.f},
-                                     {1.f,  -1.f, 1.f},
-                                     {1.f,  -1.f, -1.f},
-                                     {-1.f, -1.f, -1.f},
-                                     {-1.f, -1.f, 1.f},
-                                     {-1.f, 1.f,  -1.f},
-                                     {-1.f, 1.f,  1.f}};
+  static const CVector3f basis[8] = {{1.f, 1.f, 1.f},    {1.f, 1.f, -1.f},  {1.f, -1.f, 1.f},  {1.f, -1.f, -1.f},
+                                     {-1.f, -1.f, -1.f}, {-1.f, -1.f, 1.f}, {-1.f, 1.f, -1.f}, {-1.f, 1.f, 1.f}};
   CVector3f p = extents * basis[0];
   ret.accumulateBounds(trans * p);
   p = extents * basis[1];
@@ -36,9 +30,7 @@ CAABox COBBox::calculateAABox(const CTransform& worldXf) const {
 
 bool COBBox::OBBIntersectsBox(const COBBox& other) const {
   CVector3f v = other.transform.origin - transform.origin;
-  CVector3f T = CVector3f(v.dot(transform.basis[0]),
-                          v.dot(transform.basis[1]),
-                          v.dot(transform.basis[2]));
+  CVector3f T = CVector3f(v.dot(transform.basis[0]), v.dot(transform.basis[1]), v.dot(transform.basis[2]));
 
   CMatrix3f R;
 
@@ -50,8 +42,7 @@ bool COBBox::OBBIntersectsBox(const COBBox& other) const {
 
   for (int i = 0; i < 3; ++i) {
     ra = extents[i];
-    rb = (other.extents[0] * std::fabs(R[i][0])) +
-         (other.extents[1] * std::fabs(R[i][1])) +
+    rb = (other.extents[0] * std::fabs(R[i][0])) + (other.extents[1] * std::fabs(R[i][1])) +
          (other.extents[2] * std::fabs(R[i][2]));
     t = std::fabs(T[i]);
 
@@ -60,9 +51,7 @@ bool COBBox::OBBIntersectsBox(const COBBox& other) const {
   }
 
   for (int k = 0; k < 3; ++k) {
-    ra = (extents[0] * std::fabs(R[0][k])) +
-         (extents[1] * std::fabs(R[1][k])) +
-         (extents[2] * std::fabs(R[2][k]));
+    ra = (extents[0] * std::fabs(R[0][k])) + (extents[1] * std::fabs(R[1][k])) + (extents[2] * std::fabs(R[2][k]));
     rb = other.extents[k];
 
     t = std::fabs(T[0] * R[0][k] + T[1] * R[1][k] + T[2] * R[2][k]);
@@ -137,4 +126,4 @@ bool COBBox::OBBIntersectsBox(const COBBox& other) const {
   return true;
 }
 
-}
+} // namespace zeus

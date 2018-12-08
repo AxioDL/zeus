@@ -26,5 +26,4 @@ public:
   CVector2f position;
   CVector2f size;
 };
-}
-
+} // namespace zeus

@@ -46,4 +46,4 @@ CVector2f CVector2f::slerp(const CVector2f& a, const CVector2f& b, float t) {
   }
   return a;
 }
-}
+} // namespace zeus

@@ -62,4 +62,4 @@ CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f
   ret.origin = origin;
   return ret;
 }
-}
+} // namespace zeus

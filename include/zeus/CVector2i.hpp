@@ -29,33 +29,18 @@ public:
 
   CVector2f toVec2f() const { return CVector2f(x, y); }
 
-  CVector2i operator+(const CVector2i& val) const {
-    return CVector2i(x + val.x, y + val.y);
-  }
+  CVector2i operator+(const CVector2i& val) const { return CVector2i(x + val.x, y + val.y); }
 
-  CVector2i operator-(const CVector2i& val) const {
-    return CVector2i(x - val.x, y - val.y);
-  }
+  CVector2i operator-(const CVector2i& val) const { return CVector2i(x - val.x, y - val.y); }
 
-  CVector2i operator*(const CVector2i& val) const {
-    return CVector2i(x * val.x, y * val.y);
-  }
+  CVector2i operator*(const CVector2i& val) const { return CVector2i(x * val.x, y * val.y); }
 
-  CVector2i operator/(const CVector2i& val) const {
-    return CVector2i(x / val.x, y / val.y);
-  }
+  CVector2i operator/(const CVector2i& val) const { return CVector2i(x / val.x, y / val.y); }
 
-  bool operator==(const CVector2i& other) const {
-    return x == other.x && y == other.y;
-  }
+  bool operator==(const CVector2i& other) const { return x == other.x && y == other.y; }
 
-  bool operator!=(const CVector2i& other) const {
-    return x != other.x || y != other.y;
-  }
+  bool operator!=(const CVector2i& other) const { return x != other.x || y != other.y; }
 
-  CVector2i operator*(int val) const {
-    return CVector2i(x * val, y * val);
-  }
+  CVector2i operator*(int val) const { return CVector2i(x * val, y * val); }
 };
-}
-
+} // namespace zeus

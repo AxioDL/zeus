@@ -1,6 +1,5 @@
 #include "zeus/CAxisAngle.hpp"
 
-namespace zeus
-{
+namespace zeus {
 const CAxisAngle CAxisAngle::sIdentity = {};
 }

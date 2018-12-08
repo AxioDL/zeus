@@ -42,9 +42,6 @@ public:
 
   bool OBBIntersectsBox(const COBBox& other) const;
 
-  bool AABoxIntersectsBox(const CAABox& other) {
-    return OBBIntersectsBox(FromAABox(other, CTransform::Identity()));
-  }
+  bool AABoxIntersectsBox(const CAABox& other) { return OBBIntersectsBox(FromAABox(other, CTransform::Identity())); }
 };
-}
-
+} // namespace zeus

@@ -11,5 +11,4 @@ public:
   CVector3f origin;
   CVector3f dir;
 };
-}
-
+} // namespace zeus

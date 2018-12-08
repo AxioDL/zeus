@@ -18,8 +18,9 @@
 #undef max
 
 #if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
-#define COLOR(rgba)                                                                                                            \
-    (unsigned)(((rgba)&0x000000FF) << 24 | ((rgba)&0x0000FF00) << 8 | ((rgba)&0x00FF0000) >> 8 | ((rgba)&0xFF000000) >> 24)
+#define COLOR(rgba)                                                                                                    \
+  (unsigned)(((rgba)&0x000000FF) << 24 | ((rgba)&0x0000FF00) << 8 | ((rgba)&0x00FF0000) >> 8 |                         \
+             ((rgba)&0xFF000000) >> 24)
 #else
 #define COLOR(rgba) rgba
 #endif
@@ -136,37 +137,21 @@ public:
 
   bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
 
-  CColor operator+(const CColor& rhs) const {
-    return mSimd + rhs.mSimd;
-  }
+  CColor operator+(const CColor& rhs) const { return mSimd + rhs.mSimd; }
 
-  CColor operator-(const CColor& rhs) const {
-    return mSimd - rhs.mSimd;
-  }
+  CColor operator-(const CColor& rhs) const { return mSimd - rhs.mSimd; }
 
-  CColor operator*(const CColor& rhs) const {
-    return mSimd * rhs.mSimd;
-  }
+  CColor operator*(const CColor& rhs) const { return mSimd * rhs.mSimd; }
 
-  CColor operator/(const CColor& rhs) const {
-    return mSimd / rhs.mSimd;
-  }
+  CColor operator/(const CColor& rhs) const { return mSimd / rhs.mSimd; }
 
-  CColor operator+(float val) const {
-    return mSimd + simd<float>(val);
-  }
+  CColor operator+(float val) const { return mSimd + simd<float>(val); }
 
-  CColor operator-(float val) const {
-    return mSimd - simd<float>(val);
-  }
+  CColor operator-(float val) const { return mSimd - simd<float>(val); }
 
-  CColor operator*(float val) const {
-    return mSimd * simd<float>(val);
-  }
+  CColor operator*(float val) const { return mSimd * simd<float>(val); }
 
-  CColor operator/(float val) const {
-    return mSimd / simd<float>(val);
-  }
+  CColor operator/(float val) const { return mSimd / simd<float>(val); }
 
   const CColor& operator+=(const CColor& rhs) {
     mSimd += rhs.mSimd;
@@ -220,9 +205,7 @@ public:
     return *this * mag;
   }
 
-  float magSquared() const {
-    return mSimd.dot4(mSimd);
-  }
+  float magSquared() const { return mSimd.dot4(mSimd); }
 
   float magnitude() const { return std::sqrt(magSquared()); }
 
@@ -247,9 +230,7 @@ public:
     mSimd[3] = a;
   }
 
-  float rgbDot(const CColor& rhs) const {
-    return mSimd.dot3(rhs.mSimd);
-  }
+  float rgbDot(const CColor& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
   void fromRGBA8(const Comp8 ri, const Comp8 gi, const Comp8 bi, const Comp8 ai) {
     mSimd = simd<float>(ri * OneOver255, gi * OneOver255, bi * OneOver255, ai * OneOver255);
@@ -320,19 +301,11 @@ public:
   simd<float>::reference a() { return mSimd[3]; }
 };
 
-static inline CColor operator+(float lhs, const CColor& rhs) {
-  return simd<float>(lhs) + rhs.mSimd;
-}
+static inline CColor operator+(float lhs, const CColor& rhs) { return simd<float>(lhs) + rhs.mSimd; }
 
-static inline CColor operator-(float lhs, const CColor& rhs) {
-  return simd<float>(lhs) - rhs.mSimd;
-}
+static inline CColor operator-(float lhs, const CColor& rhs) { return simd<float>(lhs) - rhs.mSimd; }
 
-static inline CColor operator*(float lhs, const CColor& rhs) {
-  return simd<float>(lhs) * rhs.mSimd;
-}
+static inline CColor operator*(float lhs, const CColor& rhs) { return simd<float>(lhs) * rhs.mSimd; }
 
-static inline CColor operator/(float lhs, const CColor& rhs) {
-  return simd<float>(lhs) / rhs.mSimd;
-}
-}
+static inline CColor operator/(float lhs, const CColor& rhs) { return simd<float>(lhs) / rhs.mSimd; }
+} // namespace zeus

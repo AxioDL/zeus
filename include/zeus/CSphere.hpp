@@ -17,5 +17,4 @@ public:
   CVector3f position;
   float radius;
 };
-}
-
+} // namespace zeus

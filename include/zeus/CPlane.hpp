@@ -36,9 +36,7 @@ public:
     mSimd[3] = nd * mag;
   }
 
-  float pointToPlaneDist(const CVector3f& pos) const {
-    return pos.dot(normal()) - d();
-  }
+  float pointToPlaneDist(const CVector3f& pos) const { return pos.dot(normal()) - d(); }
 
   bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
 
@@ -66,5 +64,4 @@ public:
 
   zeus::simd<float> mSimd;
 };
-}
-
+} // namespace zeus

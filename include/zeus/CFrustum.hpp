@@ -16,4 +16,4 @@ public:
   bool sphereFrustumTest(const CSphere& sphere) const;
   bool pointFrustumTest(const CVector3f& point) const;
 };
-}
+} // namespace zeus

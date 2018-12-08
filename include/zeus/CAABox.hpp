@@ -16,23 +16,9 @@
 namespace zeus {
 class CAABox {
 public:
-  enum class EBoxEdgeId {
-    Z0,
-    X0,
-    Z1,
-    X1,
-    Z2,
-    X2,
-    Z3,
-    X3,
-    Y0,
-    Y1,
-    Y2,
-    Y3
-  };
+  enum class EBoxEdgeId { Z0, X0, Z1, X1, Z2, X2, Z3, X3, Y0, Y1, Y2, Y3 };
 
-  enum class EBoxFaceID {
-  };
+  enum class EBoxFaceID {};
 
   static const CAABox skInvertedBox;
   static const CAABox skNullBox;
@@ -48,8 +34,7 @@ public:
   CAABox(float min, float max) : min(CVector3f(min)), max(CVector3f(max)) {}
 
   CAABox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
-    : min(minX, minY, minZ), max(maxX, maxY, maxZ) {
-  }
+  : min(minX, minY, minZ), max(maxX, maxY, maxZ) {}
 
 #if ZE_ATHENA_TYPES
 
@@ -233,20 +218,17 @@ public:
   }
 
   bool pointInside(const CVector3f& other) const {
-    return (min.x() <= other.x() && other.x() <= max.x() &&
-            min.y() <= other.y() && other.y() <= max.y() &&
+    return (min.x() <= other.x() && other.x() <= max.x() && min.y() <= other.y() && other.y() <= max.y() &&
             min.z() <= other.z() && other.z() <= max.z());
   }
 
   CVector3f closestPointAlongVector(const CVector3f& other) const {
-    return {(other.x() >= 0.f ? min.x() : max.x()),
-            (other.y() >= 0.f ? min.y() : max.y()),
+    return {(other.x() >= 0.f ? min.x() : max.x()), (other.y() >= 0.f ? min.y() : max.y()),
             (other.z() >= 0.f ? min.z() : max.z())};
   }
 
   CVector3f furthestPointAlongVector(const CVector3f& other) const {
-    return {(other.x() >= 0.f ? max.x() : min.x()),
-            (other.y() >= 0.f ? max.y() : min.y()),
+    return {(other.x() >= 0.f ? max.x() : min.x()), (other.y() >= 0.f ? max.y() : min.y()),
             (other.z() >= 0.f ? max.z() : min.z())};
   }
 
@@ -368,5 +350,4 @@ inline bool operator==(const CAABox& left, const CAABox& right) {
 inline bool operator!=(const CAABox& left, const CAABox& right) {
   return (left.min != right.min || left.max != right.max);
 }
-}
-
+} // namespace zeus

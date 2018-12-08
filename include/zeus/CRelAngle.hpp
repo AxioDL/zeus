@@ -91,5 +91,4 @@ struct CRelAngle {
     return *this;
   }
 };
-}
-
+} // namespace zeus

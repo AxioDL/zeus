@@ -115,4 +115,4 @@ void CColor::toHSL(float& h, float& s, float& l) const {
     h /= 6.f;
   }
 }
-}
+} // namespace zeus

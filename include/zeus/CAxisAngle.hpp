@@ -14,5 +14,4 @@ struct CAxisAngle : CVector3f {
   const CVector3f& getVector() const { return *this; }
   static const CAxisAngle sIdentity;
 };
-}
-
+} // namespace zeus

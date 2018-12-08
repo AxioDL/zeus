@@ -65,4 +65,4 @@ void CProjection::_updateCachedMatrix() {
     m_mtx.m[3][3] = 0.0f;
   }
 }
-}
+} // namespace zeus

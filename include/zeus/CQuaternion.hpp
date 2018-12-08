@@ -37,9 +37,7 @@ public:
 
   CQuaternion(float xi, float yi, float zi) { fromVector3f(CVector3f(xi, yi, zi)); }
 
-  CQuaternion(float wi, const CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) {
-    mSimd[0] = wi;
-  }
+  CQuaternion(float wi, const CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) { mSimd[0] = wi; }
 
   template <typename T>
   CQuaternion(const simd<T>& s) : mSimd(s) {}
@@ -57,13 +55,9 @@ public:
 
   CQuaternion(const atVec4f& vec) : mSimd(vec.simd) {}
 
-  operator atVec4f&() {
-    return *reinterpret_cast<atVec4f*>(this);
-  }
+  operator atVec4f&() { return *reinterpret_cast<atVec4f*>(this); }
 
-  operator const atVec4f&() const {
-    return *reinterpret_cast<const atVec4f*>(this);
-  }
+  operator const atVec4f&() const { return *reinterpret_cast<const atVec4f*>(this); }
 
 #endif
 
@@ -158,9 +152,7 @@ public:
 
   CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
 
-  float dot(const CQuaternion& rhs) const {
-    return mSimd.dot4(rhs.mSimd);
-  }
+  float dot(const CQuaternion& rhs) const { return mSimd.dot4(rhs.mSimd); }
 
   static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
 
@@ -177,7 +169,7 @@ public:
 
   float roll() const {
     simd_floats f(mSimd);
-    return std::atan2(2.f * (f[1] * f[2] + f[0] * f[3]), f[0] * f[0] + f[1] * f[1] - f[2] * f[2] - f[3] * f[3]);
+    return std::asin(-2.f * (f[1] * f[3] - f[0] * f[2]));
   }
 
   float pitch() const {
@@ -187,7 +179,7 @@ public:
 
   float yaw() const {
     simd_floats f(mSimd);
-    return std::asin(-2.f * (f[1] * f[3] - f[0] * f[2]));
+    return std::atan2(2.f * (f[1] * f[2] + f[0] * f[3]), f[0] * f[0] + f[1] * f[1] - f[2] * f[2] - f[3] * f[3]);
   }
 
   CQuaternion buildEquivalent() const;
@@ -238,9 +230,7 @@ public:
 
   CNUQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
 
-  CNUQuaternion(float win, const zeus::CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) {
-    w() = win;
-  }
+  CNUQuaternion(float win, const zeus::CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) { w() = win; }
 
   CNUQuaternion(const CQuaternion& other) : mSimd(other.mSimd) {}
 
@@ -307,4 +297,4 @@ CQuaternion operator-(float lhs, const CQuaternion& rhs);
 CQuaternion operator*(float lhs, const CQuaternion& rhs);
 
 CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
-}
+} // namespace zeus

@@ -10,4 +10,4 @@ CVector4f& CVector4f::operator=(const CColor& other) {
   mSimd = other.mSimd;
   return *this;
 }
-}
+} // namespace zeus

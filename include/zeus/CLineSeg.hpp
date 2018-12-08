@@ -18,5 +18,4 @@ public:
   CVector3f xc_dir;
   CVector3f x18_end;
 };
-}
-
+} // namespace zeus

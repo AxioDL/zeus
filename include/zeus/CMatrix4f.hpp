@@ -18,14 +18,9 @@ public:
     }
   }
 
-  CMatrix4f(float m00, float m01, float m02, float m03,
-            float m10, float m11, float m12, float m13,
-            float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33)
-  : m{{m00, m10, m20, m30},
-      {m01, m11, m21, m31},
-      {m02, m12, m22, m32},
-      {m03, m13, m23, m33}} {}
+  CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
+            float m21, float m22, float m23, float m30, float m31, float m32, float m33)
+  : m{{m00, m10, m20, m30}, {m01, m11, m21, m31}, {m02, m12, m22, m32}, {m03, m13, m23, m33}} {}
 
   CMatrix4f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
@@ -47,7 +42,7 @@ public:
     m[2] = other.m[2];
     m[3] = other.m[3];
   }
-  
+
   CMatrix4f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2, const simd<float>& r3) {
     m[0].mSimd = r0;
     m[1].mSimd = r1;
@@ -71,10 +66,8 @@ public:
   }
 
   CVector4f operator*(const CVector4f& other) const {
-    return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() +
-           m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
-           m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>() +
-           m[3].mSimd * other.mSimd.shuffle<3, 3, 3, 3>();
+    return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
+           m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>() + m[3].mSimd * other.mSimd.shuffle<3, 3, 3, 3>();
   }
 
   CVector4f& operator[](size_t i) {
@@ -106,11 +99,8 @@ public:
 static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
   simd<float> v[4];
   for (int i = 0; i < 4; ++i)
-    v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() +
-           lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
-           lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>() +
-           lhs.m[3].mSimd * rhs[i].mSimd.shuffle<3, 3, 3, 3>();
+    v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
+           lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>() + lhs.m[3].mSimd * rhs[i].mSimd.shuffle<3, 3, 3, 3>();
   return CMatrix4f(v[0], v[1], v[2], v[3]);
 }
-}
-
+} // namespace zeus

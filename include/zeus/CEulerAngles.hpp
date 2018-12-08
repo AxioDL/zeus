@@ -12,5 +12,4 @@ public:
   CEulerAngles(const CTransform& xf);
 };
 
-}
-
+} // namespace zeus

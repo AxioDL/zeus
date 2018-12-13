@@ -10,6 +10,7 @@
 
 namespace zeus {
 class CVector3d;
+class CRelAngle;
 
 class CVector3f {
 public:
@@ -145,7 +146,7 @@ public:
 
   static CVector3f nlerp(const CVector3f& a, const CVector3f& b, float t) { return lerp(a, b, t).normalized(); }
 
-  static CVector3f slerp(const CVector3f& a, const CVector3f& b, float t);
+  static CVector3f slerp(const CVector3f& a, const CVector3f& b, CRelAngle clampAngle);
 
   bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 

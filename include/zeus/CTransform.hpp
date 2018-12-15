@@ -35,7 +35,9 @@ public:
   CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
   : basis(c0, c1, c2), origin(c3) {}
 
-  static CTransform Identity() { return CTransform(CMatrix3f::skIdentityMatrix3f); }
+  static const CTransform skIdentityTransform;
+
+  static const CTransform& Identity() { return skIdentityTransform; }
 
   bool operator==(const CTransform& other) const { return origin == other.origin && basis == other.basis; }
 

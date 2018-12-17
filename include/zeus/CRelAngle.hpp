@@ -12,8 +12,6 @@ struct CRelAngle {
   float angle = 0.f;
 
   static float MakeRelativeAngle(float angle) {
-    if (angle == 2.f * M_PIF)
-      return 2.f * M_PIF;
     float ret = angle - std::trunc(angle / (2.f * M_PIF)) * (2.f * M_PIF);
     if (ret < 0.f)
       ret += 2.f * M_PIF;
@@ -22,10 +20,10 @@ struct CRelAngle {
 
   CRelAngle() = default;
 
-  CRelAngle(float angle) : angle(MakeRelativeAngle(angle)) {}
+  CRelAngle(float angle) : angle(angle) {}
 
   CRelAngle& operator=(float ang) {
-    angle = MakeRelativeAngle(ang);
+    angle = ang;
     return *this;
   }
 
@@ -42,7 +40,7 @@ struct CRelAngle {
 
   static CRelAngle FromDegrees(float angle) {
     CRelAngle ret;
-    ret.angle = MakeRelativeAngle(degToRad(angle));
+    ret.angle = degToRad(angle);
     return ret;
   }
 
@@ -53,43 +51,47 @@ struct CRelAngle {
   bool operator<(const CRelAngle& other) const { return angle < other.angle; }
 
   CRelAngle& operator+=(const CRelAngle& other) {
-    angle = MakeRelativeAngle(angle + other.angle);
+    angle = angle + other.angle;
     return *this;
   }
 
   CRelAngle& operator+=(float r) {
-    angle = MakeRelativeAngle(angle + r);
+    angle = angle + r;
     return *this;
   }
 
   CRelAngle& operator-=(const CRelAngle& other) {
-    angle = MakeRelativeAngle(angle - other.angle);
+    angle = angle - other.angle;
     return *this;
   }
 
   CRelAngle& operator-=(float r) {
-    angle = MakeRelativeAngle(angle - r);
+    angle = angle - r;
     return *this;
   }
 
   CRelAngle& operator*=(const CRelAngle& other) {
-    angle = MakeRelativeAngle(angle * other.angle);
+    angle = angle * other.angle;
     return *this;
   }
 
   CRelAngle& operator*=(float r) {
-    angle = MakeRelativeAngle(angle * r);
+    angle = angle * r;
     return *this;
   }
 
   CRelAngle& operator/=(const CRelAngle& other) {
-    angle = MakeRelativeAngle(angle / other.angle);
+    angle = angle / other.angle;
     return *this;
   }
 
   CRelAngle& operator/=(float r) {
-    angle = MakeRelativeAngle(angle / r);
+    angle = angle / r;
     return *this;
   }
+
+  void makeRel() { angle = MakeRelativeAngle(angle); }
+
+  CRelAngle asRel() const { return CRelAngle(MakeRelativeAngle(angle)); }
 };
 } // namespace zeus

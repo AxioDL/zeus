@@ -302,6 +302,8 @@ public:
     return ret;
   }
 
+  bool projectedPointTest(const CMatrix4f& mvp, const CVector2f& point) const;
+
   void splitX(CAABox& negX, CAABox& posX) const {
     float midX = (max.x() - min.x()) * .5f + min.x();
     posX.max = max;

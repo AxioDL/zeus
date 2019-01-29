@@ -8,9 +8,10 @@ namespace zeus {
 /**
  * @brief The CRelAngle class represents relative angle in radians
  */
-struct CRelAngle {
+class CRelAngle {
   float angle = 0.f;
 
+public:
   static float MakeRelativeAngle(float angle) {
     float ret = angle - std::trunc(angle / (2.f * M_PIF)) * (2.f * M_PIF);
     if (ret < 0.f)

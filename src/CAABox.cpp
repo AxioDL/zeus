@@ -36,4 +36,81 @@ bool CAABox::projectedPointTest(const CMatrix4f& mvp, const CVector2f& point) co
   return false;
 }
 
+bool CAABox::intersects(const CSphere& other) const {
+  float dist = 0.f;
+  int comps = 0;
+  for (int i = 0; i < 3; i++) {
+    if (other.position[i] < min[i]) {
+      if (other.position[i] + other.radius >= min[i]) {
+        float comp = other.position[i] - min[i];
+        dist += comp * comp;
+        comps |= 1 << i;
+      } else {
+        return false;
+      }
+    } else if (other.position[i] > max[i]) {
+      if (other.position[i] - other.radius <= max[i]) {
+        float comp = other.position[i] - max[i];
+        dist += comp * comp;
+        comps |= 1 << i;
+      } else {
+        return false;
+      }
+    }
+  }
+  if (comps == 0)
+    return true;
+  return dist <= other.radius * other.radius;
+}
+
+float CAABox::intersectionRadius(const CSphere& other) const {
+  float dist = 0.f;
+  int comps = 0;
+  for (int i = 0; i < 3; i++) {
+    if (other.position[i] < min[i]) {
+      if (other.position[i] + other.radius >= min[i]) {
+        float comp = other.position[i] - min[i];
+        dist += comp * comp;
+        comps |= 1 << i;
+      } else {
+        return -1.f;
+      }
+    } else if (other.position[i] > max[i]) {
+      if (other.position[i] - other.radius <= max[i]) {
+        float comp = other.position[i] - max[i];
+        dist += comp * comp;
+        comps |= 1 << i;
+      } else {
+        return -1.f;
+      }
+    }
+  }
+  if (comps == 0)
+    return dist;
+  return (dist <= other.radius * other.radius) ? dist : -1.f;
+}
+
+CAABox CAABox::booleanIntersection(const CAABox& other) const {
+  CVector3f minVec = CVector3f::skZero;
+  CVector3f maxVec = CVector3f::skZero;
+
+  for (int i = 0; i < 3; ++i) {
+    if (min[i] <= other.min[i] && max[i] >= other.max[i]) {
+      minVec[i] = other.min[i];
+      maxVec[i] = other.max[i];
+    } else if (other.min[i] <= min[i] && other.max[i] >= max[i]) {
+      minVec[i] = min[i];
+      maxVec[i] = max[i];
+    } else if (other.min[i] <= min[i] && other.max[i] >= min[i]) {
+      minVec[i] = min[i];
+      maxVec[i] = other.max[i];
+    } else if (other.min[i] <= max[i] && other.max[i] >= max[i]) {
+      minVec[i] = other.min[i];
+      maxVec[i] = max[i];
+    }
+  }
+
+  return {minVec, maxVec};
+}
+
 } // namespace zeus

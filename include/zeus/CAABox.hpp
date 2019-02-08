@@ -51,23 +51,6 @@ public:
 
 #endif
 
-  float distanceFromPointSquared(const CVector3f& other) const {
-    float dist = 0;
-    for (int i = 0; i < 3; i++) {
-      if (other[i] < min[i]) {
-        const float tmp = (min[i] - other[i]);
-        dist += tmp * tmp;
-      } else if (other[i] > max[i]) {
-        const float tmp = (other[i] - max[i]);
-        dist += tmp * tmp;
-      }
-    }
-
-    return dist;
-  }
-
-  float distanceFromPoint(const CVector3f& other) const { return std::sqrt(distanceFromPointSquared(other)); }
-
   bool intersects(const CAABox& other) const {
     bool x1 = (max[0] >= other.min[0]);
     bool x2 = (min[0] <= other.max[0]);
@@ -78,37 +61,9 @@ public:
     return x1 && x2 && y1 && y2 && z1 && z2;
   }
 
-  bool intersects(const CSphere& other) const {
-    return distanceFromPointSquared(other.position) <= other.radius * other.radius;
-  }
-
-  float intersectionRadius(const CSphere& other) const {
-    float dist = distanceFromPoint(other.position);
-    return (dist < other.radius) ? dist : -1.f;
-  }
-
-  CAABox booleanIntersection(const CAABox& other) const {
-    CVector3f minVec = CVector3f::skZero;
-    CVector3f maxVec = CVector3f::skZero;
-
-    for (int i = 0; i < 3; ++i) {
-      if (min[i] <= other.min[i] && max[i] >= other.max[i]) {
-        minVec[i] = other.min[i];
-        maxVec[i] = other.max[i];
-      } else if (other.min[i] <= min[i] && other.max[i] >= max[i]) {
-        minVec[i] = min[i];
-        maxVec[i] = max[i];
-      } else if (other.min[i] <= min[i] && other.max[i] >= min[i]) {
-        minVec[i] = min[i];
-        maxVec[i] = other.max[i];
-      } else if (other.min[i] <= max[i] && other.max[i] >= max[i]) {
-        minVec[i] = other.min[i];
-        maxVec[i] = max[i];
-      }
-    }
-
-    return {minVec, maxVec};
-  }
+  bool intersects(const CSphere& other) const;
+  float intersectionRadius(const CSphere& other) const;
+  CAABox booleanIntersection(const CAABox& other) const;
 
   bool inside(const CAABox& other) const {
     bool x = min[0] >= other.min[0] && max[0] <= other.max[0];

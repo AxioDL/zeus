@@ -55,9 +55,9 @@ public:
 
   CVector3f(const float* floats) : mSimd(floats[0], floats[1], floats[2]) {}
 
-  CVector3f(const CVector2f& other) {
+  CVector3f(const CVector2f& other, float z = 0.f) {
     mSimd = other.mSimd;
-    mSimd[2] = 0.0f;
+    mSimd[2] = z;
     mSimd[3] = 0.0f;
   }
 

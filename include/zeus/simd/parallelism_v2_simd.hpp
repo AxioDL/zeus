@@ -659,7 +659,7 @@ public:
 #pragma GCC system_header
 #endif
 
-namespace athena::_simd {
+namespace zeus::_simd {
 
 enum class _StorageKind {
   _Scalar,
@@ -837,8 +837,8 @@ constexpr bool __vectorizable() {
          !std::is_same<_Tp, bool>::value;
 }
 
-} // namespace athena::_simd
-namespace athena::_simd::simd_abi {
+} // namespace zeus::_simd
+namespace zeus::_simd::simd_abi {
 
 using scalar = __simd_abi<_StorageKind::_Scalar, 1>;
 
@@ -851,8 +851,8 @@ inline constexpr size_t max_fixed_size = 32;
 template <class _Tp>
 using compatible = fixed_size<16 / sizeof(_Tp)>;
 
-} // namespace athena::_simd::simd_abi
-namespace athena::_simd {
+} // namespace zeus::_simd::simd_abi
+namespace zeus::_simd {
 
 template <class _Tp, class _Abi = simd_abi::compatible<_Tp>>
 class simd;
@@ -1528,4 +1528,4 @@ public:
   void __set(size_t __index, bool __val) noexcept { __storage_.set(__index, __val); }
 };
 
-} // namespace athena::_simd
+} // namespace zeus::_simd

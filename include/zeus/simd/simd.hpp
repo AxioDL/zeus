@@ -1,10 +1,10 @@
 #pragma once
-#define _ATHENA_SIMD_INCLUDED
+#define _ZEUS_SIMD_INCLUDED
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 #endif
-namespace athena::_simd {
+namespace zeus::_simd {
 using namespace std;
 }
 #include "parallelism_v2_simd.hpp"
@@ -18,13 +18,13 @@ using namespace std;
 #else
 namespace simd_abi {
 template <typename T>
-struct athena_native {};
+struct zeus_native {};
 template <>
-struct athena_native<float> {
+struct zeus_native<float> {
   using type = fixed_size<4>;
 };
 template <>
-struct athena_native<double> {
+struct zeus_native<double> {
   using type = fixed_size<4>;
 };
 } // namespace simd_abi
@@ -32,11 +32,11 @@ struct athena_native<double> {
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
-namespace athena {
+namespace zeus {
 template <typename T>
-using simd = _simd::simd<T, typename _simd::simd_abi::athena_native<T>::type>;
+using simd = _simd::simd<T, typename _simd::simd_abi::zeus_native<T>::type>;
 template <typename T>
 using simd_values = _simd::simd_data<simd<T>>;
 using simd_floats = simd_values<float>;
 using simd_doubles = simd_values<double>;
-} // namespace athena
+} // namespace zeus

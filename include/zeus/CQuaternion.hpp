@@ -31,16 +31,16 @@ class CNUQuaternion;
 /** Unit quaternion, used for all quaternion arithmetic */
 class CQuaternion {
 public:
-  CQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
+  constexpr CQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
 
-  CQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
+  constexpr CQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
 
   CQuaternion(float xi, float yi, float zi) { fromVector3f(CVector3f(xi, yi, zi)); }
 
   CQuaternion(float wi, const CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) { mSimd[0] = wi; }
 
   template <typename T>
-  CQuaternion(const simd<T>& s) : mSimd(s) {}
+  constexpr CQuaternion(const simd<T>& s) : mSimd(s) {}
 
 #if ZE_ATHENA_TYPES
 
@@ -53,7 +53,7 @@ public:
     mSimd.copy_from(f);
   }
 
-  CQuaternion(const atVec4f& vec) : mSimd(vec.simd) {}
+  constexpr CQuaternion(const atVec4f& vec) : mSimd(vec.simd) {}
 
   operator atVec4f&() { return *reinterpret_cast<atVec4f*>(this); }
 
@@ -65,7 +65,7 @@ public:
 
   CQuaternion(const CVector3f& vec) { fromVector3f(vec); }
 
-  CQuaternion(const CVector4f& vec) : mSimd(vec.mSimd) {}
+  constexpr CQuaternion(const CVector4f& vec) : mSimd(vec.mSimd) {}
 
   CQuaternion(const CVector3f& vecA, const CVector3f& vecB) {
     CVector3f vecAN = vecA.normalized();
@@ -215,8 +215,6 @@ public:
   simd<float>::reference z() { return mSimd[3]; }
 
   simd<float> mSimd;
-
-  static const CQuaternion skNoRotation;
 
   static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
 };

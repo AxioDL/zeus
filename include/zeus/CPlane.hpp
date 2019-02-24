@@ -7,9 +7,9 @@
 namespace zeus {
 class CPlane {
 public:
-  CPlane() : mSimd(1.0, 0.f, 0.f, 0.f) {}
+  constexpr CPlane() : mSimd(1.f, 0.f, 0.f, 0.f) {}
 
-  CPlane(float a, float b, float c, float d) : mSimd(a, b, c, d) {}
+  constexpr CPlane(float a, float b, float c, float d) : mSimd(a, b, c, d) {}
 
   CPlane(const CVector3f& a, const CVector3f& b, const CVector3f& c) {
     mSimd = (b - a).cross(c - a).normalized().mSimd;

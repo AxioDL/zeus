@@ -21,9 +21,9 @@ public:
     int v[2];
   };
 
-  CVector2i() = default;
+  constexpr CVector2i() : x(0), y(0) {}
 
-  CVector2i(int xin, int yin) : x(xin), y(yin) {}
+  constexpr CVector2i(int xin, int yin) : x(xin), y(yin) {}
 
   CVector2i(const CVector2f& vec) : x(int(vec.x())), y(int(vec.y())) {}
 

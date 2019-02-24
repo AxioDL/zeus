@@ -11,7 +11,7 @@ public:
     if (tmp.x() != 0.f || tmp.y() != 0.f || tmp.z() != 0.f)
       xc_dir = tmp.normalized();
     else
-      xc_dir = CVector3f::skZero;
+      xc_dir = CVector3f();
   }
 
   CVector3f x0_start;

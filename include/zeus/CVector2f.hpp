@@ -9,14 +9,14 @@ namespace zeus {
 class CVector2f {
 public:
   simd<float> mSimd;
-  CVector2f() : mSimd(0.f) {}
+  constexpr CVector2f() : mSimd(0.f) {}
 
   template <typename T>
-  CVector2f(const simd<T>& s) : mSimd(s) {}
+  constexpr CVector2f(const simd<T>& s) : mSimd(s) {}
 
 #if ZE_ATHENA_TYPES
 
-  CVector2f(const atVec2f& vec) : mSimd(vec.simd) {}
+  constexpr CVector2f(const atVec2f& vec) : mSimd(vec.simd) {}
 
   operator atVec2f&() { return *reinterpret_cast<atVec2f*>(this); }
 
@@ -37,7 +37,7 @@ public:
 
 #endif
 
-  explicit CVector2f(float xy) { splat(xy); }
+  explicit constexpr CVector2f(float xy) : mSimd(xy) {}
 
   void assign(float x, float y) {
     mSimd[0] = x;
@@ -46,7 +46,7 @@ public:
     mSimd[3] = 0.0f;
   }
 
-  CVector2f(float x, float y) { assign(x, y); }
+  constexpr CVector2f(float x, float y) : mSimd(x, y, 0.f, 0.f) {}
 
   bool operator==(const CVector2f& rhs) const { return mSimd[0] == rhs.mSimd[0] && mSimd[1] == rhs.mSimd[1]; }
 
@@ -144,7 +144,7 @@ public:
 
   float magnitude() const { return std::sqrt(magSquared()); }
 
-  void zeroOut() { *this = CVector2f::skZero; }
+  void zeroOut() { mSimd = zeus::simd<float>(0.f); }
 
   void splat(float xy) { mSimd = zeus::simd<float>(xy); }
 
@@ -188,17 +188,16 @@ public:
 
   simd<float>::reference x() { return mSimd[0]; }
   simd<float>::reference y() { return mSimd[1]; }
-
-  static const CVector2f skOne;
-  static const CVector2f skNegOne;
-  static const CVector2f skZero;
 };
+constexpr CVector2f skOne2f(1.f);
+constexpr CVector2f skNegOne2f(-1.f);
+constexpr CVector2f skZero2f(0.f);
 
-static inline CVector2f operator+(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
+inline CVector2f operator+(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 
-static inline CVector2f operator-(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
+inline CVector2f operator-(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
 
-static inline CVector2f operator*(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
+inline CVector2f operator*(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
 
-static inline CVector2f operator/(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
+inline CVector2f operator/(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
 } // namespace zeus

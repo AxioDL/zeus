@@ -2,8 +2,6 @@
 #include "zeus/Math.hpp"
 
 namespace zeus {
-const CQuaternion CQuaternion::skNoRotation;
-
 CQuaternion::CQuaternion(const CMatrix3f& mat) {
   float trace = mat[0][0] + mat[1][1] + mat[2][2];
   if (trace >= 0.f) {
@@ -234,10 +232,10 @@ CQuaternion CQuaternion::shortestRotationArc(const zeus::CVector3f& v0, const ze
 
   if (cross.magSquared() < 0.001f) {
     if (v0N.dot(v1N) > 0.f)
-      return CQuaternion::skNoRotation;
+      return CQuaternion();
     if (cross.canBeNormalized())
       return CQuaternion(0.0f, cross.normalized());
-    return CQuaternion::skNoRotation;
+    return CQuaternion();
   } else {
     float w = std::sqrt((1.f + zeus::clamp(-1.f, v0N.dot(v1N), 1.f)) * 2.f);
     return CQuaternion(0.5f * w, cross * (1.f / w));
@@ -278,7 +276,7 @@ CRelAngle CQuaternion::angleFrom(const zeus::CQuaternion& other) {
 }
 
 CQuaternion CQuaternion::lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng) {
-  CQuaternion q = skNoRotation;
+  CQuaternion q;
   zeus::CVector3f destNoZ = dest;
   zeus::CVector3f sourceNoZ = source;
   destNoZ.z() = 0.f;
@@ -300,11 +298,11 @@ CQuaternion CQuaternion::lookAt(const CUnitVector3f& source, const CUnitVector3f
   else if (destNoZ.magSquared() > 0.0001f)
     tmp = destNoZ.normalized();
   else
-    return skNoRotation;
+    return CQuaternion();
 
   float realAngle = zeus::clamp(-maxAng.asRadians(), normalize_angle(std::acos(dest.z()) - std::acos(source.z())),
                                 maxAng.asRadians());
-  return CQuaternion::fromAxisAngle(tmp.cross(CVector3f::skUp), -realAngle) * q;
+  return CQuaternion::fromAxisAngle(tmp.cross(skUp), -realAngle) * q;
 }
 
 } // namespace zeus

@@ -3,7 +3,7 @@
 namespace zeus {
 
 CAABox COBBox::calculateAABox(const CTransform& worldXf) const {
-  CAABox ret = CAABox::skInvertedBox;
+  CAABox ret;
 
   CTransform trans = worldXf * transform;
   static const CVector3f basis[8] = {{1.f, 1.f, 1.f},    {1.f, 1.f, -1.f},  {1.f, -1.f, 1.f},  {1.f, -1.f, -1.f},

@@ -5,9 +5,9 @@
 namespace zeus {
 class CRectangle {
 public:
-  CRectangle() {}
+  constexpr CRectangle() = default;
 
-  CRectangle(float x, float y, float w, float h) : position(x, y), size(w, h) {}
+  constexpr CRectangle(float x, float y, float w, float h) : position(x, y), size(w, h) {}
 
   bool contains(const CVector2f& point) const {
     if (point.x() < position.x() || point.x() > position.x() + size.x())

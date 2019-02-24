@@ -7,21 +7,6 @@
 #include "zeus/CRelAngle.hpp"
 
 namespace zeus {
-const CVector3f CVector3f::skOne(1.f);
-const CVector3f CVector3f::skNegOne(-1.f);
-const CVector3f CVector3f::skZero;
-const CVector3f CVector3f::skForward(0.f, 1.f, 0.f);
-const CVector3f CVector3f::skBack(0.f, -1.f, 0.f);
-const CVector3f CVector3f::skLeft(-1.f, 0.f, 0.f);
-const CVector3f CVector3f::skRight(1.f, 0.f, 0.f);
-const CVector3f CVector3f::skUp(0.f, 0.f, 1.f);
-const CVector3f CVector3f::skDown(0.f, 0.f, -1.f);
-const CVector3f CVector3f::skRadToDegVec(180.0f / M_PIF);
-const CVector3f CVector3f::skDegToRadVec(M_PIF / 180.0f);
-const CVector3d CVector3d::skZero(0.0, 0.0, 0.0);
-
-CVector3f::CVector3f(const CVector3d& vec) : mSimd(vec.mSimd) {}
-
 float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b) {
   float mag1 = a.magnitude();
   float mag2 = b.magnitude();

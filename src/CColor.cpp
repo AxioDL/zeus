@@ -2,17 +2,6 @@
 #include "zeus/CVector4f.hpp"
 
 namespace zeus {
-const CColor CColor::skRed(Comp32(0xFF0000FFul));
-const CColor CColor::skBlack(Comp32(0x000000FFul));
-const CColor CColor::skBlue(Comp32(0x0000FFFFul));
-const CColor CColor::skGreen(Comp32(0x00FF00FFul));
-const CColor CColor::skGrey(Comp32(0x808080FFul));
-const CColor CColor::skOrange(Comp32(0xFF7000FFul));
-const CColor CColor::skPurple(Comp32(0xA000FFFFul));
-const CColor CColor::skYellow(Comp32(0xFFFF00FFul));
-const CColor CColor::skWhite(Comp32(0xFFFFFFFFul));
-const CColor CColor::skClear(Comp32(0x00000000ul));
-
 float hueToRgb(float p, float q, float t) {
   if (t < 0.0f)
     t += 1.0f;

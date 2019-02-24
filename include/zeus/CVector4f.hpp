@@ -20,14 +20,14 @@ class CVector4f {
 public:
   zeus::simd<float> mSimd;
 
-  CVector4f() : mSimd(0.f) {}
+  constexpr CVector4f() : mSimd(0.f) {}
 
   template <typename T>
-  CVector4f(const simd<T>& s) : mSimd(s) {}
+  constexpr CVector4f(const simd<T>& s) : mSimd(s) {}
 
 #if ZE_ATHENA_TYPES
 
-  CVector4f(const atVec4f& vec) : mSimd(vec.simd) {}
+  constexpr CVector4f(const atVec4f& vec) : mSimd(vec.simd) {}
 
   operator atVec4f&() { return *reinterpret_cast<atVec4f*>(this); }
 
@@ -44,21 +44,21 @@ public:
 
 #endif
 
-  explicit CVector4f(float xyzw) : mSimd(xyzw) {}
+  explicit constexpr CVector4f(float xyzw) : mSimd(xyzw) {}
 
   void assign(float x, float y, float z, float w) { mSimd = simd<float>(x, y, z, w); }
 
-  CVector4f(float x, float y, float z, float w) : mSimd(x, y, z, w) {}
+  constexpr CVector4f(float x, float y, float z, float w) : mSimd(x, y, z, w) {}
 
-  CVector4f(const CColor& other);
+  constexpr CVector4f(const CColor& other);
 
-  CVector4f(const CVector3f& other, float wIn = 1.f) : mSimd(other.mSimd) { mSimd[3] = wIn; }
+  constexpr CVector4f(const CVector3f& other, float wIn = 1.f) : mSimd(other.mSimd) { mSimd[3] = wIn; }
 
   static CVector4f ToClip(const zeus::CVector3f& v, float w) { return CVector4f(v * w, w); }
 
   CVector3f toVec3f() const { return CVector3f(mSimd); }
 
-  CVector4f& operator=(const CColor& other);
+  constexpr CVector4f& operator=(const CColor& other);
 
   bool operator==(const CVector4f& rhs) const {
     auto eq_mask = mSimd == rhs.mSimd;
@@ -149,7 +149,7 @@ public:
 
   float magnitude() const { return std::sqrt(magSquared()); }
 
-  void zeroOut() { *this = CVector4f::skZero; }
+  void zeroOut() { mSimd = zeus::simd<float>(0.f); }
 
   void splat(float xyzw) { mSimd = zeus::simd<float>(xyzw); }
 
@@ -192,18 +192,17 @@ public:
   simd<float>::reference y() { return mSimd[1]; }
   simd<float>::reference z() { return mSimd[2]; }
   simd<float>::reference w() { return mSimd[3]; }
-
-  static const CVector4f skOne;
-  static const CVector4f skNegOne;
-  static const CVector4f skZero;
 };
+constexpr CVector4f skOne4f(1.f);
+constexpr CVector4f skNegOne4f(-1.f);
+constexpr CVector4f skZero4f(0.f);
 
-static CVector4f operator+(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
+inline CVector4f operator+(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 
-static CVector4f operator-(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
+inline CVector4f operator-(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
 
-static CVector4f operator*(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
+inline CVector4f operator*(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
 
-static CVector4f operator/(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
+inline CVector4f operator/(float lhs, const CVector4f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
 
 } // namespace zeus

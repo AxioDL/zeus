@@ -10,7 +10,6 @@ endif()
 include_directories(include ${ATHENA_INCLUDE_DIR})
 
 set(SOURCES
-    src/CAxisAngle.cpp
     src/CVector3f.cpp
     src/Math.cpp
     src/CQuaternion.cpp
@@ -21,7 +20,6 @@ set(SOURCES
     src/CTransform.cpp
     src/CColor.cpp
     src/CVector2f.cpp
-    src/CVector4f.cpp
     src/CMatrix4f.cpp
     src/CAABox.cpp
     src/COBBox.cpp

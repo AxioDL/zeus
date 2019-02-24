@@ -1,8 +1,6 @@
 #include "zeus/CTransform.hpp"
 
 namespace zeus {
-const CTransform CTransform::skIdentityTransform;
-
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec) {
   CTransform result;
   double ti, tj, th, ci, cj, ch, si, sj, sh, cc, cs, sc, ss;

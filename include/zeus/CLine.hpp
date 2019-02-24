@@ -6,7 +6,7 @@
 namespace zeus {
 class CLine {
 public:
-  CLine(const CVector3f& origin, const CVector3f& dir) : origin(origin), dir(dir) {}
+  constexpr CLine(const CVector3f& origin, const CVector3f& dir) : origin(origin), dir(dir) {}
 
   CVector3f origin;
   CVector3f dir;

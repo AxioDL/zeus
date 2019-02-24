@@ -26,11 +26,11 @@ public:
   CTransform transform;
   CVector3f extents;
 
-  COBBox() = default;
+  constexpr COBBox() = default;
 
   COBBox(const CAABox& aabb) : extents(aabb.extents()) { transform.origin = aabb.center(); }
 
-  COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
+  constexpr COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
 
   CAABox calculateAABox(const CTransform& worldXf = CTransform()) const;
 
@@ -42,6 +42,6 @@ public:
 
   bool OBBIntersectsBox(const COBBox& other) const;
 
-  bool AABoxIntersectsBox(const CAABox& other) { return OBBIntersectsBox(FromAABox(other, CTransform::Identity())); }
+  bool AABoxIntersectsBox(const CAABox& other) { return OBBIntersectsBox(FromAABox(other, CTransform())); }
 };
 } // namespace zeus

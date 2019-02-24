@@ -16,5 +16,5 @@ using simd_doubles = athena::simd_doubles;
 #endif
 } // namespace zeus
 
-inline int rotr(int x, int n) { return ((x >> n) | (x << (32 - n))); }
-inline int rotl(int x, int n) { return ((x << n) | (x >> (32 - n))); }
+constexpr int rotr(int x, int n) { return ((x >> n) | (x << (32 - n))); }
+constexpr int rotl(int x, int n) { return ((x << n) | (x >> (32 - n))); }

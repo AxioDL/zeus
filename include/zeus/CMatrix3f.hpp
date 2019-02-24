@@ -11,10 +11,7 @@ class CQuaternion;
 
 class CMatrix3f {
 public:
-  explicit CMatrix3f(bool zero = false) {
-    m[0] = simd<float>(0.f);
-    m[1] = simd<float>(0.f);
-    m[2] = simd<float>(0.f);
+  explicit constexpr CMatrix3f(bool zero = false) {
     if (!zero) {
       m[0][0] = 1.0;
       m[1][1] = 1.0;
@@ -22,33 +19,30 @@ public:
     }
   }
 
-  CMatrix3f(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
+  constexpr CMatrix3f(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
   : m{{m00, m10, m20}, {m01, m11, m21}, {m02, m12, m22}} {}
 
-  CMatrix3f(const CVector3f& scaleVec) {
-    m[0] = simd<float>(0.f);
-    m[1] = simd<float>(0.f);
-    m[2] = simd<float>(0.f);
+  constexpr CMatrix3f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
     m[1][1] = scaleVec[1];
     m[2][2] = scaleVec[2];
   }
 
-  CMatrix3f(float scale) : CMatrix3f(CVector3f(scale)) {}
+  constexpr CMatrix3f(float scale) : CMatrix3f(CVector3f(scale)) {}
 
-  CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2) {
+  constexpr CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2) {
     m[0] = r0;
     m[1] = r1;
     m[2] = r2;
   }
 
-  CMatrix3f(const CMatrix3f& other) {
+  constexpr CMatrix3f(const CMatrix3f& other) {
     m[0] = other.m[0];
     m[1] = other.m[1];
     m[2] = other.m[2];
   }
 
-  CMatrix3f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2) {
+  constexpr CMatrix3f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2) {
     m[0].mSimd = r0;
     m[1].mSimd = r1;
     m[2].mSimd = r2;
@@ -56,7 +50,7 @@ public:
 
 #if ZE_ATHENA_TYPES
 
-  CMatrix3f(const atVec4f& r0, const atVec4f& r1, const atVec4f& r2) {
+  constexpr CMatrix3f(const atVec4f& r0, const atVec4f& r1, const atVec4f& r2) {
     m[0].mSimd = r0.simd;
     m[1].mSimd = r1.simd;
     m[2].mSimd = r2.simd;
@@ -81,8 +75,6 @@ public:
   }
 
 #endif
-
-  CMatrix3f(const CVector3f& axis, float angle);
 
   CMatrix3f(const CQuaternion& quat);
 
@@ -120,8 +112,6 @@ public:
   bool operator==(const CMatrix3f& other) const {
     return m[0] == other.m[0] && m[1] == other.m[1] && m[2] == other.m[2];
   }
-
-  static const CMatrix3f skIdentityMatrix3f;
 
   void transpose();
 
@@ -167,7 +157,7 @@ public:
   CVector3f m[3];
 };
 
-static inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
+inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
   simd<float> v[3];
   for (int i = 0; i < 3; ++i)
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +

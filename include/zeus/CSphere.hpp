@@ -5,7 +5,7 @@
 namespace zeus {
 class CSphere {
 public:
-  CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
+  constexpr CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
 
   CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
 

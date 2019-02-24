@@ -3,7 +3,6 @@
 #include "zeus/Global.hpp"
 
 namespace zeus {
-const CMatrix3f CMatrix3f::skIdentityMatrix3f = CMatrix3f();
 
 CMatrix3f::CMatrix3f(const CQuaternion& quat) {
   CQuaternion nq = quat.normalized();

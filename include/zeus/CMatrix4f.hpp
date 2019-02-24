@@ -7,9 +7,7 @@
 namespace zeus {
 class CMatrix4f {
 public:
-  static const CMatrix4f skIdentityMatrix4f;
-
-  explicit CMatrix4f(bool zero = false) {
+  explicit constexpr CMatrix4f(bool zero = false) {
     if (!zero) {
       m[0][0] = 1.0;
       m[1][1] = 1.0;
@@ -18,39 +16,39 @@ public:
     }
   }
 
-  CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
-            float m21, float m22, float m23, float m30, float m31, float m32, float m33)
+  constexpr CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
+                      float m21, float m22, float m23, float m30, float m31, float m32, float m33)
   : m{{m00, m10, m20, m30}, {m01, m11, m21, m31}, {m02, m12, m22, m32}, {m03, m13, m23, m33}} {}
 
-  CMatrix4f(const CVector3f& scaleVec) {
+  constexpr CMatrix4f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
     m[1][1] = scaleVec[1];
     m[2][2] = scaleVec[2];
     m[3][3] = 1.0f;
   }
 
-  CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3) {
+  constexpr CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3) {
     m[0] = r0;
     m[1] = r1;
     m[2] = r2;
     m[3] = r3;
   }
 
-  CMatrix4f(const CMatrix4f& other) {
+  constexpr CMatrix4f(const CMatrix4f& other) {
     m[0] = other.m[0];
     m[1] = other.m[1];
     m[2] = other.m[2];
     m[3] = other.m[3];
   }
 
-  CMatrix4f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2, const simd<float>& r3) {
+  constexpr CMatrix4f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2, const simd<float>& r3) {
     m[0].mSimd = r0;
     m[1].mSimd = r1;
     m[2].mSimd = r2;
     m[3].mSimd = r3;
   }
 
-  CMatrix4f(const CMatrix3f& other) {
+  constexpr CMatrix4f(const CMatrix3f& other) {
     m[0] = other.m[0];
     m[1] = other.m[1];
     m[2] = other.m[2];
@@ -95,8 +93,9 @@ public:
 
   CVector4f m[4];
 };
+extern const CMatrix4f skIdentityMatrix4f;
 
-static inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
+inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
   simd<float> v[4];
   for (int i = 0; i < 4; ++i)
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +

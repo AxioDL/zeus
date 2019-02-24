@@ -2,9 +2,6 @@
 #include "zeus/CVector3f.hpp"
 
 namespace zeus {
-const CAABox CAABox::skInvertedBox = CAABox();
-const CAABox CAABox::skNullBox = CAABox(CVector3f::skZero, CVector3f::skZero);
-
 static const int ProjWindings[6][4] = {
   {2, 0, 4, 6}, // -X
   {0, 1, 5, 4}, // -Y
@@ -91,8 +88,8 @@ float CAABox::intersectionRadius(const CSphere& other) const {
 }
 
 CAABox CAABox::booleanIntersection(const CAABox& other) const {
-  CVector3f minVec = CVector3f::skZero;
-  CVector3f maxVec = CVector3f::skZero;
+  CVector3f minVec;
+  CVector3f maxVec;
 
   for (int i = 0; i < 3; ++i) {
     if (min[i] <= other.min[i] && max[i] >= other.max[i]) {

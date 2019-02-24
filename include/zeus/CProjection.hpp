@@ -34,7 +34,7 @@ public:
   CProjection() {
     m_projType = EProjType::Orthographic;
     m_ortho = SProjOrtho();
-    m_mtx = CMatrix4f::skIdentityMatrix4f;
+    m_mtx = CMatrix4f();
   }
 
   CProjection(const CProjection& other) { *this = other; }

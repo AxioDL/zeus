@@ -15,14 +15,14 @@ class CRelAngle;
 class CVector3f {
 public:
   zeus::simd<float> mSimd;
-  CVector3f() : mSimd(0.f) {}
+  constexpr CVector3f() : mSimd(0.f) {}
 
   template <typename T>
-  CVector3f(const simd<T>& s) : mSimd(s) {}
+  constexpr CVector3f(const simd<T>& s) : mSimd(s) {}
 
 #if ZE_ATHENA_TYPES
 
-  CVector3f(const atVec3f& vec) : mSimd(vec.simd) {}
+  constexpr CVector3f(const atVec3f& vec) : mSimd(vec.simd) {}
 
   operator atVec3f&() { return *reinterpret_cast<atVec3f*>(this); }
 
@@ -45,20 +45,20 @@ public:
 
 #endif
 
-  CVector3f(const CVector3d& vec);
+  inline CVector3f(const CVector3d& vec);
 
-  explicit CVector3f(float xyz) : mSimd(xyz) {}
+  explicit constexpr CVector3f(float xyz) : mSimd(xyz) {}
 
   void assign(float x, float y, float z) { mSimd = zeus::simd<float>(x, y, z); }
 
-  CVector3f(float x, float y, float z) : mSimd(x, y, z) {}
+  constexpr CVector3f(float x, float y, float z) : mSimd(x, y, z) {}
 
-  CVector3f(const float* floats) : mSimd(floats[0], floats[1], floats[2]) {}
+  constexpr CVector3f(const float* floats) : mSimd(floats[0], floats[1], floats[2]) {}
 
   CVector3f(const CVector2f& other, float z = 0.f) {
     mSimd = other.mSimd;
     mSimd[2] = z;
-    mSimd[3] = 0.0f;
+    mSimd[3] = 0.f;
   }
 
   CVector2f toVec2f() const { return CVector2f(mSimd); }
@@ -134,7 +134,7 @@ public:
 
   bool isMagnitudeSafe() const { return isNotInf() && magSquared() >= 9.9999994e-29; }
 
-  void zeroOut() { *this = CVector3f::skZero; }
+  void zeroOut() { mSimd = zeus::simd<float>(0.f); }
 
   void splat(float xyz) { mSimd = zeus::simd<float>(xyz); }
 
@@ -199,29 +199,32 @@ public:
   simd<float>::reference y() { return mSimd[1]; }
   simd<float>::reference z() { return mSimd[2]; }
 
-  static const CVector3f skOne;
-  static const CVector3f skNegOne;
-  static const CVector3f skZero;
-  static const CVector3f skForward;
-  static const CVector3f skBack;
-  static const CVector3f skLeft;
-  static const CVector3f skRight;
-  static const CVector3f skUp;
-  static const CVector3f skDown;
-  static const CVector3f skRadToDegVec;
-  static const CVector3f skDegToRadVec;
+  static inline CVector3f radToDeg(const CVector3f& rad);
 
-  static CVector3f radToDeg(const CVector3f& rad) { return rad * skRadToDegVec; }
-
-  static CVector3f degToRad(const CVector3f& deg) { return deg * skDegToRadVec; }
+  static inline CVector3f degToRad(const CVector3f& deg);
 };
+constexpr CVector3f skOne3f(1.f);
+constexpr CVector3f skNegOne3f(-1.f);
+constexpr CVector3f skZero3f(0.f);
+constexpr CVector3f skForward(0.f, 1.f, 0.f);
+constexpr CVector3f skBack(0.f, -1.f, 0.f);
+constexpr CVector3f skLeft(-1.f, 0.f, 0.f);
+constexpr CVector3f skRight(1.f, 0.f, 0.f);
+constexpr CVector3f skUp(0.f, 0.f, 1.f);
+constexpr CVector3f skDown(0.f, 0.f, -1.f);
+constexpr CVector3f skRadToDegVec(180.f / M_PIF);
+constexpr CVector3f skDegToRadVec(M_PIF / 180.f);
 
-static inline CVector3f operator+(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
+inline CVector3f operator+(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 
-static inline CVector3f operator-(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
+inline CVector3f operator-(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) - rhs.mSimd; }
 
-static inline CVector3f operator*(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
+inline CVector3f operator*(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) * rhs.mSimd; }
 
-static inline CVector3f operator/(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
+inline CVector3f operator/(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) / rhs.mSimd; }
+
+inline CVector3f CVector3f::radToDeg(const CVector3f& rad) { return rad * skRadToDegVec; }
+
+inline CVector3f CVector3f::degToRad(const CVector3f& deg) { return deg * skDegToRadVec; }
 
 } // namespace zeus

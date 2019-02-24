@@ -42,37 +42,33 @@ class CVector4f;
 class CColor {
 public:
   simd<float> mSimd;
-  static const CColor skRed;
-  static const CColor skBlack;
-  static const CColor skBlue;
-  static const CColor skGreen;
-  static const CColor skGrey;
-  static const CColor skOrange;
-  static const CColor skPurple;
-  static const CColor skYellow;
-  static const CColor skWhite;
-  static const CColor skClear;
 
-  CColor() : mSimd(1.f) {}
+  constexpr CColor() : mSimd(1.f) {}
 
-  CColor(float rgb, float a = 1.0) { splat(rgb, a); }
+  constexpr CColor(float rgb, float a = 1.0) : mSimd(rgb, rgb, rgb, a) {}
 
-  CColor(float r, float g, float b, float a = 1.0f) : mSimd(r, g, b, a) {}
+  constexpr CColor(float r, float g, float b, float a = 1.0f) : mSimd(r, g, b, a) {}
 
 #if ZE_ATHENA_TYPES
 
-  CColor(const atVec4f& vec) : mSimd(vec.simd) {}
+  constexpr CColor(const atVec4f& vec) : mSimd(vec.simd) {}
 
 #endif
 
-  CColor(Comp32 rgba) { fromRGBA32(rgba); }
+  constexpr CColor(Comp32 rgba) : mSimd(((COLOR(rgba) >> 0) & 0xff) * OneOver255,
+                                        ((COLOR(rgba) >> 8) & 0xff) * OneOver255,
+                                        ((COLOR(rgba) >> 16) & 0xff) * OneOver255,
+                                        ((COLOR(rgba) >> 24) & 0xff) * OneOver255) {}
 
-  CColor(const Comp8* rgba) { fromRGBA8(rgba[0], rgba[1], rgba[2], rgba[3]); }
+  constexpr CColor(const Comp8* rgba) : mSimd(rgba[0] * OneOver255,
+                                              rgba[1] * OneOver255,
+                                              rgba[2] * OneOver255,
+                                              rgba[3] * OneOver255) {}
 
-  CColor(const CVector4f& other) : mSimd(other.mSimd) {}
+  constexpr CColor(const CVector4f& other) : mSimd(other.mSimd) {}
 
   template <typename T>
-  CColor(const simd<T>& s) : mSimd(s) {}
+  constexpr CColor(const simd<T>& s) : mSimd(s) {}
 
   CColor& operator=(const CVector4f& other) {
     mSimd = other.mSimd;
@@ -237,7 +233,7 @@ public:
   }
 
   void fromRGBA32(Comp32 rgba) {
-    static RGBA32 tmp;
+    RGBA32 tmp;
     tmp.rgba = COLOR(rgba);
     fromRGBA8(tmp.r, tmp.g, tmp.b, tmp.a);
   }
@@ -300,12 +296,29 @@ public:
   simd<float>::reference b() { return mSimd[2]; }
   simd<float>::reference a() { return mSimd[3]; }
 };
+constexpr CVector4f::CVector4f(const zeus::CColor& other) : mSimd(other.mSimd) {}
 
-static inline CColor operator+(float lhs, const CColor& rhs) { return simd<float>(lhs) + rhs.mSimd; }
+constexpr CVector4f& CVector4f::operator=(const CColor& other) {
+  mSimd = other.mSimd;
+  return *this;
+}
 
-static inline CColor operator-(float lhs, const CColor& rhs) { return simd<float>(lhs) - rhs.mSimd; }
+constexpr CColor skRed(1.f, 0.f, 0.f, 1.f);
+constexpr CColor skBlack(0.f, 0.f, 0.f, 1.f);
+constexpr CColor skBlue(0.f, 0.f, 1.f, 1.f);
+constexpr CColor skGreen(0.f, 1.f, 0.f, 1.f);
+constexpr CColor skGrey(0.5f, 0.5f, 0.5f, 1.f);
+constexpr CColor skOrange(1.f, 0.43f, 0.f, 1.f);
+constexpr CColor skPurple(0.63f, 0.f, 1.f, 1.f);
+constexpr CColor skYellow(1.f, 1.f, 0.f, 1.f);
+constexpr CColor skWhite(1.f, 1.f, 1.f, 1.f);
+constexpr CColor skClear(0.f, 0.f, 0.f, 0.f);
 
-static inline CColor operator*(float lhs, const CColor& rhs) { return simd<float>(lhs) * rhs.mSimd; }
+inline CColor operator+(float lhs, const CColor& rhs) { return simd<float>(lhs) + rhs.mSimd; }
 
-static inline CColor operator/(float lhs, const CColor& rhs) { return simd<float>(lhs) / rhs.mSimd; }
+inline CColor operator-(float lhs, const CColor& rhs) { return simd<float>(lhs) - rhs.mSimd; }
+
+inline CColor operator*(float lhs, const CColor& rhs) { return simd<float>(lhs) * rhs.mSimd; }
+
+inline CColor operator/(float lhs, const CColor& rhs) { return simd<float>(lhs) / rhs.mSimd; }
 } // namespace zeus

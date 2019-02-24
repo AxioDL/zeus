@@ -19,9 +19,9 @@ public:
     return ret;
   }
 
-  CRelAngle() = default;
+  constexpr CRelAngle() = default;
 
-  CRelAngle(float angle) : angle(angle) {}
+  constexpr CRelAngle(float angle) : angle(angle) {}
 
   CRelAngle& operator=(float ang) {
     angle = ang;

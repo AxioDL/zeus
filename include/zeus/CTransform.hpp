@@ -11,9 +11,10 @@
 namespace zeus {
 class CTransform {
 public:
-  CTransform() : basis(false) {}
+  constexpr CTransform() : basis(false) {}
 
-  CTransform(const CMatrix3f& basis, const CVector3f& offset = CVector3f::skZero) : basis(basis), origin(offset) {}
+  constexpr CTransform(const CMatrix3f& basis, const CVector3f& offset = {})
+  : basis(basis), origin(offset) {}
 
 #if ZE_ATHENA_TYPES
 
@@ -32,12 +33,8 @@ public:
 #endif
 
   /* Column constructor */
-  CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
+  constexpr CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
   : basis(c0, c1, c2), origin(c3) {}
-
-  static const CTransform skIdentityTransform;
-
-  static const CTransform& Identity() { return skIdentityTransform; }
 
   bool operator==(const CTransform& other) const { return origin == other.origin && basis == other.basis; }
 
@@ -50,7 +47,7 @@ public:
     return CTransform(inv, inv * -origin);
   }
 
-  static CTransform Translate(const CVector3f& position) { return {CMatrix3f::skIdentityMatrix3f, position}; }
+  static CTransform Translate(const CVector3f& position) { return {CMatrix3f(), position}; }
 
   static CTransform Translate(float x, float y, float z) { return Translate({x, y, z}); }
 
@@ -224,17 +221,17 @@ public:
     else
       i = 1;
 
-    CVector3f v = CVector3f::skZero;
+    CVector3f v;
     v[i] = 1.f;
     CUnitVector3f newUVec(uVec.cross(v));
-    return {newUVec, uVec, uVec.cross(newUVec), CVector3f::skZero};
+    return {newUVec, uVec, uVec.cross(newUVec), CVector3f()};
   }
 
   CMatrix3f basis;
   CVector3f origin;
 };
 
-static inline CTransform CTransformFromScaleVector(const CVector3f& scale) { return CTransform(CMatrix3f(scale)); }
+constexpr CTransform CTransformFromScaleVector(const CVector3f& scale) { return CTransform(CMatrix3f(scale)); }
 
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
 
@@ -242,5 +239,5 @@ CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f
 
 CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle);
 
-CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up = CVector3f::skUp);
+CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up = skUp);
 } // namespace zeus

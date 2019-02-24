@@ -1,8 +1,7 @@
 #include "zeus/CMatrix4f.hpp"
 
 namespace zeus {
-
-const CMatrix4f CMatrix4f::skIdentityMatrix4f = CMatrix4f();
+const CMatrix4f skIdentityMatrix4f;
 
 CMatrix4f CMatrix4f::transposed() const {
   CMatrix4f ret;

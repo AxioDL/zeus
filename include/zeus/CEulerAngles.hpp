@@ -7,7 +7,7 @@ class CQuaternion;
 
 class CEulerAngles : public CVector3f {
 public:
-  CEulerAngles(float x, float y, float z) { assign(x, y, z); }
+  constexpr CEulerAngles(float x, float y, float z) : CVector3f(x, y, z) {}
   CEulerAngles(const CQuaternion& quat);
   CEulerAngles(const CTransform& xf);
 };

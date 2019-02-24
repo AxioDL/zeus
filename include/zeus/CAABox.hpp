@@ -20,20 +20,17 @@ public:
 
   enum class EBoxFaceID {};
 
-  static const CAABox skInvertedBox;
-  static const CAABox skNullBox;
-
   CVector3f min;
   CVector3f max;
 
   // set default AABox to insane inverse min/max to allow for accumulation
-  CAABox() : CAABox(1e16f, -1e16f) {}
+  constexpr CAABox() : CAABox(1e16f, -1e16f) {}
 
-  CAABox(const CVector3f& min, const CVector3f& max) : min(min), max(max) {}
+  constexpr CAABox(const CVector3f& min, const CVector3f& max) : min(min), max(max) {}
 
-  CAABox(float min, float max) : min(CVector3f(min)), max(CVector3f(max)) {}
+  constexpr CAABox(float min, float max) : min(CVector3f(min)), max(CVector3f(max)) {}
 
-  CAABox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
+  constexpr CAABox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
   : min(minX, minY, minZ), max(maxX, maxY, maxZ) {}
 
 #if ZE_ATHENA_TYPES
@@ -299,6 +296,8 @@ public:
       return max[idx - 3];
   }
 };
+constexpr CAABox skInvertedBox;
+constexpr CAABox skNullBox(CVector3f{}, CVector3f{});
 
 inline bool operator==(const CAABox& left, const CAABox& right) {
   return (left.min == right.min && left.max == right.max);

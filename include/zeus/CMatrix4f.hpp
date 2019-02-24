@@ -20,7 +20,7 @@ public:
                       float m21, float m22, float m23, float m30, float m31, float m32, float m33)
   : m{{m00, m10, m20, m30}, {m01, m11, m21, m31}, {m02, m12, m22, m32}, {m03, m13, m23, m33}} {}
 
-  constexpr CMatrix4f(const CVector3f& scaleVec) {
+  CMatrix4f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
     m[1][1] = scaleVec[1];
     m[2][2] = scaleVec[2];
@@ -49,10 +49,10 @@ public:
   }
 
   constexpr CMatrix4f(const CMatrix3f& other) {
-    m[0] = other.m[0];
-    m[1] = other.m[1];
-    m[2] = other.m[2];
-    m[3] = CVector4f(0.f, 0.f, 0.f, 1.0f);
+    m[0].mSimd = other.m[0].mSimd;
+    m[1].mSimd = other.m[1].mSimd;
+    m[2].mSimd = other.m[2].mSimd;
+    m[3].mSimd = CVector4f(0.f, 0.f, 0.f, 1.0f).mSimd;
   }
 
   CMatrix4f& operator=(const CMatrix4f& other) {

@@ -231,7 +231,7 @@ public:
   CVector3f origin;
 };
 
-constexpr CTransform CTransformFromScaleVector(const CVector3f& scale) { return CTransform(CMatrix3f(scale)); }
+inline CTransform CTransformFromScaleVector(const CVector3f& scale) { return CTransform(CMatrix3f(scale)); }
 
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec);
 

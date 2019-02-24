@@ -52,7 +52,7 @@ public:
 
   constexpr CVector4f(const CColor& other);
 
-  constexpr CVector4f(const CVector3f& other, float wIn = 1.f) : mSimd(other.mSimd) { mSimd[3] = wIn; }
+  CVector4f(const CVector3f& other, float wIn = 1.f) : mSimd(other.mSimd) { mSimd[3] = wIn; }
 
   static CVector4f ToClip(const zeus::CVector3f& v, float w) { return CVector4f(v * w, w); }
 

@@ -35,8 +35,9 @@ public:
   CAABox calculateAABox(const CTransform& worldXf = CTransform()) const;
 
   static COBBox FromAABox(const CAABox& box, const CTransform& xf) {
-    const CVector3f extents = box.max - box.center();
-    const CTransform newXf = CTransform::Translate(box.center()) * xf;
+    CVector3f center = box.center();
+    const CVector3f extents = box.max - center;
+    const CTransform newXf = xf * CTransform::Translate(center);
     return COBBox(newXf, extents);
   }
 

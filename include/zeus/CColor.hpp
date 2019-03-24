@@ -133,59 +133,67 @@ public:
 
   bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
 
-  CColor operator+(const CColor& rhs) const { return mSimd + rhs.mSimd; }
+  CColor operator+(const CColor& rhs) const { return CColor(mSimd + rhs.mSimd).Clamp(); }
 
-  CColor operator-(const CColor& rhs) const { return mSimd - rhs.mSimd; }
+  CColor operator-(const CColor& rhs) const { return CColor(mSimd - rhs.mSimd).Clamp(); }
 
-  CColor operator*(const CColor& rhs) const { return mSimd * rhs.mSimd; }
+  CColor operator*(const CColor& rhs) const { return CColor(mSimd * rhs.mSimd).Clamp(); }
 
-  CColor operator/(const CColor& rhs) const { return mSimd / rhs.mSimd; }
+  CColor operator/(const CColor& rhs) const { return CColor(mSimd / rhs.mSimd).Clamp(); }
 
-  CColor operator+(float val) const { return mSimd + simd<float>(val); }
+  CColor operator+(float val) const { return CColor(mSimd + simd<float>(val)).Clamp(); }
 
-  CColor operator-(float val) const { return mSimd - simd<float>(val); }
+  CColor operator-(float val) const { return CColor(mSimd - simd<float>(val)).Clamp(); }
 
-  CColor operator*(float val) const { return mSimd * simd<float>(val); }
+  CColor operator*(float val) const { return CColor(mSimd * simd<float>(val)).Clamp(); }
 
-  CColor operator/(float val) const { return mSimd / simd<float>(val); }
+  CColor operator/(float val) const { return CColor(mSimd / simd<float>(val)).Clamp(); }
 
   const CColor& operator+=(const CColor& rhs) {
     mSimd += rhs.mSimd;
+    Clamp();
     return *this;
   }
 
   const CColor& operator-=(const CColor& rhs) {
     mSimd -= rhs.mSimd;
+    Clamp();
     return *this;
   }
 
   const CColor& operator*=(const CColor& rhs) {
     mSimd *= rhs.mSimd;
+    Clamp();
     return *this;
   }
 
   const CColor& operator/=(const CColor& rhs) {
     mSimd /= rhs.mSimd;
+    Clamp();
     return *this;
   }
 
   const CColor& operator+=(float rhs) {
     mSimd += simd<float>(rhs);
+    Clamp();
     return *this;
   }
 
   const CColor& operator-=(float rhs) {
     mSimd -= simd<float>(rhs);
+    Clamp();
     return *this;
   }
 
   const CColor& operator*=(float rhs) {
     mSimd *= simd<float>(rhs);
+    Clamp();
     return *this;
   }
 
   const CColor& operator/=(float rhs) {
     mSimd /= simd<float>(rhs);
+    Clamp();
     return *this;
   }
 
@@ -279,11 +287,12 @@ public:
   /**
    * @brief Clamps to GPU-safe RGBA values [0,1]
    */
-  void Clamp() {
+  CColor& Clamp() {
     r() = std::min(1.f, std::max(0.f, float(r())));
     g() = std::min(1.f, std::max(0.f, float(g())));
     b() = std::min(1.f, std::max(0.f, float(b())));
     a() = std::min(1.f, std::max(0.f, float(a())));
+    return *this;
   }
 
   float r() const { return mSimd[0]; }
@@ -314,11 +323,11 @@ constexpr CColor skYellow(1.f, 1.f, 0.f, 1.f);
 constexpr CColor skWhite(1.f, 1.f, 1.f, 1.f);
 constexpr CColor skClear(0.f, 0.f, 0.f, 0.f);
 
-inline CColor operator+(float lhs, const CColor& rhs) { return simd<float>(lhs) + rhs.mSimd; }
+inline CColor operator+(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) + rhs.mSimd).Clamp(); }
 
-inline CColor operator-(float lhs, const CColor& rhs) { return simd<float>(lhs) - rhs.mSimd; }
+inline CColor operator-(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) - rhs.mSimd).Clamp(); }
 
-inline CColor operator*(float lhs, const CColor& rhs) { return simd<float>(lhs) * rhs.mSimd; }
+inline CColor operator*(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) * rhs.mSimd).Clamp(); }
 
-inline CColor operator/(float lhs, const CColor& rhs) { return simd<float>(lhs) / rhs.mSimd; }
+inline CColor operator/(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) / rhs.mSimd).Clamp(); }
 } // namespace zeus

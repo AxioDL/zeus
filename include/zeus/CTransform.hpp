@@ -157,10 +157,8 @@ public:
                                 simd<float>{0.f, 0.f, factor, 0.f}));
   }
 
-  CTransform multiplyIgnoreTranslation(const CTransform& xfrm) const {
-    CTransform ret;
-    ret.basis = basis * xfrm.basis;
-    return ret;
+  CTransform multiplyIgnoreTranslation(const CTransform& rhs) const {
+    return CTransform(basis * rhs.basis, origin + rhs.origin);
   }
 
   CTransform getRotation() const {

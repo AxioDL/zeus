@@ -18,7 +18,14 @@ class CAABox {
 public:
   enum class EBoxEdgeId { Z0, X0, Z1, X1, Z2, X2, Z3, X3, Y0, Y1, Y2, Y3 };
 
-  enum class EBoxFaceID {};
+  enum class EBoxFaceId {
+    YMin,
+    YMax,
+    XMin,
+    XMax,
+    ZMax,
+    ZMin
+  };
 
   CVector3f min;
   CVector3f max;
@@ -127,6 +134,12 @@ public:
       return CLineSeg({max.x(), min.y(), max.z()}, {max.x(), max.y(), max.z()});
     }
   }
+
+  struct Tri {
+    zeus::CPlane x0_plane;
+    zeus::CVector3f x10_[3];
+  };
+  Tri getTri(EBoxFaceId face, int windOffset) const;
 
   CAABox getTransformedAABox(const CTransform& xfrm) const {
     CAABox box;

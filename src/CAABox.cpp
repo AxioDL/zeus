@@ -110,4 +110,53 @@ CAABox CAABox::booleanIntersection(const CAABox& other) const {
   return {minVec, maxVec};
 }
 
+CAABox::Tri CAABox::getTri(EBoxFaceId face, int windOffset) const {
+  zeus::CVector3f verts[] = {
+    {min.x(), min.y(), max.z()},
+    min,
+    {max.x(), min.y(), min.z()},
+    {max.x(), min.y(), max.z()}};
+  switch (face) {
+  case EBoxFaceId::YMin:
+  default:
+    verts[0].assign(min.x(), min.y(), max.z());
+    verts[1].assign(max.x(), min.y(), max.z());
+    verts[2].assign(max.x(), min.y(), min.z());
+    verts[3] = min;
+    break;
+  case EBoxFaceId::YMax:
+    verts[0] = max;
+    verts[1].assign(min.x(), max.y(), max.z());
+    verts[2].assign(min.x(), max.y(), min.z());
+    verts[3].assign(max.x(), max.y(), min.z());
+    break;
+  case EBoxFaceId::XMin:
+    verts[0].assign(min.x(), max.y(), max.z());
+    verts[1].assign(min.x(), min.y(), max.z());
+    verts[2] = min;
+    verts[3].assign(min.x(), max.y(), min.z());
+    break;
+  case EBoxFaceId::XMax:
+    verts[0].assign(max.x(), min.y(), max.z());
+    verts[1] = max;
+    verts[2].assign(max.x(), max.y(), min.z());
+    verts[3].assign(max.x(), min.y(), min.z());
+    break;
+  case EBoxFaceId::ZMax:
+    verts[0].assign(min.x(), max.y(), max.z());
+    verts[1] = max;
+    verts[2].assign(max.x(), min.y(), max.z());
+    verts[3].assign(min.x(), min.y(), max.z());
+    break;
+  case EBoxFaceId::ZMin:
+    verts[0] = min;
+    verts[1].assign(max.x(), min.y(), min.z());
+    verts[2].assign(max.x(), max.y(), min.z());
+    verts[3].assign(min.x(), max.y(), min.z());
+    break;
+  }
+  return {zeus::CPlane(verts[windOffset % 2], verts[(windOffset + 1) % 2], verts[(windOffset + 2) % 2]),
+          verts[windOffset % 2], verts[(windOffset + 1) % 2], verts[(windOffset + 2) % 2]};
+}
+
 } // namespace zeus

@@ -137,7 +137,7 @@ public:
 
   struct Tri {
     zeus::CPlane x0_plane;
-    zeus::CVector3f x10_[3];
+    zeus::CVector3f x10_verts[3];
   };
   Tri getTri(EBoxFaceId face, int windOffset) const;
 

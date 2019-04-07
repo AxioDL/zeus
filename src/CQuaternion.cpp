@@ -275,6 +275,15 @@ CRelAngle CQuaternion::angleFrom(const zeus::CQuaternion& other) {
   return std::acos(zeus::clamp(-1.f, dot(other), 1.f));
 }
 
+static float normalize_angle(float angle) {
+  if (angle > M_PIF)
+    angle -= 2.f * M_PIF;
+  else if (angle < -M_PIF)
+    angle += 2.f * M_PIF;
+
+  return angle;
+}
+
 CQuaternion CQuaternion::lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng) {
   CQuaternion q;
   zeus::CVector3f destNoZ = dest;

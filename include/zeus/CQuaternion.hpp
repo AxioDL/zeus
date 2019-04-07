@@ -17,15 +17,6 @@
 
 namespace zeus {
 
-static float normalize_angle(float angle) {
-  if (angle > M_PIF)
-    angle -= 2.f * M_PIF;
-  else if (angle < -M_PIF)
-    angle += 2.f * M_PIF;
-
-  return angle;
-}
-
 class CNUQuaternion;
 
 /** Unit quaternion, used for all quaternion arithmetic */

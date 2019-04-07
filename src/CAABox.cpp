@@ -156,7 +156,7 @@ CAABox::Tri CAABox::getTri(EBoxFaceId face, int windOffset) const {
     break;
   }
   return {zeus::CPlane(verts[windOffset % 2], verts[(windOffset + 1) % 2], verts[(windOffset + 2) % 2]),
-          verts[windOffset % 2], verts[(windOffset + 1) % 2], verts[(windOffset + 2) % 2]};
+          {verts[windOffset % 2], verts[(windOffset + 1) % 2], verts[(windOffset + 2) % 2]}};
 }
 
 } // namespace zeus

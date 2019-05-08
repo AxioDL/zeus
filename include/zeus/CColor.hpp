@@ -331,3 +331,16 @@ inline CColor operator*(float lhs, const CColor& rhs) { return CColor(simd<float
 
 inline CColor operator/(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) / rhs.mSimd).Clamp(); }
 } // namespace zeus
+
+namespace std {
+template <>
+struct hash<zeus::CColor> {
+  size_t operator()(const zeus::CColor& color) const noexcept {
+    size_t ret = std::hash<float>()(color.r());
+    zeus::hash_combine_impl(ret, std::hash<float>()(color.g()));
+    zeus::hash_combine_impl(ret, std::hash<float>()(color.b()));
+    zeus::hash_combine_impl(ret, std::hash<float>()(color.a()));
+    return ret;
+  }
+};
+}

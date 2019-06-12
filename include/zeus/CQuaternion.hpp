@@ -101,9 +101,11 @@ public:
 
   CQuaternion normalized() const { return *this / magnitude(); }
 
-  void invert();
+  static constexpr simd<float> InvertQuat = {1.f, -1.f, -1.f, -1.f};
 
-  CQuaternion inverse() const;
+  void invert() { mSimd *= InvertQuat; }
+
+  CQuaternion inverse() const { return mSimd * InvertQuat; }
 
   /**
    * @brief Set the rotation using axis angle notation

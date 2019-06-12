@@ -4,11 +4,6 @@ project(zeus)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (NOT DEFINED ATHENA_INCLUDE_DIR)
-    set(ATHENA_INCLUDE_DIR ../athena/include)
-endif()
-include_directories(include ${ATHENA_INCLUDE_DIR})
-
 set(SOURCES
     src/CVector3f.cpp
     src/Math.cpp
@@ -58,6 +53,12 @@ add_library(zeus
     include/zeus/simd/simd_sse.hpp
     include/zeus/simd/simd_avx.hpp
     include/zeus/simd/parallelism_v2_simd.hpp)
+
+target_include_directories(zeus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+if(TARGET athena-core)
+  target_link_libraries(zeus PUBLIC athena-core)
+  target_compile_definitions(zeus PUBLIC ZE_ATHENA_TYPES=1)
+endif()
 
 add_subdirectory(test)
 

@@ -149,12 +149,6 @@ const CQuaternion& CQuaternion::operator/=(float scale) {
   return *this;
 }
 
-static const simd<float> InvertQuat(1.f, -1.f, -1.f, -1.f);
-
-void CQuaternion::invert() { mSimd *= InvertQuat; }
-
-CQuaternion CQuaternion::inverse() const { return mSimd * InvertQuat; }
-
 CQuaternion CQuaternion::log() const {
   float a = std::acos(w());
   float sina = std::sin(a);

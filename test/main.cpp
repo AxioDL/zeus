@@ -12,6 +12,8 @@ union Color {
   zeus::Comp32 rgba;
 };
 
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+
 int main() {
   zeus::detectCPU();
   assert(!CAABox({100, 100, 100}, {100, 100, 100}).invalid());

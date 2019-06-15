@@ -67,31 +67,46 @@ public:
 
   void fromVector3f(const CVector3f& vec);
 
-  CQuaternion& operator=(const CQuaternion& q);
+  CQuaternion& operator=(const CQuaternion& q) {
+    mSimd = q.mSimd;
+    return *this;
+  }
 
-  CQuaternion operator+(const CQuaternion& q) const;
+  CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
 
-  CQuaternion operator-(const CQuaternion& q) const;
+  CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
 
   CQuaternion operator*(const CQuaternion& q) const;
 
   CQuaternion operator/(const CQuaternion& q) const;
 
-  CQuaternion operator*(float scale) const;
+  CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-  CQuaternion operator/(float scale) const;
+  CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
 
-  CQuaternion operator-() const;
+  CQuaternion operator-() const { return -mSimd; }
 
-  const CQuaternion& operator+=(const CQuaternion& q);
+  const CQuaternion& operator+=(const CQuaternion& q) {
+    mSimd += q.mSimd;
+    return *this;
+  }
 
-  const CQuaternion& operator-=(const CQuaternion& q);
+  const CQuaternion& operator-=(const CQuaternion& q) {
+    mSimd -= q.mSimd;
+    return *this;
+  }
 
   const CQuaternion& operator*=(const CQuaternion& q);
 
-  const CQuaternion& operator*=(float scale);
+  const CQuaternion& operator*=(float scale) {
+    mSimd *= simd<float>(scale);
+    return *this;
+  }
 
-  const CQuaternion& operator/=(float scale);
+  const CQuaternion& operator/=(float scale) {
+    mSimd /= simd<float>(scale);
+    return *this;
+  }
 
   float magnitude() const { return std::sqrt(magSquared()); }
 
@@ -249,9 +264,12 @@ public:
 
   CNUQuaternion operator*(const CNUQuaternion& q) const;
 
-  CNUQuaternion operator*(float f) const;
+  CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
 
-  const CNUQuaternion& operator+=(const CNUQuaternion& q);
+  const CNUQuaternion& operator+=(const CNUQuaternion& q) {
+    mSimd += q.mSimd;
+    return *this;
+  }
 
   zeus::simd<float>::reference operator[](size_t idx) {
     assert(idx < 4);

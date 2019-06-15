@@ -76,15 +76,6 @@ void CQuaternion::fromVector3f(const CVector3f& vec) {
   mSimd.copy_from(f);
 }
 
-CQuaternion& CQuaternion::operator=(const CQuaternion& q) {
-  mSimd = q.mSimd;
-  return *this;
-}
-
-CQuaternion CQuaternion::operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
-
-CQuaternion CQuaternion::operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
-
 CQuaternion CQuaternion::operator*(const CQuaternion& q) const {
   return CQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
                      y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
@@ -105,29 +96,6 @@ CQuaternion CQuaternion::operator/(const CQuaternion& q) const {
   return *this * p;
 }
 
-CQuaternion CQuaternion::operator*(float scale) const { return mSimd * simd<float>(scale); }
-
-CNUQuaternion CNUQuaternion::operator*(float scale) const { return mSimd * simd<float>(scale); }
-
-CQuaternion CQuaternion::operator/(float scale) const { return mSimd / simd<float>(scale); }
-
-CQuaternion CQuaternion::operator-() const { return -mSimd; }
-
-const CQuaternion& CQuaternion::operator+=(const CQuaternion& q) {
-  mSimd += q.mSimd;
-  return *this;
-}
-
-const CNUQuaternion& CNUQuaternion::operator+=(const CNUQuaternion& q) {
-  mSimd += q.mSimd;
-  return *this;
-}
-
-const CQuaternion& CQuaternion::operator-=(const CQuaternion& q) {
-  mSimd -= q.mSimd;
-  return *this;
-}
-
 const CQuaternion& CQuaternion::operator*=(const CQuaternion& q) {
   CQuaternion orig = *this;
 
@@ -136,16 +104,6 @@ const CQuaternion& CQuaternion::operator*=(const CQuaternion& q) {
   y() = orig.z() * q.x() - orig.x() * q.z() + orig.w() * q.y() + orig.y() * q.w();
   z() = orig.x() * q.y() - orig.y() * q.x() + orig.w() * q.z() + orig.z() * q.w();
 
-  return *this;
-}
-
-const CQuaternion& CQuaternion::operator*=(float scale) {
-  mSimd *= simd<float>(scale);
-  return *this;
-}
-
-const CQuaternion& CQuaternion::operator/=(float scale) {
-  mSimd /= simd<float>(scale);
   return *this;
 }
 

@@ -315,8 +315,10 @@ constexpr CVector4f& CVector4f::operator=(const CColor& other) {
 constexpr CColor skRed(1.f, 0.f, 0.f, 1.f);
 constexpr CColor skBlack(0.f, 0.f, 0.f, 1.f);
 constexpr CColor skBlue(0.f, 0.f, 1.f, 1.f);
+constexpr CColor skCyan(0.f, 1.f, 1.f, 1.f);
 constexpr CColor skGreen(0.f, 1.f, 0.f, 1.f);
 constexpr CColor skGrey(0.5f, 0.5f, 0.5f, 1.f);
+constexpr CColor skMagenta(1.f, 0.f, 1.f, 1.f);
 constexpr CColor skOrange(1.f, 0.43f, 0.f, 1.f);
 constexpr CColor skPurple(0.63f, 0.f, 1.f, 1.f);
 constexpr CColor skYellow(1.f, 1.f, 0.f, 1.f);

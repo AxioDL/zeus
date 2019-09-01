@@ -1,9 +1,12 @@
 #pragma once
 
+#include "zeus/CAABox.hpp"
 #include "zeus/CTransform.hpp"
 #include "zeus/CVector3f.hpp"
-#include "zeus/CAABox.hpp"
-#include "zeus/CMRay.hpp"
+
+#if ZE_ATHENA_TYPES
+#include <athena/IStreamReader.hpp>
+#endif
 
 namespace zeus {
 class COBBox {

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "zeus/CVector3f.hpp"
-#include "zeus/CTransform.hpp"
-#include "zeus/CPlane.hpp"
+#include <cassert>
+
 #include "zeus/CLineSeg.hpp"
+#include "zeus/CPlane.hpp"
 #include "zeus/CSphere.hpp"
+#include "zeus/CTransform.hpp"
+#include "zeus/CVector3f.hpp"
 #include "zeus/Math.hpp"
 
 #if ZE_ATHENA_TYPES
-
 #include <athena/IStreamReader.hpp>
-
 #endif
 
 namespace zeus {

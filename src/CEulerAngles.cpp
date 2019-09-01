@@ -1,5 +1,9 @@
 #include "zeus/CEulerAngles.hpp"
+
+#include <cmath>
+
 #include "zeus/CQuaternion.hpp"
+#include "zeus/CTransform.hpp"
 
 namespace zeus {
 

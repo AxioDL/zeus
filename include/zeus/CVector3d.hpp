@@ -1,9 +1,13 @@
 #pragma once
 
-#include "athena/Types.hpp"
-#include "Global.hpp"
-#include "zeus/Math.hpp"
+#include <cassert>
+
 #include "zeus/CVector3f.hpp"
+#include "zeus/Global.hpp"
+
+#if ZE_ATHENA_TYPES
+#include <athena/Types.hpp>
+#endif
 
 namespace zeus {
 

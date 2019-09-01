@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Global.hpp"
+#include "zeus/CUnitVector.hpp"
 #include "zeus/CVector3f.hpp"
-#include "CUnitVector.hpp"
 
 namespace zeus {
 struct CAxisAngle : CVector3f {

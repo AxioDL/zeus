@@ -1,8 +1,8 @@
 #pragma once
 
-#include "zeus/CVector3f.hpp"
-#include "zeus/Math.hpp"
 #include <cmath>
+
+#include "zeus/Math.hpp"
 
 namespace zeus {
 /**

@@ -1,18 +1,17 @@
 #pragma once
 
-#include "Global.hpp"
+#include <algorithm>
+#include <cassert>
+#include <functional>
+
+#include "zeus/CVector4f.hpp"
+#include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
-#include "CVector4f.hpp"
 
 #if ZE_ATHENA_TYPES
-
-#include "athena/FileReader.hpp"
-#include "athena/FileWriter.hpp"
-
+#include <athena/FileReader.hpp>
+#include <athena/FileWriter.hpp>
 #endif
-
-#include <iostream>
-#include <cassert>
 
 #undef min
 #undef max

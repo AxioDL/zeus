@@ -4,6 +4,7 @@
 
 namespace zeus {
 class CQuaternion;
+class CTransform;
 
 class CEulerAngles : public CVector3f {
 public:

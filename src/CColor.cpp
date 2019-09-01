@@ -1,5 +1,6 @@
 #include "zeus/CColor.hpp"
-#include "zeus/CVector4f.hpp"
+
+#include <algorithm>
 
 namespace zeus {
 float hueToRgb(float p, float q, float t) {

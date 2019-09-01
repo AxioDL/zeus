@@ -1,18 +1,17 @@
 #pragma once
 
-#include "Global.hpp"
-#include "CAxisAngle.hpp"
-#include "zeus/CVector3f.hpp"
-#include "zeus/CVector4f.hpp"
+#include <cmath>
+
+#include "zeus/CAxisAngle.hpp"
 #include "zeus/CMatrix3f.hpp"
-#include "zeus/Math.hpp"
 #include "zeus/CRelAngle.hpp"
 #include "zeus/CTransform.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/CVector4f.hpp"
+#include "zeus/Global.hpp"
 
 #if ZE_ATHENA_TYPES
-
 #include <athena/IStreamReader.hpp>
-
 #endif
 
 namespace zeus {

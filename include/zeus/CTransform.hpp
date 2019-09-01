@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Global.hpp"
-#include "zeus/CMatrix3f.hpp"
-#include "zeus/CMatrix4f.hpp"
-#include "zeus/CVector3f.hpp"
-#include "zeus/CUnitVector.hpp"
 #include <cstdint>
 #include <cstdio>
+
+#include "zeus/CMatrix3f.hpp"
+#include "zeus/CMatrix4f.hpp"
+#include "zeus/CUnitVector.hpp"
+#include "zeus/CVector3f.hpp"
+#include "zeus/Global.hpp"
 
 namespace zeus {
 class CTransform {

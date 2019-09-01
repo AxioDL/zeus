@@ -1,14 +1,6 @@
 #pragma once
 
-#include "Global.hpp"
-#include "zeus/Math.hpp"
-#include "CVector2f.hpp"
-
-#if ZE_ATHENA_TYPES
-
-#include <athena/IStreamReader.hpp>
-
-#endif
+#include "zeus/CVector2f.hpp"
 
 namespace zeus {
 

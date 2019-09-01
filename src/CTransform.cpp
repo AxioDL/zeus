@@ -1,5 +1,7 @@
 #include "zeus/CTransform.hpp"
 
+#include <cmath>
+
 namespace zeus {
 CTransform CTransformFromEditorEuler(const CVector3f& eulerVec) {
   CTransform result;

@@ -1,5 +1,8 @@
 #include "zeus/COBBox.hpp"
 
+#include <cfloat>
+#include <cmath>
+
 namespace zeus {
 
 CAABox COBBox::calculateAABox(const CTransform& worldXf) const {

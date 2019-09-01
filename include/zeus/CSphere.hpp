@@ -9,7 +9,7 @@ public:
 
   CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
 
-  bool intersects(const CSphere& other) {
+  bool intersects(const CSphere& other) const {
     float dist = (position - other.position).magnitude();
     return dist < (radius + other.radius);
   }

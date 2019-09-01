@@ -1,4 +1,7 @@
 #include "zeus/CQuaternion.hpp"
+
+#include <cmath>
+
 #include "zeus/Math.hpp"
 
 namespace zeus {

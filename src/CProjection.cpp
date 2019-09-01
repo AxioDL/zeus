@@ -1,6 +1,7 @@
 #include "zeus/CProjection.hpp"
-#include "zeus/Math.hpp"
+
 #include <cassert>
+#include <cmath>
 
 namespace zeus {
 void CProjection::_updateCachedMatrix() {

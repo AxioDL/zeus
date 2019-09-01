@@ -1,8 +1,7 @@
 #pragma once
 
-#include "zeus/CVector3f.hpp"
 #include "zeus/CTransform.hpp"
-#include "zeus/Math.hpp"
+#include "zeus/CVector3f.hpp"
 
 namespace zeus {
 struct CMRay {

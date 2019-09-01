@@ -1,8 +1,9 @@
 #include "zeus/CVector2f.hpp"
-#include <memory.h>
-#include <cmath>
+
+#include <algorithm>
 #include <cassert>
-#include "zeus/Math.hpp"
+#include <cfloat>
+#include <cmath>
 
 namespace zeus {
 float CVector2f::getAngleDiff(const CVector2f& a, const CVector2f& b) {
@@ -13,7 +14,7 @@ float CVector2f::getAngleDiff(const CVector2f& a, const CVector2f& b) {
     return 0.f;
 
   float dot = a.dot(b);
-  return std::acos(zeus::clamp(-1.f, dot / (mag1 * mag2), 1.f));
+  return std::acos(std::clamp(-1.f, dot / (mag1 * mag2), 1.f));
 }
 
 CVector2f CVector2f::slerp(const CVector2f& a, const CVector2f& b, float t) {

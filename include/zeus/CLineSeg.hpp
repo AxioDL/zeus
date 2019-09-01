@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Global.hpp"
 #include "zeus/CVector3f.hpp"
 
 namespace zeus {

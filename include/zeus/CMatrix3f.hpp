@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Global.hpp"
-#include "zeus/CVector3f.hpp"
 #include <cassert>
-#include <cstring>
+
+#include "zeus/CVector3f.hpp"
+#include "zeus/Global.hpp"
 
 /* Column-major matrix class */
 namespace zeus {

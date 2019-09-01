@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Global.hpp"
-#include "zeus/Math.hpp"
-#include "zeus/Math.hpp"
 #include <cassert>
+
+#include "zeus/Global.hpp"
+#include "zeus/Math.hpp"
+
+#if ZE_ATHENA_TYPES
+#include <athena/IStreamReader.hpp>
+#endif
 
 namespace zeus {
 class CVector2f {

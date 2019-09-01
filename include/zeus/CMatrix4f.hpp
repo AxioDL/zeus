@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cassert>
+
 #include "zeus/CMatrix3f.hpp"
-#include "zeus/CVector4f.hpp"
 #include "zeus/CVector3f.hpp"
+#include "zeus/CVector4f.hpp"
 
 namespace zeus {
 class CMatrix4f {

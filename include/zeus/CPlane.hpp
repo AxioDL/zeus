@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Global.hpp"
+#include <cassert>
+
 #include "zeus/CVector3f.hpp"
+#include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
 
 namespace zeus {

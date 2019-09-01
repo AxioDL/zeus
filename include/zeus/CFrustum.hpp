@@ -1,10 +1,13 @@
 #pragma once
 
 #include "zeus/CPlane.hpp"
-#include "zeus/CAABox.hpp"
-#include "zeus/CProjection.hpp"
 
 namespace zeus {
+class CAABox;
+class CMatrix4f;
+class CProjection;
+class CSphere;
+
 class CFrustum {
   CPlane planes[6];
   bool valid = false;

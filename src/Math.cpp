@@ -1,7 +1,12 @@
 #include "zeus/Math.hpp"
+
+#include <cfloat>
+#include <cmath>
+#include <cstring>
+
 #include "zeus/CTransform.hpp"
-#include "zeus/CVector3f.hpp"
 #include "zeus/CVector2f.hpp"
+#include "zeus/CVector3f.hpp"
 
 #if _WIN32
 #include <intrin.h>

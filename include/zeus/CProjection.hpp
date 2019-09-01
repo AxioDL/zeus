@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Global.hpp"
-#include "zeus/CMatrix4f.hpp"
-#include <cstdlib>
 #include <cstdio>
-#include <cmath>
+#include <cstdlib>
+
+#include "zeus/CMatrix4f.hpp"
 
 namespace zeus {
 enum class EProjType { None = 0, Orthographic = 1, Perspective = 2 };

@@ -1,5 +1,11 @@
 #include "zeus/CFrustum.hpp"
 
+#include <cmath>
+
+#include "zeus/CAABox.hpp"
+#include "zeus/CProjection.hpp"
+#include "zeus/CTransform.hpp"
+
 namespace zeus {
 
 void CFrustum::updatePlanes(const CMatrix4f& viewMtx, const CMatrix4f& projection) {

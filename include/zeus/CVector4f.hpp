@@ -1,17 +1,15 @@
 #pragma once
 
-#include "Global.hpp"
+#include <cassert>
+#include <cfloat>
+#include <cmath>
+
 #include "zeus/CVector3f.hpp"
+#include "zeus/Global.hpp"
 
 #if ZE_ATHENA_TYPES
-
-#include "athena/IStreamReader.hpp"
-
+#include <athena/IStreamReader.hpp>
 #endif
-
-#include "zeus/Math.hpp"
-#include <cfloat>
-#include <cassert>
 
 namespace zeus {
 class CColor;

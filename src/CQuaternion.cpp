@@ -226,7 +226,7 @@ CQuaternion CQuaternion::buildEquivalent() const {
     return CQuaternion::fromAxisAngle(CUnitVector3f(mSimd.shuffle<1, 2, 3, 3>()), tmp + 2.0 * M_PI);
 }
 
-CRelAngle CQuaternion::angleFrom(const zeus::CQuaternion& other) {
+CRelAngle CQuaternion::angleFrom(const zeus::CQuaternion& other) const {
   return std::acos(zeus::clamp(-1.f, dot(other), 1.f));
 }
 

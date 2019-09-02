@@ -166,7 +166,7 @@ public:
            std::fabs(w()) >= FLT_EPSILON;
   }
 
-  bool isEqu(const CVector4f& other, float epsilon = FLT_EPSILON) {
+  bool isEqu(const CVector4f& other, float epsilon = FLT_EPSILON) const {
     const CVector4f diffVec = other - *this;
     return (diffVec.x() <= epsilon && diffVec.y() <= epsilon && diffVec.z() <= epsilon && diffVec.w() <= epsilon);
   }

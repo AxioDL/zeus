@@ -52,14 +52,14 @@ public:
 
   static CTransform Translate(float x, float y, float z) { return Translate({x, y, z}); }
 
-  CTransform operator+(const CVector3f& other) { return CTransform(basis, origin + other); }
+  CTransform operator+(const CVector3f& other) const { return CTransform(basis, origin + other); }
 
   CTransform& operator+=(const CVector3f& other) {
     origin += other;
     return *this;
   }
 
-  CTransform operator-(const CVector3f& other) { return CTransform(basis, origin - other); }
+  CTransform operator-(const CVector3f& other) const { return CTransform(basis, origin - other); }
 
   CTransform& operator-=(const CVector3f& other) {
     origin -= other;

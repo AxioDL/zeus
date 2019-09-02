@@ -29,7 +29,7 @@ public:
 
   constexpr CVector3d(double x, double y, double z) : mSimd(x, y, z) {}
 
-  CVector3f asCVector3f() { return mSimd; }
+  CVector3f asCVector3f() const { return mSimd; }
 
   double magSquared() const { return mSimd.dot3(mSimd); }
 
@@ -41,7 +41,7 @@ public:
 
   double dot(const CVector3d& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
-  CVector3d asNormalized() {
+  CVector3d asNormalized() const {
     double mag = magnitude();
     mag = 1.0 / mag;
     return mSimd * zeus::simd<double>(mag);

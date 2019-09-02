@@ -180,7 +180,7 @@ public:
     return v;
   }
 
-  bool isEqu(const CVector3f& other, float epsilon = FLT_EPSILON) {
+  bool isEqu(const CVector3f& other, float epsilon = FLT_EPSILON) const {
     const CVector3f diffVec = other - *this;
     return (diffVec.x() <= epsilon && diffVec.y() <= epsilon && diffVec.z() <= epsilon);
   }

@@ -199,7 +199,7 @@ public:
     z() = i.z();
   }
 
-  CRelAngle angleFrom(const zeus::CQuaternion& other);
+  CRelAngle angleFrom(const zeus::CQuaternion& other) const;
 
   simd<float>::reference operator[](size_t idx) {
     assert(idx < 4);

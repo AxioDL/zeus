@@ -172,7 +172,7 @@ public:
 
   bool isZero() const { return magSquared() <= FLT_EPSILON; }
 
-  bool isEqu(const CVector2f& other, float epsilon = FLT_EPSILON) {
+  bool isEqu(const CVector2f& other, float epsilon = FLT_EPSILON) const {
     const CVector2f diffVec = other - *this;
     return (diffVec.x() <= epsilon && diffVec.y() <= epsilon);
   }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include "zeus/CPlane.hpp"
 
 namespace zeus {
@@ -9,7 +10,7 @@ class CProjection;
 class CSphere;
 
 class CFrustum {
-  CPlane planes[6];
+  std::array<CPlane, 6> planes;
   bool valid = false;
 
 public:

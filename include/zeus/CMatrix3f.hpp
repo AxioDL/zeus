@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cassert>
 
 #include "zeus/CVector3f.hpp"
@@ -20,7 +21,7 @@ public:
   }
 
   constexpr CMatrix3f(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
-  : m{{m00, m10, m20}, {m01, m11, m21}, {m02, m12, m22}} {}
+  : m{{{m00, m10, m20}, {m01, m11, m21}, {m02, m12, m22}}} {}
 
   CMatrix3f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
@@ -30,17 +31,9 @@ public:
 
   CMatrix3f(float scale) : CMatrix3f(CVector3f(scale)) {}
 
-  constexpr CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2) {
-    m[0] = r0;
-    m[1] = r1;
-    m[2] = r2;
-  }
+  constexpr CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2) : m{{r0, r1, r2}} {}
 
-  constexpr CMatrix3f(const CMatrix3f& other) {
-    m[0] = other.m[0];
-    m[1] = other.m[1];
-    m[2] = other.m[2];
-  }
+  constexpr CMatrix3f(const CMatrix3f& other) = default;
 
   constexpr CMatrix3f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2) {
     m[0].mSimd = r0;
@@ -78,12 +71,7 @@ public:
 
   CMatrix3f(const CQuaternion& quat);
 
-  CMatrix3f& operator=(const CMatrix3f& other) {
-    m[0] = other.m[0];
-    m[1] = other.m[1];
-    m[2] = other.m[2];
-    return *this;
-  }
+  CMatrix3f& operator=(const CMatrix3f& other) = default;
 
   CVector3f operator*(const CVector3f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
@@ -91,12 +79,12 @@ public:
   }
 
   CVector3f& operator[](size_t i) {
-    assert(i < 3);
+    assert(i < m.size());
     return m[i];
   }
 
   const CVector3f& operator[](size_t i) const {
-    assert(i < 3);
+    assert(i < m.size());
     return m[i];
   }
 
@@ -154,14 +142,15 @@ public:
            m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
   }
 
-  CVector3f m[3];
+  std::array<CVector3f, 3> m;
 };
 
 inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
-  simd<float> v[3];
-  for (int i = 0; i < 3; ++i)
+  std::array<simd<float>, 3> v;
+  for (size_t i = 0; i < v.size(); ++i) {
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
            lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>();
+  }
   return CMatrix3f(v[0], v[1], v[2]);
 }
 } // namespace zeus

@@ -245,12 +245,12 @@ public:
     fromRGBA8(tmp.r, tmp.g, tmp.b, tmp.a);
   }
 
-  /*!
-   * \brief Converts a CColor to RGBA8
-   * \param r
-   * \param g
-   * \param b
-   * \param a
+  /**
+   * @brief Converts a CColor to RGBA8
+   * @param ro Red component
+   * @param go Green component
+   * @param bo Blue component
+   * @param ao Alpha component
    */
   void toRGBA8(Comp8& ro, Comp8& go, Comp8& bo, Comp8& ao) const {
     ro = Comp8(r() * 255);
@@ -261,19 +261,18 @@ public:
 
   /**
    * @brief Assigns rgba from hsv
-   * @param h[0-1] The hue percentagee of the color.
+   * @param h[0-1] The hue percentage of the color.
    * @param s[0-1] The saturation percentage of the color.
    * @param v[0-1] The value percentage of the color.
-   * @param a[0-1] The alpha percentage of the color.
+   * @param _a[0-1] The alpha percentage of the color.
    */
   void fromHSV(float h, float s, float v, float _a = 1.0);
 
   /**
    * @brief Converts rgba to hsv
-   * @param h[0-1] The hue percentagee of the color.
+   * @param h[0-1] The hue percentage of the color.
    * @param s[0-1] The saturation percentage of the color.
    * @param v[0-1] The value percentage of the color.
-   * @param a[0-1] The alpha percentage of the color.
    */
   void toHSV(float& h, float& s, float& v) const;
 

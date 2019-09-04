@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cassert>
 
 #include "zeus/CMatrix3f.hpp"
@@ -20,7 +21,7 @@ public:
 
   constexpr CMatrix4f(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20,
                       float m21, float m22, float m23, float m30, float m31, float m32, float m33)
-  : m{{m00, m10, m20, m30}, {m01, m11, m21, m31}, {m02, m12, m22, m32}, {m03, m13, m23, m33}} {}
+  : m{{{m00, m10, m20, m30}, {m01, m11, m21, m31}, {m02, m12, m22, m32}, {m03, m13, m23, m33}}} {}
 
   CMatrix4f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
@@ -29,19 +30,10 @@ public:
     m[3][3] = 1.0f;
   }
 
-  constexpr CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3) {
-    m[0] = r0;
-    m[1] = r1;
-    m[2] = r2;
-    m[3] = r3;
-  }
+  constexpr CMatrix4f(const CVector4f& r0, const CVector4f& r1, const CVector4f& r2, const CVector4f& r3)
+  : m{{r0, r1, r2, r3}} {}
 
-  constexpr CMatrix4f(const CMatrix4f& other) {
-    m[0] = other.m[0];
-    m[1] = other.m[1];
-    m[2] = other.m[2];
-    m[3] = other.m[3];
-  }
+  constexpr CMatrix4f(const CMatrix4f& other) = default;
 
   constexpr CMatrix4f(const simd<float>& r0, const simd<float>& r1, const simd<float>& r2, const simd<float>& r3) {
     m[0].mSimd = r0;
@@ -57,13 +49,7 @@ public:
     m[3].mSimd = CVector4f(0.f, 0.f, 0.f, 1.0f).mSimd;
   }
 
-  CMatrix4f& operator=(const CMatrix4f& other) {
-    m[0] = other.m[0];
-    m[1] = other.m[1];
-    m[2] = other.m[2];
-    m[3] = other.m[3];
-    return *this;
-  }
+  CMatrix4f& operator=(const CMatrix4f& other) = default;
 
   CVector4f operator*(const CVector4f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
@@ -71,12 +57,12 @@ public:
   }
 
   CVector4f& operator[](size_t i) {
-    assert(i < 4);
+    assert(i < m.size());
     return m[i];
   }
 
   const CVector4f& operator[](size_t i) const {
-    assert(i < 4);
+    assert(i < m.size());
     return m[i];
   }
 
@@ -93,15 +79,16 @@ public:
     return xfVec.toVec3f() / xfVec.w();
   }
 
-  CVector4f m[4];
+  std::array<CVector4f, 4> m;
 };
 extern const CMatrix4f skIdentityMatrix4f;
 
 inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
-  simd<float> v[4];
-  for (int i = 0; i < 4; ++i)
+  std::array<simd<float>, 4> v;
+  for (size_t i = 0; i < v.size(); ++i) {
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +
            lhs.m[2].mSimd * rhs[i].mSimd.shuffle<2, 2, 2, 2>() + lhs.m[3].mSimd * rhs[i].mSimd.shuffle<3, 3, 3, 3>();
+  }
   return CMatrix4f(v[0], v[1], v[2], v[3]);
 }
 } // namespace zeus

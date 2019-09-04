@@ -28,4 +28,6 @@ public:
 
   constexpr CVector2i operator*(int32_t val) const noexcept { return CVector2i(x * val, y * val); }
 };
+static_assert(sizeof(CVector2i) == sizeof(int32_t) * 2);
+
 } // namespace zeus

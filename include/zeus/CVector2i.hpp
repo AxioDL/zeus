@@ -28,7 +28,7 @@ public:
 
   bool operator==(const CVector2i& other) const { return x == other.x && y == other.y; }
 
-  bool operator!=(const CVector2i& other) const { return x != other.x || y != other.y; }
+  bool operator!=(const CVector2i& other) const { return !operator==(other); }
 
   CVector2i operator*(int32_t val) const { return CVector2i(x * val, y * val); }
 };

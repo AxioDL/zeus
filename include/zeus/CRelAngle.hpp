@@ -12,87 +12,86 @@ class CRelAngle {
   float angle = 0.f;
 
 public:
-  static float MakeRelativeAngle(float angle) {
+  static float MakeRelativeAngle(float angle) noexcept {
     float ret = angle - std::trunc(angle / (2.f * M_PIF)) * (2.f * M_PIF);
     if (ret < 0.f)
       ret += 2.f * M_PIF;
     return ret;
   }
 
-  constexpr CRelAngle() = default;
+  constexpr CRelAngle() noexcept = default;
 
-  constexpr CRelAngle(float angle) : angle(angle) {}
+  constexpr CRelAngle(float angle) noexcept : angle(angle) {}
 
-  CRelAngle& operator=(float ang) {
+  constexpr CRelAngle(const CRelAngle&) noexcept = default;
+
+  constexpr CRelAngle& operator=(float ang) noexcept {
     angle = ang;
     return *this;
   }
 
-  CRelAngle& operator=(const CRelAngle& ang) {
-    angle = ang.angle;
-    return *this;
-  }
+  constexpr CRelAngle& operator=(const CRelAngle& ang) noexcept = default;
 
-  float asDegrees() const { return radToDeg(angle); }
+  constexpr float asDegrees() const noexcept { return radToDeg(angle); }
 
-  float asRadians() const { return angle; }
+  constexpr float asRadians() const noexcept { return angle; }
 
-  float arcCosine() const { return std::acos(angle); }
+  float arcCosine() const noexcept { return std::acos(angle); }
 
-  static CRelAngle FromDegrees(float angle) {
+  static constexpr CRelAngle FromDegrees(float angle) noexcept {
     CRelAngle ret;
     ret.angle = degToRad(angle);
     return ret;
   }
 
-  operator float() const { return angle; }
+  constexpr operator float() const noexcept { return angle; }
 
-  static CRelAngle FromRadians(float angle) { return CRelAngle(angle); }
+  static constexpr CRelAngle FromRadians(float angle) noexcept { return CRelAngle(angle); }
 
-  bool operator<(const CRelAngle& other) const { return angle < other.angle; }
+  constexpr bool operator<(const CRelAngle& other) const noexcept { return angle < other.angle; }
 
-  CRelAngle& operator+=(const CRelAngle& other) {
-    angle = angle + other.angle;
+  constexpr CRelAngle& operator+=(const CRelAngle& other) noexcept {
+    angle += other.angle;
     return *this;
   }
 
-  CRelAngle& operator+=(float r) {
-    angle = angle + r;
+  constexpr CRelAngle& operator+=(float r) noexcept {
+    angle += r;
     return *this;
   }
 
-  CRelAngle& operator-=(const CRelAngle& other) {
-    angle = angle - other.angle;
+  constexpr CRelAngle& operator-=(const CRelAngle& other) noexcept {
+    angle -= other.angle;
     return *this;
   }
 
-  CRelAngle& operator-=(float r) {
-    angle = angle - r;
+  constexpr CRelAngle& operator-=(float r) noexcept {
+    angle -= r;
     return *this;
   }
 
-  CRelAngle& operator*=(const CRelAngle& other) {
-    angle = angle * other.angle;
+  constexpr CRelAngle& operator*=(const CRelAngle& other) noexcept {
+    angle *= other.angle;
     return *this;
   }
 
-  CRelAngle& operator*=(float r) {
-    angle = angle * r;
+  constexpr CRelAngle& operator*=(float r) noexcept {
+    angle *= r;
     return *this;
   }
 
-  CRelAngle& operator/=(const CRelAngle& other) {
-    angle = angle / other.angle;
+  constexpr CRelAngle& operator/=(const CRelAngle& other) noexcept {
+    angle /= other.angle;
     return *this;
   }
 
-  CRelAngle& operator/=(float r) {
-    angle = angle / r;
+  constexpr CRelAngle& operator/=(float r) noexcept {
+    angle /= r;
     return *this;
   }
 
-  void makeRel() { angle = MakeRelativeAngle(angle); }
+  void makeRel() noexcept { angle = MakeRelativeAngle(angle); }
 
-  CRelAngle asRel() const { return CRelAngle(MakeRelativeAngle(angle)); }
+  CRelAngle asRel() const noexcept { return CRelAngle(MakeRelativeAngle(angle)); }
 };
 } // namespace zeus

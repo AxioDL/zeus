@@ -49,7 +49,7 @@ public:
     m[3].mSimd = CVector4f(0.f, 0.f, 0.f, 1.0f).mSimd;
   }
 
-  CMatrix4f& operator=(const CMatrix4f& other) = default;
+  constexpr CMatrix4f& operator=(const CMatrix4f& other) = default;
 
   CVector4f operator*(const CVector4f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +

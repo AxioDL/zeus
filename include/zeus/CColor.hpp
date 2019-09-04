@@ -25,16 +25,16 @@
 #endif
 
 namespace zeus {
-typedef uint8_t Comp8;
-typedef uint32_t Comp32;
+using Comp8 = uint8_t;
+using Comp32 = uint32_t;
 constexpr float OneOver255 = 1.f / 255.f;
 
-typedef union {
+union RGBA32 {
   struct {
     Comp8 r, g, b, a;
   };
   Comp32 rgba;
-} RGBA32;
+};
 
 class CVector4f;
 

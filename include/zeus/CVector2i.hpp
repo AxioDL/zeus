@@ -1,23 +1,20 @@
 #pragma once
 
+#include <cstdint>
 #include "zeus/CVector2f.hpp"
 
 namespace zeus {
 
 class CVector2i {
 public:
-  union {
-    struct {
-      int x, y;
-    };
-    int v[2];
-  };
+  int32_t x = 0;
+  int32_t y = 0;
 
-  constexpr CVector2i() : x(0), y(0) {}
+  constexpr CVector2i() = default;
 
-  constexpr CVector2i(int xin, int yin) : x(xin), y(yin) {}
+  constexpr CVector2i(int32_t xin, int32_t yin) : x(xin), y(yin) {}
 
-  CVector2i(const CVector2f& vec) : x(int(vec.x())), y(int(vec.y())) {}
+  CVector2i(const CVector2f& vec) : x(int32_t(vec.x())), y(int32_t(vec.y())) {}
 
   CVector2f toVec2f() const { return CVector2f(x, y); }
 
@@ -33,6 +30,6 @@ public:
 
   bool operator!=(const CVector2i& other) const { return x != other.x || y != other.y; }
 
-  CVector2i operator*(int val) const { return CVector2i(x * val, y * val); }
+  CVector2i operator*(int32_t val) const { return CVector2i(x * val, y * val); }
 };
 } // namespace zeus

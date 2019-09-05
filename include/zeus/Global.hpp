@@ -20,6 +20,3 @@ constexpr void hash_combine_impl(SizeT& seed, SizeT value) noexcept {
   seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
 } // namespace zeus
-
-constexpr int rotr(int x, int n) { return ((x >> n) | (x << (32 - n))); }
-constexpr int rotl(int x, int n) { return ((x << n) | (x >> (32 - n))); }

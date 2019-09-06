@@ -14,7 +14,7 @@ public:
 
   constexpr CVector2i(int32_t xin, int32_t yin) noexcept : x(xin), y(yin) {}
 
-  constexpr CVector2i(const CVector2f& vec) noexcept : x(int32_t(vec.x())), y(int32_t(vec.y())) {}
+  CVector2i(const CVector2f& vec) noexcept : x(int32_t(vec.x())), y(int32_t(vec.y())) {}
 
   constexpr CVector2f toVec2f() const noexcept { return CVector2f(float(x), float(y)); }
 

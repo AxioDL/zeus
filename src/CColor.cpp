@@ -91,11 +91,13 @@ void CColor::fromHSL(float h, float s, float l, float _a) {
 void CColor::toHSL(float& h, float& s, float& l) const {
   const float min = std::min({r(), g(), b()});
   const float max = std::max({r(), g(), b()});
-  const float d = max - min;
+
+  l = (max + min) / 2.0f;
 
   if (max == min) {
     h = s = 0.f;
   } else {
+    const float d = max - min;
     s = l > 0.5f ? d / (2.f - max - min) : d / (max + min);
 
     if (max == r()) {

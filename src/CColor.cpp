@@ -53,22 +53,24 @@ void CColor::fromHSV(float h, float s, float v, float _a) {
 }
 
 void CColor::toHSV(float& h, float& s, float& v) const {
-  float min = std::min(r(), std::min(g(), b()));
-  float max = std::max(r(), std::max(g(), b()));
+  const float min = std::min({r(), g(), b()});
+  const float max = std::max({r(), g(), b()});
   v = max;
 
-  float delta = max - min;
+  const float delta = max - min;
   s = max == 0.f ? 0.f : delta / max;
 
-  if (max == min)
+  if (max == min) {
     h = 0.f;
-  else {
-    if (max == r())
+  } else {
+    if (max == r()) {
       h = (g() - b()) / delta + (g() < b() ? 6.f : 0.f);
-    else if (max == g())
+    } else if (max == g()) {
       h = (b() - r()) / delta + 2.f;
-    else if (max == b())
+    } else if (max == b()) {
       h = (r() - g()) / delta + 4.f;
+    }
+
     h /= 6.f;
   }
 }
@@ -87,20 +89,22 @@ void CColor::fromHSL(float h, float s, float l, float _a) {
 }
 
 void CColor::toHSL(float& h, float& s, float& l) const {
-  const float min = std::min(r(), std::min(g(), b()));
-  const float max = std::max(r(), std::max(g(), b()));
+  const float min = std::min({r(), g(), b()});
+  const float max = std::max({r(), g(), b()});
   const float d = max - min;
 
-  if (max == min)
+  if (max == min) {
     h = s = 0.f;
-  else {
+  } else {
     s = l > 0.5f ? d / (2.f - max - min) : d / (max + min);
-    if (max == r())
+
+    if (max == r()) {
       h = (g() - b()) / d + (g() < b() ? 6.f : 0.f);
-    else if (max == g())
+    } else if (max == g()) {
       h = (b() - r()) / d + 2.f;
-    else if (max == b())
+    } else if (max == b()) {
       h = (r() - g()) / d + 4.f;
+    }
 
     h /= 6.f;
   }

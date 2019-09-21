@@ -148,16 +148,16 @@ CQuaternion CQuaternion::nlerp(const CQuaternion& a, const CQuaternion& b, doubl
 }
 
 CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, double t) {
-  if (t <= 0.0f)
+  if (t <= 0.0f) {
     return a;
-  if (t >= 1.0f)
+  }
+
+  if (t >= 1.0f) {
     return b;
+  }
 
-  CQuaternion ret;
-
-  float mag = std::sqrt(a.dot(a) * b.dot(b));
-
-  float prod = a.dot(b) / mag;
+  const float mag = std::sqrt(a.dot(a) * b.dot(b));
+  const float prod = a.dot(b) / mag;
 
   if (std::fabs(prod) < 1.0f) {
     const double sign = (prod < 0.0f) ? -1.0f : 1.0f;
@@ -167,10 +167,9 @@ CQuaternion CQuaternion::slerp(const CQuaternion& a, const CQuaternion& b, doubl
     const double d = 1.0 / std::sin(theta);
     const double s0 = std::sin((1.0 - t) * theta);
 
-    ret = (a * s0 + b * s1) * d;
-
-    return ret;
+    return (a * s0 + b * s1) * d;
   }
+
   return a;
 }
 

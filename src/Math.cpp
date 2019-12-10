@@ -49,7 +49,8 @@ void detectCPU() {
   *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 4) = regs[3];
   *reinterpret_cast<int*>((char*)g_cpuFeatures.cpuVendor + 8) = regs[2];
   getCpuInfo(0x80000000, regs);
-  if (regs[0] >= 0x80000004) {
+  int maxExtended = regs[0];
+  if (maxExtended >= 0x80000004) {
     for (unsigned int i = 0x80000002; i <= 0x80000004; i++) {
       getCpuInfo(i, regs);
       // Interpret CPU brand string and cache information.
@@ -77,6 +78,11 @@ void detectCPU() {
   if (highestFeature >= 7) {
     getCpuInfoEx(7, 0, regs);
     memset((bool*)&g_cpuFeatures.AVX2, ((regs[1] & 0x00000020) != 0), 1);
+  }
+
+  if (maxExtended >= 0x80000001) {
+    getCpuInfo(0x80000001, regs);
+    memset((bool*)&g_cpuFeatures.SSE4a, ((regs[2] & (1 << 6)) != 0), 1);
   }
 
   isCPUInit = true;

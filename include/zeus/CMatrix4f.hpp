@@ -51,29 +51,29 @@ public:
 
   constexpr CMatrix4f& operator=(const CMatrix4f& other) = default;
 
-  CVector4f operator*(const CVector4f& other) const {
+  [[nodiscard]] CVector4f operator*(const CVector4f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
            m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>() + m[3].mSimd * other.mSimd.shuffle<3, 3, 3, 3>();
   }
 
-  CVector4f& operator[](size_t i) {
+  [[nodiscard]] CVector4f& operator[](size_t i) {
     assert(i < m.size());
     return m[i];
   }
 
-  const CVector4f& operator[](size_t i) const {
+  [[nodiscard]] const CVector4f& operator[](size_t i) const {
     assert(i < m.size());
     return m[i];
   }
 
-  CMatrix4f transposed() const;
+  [[nodiscard]] CMatrix4f transposed() const;
 
-  CVector3f multiplyOneOverW(const CVector3f& point) const {
+  [[nodiscard]] CVector3f multiplyOneOverW(const CVector3f& point) const {
     CVector4f xfVec = *this * point;
     return xfVec.toVec3f() / xfVec.w();
   }
 
-  CVector3f multiplyOneOverW(const CVector3f& point, float& wOut) const {
+  [[nodiscard]] CVector3f multiplyOneOverW(const CVector3f& point, float& wOut) const {
     CVector4f xfVec = *this * point;
     wOut = xfVec.w();
     return xfVec.toVec3f() / xfVec.w();
@@ -83,7 +83,7 @@ public:
 };
 extern const CMatrix4f skIdentityMatrix4f;
 
-inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
+[[nodiscard]] inline CMatrix4f operator*(const CMatrix4f& lhs, const CMatrix4f& rhs) {
   std::array<simd<float>, 4> v;
   for (size_t i = 0; i < v.size(); ++i) {
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +

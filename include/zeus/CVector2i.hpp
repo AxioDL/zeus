@@ -16,17 +16,27 @@ public:
 
   CVector2i(const CVector2f& vec) noexcept : x(int32_t(vec.x())), y(int32_t(vec.y())) {}
 
-  constexpr CVector2f toVec2f() const noexcept { return CVector2f(float(x), float(y)); }
+  [[nodiscard]] constexpr CVector2f toVec2f() const noexcept { return CVector2f(float(x), float(y)); }
 
-  constexpr CVector2i operator+(const CVector2i& val) const noexcept { return CVector2i(x + val.x, y + val.y); }
-  constexpr CVector2i operator-(const CVector2i& val) const noexcept { return CVector2i(x - val.x, y - val.y); }
-  constexpr CVector2i operator*(const CVector2i& val) const noexcept { return CVector2i(x * val.x, y * val.y); }
-  constexpr CVector2i operator/(const CVector2i& val) const noexcept { return CVector2i(x / val.x, y / val.y); }
+  [[nodiscard]] constexpr CVector2i operator+(const CVector2i& val) const noexcept {
+    return CVector2i(x + val.x, y + val.y);
+  }
+  [[nodiscard]] constexpr CVector2i operator-(const CVector2i& val) const noexcept {
+    return CVector2i(x - val.x, y - val.y);
+  }
+  [[nodiscard]] constexpr CVector2i operator*(const CVector2i& val) const noexcept {
+    return CVector2i(x * val.x, y * val.y);
+  }
+  [[nodiscard]] constexpr CVector2i operator/(const CVector2i& val) const noexcept {
+    return CVector2i(x / val.x, y / val.y);
+  }
 
-  constexpr bool operator==(const CVector2i& other) const noexcept { return x == other.x && y == other.y; }
-  constexpr bool operator!=(const CVector2i& other) const noexcept { return !operator==(other); }
+  [[nodiscard]] constexpr bool operator==(const CVector2i& other) const noexcept {
+    return x == other.x && y == other.y;
+  }
+  [[nodiscard]] constexpr bool operator!=(const CVector2i& other) const noexcept { return !operator==(other); }
 
-  constexpr CVector2i operator*(int32_t val) const noexcept { return CVector2i(x * val, y * val); }
+  [[nodiscard]] constexpr CVector2i operator*(int32_t val) const noexcept { return CVector2i(x * val, y * val); }
 };
 static_assert(sizeof(CVector2i) == sizeof(int32_t) * 2);
 

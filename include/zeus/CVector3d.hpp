@@ -29,19 +29,19 @@ public:
 
   constexpr CVector3d(double x, double y, double z) : mSimd(x, y, z) {}
 
-  CVector3f asCVector3f() const { return mSimd; }
+  [[nodiscard]] CVector3f asCVector3f() const { return mSimd; }
 
-  double magSquared() const { return mSimd.dot3(mSimd); }
+  [[nodiscard]] double magSquared() const { return mSimd.dot3(mSimd); }
 
-  double magnitude() const { return sqrt(magSquared()); }
+  [[nodiscard]] double magnitude() const { return sqrt(magSquared()); }
 
-  CVector3d cross(const CVector3d& rhs) const {
+  [[nodiscard]] CVector3d cross(const CVector3d& rhs) const {
     return {y() * rhs.z() - z() * rhs.y(), z() * rhs.x() - x() * rhs.z(), x() * rhs.y() - y() * rhs.x()};
   }
 
-  double dot(const CVector3d& rhs) const { return mSimd.dot3(rhs.mSimd); }
+  [[nodiscard]] double dot(const CVector3d& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
-  CVector3d asNormalized() const {
+  [[nodiscard]] CVector3d asNormalized() const {
     double mag = magnitude();
     mag = 1.0 / mag;
     return mSimd * zeus::simd<double>(mag);
@@ -51,42 +51,50 @@ public:
 
   void zeroOut() { mSimd = zeus::simd<double>(0.0); }
 
-  CVector3d operator+(const CVector3d& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] CVector3d operator+(const CVector3d& rhs) const { return mSimd + rhs.mSimd; }
 
-  CVector3d operator-(const CVector3d& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] CVector3d operator-(const CVector3d& rhs) const { return mSimd - rhs.mSimd; }
 
-  CVector3d operator*(const CVector3d& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] CVector3d operator*(const CVector3d& rhs) const { return mSimd * rhs.mSimd; }
 
-  CVector3d operator/(const CVector3d& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] CVector3d operator/(const CVector3d& rhs) const { return mSimd / rhs.mSimd; }
 
-  zeus::simd<double>::reference operator[](size_t idx) {
+  [[nodiscard]] simd<double>::reference operator[](size_t idx) {
     assert(idx < 3);
     return mSimd[idx];
   }
 
-  double operator[](size_t idx) const {
+  [[nodiscard]] double operator[](size_t idx) const {
     assert(idx < 3);
     return mSimd[idx];
   }
 
-  double x() const { return mSimd[0]; }
-  double y() const { return mSimd[1]; }
-  double z() const { return mSimd[2]; }
+  [[nodiscard]] double x() const { return mSimd[0]; }
+  [[nodiscard]] double y() const { return mSimd[1]; }
+  [[nodiscard]] double z() const { return mSimd[2]; }
 
-  simd<double>::reference x() { return mSimd[0]; }
-  simd<double>::reference y() { return mSimd[1]; }
-  simd<double>::reference z() { return mSimd[2]; }
+  [[nodiscard]] simd<double>::reference x() { return mSimd[0]; }
+  [[nodiscard]] simd<double>::reference y() { return mSimd[1]; }
+  [[nodiscard]] simd<double>::reference z() { return mSimd[2]; }
 };
 inline CVector3f::CVector3f(const CVector3d& vec) : mSimd(vec.mSimd) {}
 
 constexpr CVector3d skZero3d(0.0);
 
-inline CVector3d operator+(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) + rhs.mSimd; }
+[[nodiscard]] inline CVector3d operator+(double lhs, const CVector3d& rhs) {
+  return zeus::simd<double>(lhs) + rhs.mSimd;
+}
 
-inline CVector3d operator-(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) - rhs.mSimd; }
+[[nodiscard]] inline CVector3d operator-(double lhs, const CVector3d& rhs) {
+  return zeus::simd<double>(lhs) - rhs.mSimd;
+}
 
-inline CVector3d operator*(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) * rhs.mSimd; }
+[[nodiscard]] inline CVector3d operator*(double lhs, const CVector3d& rhs) {
+  return zeus::simd<double>(lhs) * rhs.mSimd;
+}
 
-inline CVector3d operator/(double lhs, const CVector3d& rhs) { return zeus::simd<double>(lhs) / rhs.mSimd; }
+[[nodiscard]] inline CVector3d operator/(double lhs, const CVector3d& rhs) {
+  return zeus::simd<double>(lhs) / rhs.mSimd;
+}
 
 } // namespace zeus

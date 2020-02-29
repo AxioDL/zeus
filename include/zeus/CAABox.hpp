@@ -47,7 +47,7 @@ public:
     max.readBig(in);
   }
 
-  static CAABox ReadBoundingBoxBig(athena::io::IStreamReader& in) {
+  [[nodiscard]] static CAABox ReadBoundingBoxBig(athena::io::IStreamReader& in) {
     CAABox ret;
     ret.readBoundingBoxBig(in);
     return ret;
@@ -55,28 +55,28 @@ public:
 
 #endif
 
-  bool intersects(const CAABox& other) const {
-    bool x1 = (max[0] >= other.min[0]);
-    bool x2 = (min[0] <= other.max[0]);
-    bool y1 = (max[1] >= other.min[1]);
-    bool y2 = (min[1] <= other.max[1]);
-    bool z1 = (max[2] >= other.min[2]);
-    bool z2 = (min[2] <= other.max[2]);
+  [[nodiscard]] bool intersects(const CAABox& other) const {
+    const bool x1 = max[0] >= other.min[0];
+    const bool x2 = min[0] <= other.max[0];
+    const bool y1 = max[1] >= other.min[1];
+    const bool y2 = min[1] <= other.max[1];
+    const bool z1 = max[2] >= other.min[2];
+    const bool z2 = min[2] <= other.max[2];
     return x1 && x2 && y1 && y2 && z1 && z2;
   }
 
-  bool intersects(const CSphere& other) const;
-  float intersectionRadius(const CSphere& other) const;
-  CAABox booleanIntersection(const CAABox& other) const;
+  [[nodiscard]] bool intersects(const CSphere& other) const;
+  [[nodiscard]] float intersectionRadius(const CSphere& other) const;
+  [[nodiscard]] CAABox booleanIntersection(const CAABox& other) const;
 
-  bool inside(const CAABox& other) const {
-    bool x = min[0] >= other.min[0] && max[0] <= other.max[0];
-    bool y = min[1] >= other.min[1] && max[1] <= other.max[1];
-    bool z = min[2] >= other.min[2] && max[2] <= other.max[2];
+  [[nodiscard]] bool inside(const CAABox& other) const {
+    const bool x = min[0] >= other.min[0] && max[0] <= other.max[0];
+    const bool y = min[1] >= other.min[1] && max[1] <= other.max[1];
+    const bool z = min[2] >= other.min[2] && max[2] <= other.max[2];
     return x && y && z;
   }
 
-  bool insidePlane(const CPlane& plane) const {
+  [[nodiscard]] bool insidePlane(const CPlane& plane) const {
     CVector3f vmax;
     /* X axis */
     if (plane.x() >= 0.f)
@@ -96,16 +96,16 @@ public:
     return plane.normal().dot(vmax) + plane.d() >= 0.f;
   }
 
-  CVector3f center() const { return (min + max) * 0.5f; }
+  [[nodiscard]] CVector3f center() const { return (min + max) * 0.5f; }
 
-  CVector3f extents() const { return (max - min) * 0.5f; }
+  [[nodiscard]] CVector3f extents() const { return (max - min) * 0.5f; }
 
-  float volume() const {
-    auto delta = max - min;
+  [[nodiscard]] float volume() const {
+    const auto delta = max - min;
     return delta.x() * delta.y() * delta.z();
   }
 
-  CLineSeg getEdge(EBoxEdgeId id) const {
+  [[nodiscard]] CLineSeg getEdge(EBoxEdgeId id) const {
     switch (id) {
     case EBoxEdgeId::Z0:
     default:
@@ -139,9 +139,9 @@ public:
     zeus::CPlane x0_plane;
     zeus::CVector3f x10_verts[3];
   };
-  Tri getTri(EBoxFaceId face, int windOffset) const;
+  [[nodiscard]] Tri getTri(EBoxFaceId face, int windOffset) const;
 
-  CAABox getTransformedAABox(const CTransform& xfrm) const {
+  [[nodiscard]] CAABox getTransformedAABox(const CTransform& xfrm) const {
     CAABox box;
     CVector3f point = xfrm * getPoint(0);
     box.accumulateBounds(point);
@@ -182,22 +182,22 @@ public:
     accumulateBounds(other.max);
   }
 
-  bool pointInside(const CVector3f& other) const {
+  [[nodiscard]] bool pointInside(const CVector3f& other) const {
     return (min.x() <= other.x() && other.x() <= max.x() && min.y() <= other.y() && other.y() <= max.y() &&
             min.z() <= other.z() && other.z() <= max.z());
   }
 
-  CVector3f closestPointAlongVector(const CVector3f& other) const {
+  [[nodiscard]] CVector3f closestPointAlongVector(const CVector3f& other) const {
     return {(other.x() >= 0.f ? min.x() : max.x()), (other.y() >= 0.f ? min.y() : max.y()),
             (other.z() >= 0.f ? min.z() : max.z())};
   }
 
-  CVector3f furthestPointAlongVector(const CVector3f& other) const {
+  [[nodiscard]] CVector3f furthestPointAlongVector(const CVector3f& other) const {
     return {(other.x() >= 0.f ? max.x() : min.x()), (other.y() >= 0.f ? max.y() : min.y()),
             (other.z() >= 0.f ? max.z() : min.z())};
   }
 
-  float distanceBetween(const CAABox& other) {
+  [[nodiscard]] float distanceBetween(const CAABox& other) const {
     int intersects = 0;
     if (max.x() >= other.min.x() && min.x() <= other.max.x())
       intersects |= 0x1;
@@ -254,12 +254,12 @@ public:
     }
   }
 
-  CVector3f getPoint(const int point) const {
+  [[nodiscard]] CVector3f getPoint(const int point) const {
     const CVector3f* vecs = &min;
     return CVector3f(vecs[(point & 1) != 0].x(), vecs[(point & 2) != 0].y(), vecs[(point & 4) != 0].z());
   }
 
-  CVector3f clampToBox(const CVector3f& vec) const {
+  [[nodiscard]] CVector3f clampToBox(const CVector3f& vec) const {
     CVector3f ret = vec;
     ret.x() = clamp(min.x(), float(ret.x()), max.x());
     ret.y() = clamp(min.y(), float(ret.y()), max.y());
@@ -267,7 +267,7 @@ public:
     return ret;
   }
 
-  bool projectedPointTest(const CMatrix4f& mvp, const CVector2f& point) const;
+  [[nodiscard]] bool projectedPointTest(const CMatrix4f& mvp, const CVector2f& point) const;
 
   void splitX(CAABox& negX, CAABox& posX) const {
     float midX = (max.x() - min.x()) * .5f + min.x();
@@ -299,9 +299,9 @@ public:
     negZ.min = min;
   }
 
-  bool invalid() { return (max.x() < min.x() || max.y() < min.y() || max.z() < min.z()); }
+  [[nodiscard]] bool invalid() const { return max.x() < min.x() || max.y() < min.y() || max.z() < min.z(); }
 
-  float operator[](size_t idx) const {
+  [[nodiscard]] float operator[](size_t idx) const {
     assert(idx < 6);
     if (idx < 3)
       return min[idx];
@@ -312,11 +312,11 @@ public:
 constexpr CAABox skInvertedBox;
 constexpr CAABox skNullBox(CVector3f{}, CVector3f{});
 
-inline bool operator==(const CAABox& left, const CAABox& right) {
+[[nodiscard]] inline bool operator==(const CAABox& left, const CAABox& right) {
   return (left.min == right.min && left.max == right.max);
 }
 
-inline bool operator!=(const CAABox& left, const CAABox& right) {
+[[nodiscard]] inline bool operator!=(const CAABox& left, const CAABox& right) {
   return (left.min != right.min || left.max != right.max);
 }
 } // namespace zeus

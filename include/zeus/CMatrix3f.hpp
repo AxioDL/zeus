@@ -61,7 +61,7 @@ public:
     m[2][2] = input.readFloatBig();
   }
 
-  static CMatrix3f ReadBig(athena::io::IStreamReader& input) {
+  [[nodiscard]] static CMatrix3f ReadBig(athena::io::IStreamReader& input) {
     CMatrix3f ret;
     ret.readBig(input);
     return ret;
@@ -73,22 +73,22 @@ public:
 
   CMatrix3f& operator=(const CMatrix3f& other) = default;
 
-  CVector3f operator*(const CVector3f& other) const {
+  [[nodiscard]] CVector3f operator*(const CVector3f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
            m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>();
   }
 
-  CVector3f& operator[](size_t i) {
+  [[nodiscard]] CVector3f& operator[](size_t i) {
     assert(i < m.size());
     return m[i];
   }
 
-  const CVector3f& operator[](size_t i) const {
+  [[nodiscard]] const CVector3f& operator[](size_t i) const {
     assert(i < m.size());
     return m[i];
   }
 
-  CMatrix3f orthonormalized() const {
+  [[nodiscard]] CMatrix3f orthonormalized() const {
     CMatrix3f ret;
     ret[0] = m[0].normalized();
     ret[2] = ret[0].cross(m[1]);
@@ -97,17 +97,19 @@ public:
     return ret;
   }
 
-  bool operator==(const CMatrix3f& other) const {
+  [[nodiscard]] bool operator==(const CMatrix3f& other) const {
     return m[0] == other.m[0] && m[1] == other.m[1] && m[2] == other.m[2];
   }
 
+  [[nodiscard]] bool operator!=(const CMatrix3f& other) const { return !operator==(other); }
+
   void transpose();
 
-  CMatrix3f transposed() const;
+  [[nodiscard]] CMatrix3f transposed() const;
 
   void invert() { *this = inverted(); }
 
-  CMatrix3f inverted() const;
+  [[nodiscard]] CMatrix3f inverted() const;
 
   void addScaledMatrix(const CMatrix3f& other, float scale) {
     CVector3f scaleVec(scale);
@@ -116,28 +118,28 @@ public:
     m[2] += other.m[2] * scaleVec;
   }
 
-  static CMatrix3f RotateX(float theta) {
+  [[nodiscard]] static CMatrix3f RotateX(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
     return CMatrix3f(simd<float>{1.f, 0.f, 0.f, 0.f}, simd<float>{0.f, cosT, sinT, 0.f},
                      simd<float>{0.f, -sinT, cosT, 0.f});
   }
 
-  static CMatrix3f RotateY(float theta) {
+  [[nodiscard]] static CMatrix3f RotateY(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
     return CMatrix3f(simd<float>{cosT, 0.f, -sinT, 0.f}, simd<float>{0.f, 1.f, 0.f, 0.f},
                      simd<float>{sinT, 0.f, cosT, 0.f});
   }
 
-  static CMatrix3f RotateZ(float theta) {
+  [[nodiscard]] static CMatrix3f RotateZ(float theta) {
     float sinT = std::sin(theta);
     float cosT = std::cos(theta);
     return CMatrix3f(simd<float>{cosT, sinT, 0.f, 0.f}, simd<float>{-sinT, cosT, 0.f, 0.f},
                      simd<float>{0.f, 0.f, 1.f, 0.f});
   }
 
-  float determinant() const {
+  [[nodiscard]] float determinant() const {
     return m[1][0] * (m[2][1] * m[0][2] - m[0][1] * m[2][2]) + m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) +
            m[2][0] * (m[0][1] * m[1][2] - m[1][1] * m[0][2]);
   }
@@ -145,7 +147,7 @@ public:
   std::array<CVector3f, 3> m;
 };
 
-inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
+[[nodiscard]] inline CMatrix3f operator*(const CMatrix3f& lhs, const CMatrix3f& rhs) {
   std::array<simd<float>, 3> v;
   for (size_t i = 0; i < v.size(); ++i) {
     v[i] = lhs.m[0].mSimd * rhs[i].mSimd.shuffle<0, 0, 0, 0>() + lhs.m[1].mSimd * rhs[i].mSimd.shuffle<1, 1, 1, 1>() +

@@ -76,7 +76,7 @@ public:
 
 #if ZE_ATHENA_TYPES
 
-  static CColor ReadRGBABig(athena::io::IStreamReader& reader) {
+  [[nodiscard]] static CColor ReadRGBABig(athena::io::IStreamReader& reader) {
     CColor ret;
     ret.readRGBABig(reader);
     return ret;
@@ -126,27 +126,27 @@ public:
 
 #endif
 
-  bool operator==(const CColor& rhs) const {
+  [[nodiscard]] bool operator==(const CColor& rhs) const {
     return (r() == rhs.r() && g() == rhs.g() && b() == rhs.b() && a() == rhs.a());
   }
 
-  bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
+  [[nodiscard]] bool operator!=(const CColor& rhs) const { return !(*this == rhs); }
 
-  CColor operator+(const CColor& rhs) const { return CColor(mSimd + rhs.mSimd).Clamp(); }
+  [[nodiscard]] CColor operator+(const CColor& rhs) const { return CColor(mSimd + rhs.mSimd).Clamp(); }
 
-  CColor operator-(const CColor& rhs) const { return CColor(mSimd - rhs.mSimd).Clamp(); }
+  [[nodiscard]] CColor operator-(const CColor& rhs) const { return CColor(mSimd - rhs.mSimd).Clamp(); }
 
-  CColor operator*(const CColor& rhs) const { return CColor(mSimd * rhs.mSimd).Clamp(); }
+  [[nodiscard]] CColor operator*(const CColor& rhs) const { return CColor(mSimd * rhs.mSimd).Clamp(); }
 
-  CColor operator/(const CColor& rhs) const { return CColor(mSimd / rhs.mSimd).Clamp(); }
+  [[nodiscard]] CColor operator/(const CColor& rhs) const { return CColor(mSimd / rhs.mSimd).Clamp(); }
 
-  CColor operator+(float val) const { return CColor(mSimd + simd<float>(val)).Clamp(); }
+  [[nodiscard]] CColor operator+(float val) const { return CColor(mSimd + simd<float>(val)).Clamp(); }
 
-  CColor operator-(float val) const { return CColor(mSimd - simd<float>(val)).Clamp(); }
+  [[nodiscard]] CColor operator-(float val) const { return CColor(mSimd - simd<float>(val)).Clamp(); }
 
-  CColor operator*(float val) const { return CColor(mSimd * simd<float>(val)).Clamp(); }
+  [[nodiscard]] CColor operator*(float val) const { return CColor(mSimd * simd<float>(val)).Clamp(); }
 
-  CColor operator/(float val) const { return CColor(mSimd / simd<float>(val)).Clamp(); }
+  [[nodiscard]] CColor operator/(float val) const { return CColor(mSimd / simd<float>(val)).Clamp(); }
 
   const CColor& operator+=(const CColor& rhs) {
     mSimd += rhs.mSimd;
@@ -202,28 +202,28 @@ public:
     *this *= mag;
   }
 
-  CColor normalized() const {
+  [[nodiscard]] CColor normalized() const {
     float mag = magnitude();
     mag = 1.f / mag;
     return *this * mag;
   }
 
-  float magSquared() const { return mSimd.dot4(mSimd); }
+  [[nodiscard]] float magSquared() const { return mSimd.dot4(mSimd); }
 
-  float magnitude() const { return std::sqrt(magSquared()); }
+  [[nodiscard]] float magnitude() const { return std::sqrt(magSquared()); }
 
-  static CColor lerp(const CColor& a, const CColor& b, float t) {
+  [[nodiscard]] static CColor lerp(const CColor& a, const CColor& b, float t) {
     return zeus::simd<float>(1.f - t) * a.mSimd + b.mSimd * zeus::simd<float>(t);
   }
 
-  static CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
+  [[nodiscard]] static CColor nlerp(const CColor& a, const CColor& b, float t) { return lerp(a, b, t).normalized(); }
 
-  simd<float>::reference operator[](const size_t& idx) {
+  [[nodiscard]] simd<float>::reference operator[](const size_t& idx) {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float operator[](const size_t& idx) const {
+  [[nodiscard]] float operator[](const size_t& idx) const {
     assert(idx < 4);
     return mSimd[idx];
   }
@@ -233,7 +233,7 @@ public:
     mSimd[3] = a;
   }
 
-  float rgbDot(const CColor& rhs) const { return mSimd.dot3(rhs.mSimd); }
+  [[nodiscard]] float rgbDot(const CColor& rhs) const { return mSimd.dot3(rhs.mSimd); }
 
   void fromRGBA8(const Comp8 ri, const Comp8 gi, const Comp8 bi, const Comp8 ai) {
     mSimd = simd<float>(ri * OneOver255, gi * OneOver255, bi * OneOver255, ai * OneOver255);
@@ -280,7 +280,7 @@ public:
 
   void toHSL(float& h, float& s, float& l) const;
 
-  CColor toGrayscale() const { return {std::sqrt((r() * r() + g() * g() + b() * b()) / 3), a()}; }
+  [[nodiscard]] CColor toGrayscale() const { return {std::sqrt((r() * r() + g() * g() + b() * b()) / 3), a()}; }
 
   /**
    * @brief Clamps to GPU-safe RGBA values [0,1]
@@ -293,15 +293,15 @@ public:
     return *this;
   }
 
-  float r() const { return mSimd[0]; }
-  float g() const { return mSimd[1]; }
-  float b() const { return mSimd[2]; }
-  float a() const { return mSimd[3]; }
+  [[nodiscard]] float r() const { return mSimd[0]; }
+  [[nodiscard]] float g() const { return mSimd[1]; }
+  [[nodiscard]] float b() const { return mSimd[2]; }
+  [[nodiscard]] float a() const { return mSimd[3]; }
 
-  simd<float>::reference r() { return mSimd[0]; }
-  simd<float>::reference g() { return mSimd[1]; }
-  simd<float>::reference b() { return mSimd[2]; }
-  simd<float>::reference a() { return mSimd[3]; }
+  [[nodiscard]] simd<float>::reference r() { return mSimd[0]; }
+  [[nodiscard]] simd<float>::reference g() { return mSimd[1]; }
+  [[nodiscard]] simd<float>::reference b() { return mSimd[2]; }
+  [[nodiscard]] simd<float>::reference a() { return mSimd[3]; }
 };
 constexpr CVector4f::CVector4f(const zeus::CColor& other) : mSimd(other.mSimd) {}
 
@@ -323,13 +323,21 @@ constexpr CColor skYellow(1.f, 1.f, 0.f, 1.f);
 constexpr CColor skWhite(1.f, 1.f, 1.f, 1.f);
 constexpr CColor skClear(0.f, 0.f, 0.f, 0.f);
 
-inline CColor operator+(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) + rhs.mSimd).Clamp(); }
+[[nodiscard]] inline CColor operator+(float lhs, const CColor& rhs) {
+  return CColor(simd<float>(lhs) + rhs.mSimd).Clamp();
+}
 
-inline CColor operator-(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) - rhs.mSimd).Clamp(); }
+[[nodiscard]] inline CColor operator-(float lhs, const CColor& rhs) {
+  return CColor(simd<float>(lhs) - rhs.mSimd).Clamp();
+}
 
-inline CColor operator*(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) * rhs.mSimd).Clamp(); }
+[[nodiscard]] inline CColor operator*(float lhs, const CColor& rhs) {
+  return CColor(simd<float>(lhs) * rhs.mSimd).Clamp();
+}
 
-inline CColor operator/(float lhs, const CColor& rhs) { return CColor(simd<float>(lhs) / rhs.mSimd).Clamp(); }
+[[nodiscard]] inline CColor operator/(float lhs, const CColor& rhs) {
+  return CColor(simd<float>(lhs) / rhs.mSimd).Clamp();
+}
 } // namespace zeus
 
 namespace std {

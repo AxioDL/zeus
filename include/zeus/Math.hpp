@@ -157,15 +157,15 @@ typename std::enable_if<std::is_enum<E>::value, int>::type PopCount(E e) {
   return PopCount(static_cast<typename std::underlying_type<E>::type>(e));
 }
 
-bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = 0.000099999997f);
+bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = FLT_EPSILON);
 
-bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = 0.000099999997f);
+bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = FLT_EPSILON);
 
-inline bool close_enough(float a, float b, double epsilon = 0.000009999999747378752) {
+inline bool close_enough(float a, float b, double epsilon = FLT_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 
-inline bool close_enough(double a, double b, double epsilon = 0.000009999999747378752) {
+inline bool close_enough(double a, double b, double epsilon = FLT_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 } // namespace zeus

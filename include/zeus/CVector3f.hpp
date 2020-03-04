@@ -152,12 +152,12 @@ public:
 
   static CVector3f slerp(const CVector3f& a, const CVector3f& b, CRelAngle clampAngle);
 
-  bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
+  bool isNormalized() const { return std::fabs(1.f - magSquared()) <= FLT_EPSILON; }
 
   bool canBeNormalized() const {
     if (std::isinf(x()) || std::isinf(y()) || std::isinf(z()))
       return false;
-    return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON || std::fabs(z()) >= FLT_EPSILON;
+    return !(std::fabs(x()) < FLT_EPSILON && std::fabs(y()) < FLT_EPSILON && std::fabs(z()) < FLT_EPSILON);
   }
 
   bool isZero() const { return magSquared() <= FLT_EPSILON; }

@@ -17,7 +17,7 @@ struct CMRay {
     dir = invLen * delta;
   }
 
-  CMRay getInvUnscaledTransformRay(const CTransform& xfrm) const {
+  [[nodiscard]] CMRay getInvUnscaledTransformRay(const CTransform& xfrm) const {
     const CTransform inv = xfrm.inverse();
     return CMRay(inv * start, inv * end, length, invLength);
   }

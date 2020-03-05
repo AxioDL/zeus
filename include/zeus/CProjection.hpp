@@ -63,9 +63,9 @@ public:
     _updateCachedMatrix();
   }
 
-  EProjType getType() const { return m_projType; }
+  [[nodiscard]] EProjType getType() const { return m_projType; }
 
-  const SProjOrtho& getOrtho() const {
+  [[nodiscard]] const SProjOrtho& getOrtho() const {
 #ifndef NDEBUG
     if (m_projType != EProjType::Orthographic) {
       std::fprintf(stderr, "attempted to access orthographic structure of non-ortho projection");
@@ -75,7 +75,7 @@ public:
     return m_ortho;
   }
 
-  const SProjPersp& getPersp() const {
+  [[nodiscard]] const SProjPersp& getPersp() const {
 #ifndef NDEBUG
     if (m_projType != EProjType::Perspective) {
       std::fprintf(stderr, "attempted to access perspective structure of non-persp projection");
@@ -85,7 +85,7 @@ public:
     return m_persp;
   }
 
-  const CMatrix4f& getCachedMatrix() const { return m_mtx; }
+  [[nodiscard]] const CMatrix4f& getCachedMatrix() const { return m_mtx; }
 
 protected:
   /* Projection type */

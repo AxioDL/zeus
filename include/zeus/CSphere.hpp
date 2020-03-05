@@ -7,10 +7,10 @@ class CSphere {
 public:
   constexpr CSphere(const CVector3f& position, float radius) : position(position), radius(radius) {}
 
-  CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
+  [[nodiscard]] CVector3f getSurfaceNormal(const CVector3f& coord) const { return (coord - position).normalized(); }
 
-  bool intersects(const CSphere& other) const {
-    float dist = (position - other.position).magnitude();
+  [[nodiscard]] bool intersects(const CSphere& other) const {
+    const float dist = (position - other.position).magnitude();
     return dist < (radius + other.radius);
   }
 

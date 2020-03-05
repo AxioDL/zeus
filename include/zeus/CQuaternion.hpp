@@ -71,19 +71,19 @@ public:
     return *this;
   }
 
-  CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
+  [[nodiscard]] CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
 
-  CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
+  [[nodiscard]] CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
 
-  CQuaternion operator*(const CQuaternion& q) const;
+  [[nodiscard]] CQuaternion operator*(const CQuaternion& q) const;
 
-  CQuaternion operator/(const CQuaternion& q) const;
+  [[nodiscard]] CQuaternion operator/(const CQuaternion& q) const;
 
-  CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
+  [[nodiscard]] CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-  CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
+  [[nodiscard]] CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
 
-  CQuaternion operator-() const { return -mSimd; }
+  [[nodiscard]] CQuaternion operator-() const { return -mSimd; }
 
   const CQuaternion& operator+=(const CQuaternion& q) {
     mSimd += q.mSimd;
@@ -107,19 +107,19 @@ public:
     return *this;
   }
 
-  float magnitude() const { return std::sqrt(magSquared()); }
+  [[nodiscard]] float magnitude() const { return std::sqrt(magSquared()); }
 
-  float magSquared() const { return mSimd.dot4(mSimd); }
+  [[nodiscard]] float magSquared() const { return mSimd.dot4(mSimd); }
 
   void normalize() { *this /= magnitude(); }
 
-  CQuaternion normalized() const { return *this / magnitude(); }
+  [[nodiscard]] CQuaternion normalized() const { return *this / magnitude(); }
 
   static constexpr simd<float> InvertQuat = {1.f, -1.f, -1.f, -1.f};
 
   void invert() { mSimd *= InvertQuat; }
 
-  CQuaternion inverse() const { return mSimd * InvertQuat; }
+  [[nodiscard]] CQuaternion inverse() const { return mSimd * InvertQuat; }
 
   /**
    * @brief Set the rotation using axis angle notation
@@ -127,7 +127,7 @@ public:
    * @param angle The magnitude of the rotation in radians
    * @return
    */
-  static CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
+  [[nodiscard]] static CQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
     return CQuaternion(std::cos(angle / 2.f), axis * std::sin(angle / 2.f));
   }
 
@@ -137,93 +137,96 @@ public:
 
   void rotateZ(const CRelAngle& angle) { *this *= fromAxisAngle({0.0f, 0.0f, 1.0f}, angle); }
 
-  static CVector3f rotate(const CQuaternion& rotation, const CAxisAngle& v) {
+  [[nodiscard]] static CVector3f rotate(const CQuaternion& rotation, const CAxisAngle& v) {
     CQuaternion q = rotation * v;
     q *= rotation.inverse();
 
     return {q.mSimd.shuffle<1, 2, 3, 3>()};
   }
 
-  static CQuaternion lookAt(const CUnitVector3f& source, const CUnitVector3f& dest, const CRelAngle& maxAng);
+  [[nodiscard]] static CQuaternion lookAt(const CUnitVector3f& source, const CUnitVector3f& dest,
+                                          const CRelAngle& maxAng);
 
-  CVector3f transform(const CVector3f& v) const {
-    CQuaternion r(0.f, v);
+  [[nodiscard]] CVector3f transform(const CVector3f& v) const {
+    const CQuaternion r(0.f, v);
     return (*this * r * inverse()).getImaginary();
   }
 
-  CQuaternion log() const;
+  [[nodiscard]] CQuaternion log() const;
 
-  CQuaternion exp() const;
+  [[nodiscard]] CQuaternion exp() const;
 
-  CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
+  [[nodiscard]] CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
 
-  CTransform toTransform(const zeus::CVector3f& origin) const { return CTransform(CMatrix3f(*this), origin); }
+  [[nodiscard]] CTransform toTransform(const zeus::CVector3f& origin) const {
+    return CTransform(CMatrix3f(*this), origin);
+  }
 
-  float dot(const CQuaternion& rhs) const { return mSimd.dot4(rhs.mSimd); }
+  [[nodiscard]] float dot(const CQuaternion& rhs) const { return mSimd.dot4(rhs.mSimd); }
 
-  static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
+  [[nodiscard]] static CQuaternion lerp(const CQuaternion& a, const CQuaternion& b, double t);
 
-  static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
+  [[nodiscard]] static CQuaternion slerp(const CQuaternion& a, const CQuaternion& b, double t);
 
-  static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
+  [[nodiscard]] static CQuaternion slerpShort(const CQuaternion& a, const CQuaternion& b, double t);
 
-  static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
+  [[nodiscard]] static CQuaternion nlerp(const CQuaternion& a, const CQuaternion& b, double t);
 
-  static CQuaternion shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1);
+  [[nodiscard]] static CQuaternion shortestRotationArc(const zeus::CVector3f& v0, const zeus::CVector3f& v1);
 
-  static CQuaternion clampedRotateTo(const zeus::CUnitVector3f& v0, const zeus::CUnitVector3f& v1,
-                                     const zeus::CRelAngle& angle);
+  [[nodiscard]] static CQuaternion clampedRotateTo(const zeus::CUnitVector3f& v0, const zeus::CUnitVector3f& v1,
+                                                   const zeus::CRelAngle& angle);
 
-  float roll() const {
+  [[nodiscard]] float roll() const {
     simd_floats f(mSimd);
     return std::asin(-2.f * (f[1] * f[3] - f[0] * f[2]));
   }
 
-  float pitch() const {
+  [[nodiscard]] float pitch() const {
     simd_floats f(mSimd);
     return std::atan2(2.f * (f[2] * f[3] + f[0] * f[1]), f[0] * f[0] - f[1] * f[1] - f[2] * f[2] + f[3] * f[3]);
   }
 
-  float yaw() const {
+  [[nodiscard]] float yaw() const {
     simd_floats f(mSimd);
     return std::atan2(2.f * (f[1] * f[2] + f[0] * f[3]), f[0] * f[0] + f[1] * f[1] - f[2] * f[2] - f[3] * f[3]);
   }
 
-  CQuaternion buildEquivalent() const;
+  [[nodiscard]] CQuaternion buildEquivalent() const;
 
-  zeus::CVector3f getImaginary() const { return mSimd.shuffle<1, 2, 3, 3>(); }
+  [[nodiscard]] CVector3f getImaginary() const { return mSimd.shuffle<1, 2, 3, 3>(); }
 
-  void setImaginary(const zeus::CVector3f& i) {
+  void setImaginary(const CVector3f& i) {
     x() = i.x();
     y() = i.y();
     z() = i.z();
   }
 
-  CRelAngle angleFrom(const zeus::CQuaternion& other) const;
+  [[nodiscard]] CRelAngle angleFrom(const CQuaternion& other) const;
 
-  simd<float>::reference operator[](size_t idx) {
+  [[nodiscard]] simd<float>::reference operator[](size_t idx) {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float operator[](size_t idx) const {
+  [[nodiscard]] float operator[](size_t idx) const {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float w() const { return mSimd[0]; }
-  float x() const { return mSimd[1]; }
-  float y() const { return mSimd[2]; }
-  float z() const { return mSimd[3]; }
+  [[nodiscard]] float w() const { return mSimd[0]; }
+  [[nodiscard]] float x() const { return mSimd[1]; }
+  [[nodiscard]] float y() const { return mSimd[2]; }
+  [[nodiscard]] float z() const { return mSimd[3]; }
 
-  simd<float>::reference w() { return mSimd[0]; }
-  simd<float>::reference x() { return mSimd[1]; }
-  simd<float>::reference y() { return mSimd[2]; }
-  simd<float>::reference z() { return mSimd[3]; }
+  [[nodiscard]] simd<float>::reference w() { return mSimd[0]; }
+  [[nodiscard]] simd<float>::reference x() { return mSimd[1]; }
+  [[nodiscard]] simd<float>::reference y() { return mSimd[2]; }
+  [[nodiscard]] simd<float>::reference z() { return mSimd[3]; }
 
   simd<float> mSimd;
 
-  static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
+  [[nodiscard]] static CQuaternion fromNUQuaternion(const CNUQuaternion& q);
 };
 
 /** Non-unit quaternion, no guarantee that it's normalized.
@@ -243,52 +246,52 @@ public:
 
   CNUQuaternion(const simd<float>& s) : mSimd(s) {}
 
-  static CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
+  [[nodiscard]] static CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
     return CNUQuaternion(CQuaternion::fromAxisAngle(axis, angle));
   }
 
-  float magnitude() const { return std::sqrt(magSquared()); }
+  [[nodiscard]] float magnitude() const { return std::sqrt(magSquared()); }
 
-  float magSquared() const { return mSimd.dot4(mSimd); }
+  [[nodiscard]] float magSquared() const { return mSimd.dot4(mSimd); }
 
   void normalize() {
     float magDiv = 1.f / magnitude();
     mSimd *= magDiv;
   }
 
-  CNUQuaternion normalized() const {
+  [[nodiscard]] CNUQuaternion normalized() const {
     float magDiv = 1.f / magnitude();
     return mSimd * simd<float>(magDiv);
   }
 
-  CNUQuaternion operator*(const CNUQuaternion& q) const;
+  [[nodiscard]] CNUQuaternion operator*(const CNUQuaternion& q) const;
 
-  CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
+  [[nodiscard]] CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
 
   const CNUQuaternion& operator+=(const CNUQuaternion& q) {
     mSimd += q.mSimd;
     return *this;
   }
 
-  zeus::simd<float>::reference operator[](size_t idx) {
+  [[nodiscard]] simd<float>::reference operator[](size_t idx) {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float operator[](size_t idx) const {
+  [[nodiscard]] float operator[](size_t idx) const {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float w() const { return mSimd[0]; }
-  float x() const { return mSimd[1]; }
-  float y() const { return mSimd[2]; }
-  float z() const { return mSimd[3]; }
+  [[nodiscard]] float w() const { return mSimd[0]; }
+  [[nodiscard]] float x() const { return mSimd[1]; }
+  [[nodiscard]] float y() const { return mSimd[2]; }
+  [[nodiscard]] float z() const { return mSimd[3]; }
 
-  simd<float>::reference w() { return mSimd[0]; }
-  simd<float>::reference x() { return mSimd[1]; }
-  simd<float>::reference y() { return mSimd[2]; }
-  simd<float>::reference z() { return mSimd[3]; }
+  [[nodiscard]] simd<float>::reference w() { return mSimd[0]; }
+  [[nodiscard]] simd<float>::reference x() { return mSimd[1]; }
+  [[nodiscard]] simd<float>::reference y() { return mSimd[2]; }
+  [[nodiscard]] simd<float>::reference z() { return mSimd[3]; }
 
   simd<float> mSimd;
 };
@@ -298,11 +301,11 @@ inline CQuaternion CQuaternion::fromNUQuaternion(const CNUQuaternion& q) {
   return norm.mSimd;
 }
 
-CQuaternion operator+(float lhs, const CQuaternion& rhs);
+[[nodiscard]] CQuaternion operator+(float lhs, const CQuaternion& rhs);
 
-CQuaternion operator-(float lhs, const CQuaternion& rhs);
+[[nodiscard]] CQuaternion operator-(float lhs, const CQuaternion& rhs);
 
-CQuaternion operator*(float lhs, const CQuaternion& rhs);
+[[nodiscard]] CQuaternion operator*(float lhs, const CQuaternion& rhs);
 
-CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
+[[nodiscard]] CNUQuaternion operator*(float lhs, const CNUQuaternion& rhs);
 } // namespace zeus

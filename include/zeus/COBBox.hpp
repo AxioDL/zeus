@@ -18,7 +18,7 @@ public:
     extents.readBig(in);
   }
 
-  static COBBox ReadBig(athena::io::IStreamReader& in) {
+  [[nodiscard]] static COBBox ReadBig(athena::io::IStreamReader& in) {
     COBBox out;
     out.readBig(in);
     return out;
@@ -35,17 +35,19 @@ public:
 
   constexpr COBBox(const CTransform& xf, const CVector3f& extents) : transform(xf), extents(extents) {}
 
-  CAABox calculateAABox(const CTransform& worldXf = CTransform()) const;
+  [[nodiscard]] CAABox calculateAABox(const CTransform& worldXf = CTransform()) const;
 
-  static COBBox FromAABox(const CAABox& box, const CTransform& xf) {
-    CVector3f center = box.center();
+  [[nodiscard]] static COBBox FromAABox(const CAABox& box, const CTransform& xf) {
+    const CVector3f center = box.center();
     const CVector3f extents = box.max - center;
     const CTransform newXf = xf * CTransform::Translate(center);
     return COBBox(newXf, extents);
   }
 
-  bool OBBIntersectsBox(const COBBox& other) const;
+  [[nodiscard]] bool OBBIntersectsBox(const COBBox& other) const;
 
-  bool AABoxIntersectsBox(const CAABox& other) const { return OBBIntersectsBox(FromAABox(other, CTransform())); }
+  [[nodiscard]] bool AABoxIntersectsBox(const CAABox& other) const {
+    return OBBIntersectsBox(FromAABox(other, CTransform()));
+  }
 };
 } // namespace zeus

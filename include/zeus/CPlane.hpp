@@ -23,9 +23,9 @@ public:
     mSimd[3] = displacement;
   }
 
-  float clipLineSegment(const CVector3f& a, const CVector3f& b) {
-    float mag = (b - a).dot(normal());
-    float dis = (-(y() - d())) / mag;
+  [[nodiscard]] float clipLineSegment(const CVector3f& a, const CVector3f& b) {
+    const float mag = (b - a).dot(normal());
+    const float dis = (-(y() - d())) / mag;
     return clamp(0.0f, dis, 1.0f);
   }
 
@@ -38,31 +38,31 @@ public:
     mSimd[3] = nd * mag;
   }
 
-  float pointToPlaneDist(const CVector3f& pos) const { return pos.dot(normal()) - d(); }
+  [[nodiscard]] float pointToPlaneDist(const CVector3f& pos) const { return pos.dot(normal()) - d(); }
 
-  bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
+  [[nodiscard]] bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
 
-  CVector3f normal() const { return mSimd; }
+  [[nodiscard]] CVector3f normal() const { return mSimd; }
 
-  zeus::simd<float>::reference operator[](size_t idx) {
+  [[nodiscard]] zeus::simd<float>::reference operator[](size_t idx) {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float operator[](size_t idx) const {
+  [[nodiscard]] float operator[](size_t idx) const {
     assert(idx < 4);
     return mSimd[idx];
   }
 
-  float x() const { return mSimd[0]; }
-  float y() const { return mSimd[1]; }
-  float z() const { return mSimd[2]; }
-  float d() const { return mSimd[3]; }
+  [[nodiscard]] float x() const { return mSimd[0]; }
+  [[nodiscard]] float y() const { return mSimd[1]; }
+  [[nodiscard]] float z() const { return mSimd[2]; }
+  [[nodiscard]] float d() const { return mSimd[3]; }
 
-  simd<float>::reference x() { return mSimd[0]; }
-  simd<float>::reference y() { return mSimd[1]; }
-  simd<float>::reference z() { return mSimd[2]; }
-  simd<float>::reference d() { return mSimd[3]; }
+  [[nodiscard]] simd<float>::reference x() { return mSimd[0]; }
+  [[nodiscard]] simd<float>::reference y() { return mSimd[1]; }
+  [[nodiscard]] simd<float>::reference z() { return mSimd[2]; }
+  [[nodiscard]] simd<float>::reference d() { return mSimd[3]; }
 
   zeus::simd<float> mSimd;
 };

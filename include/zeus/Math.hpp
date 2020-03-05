@@ -68,7 +68,7 @@ void detectCPU();
 
 const CPUInfo& cpuFeatures();
 
-std::pair<bool, const CPUInfo&> validateCPU();
+[[nodiscard]] std::pair<bool, const CPUInfo&> validateCPU();
 
 void getCpuInfo(int eax, int regs[4]);
 
@@ -81,62 +81,64 @@ class CVector2f;
 class CTransform;
 
 template <typename T>
-constexpr T min(const T& a, const T& b) {
+[[nodiscard]] constexpr T min(const T& a, const T& b) {
   return a < b ? a : b;
 }
 
 template <typename T>
-constexpr T max(const T& a, const T& b) {
+[[nodiscard]] constexpr T max(const T& a, const T& b) {
   return a > b ? a : b;
 }
 
 template <>
-CVector3f min(const CVector3f& a, const CVector3f& b);
+[[nodiscard]] CVector3f min(const CVector3f& a, const CVector3f& b);
 
 template <>
-CVector3f max(const CVector3f& a, const CVector3f& b);
+[[nodiscard]] CVector3f max(const CVector3f& a, const CVector3f& b);
 
 template <typename T>
-constexpr T clamp(const T& a, const T& val, const T& b) {
+[[nodiscard]] constexpr T clamp(const T& a, const T& val, const T& b) {
   return max<T>(a, min<T>(b, val));
 }
 
-inline constexpr float radToDeg(float rad) { return rad * (180.f / M_PIF); }
+[[nodiscard]] constexpr float radToDeg(float rad) { return rad * (180.f / M_PIF); }
 
-constexpr float degToRad(float deg) { return deg * (M_PIF / 180.f); }
+[[nodiscard]] constexpr float degToRad(float deg) { return deg * (M_PIF / 180.f); }
 
-constexpr double radToDeg(double rad) { return rad * (180.0 / M_PI); }
+[[nodiscard]] constexpr double radToDeg(double rad) { return rad * (180.0 / M_PI); }
 
-constexpr double degToRad(double deg) { return deg * (M_PI / 180.0); }
+[[nodiscard]] constexpr double degToRad(double deg) { return deg * (M_PI / 180.0); }
 
-CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2, const CVector3f& bary);
+[[nodiscard]] CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f& p2,
+                                    const CVector3f& bary);
 
-CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t);
+[[nodiscard]] CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
+                                       float t);
 
-float getCatmullRomSplinePoint(float a, float b, float c, float d, float t);
+[[nodiscard]] float getCatmullRomSplinePoint(float a, float b, float c, float d, float t);
 
-CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
-                                   float t);
+[[nodiscard]] CVector3f getCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c,
+                                                 const CVector3f& d, float t);
 
-CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d,
-                                        float t);
+[[nodiscard]] CVector3f getRoundCatmullRomSplinePoint(const CVector3f& a, const CVector3f& b, const CVector3f& c,
+                                                      const CVector3f& d, float t);
 
 // Since round(double) doesn't exist in some <cmath> implementations
 // we'll define our own
-inline double round(double val) { return (val < 0.0 ? std::ceil(val - 0.5) : std::ceil(val + 0.5)); }
+[[nodiscard]] inline double round(double val) { return (val < 0.0 ? std::ceil(val - 0.5) : std::ceil(val + 0.5)); }
 
-inline double powD(float a, float b) { return std::exp(b * std::log(a)); }
+[[nodiscard]] inline double powD(float a, float b) { return std::exp(b * std::log(a)); }
 
-inline double invSqrtD(double val) { return 1.0 / std::sqrt(val); }
+[[nodiscard]] inline double invSqrtD(double val) { return 1.0 / std::sqrt(val); }
 
-inline float invSqrtF(float val) { return float(1.0 / std::sqrt(val)); }
+[[nodiscard]] inline float invSqrtF(float val) { return float(1.0 / std::sqrt(val)); }
 
-int floorPowerOfTwo(int x);
+[[nodiscard]] int floorPowerOfTwo(int x);
 
-int ceilingPowerOfTwo(int x);
+[[nodiscard]] int ceilingPowerOfTwo(int x);
 
 template <typename U>
-typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, int>::type PopCount(U x) {
+[[nodiscard]] typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, int>::type PopCount(U x) {
 #if __GNUC__ >= 4
   return __builtin_popcountll(x);
 #else
@@ -153,19 +155,19 @@ typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, i
 }
 
 template <typename E>
-typename std::enable_if<std::is_enum<E>::value, int>::type PopCount(E e) {
+[[nodiscard]] typename std::enable_if<std::is_enum<E>::value, int>::type PopCount(E e) {
   return PopCount(static_cast<typename std::underlying_type<E>::type>(e));
 }
 
-bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = FLT_EPSILON);
+[[nodiscard]] bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = FLT_EPSILON);
 
-bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = FLT_EPSILON);
+[[nodiscard]] bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = FLT_EPSILON);
 
-inline bool close_enough(float a, float b, double epsilon = FLT_EPSILON) {
+[[nodiscard]] inline bool close_enough(float a, float b, double epsilon = FLT_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 
-inline bool close_enough(double a, double b, double epsilon = FLT_EPSILON) {
+[[nodiscard]] inline bool close_enough(double a, double b, double epsilon = FLT_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 } // namespace zeus

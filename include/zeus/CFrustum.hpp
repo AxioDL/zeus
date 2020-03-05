@@ -16,8 +16,8 @@ class CFrustum {
 public:
   void updatePlanes(const CMatrix4f& viewMtx, const CMatrix4f& projection);
   void updatePlanes(const CTransform& viewPointMtx, const CProjection& projection);
-  bool aabbFrustumTest(const CAABox& aabb) const;
-  bool sphereFrustumTest(const CSphere& sphere) const;
-  bool pointFrustumTest(const CVector3f& point) const;
+  [[nodiscard]] bool aabbFrustumTest(const CAABox& aabb) const;
+  [[nodiscard]] bool sphereFrustumTest(const CSphere& sphere) const;
+  [[nodiscard]] bool pointFrustumTest(const CVector3f& point) const;
 };
 } // namespace zeus

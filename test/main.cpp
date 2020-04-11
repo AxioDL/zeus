@@ -34,18 +34,18 @@ int main() {
   CVector2f point3(-90, 67);
   CVector3f point4 = point2 + point3;
   CVector3f point(-90, 67, -105);
-  test.closestPointAlongVector(point);
+  CVector3f point5 = test.closestPointAlongVector(point);
   CVector3d(100, -100, -200);
   zeus::CAABox aabb1{208.9f, -83.9f, 17.7f, 211.9f, -80.9f, 25.7f};
-  aabb1.center();
-  aabb1.extents() * 2.f;
+  CVector3f point6 = aabb1.center();
+  CVector3f point7 = aabb1.extents() * 2.f;
   zeus::CAABox aabb2{211.8f, -81.4f, 22.3f, 212.8f, -80.4f, 25.0f};
-  aabb2.center();
-  aabb2.extents() * 2.f;
+  CVector3f point8 = aabb2.center();
+  CVector3f point9 = aabb2.extents() * 2.f;
 
-  aabb1.booleanIntersection(aabb2);
-  aabb2.center();
-  aabb2.extents() * 2.f;
+  CAABox aabb3 = aabb1.booleanIntersection(aabb2);
+  CVector3f point10 = aabb2.center();
+  CVector3f point11 = aabb2.extents() * 2.f;
 
   assert(t.isEqu(t));
   assert(test.inside(test));

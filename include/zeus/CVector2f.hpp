@@ -207,9 +207,9 @@ public:
   [[nodiscard]] simd<float>::reference x() { return mSimd[0]; }
   [[nodiscard]] simd<float>::reference y() { return mSimd[1]; }
 };
-constexpr CVector2f skOne2f(1.f);
-constexpr CVector2f skNegOne2f(-1.f);
-constexpr CVector2f skZero2f(0.f);
+constexpr inline CVector2f skOne2f(1.f);
+constexpr inline CVector2f skNegOne2f(-1.f);
+constexpr inline CVector2f skZero2f(0.f);
 
 [[nodiscard]] inline CVector2f operator+(float lhs, const CVector2f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 

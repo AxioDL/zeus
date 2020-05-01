@@ -18,7 +18,7 @@ class CVector4f {
 public:
   zeus::simd<float> mSimd;
 
-  constexpr CVector4f() : mSimd(0.f) {}
+  constexpr CVector4f() : mSimd() {}
 
   template <typename T>
   constexpr CVector4f(const simd<T>& s) : mSimd(s) {}

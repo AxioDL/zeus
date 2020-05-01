@@ -34,8 +34,8 @@ void CMatrix3f::transpose() {
   m[1].mSimd = _mm_movehl_ps(T2, T0);
   m[2].mSimd = _mm_movelh_ps(T1, T3);
 #elif __ARM_NEON
-  float32x4x2_t P0 = vzipq_f32(M.r[0], M.r[2]);
-  float32x4x2_t P1 = vzipq_f32(M.r[1], M.r[3]);
+  float32x4x2_t P0 = vzipq_f32(m[0].mSimd.native(), m[2].mSimd.native());
+  float32x4x2_t P1 = vzipq_f32(m[1].mSimd.native(), m[3].mSimd.native());
 
   float32x4x2_t T0 = vzipq_f32(P0.val[0], P1.val[0]);
   float32x4x2_t T1 = vzipq_f32(P0.val[1], P1.val[1]);
@@ -69,8 +69,8 @@ CMatrix3f CMatrix3f::transposed() const {
   __m128 T3 = _mm_unpackhi_ps(m[2].mSimd.native(), zero);
   return CMatrix3f(_mm_movelh_ps(T0, T2), _mm_movehl_ps(T2, T0), _mm_movelh_ps(T1, T3));
 #elif __ARM_NEON
-  float32x4x2_t P0 = vzipq_f32(M.r[0], M.r[2]);
-  float32x4x2_t P1 = vzipq_f32(M.r[1], M.r[3]);
+  float32x4x2_t P0 = vzipq_f32(m[0].mSimd.native(), m[2].mSimd.native());
+  float32x4x2_t P1 = vzipq_f32(m[1].mSimd.native(), m[3].mSimd.native());
 
   float32x4x2_t T0 = vzipq_f32(P0.val[0], P1.val[0]);
   float32x4x2_t T1 = vzipq_f32(P0.val[1], P1.val[1]);

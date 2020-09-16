@@ -184,7 +184,7 @@ public:
     return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON;
   }
 
-  [[nodiscard]] bool isZero() const { return magSquared() <= FLT_EPSILON; }
+  [[nodiscard]] bool isZero() const { return mSimd[0] == 0.f && mSimd[1] == 0.f; }
 
   [[nodiscard]] bool isEqu(const CVector2f& other, float epsilon = FLT_EPSILON) const {
     const CVector2f diffVec = other - *this;

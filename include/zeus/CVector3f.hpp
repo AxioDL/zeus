@@ -162,7 +162,7 @@ public:
     return !(std::fabs(x()) < FLT_EPSILON && std::fabs(y()) < FLT_EPSILON && std::fabs(z()) < FLT_EPSILON);
   }
 
-  [[nodiscard]] bool isZero() const { return magSquared() <= FLT_EPSILON; }
+  [[nodiscard]] bool isZero() const { return mSimd[0] == 0.f && mSimd[1] == 0.f && mSimd[2] == 0.f; }
 
   void scaleToLength(float newLength) {
     float length = magSquared();

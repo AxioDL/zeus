@@ -79,7 +79,7 @@ public:
 };
 inline CVector3f::CVector3f(const CVector3d& vec) : mSimd(vec.mSimd) {}
 
-constexpr CVector3d skZero3d(0.0);
+constexpr inline CVector3d skZero3d(0.0);
 
 [[nodiscard]] inline CVector3d operator+(double lhs, const CVector3d& rhs) {
   return zeus::simd<double>(lhs) + rhs.mSimd;

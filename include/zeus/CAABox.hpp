@@ -309,8 +309,8 @@ public:
       return max[idx - 3];
   }
 };
-constexpr CAABox skInvertedBox;
-constexpr CAABox skNullBox(CVector3f{}, CVector3f{});
+constexpr inline CAABox skInvertedBox;
+constexpr inline CAABox skNullBox(CVector3f{}, CVector3f{});
 
 [[nodiscard]] inline bool operator==(const CAABox& left, const CAABox& right) {
   return (left.min == right.min && left.max == right.max);

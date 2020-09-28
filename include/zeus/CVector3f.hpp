@@ -173,7 +173,7 @@ public:
     return !(std::fabs(x()) < FLT_EPSILON && std::fabs(y()) < FLT_EPSILON && std::fabs(z()) < FLT_EPSILON);
   }
 
-  [[nodiscard]] bool isZero() const { return magSquared() <= FLT_EPSILON; }
+  [[nodiscard]] bool isZero() const { return mSimd[0] == 0.f && mSimd[1] == 0.f && mSimd[2] == 0.f; }
 
   void scaleToLength(float newLength) {
     float length = magSquared();
@@ -220,17 +220,17 @@ public:
 
   [[nodiscard]] static inline CVector3f degToRad(const CVector3f& deg);
 };
-constexpr CVector3f skOne3f(1.f);
-constexpr CVector3f skNegOne3f(-1.f);
-constexpr CVector3f skZero3f(0.f);
-constexpr CVector3f skForward(0.f, 1.f, 0.f);
-constexpr CVector3f skBack(0.f, -1.f, 0.f);
-constexpr CVector3f skLeft(-1.f, 0.f, 0.f);
-constexpr CVector3f skRight(1.f, 0.f, 0.f);
-constexpr CVector3f skUp(0.f, 0.f, 1.f);
-constexpr CVector3f skDown(0.f, 0.f, -1.f);
-constexpr CVector3f skRadToDegVec(180.f / M_PIF);
-constexpr CVector3f skDegToRadVec(M_PIF / 180.f);
+constexpr inline CVector3f skOne3f(1.f);
+constexpr inline CVector3f skNegOne3f(-1.f);
+constexpr inline CVector3f skZero3f(0.f);
+constexpr inline CVector3f skForward(0.f, 1.f, 0.f);
+constexpr inline CVector3f skBack(0.f, -1.f, 0.f);
+constexpr inline CVector3f skLeft(-1.f, 0.f, 0.f);
+constexpr inline CVector3f skRight(1.f, 0.f, 0.f);
+constexpr inline CVector3f skUp(0.f, 0.f, 1.f);
+constexpr inline CVector3f skDown(0.f, 0.f, -1.f);
+constexpr inline CVector3f skRadToDegVec(180.f / M_PIF);
+constexpr inline CVector3f skDegToRadVec(M_PIF / 180.f);
 
 [[nodiscard]] inline CVector3f operator+(float lhs, const CVector3f& rhs) { return zeus::simd<float>(lhs) + rhs.mSimd; }
 

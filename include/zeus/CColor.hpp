@@ -319,18 +319,18 @@ constexpr CVector4f& CVector4f::operator=(const CColor& other) {
   return *this;
 }
 
-constexpr CColor skRed(1.f, 0.f, 0.f, 1.f);
-constexpr CColor skBlack(0.f, 0.f, 0.f, 1.f);
-constexpr CColor skBlue(0.f, 0.f, 1.f, 1.f);
-constexpr CColor skCyan(0.f, 1.f, 1.f, 1.f);
-constexpr CColor skGreen(0.f, 1.f, 0.f, 1.f);
-constexpr CColor skGrey(0.5f, 0.5f, 0.5f, 1.f);
-constexpr CColor skMagenta(1.f, 0.f, 1.f, 1.f);
-constexpr CColor skOrange(1.f, 0.43f, 0.f, 1.f);
-constexpr CColor skPurple(0.63f, 0.f, 1.f, 1.f);
-constexpr CColor skYellow(1.f, 1.f, 0.f, 1.f);
-constexpr CColor skWhite(1.f, 1.f, 1.f, 1.f);
-constexpr CColor skClear(0.f, 0.f, 0.f, 0.f);
+constexpr inline CColor skRed(1.f, 0.f, 0.f, 1.f);
+constexpr inline CColor skBlack(0.f, 0.f, 0.f, 1.f);
+constexpr inline CColor skBlue(0.f, 0.f, 1.f, 1.f);
+constexpr inline CColor skCyan(0.f, 1.f, 1.f, 1.f);
+constexpr inline CColor skGreen(0.f, 1.f, 0.f, 1.f);
+constexpr inline CColor skGrey(0.5f, 0.5f, 0.5f, 1.f);
+constexpr inline CColor skMagenta(1.f, 0.f, 1.f, 1.f);
+constexpr inline CColor skOrange(1.f, 0.43f, 0.f, 1.f);
+constexpr inline CColor skPurple(0.63f, 0.f, 1.f, 1.f);
+constexpr inline CColor skYellow(1.f, 1.f, 0.f, 1.f);
+constexpr inline CColor skWhite(1.f, 1.f, 1.f, 1.f);
+constexpr inline CColor skClear(0.f, 0.f, 0.f, 0.f);
 
 [[nodiscard]] inline CColor operator+(float lhs, const CColor& rhs) {
   return CColor(simd<float>(lhs) + rhs.mSimd).Clamp();

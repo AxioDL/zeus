@@ -16,7 +16,7 @@ float CVector3f::getAngleDiff(const CVector3f& a, const CVector3f& b) {
     return 0.f;
 
   float dot = a.dot(b);
-  return std::acos(std::clamp(-1.f, dot / (mag1 * mag2), 1.f));
+  return std::acos(zeus::clamp(-1.f, dot / (mag1 * mag2), 1.f));
 }
 
 CVector3f CVector3f::slerp(const CVector3f& a, const CVector3f& b, CRelAngle clampAngle) {

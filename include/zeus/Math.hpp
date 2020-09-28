@@ -159,6 +159,26 @@ template <typename E>
   return PopCount(static_cast<typename std::underlying_type<E>::type>(e));
 }
 
+template <typename U>
+[[nodiscard]] typename std::enable_if<!std::is_enum<U>::value && std::is_integral<U>::value, int>::type
+countLeadingZeros(U x) {
+#if __GNUC__ >= 4
+  return __builtin_clz(x);
+#else
+  x = x | (x >> 1);
+  x = x | (x >> 2);
+  x = x | (x >> 4);
+  x = x | (x >> 8);
+  x = x | (x >> 16);
+  return PopCount(~x);
+#endif
+}
+
+template <typename E>
+[[nodiscard]] typename std::enable_if<std::is_enum<E>::value, int>::type countLeadingZeros(E e) {
+  return countLeadingZeros(static_cast<typename std::underlying_type<E>::type>(e));
+}
+
 [[nodiscard]] bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon = FLT_EPSILON);
 
 [[nodiscard]] bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = FLT_EPSILON);

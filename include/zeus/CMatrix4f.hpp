@@ -49,6 +49,16 @@ public:
     m[3].mSimd = CVector4f(0.f, 0.f, 0.f, 1.0f).mSimd;
   }
 
+#if ZE_HSH_TYPES
+
+  operator hsh::float4x4() const {
+    return hsh::float4x4{hsh::float4(m[0]), hsh::float4(m[1]), hsh::float4(m[2]), hsh::float4(m[3])};
+  }
+
+  constexpr CMatrix4f(const hsh::float4x4& vec) : m{vec.cols[0], vec.cols[1], vec.cols[2], vec.cols[3]} {}
+
+#endif
+
   constexpr CMatrix4f& operator=(const CMatrix4f& other) = default;
 
   [[nodiscard]] CVector4f operator*(const CVector4f& other) const {

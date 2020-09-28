@@ -49,6 +49,17 @@ public:
 
 #endif
 
+#if ZE_HSH_TYPES
+
+  operator hsh::float3() const {
+    simd_floats floats(mSimd);
+    return hsh::float3{floats[0], floats[1], floats[2]};
+  }
+
+  constexpr CVector3f(const hsh::float3& vec) : mSimd(vec.x, vec.y, vec.z) {}
+
+#endif
+
   inline CVector3f(const CVector3d& vec);
 
   explicit constexpr CVector3f(float xyz) : mSimd(xyz) {}

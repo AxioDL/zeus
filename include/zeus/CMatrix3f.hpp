@@ -69,6 +69,16 @@ public:
 
 #endif
 
+#if ZE_HSH_TYPES
+
+  operator hsh::float3x3() const {
+    return hsh::float3x3{hsh::float3(m[0]), hsh::float3(m[1]), hsh::float3(m[2])};
+  }
+
+  constexpr CMatrix3f(const hsh::float3x3& vec) : m{vec.cols[0], vec.cols[1], vec.cols[2]} {}
+
+#endif
+
   CMatrix3f(const CQuaternion& quat);
 
   CMatrix3f& operator=(const CMatrix3f& other) = default;

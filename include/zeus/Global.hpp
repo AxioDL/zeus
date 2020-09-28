@@ -7,6 +7,10 @@
 #include "simd/simd.hpp"
 #endif
 
+#if ZE_HSH_TYPES
+#include "hsh/hsh.h"
+#endif
+
 namespace zeus {
 #if ZE_ATHENA_TYPES
 template <typename T>

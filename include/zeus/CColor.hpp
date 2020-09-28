@@ -126,6 +126,15 @@ public:
 
 #endif
 
+#if ZE_HSH_TYPES
+
+  operator hsh::float4() const {
+    simd_floats floats(mSimd);
+    return hsh::float4{floats[0], floats[1], floats[2], floats[3]};
+  }
+
+#endif
+
   [[nodiscard]] bool operator==(const CColor& rhs) const {
     return (r() == rhs.r() && g() == rhs.g() && b() == rhs.b() && a() == rhs.a());
   }

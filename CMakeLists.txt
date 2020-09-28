@@ -62,5 +62,10 @@ if(TARGET athena-core)
   target_compile_definitions(zeus PUBLIC ZE_ATHENA_TYPES=1)
 endif()
 
+if(TARGET hsh)
+  target_link_libraries(zeus PUBLIC hsh)
+  target_compile_definitions(zeus PUBLIC ZE_HSH_TYPES=1)
+endif()
+
 add_subdirectory(test)
 

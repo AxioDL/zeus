@@ -41,6 +41,17 @@ public:
 
 #endif
 
+#if ZE_HSH_TYPES
+
+  operator hsh::float2() const {
+    simd_floats floats(mSimd);
+    return hsh::float2{floats[0], floats[1]};
+  }
+
+  constexpr CVector2f(const hsh::float2& vec) : mSimd(vec.x, vec.y) {}
+
+#endif
+
   explicit constexpr CVector2f(float xy) : mSimd(xy) {}
 
   void assign(float x, float y) {

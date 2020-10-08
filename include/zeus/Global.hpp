@@ -8,7 +8,7 @@
 #endif
 
 #if ZE_HSH_TYPES
-#include "hsh/hsh.h"
+#include "hsh/bits/builtin_types.h"
 #endif
 
 namespace zeus {

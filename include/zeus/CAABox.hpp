@@ -56,13 +56,9 @@ public:
 #endif
 
   [[nodiscard]] bool intersects(const CAABox& other) const {
-    const bool x1 = max[0] >= other.min[0];
-    const bool x2 = min[0] <= other.max[0];
-    const bool y1 = max[1] >= other.min[1];
-    const bool y2 = min[1] <= other.max[1];
-    const bool z1 = max[2] >= other.min[2];
-    const bool z2 = min[2] <= other.max[2];
-    return x1 && x2 && y1 && y2 && z1 && z2;
+    const auto mmax = max >= other.min;
+    const auto mmin = min <= other.max;
+    return mmax[0] && mmax[1] && mmax[2] && mmin[0] && mmin[1] && mmin[2];
   }
 
   [[nodiscard]] bool intersects(const CSphere& other) const;
@@ -70,10 +66,9 @@ public:
   [[nodiscard]] CAABox booleanIntersection(const CAABox& other) const;
 
   [[nodiscard]] bool inside(const CAABox& other) const {
-    const bool x = min[0] >= other.min[0] && max[0] <= other.max[0];
-    const bool y = min[1] >= other.min[1] && max[1] <= other.max[1];
-    const bool z = min[2] >= other.min[2] && max[2] <= other.max[2];
-    return x && y && z;
+    const auto mmax = max <= other.max;
+    const auto mmin = min >= other.min;
+    return mmax[0] && mmax[1] && mmax[2] && mmin[0] && mmin[1] && mmin[2];
   }
 
   [[nodiscard]] bool insidePlane(const CPlane& plane) const {

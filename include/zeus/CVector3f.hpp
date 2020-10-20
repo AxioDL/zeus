@@ -19,7 +19,7 @@ class CRelAngle;
 class CVector3f {
 public:
   zeus::simd<float> mSimd;
-  constexpr CVector3f() : mSimd(0.f) {}
+  constexpr CVector3f() : mSimd() {}
 
   template <typename T>
   constexpr CVector3f(const simd<T>& s) : mSimd(s) {}
@@ -64,7 +64,7 @@ public:
 
   explicit constexpr CVector3f(float xyz) : mSimd(xyz) {}
 
-  void assign(float x, float y, float z) { mSimd = zeus::simd<float>(x, y, z); }
+  void assign(float x, float y, float z) { mSimd.set(x, y, z); }
 
   constexpr CVector3f(float x, float y, float z) : mSimd(x, y, z) {}
 
@@ -73,16 +73,21 @@ public:
   CVector3f(const CVector2f& other, float z = 0.f) {
     mSimd = other.mSimd;
     mSimd[2] = z;
-    mSimd[3] = 0.f;
   }
 
   [[nodiscard]] CVector2f toVec2f() const { return CVector2f(mSimd); }
 
   [[nodiscard]] bool operator==(const CVector3f& rhs) const {
-    return mSimd[0] == rhs.mSimd[0] && mSimd[1] == rhs.mSimd[1] && mSimd[2] == rhs.mSimd[2];
+    const auto mask = mSimd == rhs.mSimd;
+    return mask[0] && mask[1] && mask[2];
   }
 
   [[nodiscard]] bool operator!=(const CVector3f& rhs) const { return !(*this == rhs); }
+
+  [[nodiscard]] simd<float>::mask_type operator>(const CVector3f& rhs) const { return mSimd > rhs.mSimd; }
+  [[nodiscard]] simd<float>::mask_type operator>=(const CVector3f& rhs) const { return mSimd >= rhs.mSimd; }
+  [[nodiscard]] simd<float>::mask_type operator<(const CVector3f& rhs) const { return mSimd < rhs.mSimd; }
+  [[nodiscard]] simd<float>::mask_type operator<=(const CVector3f& rhs) const { return mSimd <= rhs.mSimd; }
 
   [[nodiscard]] CVector3f operator+(const CVector3f& rhs) const { return mSimd + rhs.mSimd; }
 
@@ -94,16 +99,13 @@ public:
 
   [[nodiscard]] CVector3f operator/(const CVector3f& rhs) const { return mSimd / rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator+(float val) const { return mSimd + zeus::simd<float>(val); }
+  [[nodiscard]] CVector3f operator+(float val) const { return mSimd + val; }
 
-  [[nodiscard]] CVector3f operator-(float val) const { return mSimd - zeus::simd<float>(val); }
+  [[nodiscard]] CVector3f operator-(float val) const { return mSimd - val; }
 
-  [[nodiscard]] CVector3f operator*(float val) const { return mSimd * zeus::simd<float>(val); }
+  [[nodiscard]] CVector3f operator*(float val) const { return mSimd * val; }
 
-  [[nodiscard]] CVector3f operator/(float val) const {
-    const float ooval = 1.f / val;
-    return mSimd * zeus::simd<float>(ooval);
-  }
+  [[nodiscard]] CVector3f operator/(float val) const { return mSimd / val; }
 
   const CVector3f& operator+=(const CVector3f& rhs) {
     mSimd += rhs.mSimd;
@@ -136,7 +138,7 @@ public:
   }
 
   [[nodiscard]] CVector3f cross(const CVector3f& rhs) const {
-    return CVector3f(y() * rhs.z() - z() * rhs.y(), z() * rhs.x() - x() * rhs.z(), x() * rhs.y() - y() * rhs.x());
+    return {y() * rhs.z() - z() * rhs.y(), z() * rhs.x() - x() * rhs.z(), x() * rhs.y() - y() * rhs.x()};
   }
 
   [[nodiscard]] float dot(const CVector3f& rhs) const { return mSimd.dot3(rhs.mSimd); }
@@ -149,9 +151,9 @@ public:
 
   [[nodiscard]] bool isMagnitudeSafe() const { return isNotInf() && magSquared() >= 9.9999994e-29; }
 
-  void zeroOut() { mSimd = zeus::simd<float>(0.f); }
+  void zeroOut() { mSimd.broadcast(0.f); }
 
-  void splat(float xyz) { mSimd = zeus::simd<float>(xyz); }
+  void splat(float xyz) { mSimd.broadcast(xyz); }
 
   [[nodiscard]] static float getAngleDiff(const CVector3f& a, const CVector3f& b);
 

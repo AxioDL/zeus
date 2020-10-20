@@ -13,7 +13,7 @@ namespace zeus {
 class CVector2f {
 public:
   simd<float> mSimd;
-  constexpr CVector2f() : mSimd(0.f) {}
+  constexpr CVector2f() : mSimd() {}
 
   template <typename T>
   constexpr CVector2f(const simd<T>& s) : mSimd(s) {}
@@ -54,11 +54,8 @@ public:
 
   explicit constexpr CVector2f(float xy) : mSimd(xy) {}
 
-  void assign(float x, float y) {
-    mSimd[0] = x;
-    mSimd[1] = y;
-    mSimd[2] = 0.0f;
-    mSimd[3] = 0.0f;
+  constexpr void assign(float x, float y) {
+    mSimd.set(x, y);
   }
 
   constexpr CVector2f(float x, float y) : mSimd(x, y, 0.f, 0.f) {}
@@ -161,19 +158,19 @@ public:
     return *this * mag;
   }
 
-  [[nodiscard]] CVector2f perpendicularVector() const { return {-y(), x()}; }
+  [[nodiscard]] constexpr CVector2f perpendicularVector() const { return {-y(), x()}; }
 
-  [[nodiscard]] float cross(const CVector2f& rhs) const { return (x() * rhs.y()) - (y() * rhs.x()); }
+  [[nodiscard]] constexpr float cross(const CVector2f& rhs) const { return (x() * rhs.y()) - (y() * rhs.x()); }
 
-  [[nodiscard]] float dot(const CVector2f& rhs) const { return mSimd.dot2(rhs.mSimd); }
+  [[nodiscard]] constexpr float dot(const CVector2f& rhs) const { return mSimd.dot2(rhs.mSimd); }
 
-  [[nodiscard]] float magSquared() const { return mSimd.dot2(mSimd); }
+  [[nodiscard]] constexpr float magSquared() const { return mSimd.dot2(mSimd); }
 
-  [[nodiscard]] float magnitude() const { return std::sqrt(magSquared()); }
+  [[nodiscard]] constexpr float magnitude() const { return std::sqrt(magSquared()); }
 
-  void zeroOut() { mSimd = zeus::simd<float>(0.f); }
+  constexpr void zeroOut() { mSimd = 0.f; }
 
-  void splat(float xy) { mSimd = zeus::simd<float>(xy); }
+  constexpr void splat(float xy) { mSimd = xy; }
 
   [[nodiscard]] static float getAngleDiff(const CVector2f& a, const CVector2f& b);
 
@@ -187,9 +184,9 @@ public:
 
   [[nodiscard]] static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
-  [[nodiscard]] bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
+  [[nodiscard]] constexpr bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 
-  [[nodiscard]] bool canBeNormalized() const {
+  [[nodiscard]] constexpr bool canBeNormalized() const {
     if (std::isinf(x()) || std::isinf(y()))
       return false;
     return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON;
@@ -202,21 +199,21 @@ public:
     return (diffVec.x() <= epsilon && diffVec.y() <= epsilon);
   }
 
-  [[nodiscard]] simd<float>::reference operator[](size_t idx) {
+  [[nodiscard]] constexpr simd<float>::reference operator[](size_t idx) {
     assert(idx < 2);
     return mSimd[idx];
   }
 
-  [[nodiscard]] float operator[](size_t idx) const {
+  [[nodiscard]] constexpr float operator[](size_t idx) const {
     assert(idx < 2);
     return mSimd[idx];
   }
 
-  [[nodiscard]] float x() const { return mSimd[0]; }
-  [[nodiscard]] float y() const { return mSimd[1]; }
+  [[nodiscard]] constexpr float x() const { return mSimd[0]; }
+  [[nodiscard]] constexpr float y() const { return mSimd[1]; }
 
-  [[nodiscard]] simd<float>::reference x() { return mSimd[0]; }
-  [[nodiscard]] simd<float>::reference y() { return mSimd[1]; }
+  [[nodiscard]] constexpr simd<float>::reference x() { return mSimd[0]; }
+  [[nodiscard]] constexpr simd<float>::reference y() { return mSimd[1]; }
 };
 constexpr inline CVector2f skOne2f(1.f);
 constexpr inline CVector2f skNegOne2f(-1.f);

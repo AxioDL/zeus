@@ -23,13 +23,13 @@ public:
   constexpr CMatrix3f(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
   : m{{{m00, m10, m20}, {m01, m11, m21}, {m02, m12, m22}}} {}
 
-  CMatrix3f(const CVector3f& scaleVec) {
+  constexpr CMatrix3f(const CVector3f& scaleVec) {
     m[0][0] = scaleVec[0];
     m[1][1] = scaleVec[1];
     m[2][2] = scaleVec[2];
   }
 
-  CMatrix3f(float scale) : CMatrix3f(CVector3f(scale)) {}
+  constexpr CMatrix3f(float scale) : CMatrix3f(CVector3f(scale)) {}
 
   constexpr CMatrix3f(const CVector3f& r0, const CVector3f& r1, const CVector3f& r2) : m{{r0, r1, r2}} {}
 
@@ -81,7 +81,7 @@ public:
 
   CMatrix3f(const CQuaternion& quat);
 
-  CMatrix3f& operator=(const CMatrix3f& other) = default;
+  constexpr CMatrix3f& operator=(const CMatrix3f& other) = default;
 
   [[nodiscard]] CVector3f operator*(const CVector3f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +

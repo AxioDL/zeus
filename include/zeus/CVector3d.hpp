@@ -14,7 +14,7 @@ namespace zeus {
 class CVector3d {
 public:
   zeus::simd<double> mSimd;
-  constexpr CVector3d() : mSimd(0.0) {}
+  constexpr CVector3d() : mSimd() {}
 
   template <typename T>
   constexpr CVector3d(const simd<T>& s) : mSimd(s) {}

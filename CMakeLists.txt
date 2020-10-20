@@ -54,6 +54,7 @@ add_library(zeus
     include/zeus/simd/simd.hpp
     include/zeus/simd/simd_sse.hpp
     include/zeus/simd/simd_avx.hpp
+    include/zeus/simd/simd_neon.hpp
     include/zeus/simd/parallelism_v2_simd.hpp)
 
 target_include_directories(zeus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)

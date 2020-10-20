@@ -10,10 +10,8 @@
 
 #if _WIN32
 #include <intrin.h>
-#else
-
+#elif __x86_64__
 #include <cpuid.h>
-
 #endif
 
 namespace zeus {
@@ -23,8 +21,8 @@ static CPUInfo g_cpuFeatures = {};
 static CPUInfo g_missingFeatures = {};
 
 void getCpuInfo(int eax, int regs[4]) {
-#if !GEKKO
-#if _WIN32
+#if __x86_64__
+  #if _WIN32
   __cpuid(regs, eax);
 #else
   __cpuid(eax, regs[0], regs[1], regs[2], regs[3]);
@@ -33,8 +31,8 @@ void getCpuInfo(int eax, int regs[4]) {
 }
 
 void getCpuInfoEx(int eax, int ecx, int regs[4]) {
-#if !GEKKO
-#if _WIN32
+#if __x86_64__
+  #if _WIN32
   __cpuidex(regs, eax, ecx);
 #else
   __cpuid_count(eax, ecx, regs[0], regs[1], regs[2], regs[3]);
@@ -43,7 +41,7 @@ void getCpuInfoEx(int eax, int ecx, int regs[4]) {
 }
 
 void detectCPU() {
-#if !GEKKO
+#if __x86_64__
   if (isCPUInit)
     return;
 

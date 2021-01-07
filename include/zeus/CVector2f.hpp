@@ -155,7 +155,7 @@ public:
 
   [[nodiscard]] constexpr float magSquared() const { return mSimd.dot2(mSimd); }
 
-  [[nodiscard]] constexpr float magnitude() const { return std::sqrt(magSquared()); }
+  [[nodiscard]] float magnitude() const { return std::sqrt(magSquared()); }
 
   constexpr void zeroOut() { mSimd = 0.f; }
 
@@ -173,9 +173,9 @@ public:
 
   [[nodiscard]] static CVector2f slerp(const CVector2f& a, const CVector2f& b, float t);
 
-  [[nodiscard]] constexpr bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
+  [[nodiscard]] bool isNormalized() const { return std::fabs(1.f - magSquared()) < 0.01f; }
 
-  [[nodiscard]] constexpr bool canBeNormalized() const {
+  [[nodiscard]] bool canBeNormalized() const {
     if (std::isinf(x()) || std::isinf(y()))
       return false;
     return std::fabs(x()) >= FLT_EPSILON || std::fabs(y()) >= FLT_EPSILON;

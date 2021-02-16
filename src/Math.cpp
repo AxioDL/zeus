@@ -21,7 +21,7 @@ static CPUInfo g_cpuFeatures = {};
 static CPUInfo g_missingFeatures = {};
 
 void getCpuInfo(int eax, int regs[4]) {
-#if __x86_64__
+#if defined(__x86_64__) || defined(_M_X64)
   #if _WIN32
   __cpuid(regs, eax);
 #else
@@ -31,7 +31,7 @@ void getCpuInfo(int eax, int regs[4]) {
 }
 
 void getCpuInfoEx(int eax, int ecx, int regs[4]) {
-#if __x86_64__
+#if defined(__x86_64__) || defined(_M_X64)
   #if _WIN32
   __cpuidex(regs, eax, ecx);
 #else
@@ -41,7 +41,7 @@ void getCpuInfoEx(int eax, int ecx, int regs[4]) {
 }
 
 void detectCPU() {
-#if __x86_64__
+#if defined(__x86_64__) || defined(_M_X64)
   if (isCPUInit)
     return;
 

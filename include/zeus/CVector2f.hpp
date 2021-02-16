@@ -188,7 +188,7 @@ public:
     return (diffVec.x() <= epsilon && diffVec.y() <= epsilon);
   }
 
-  [[nodiscard]] constexpr simd<float>::reference operator[](size_t idx) {
+  [[nodiscard]] simd<float>::reference operator[](size_t idx) {
     assert(idx < 2);
     return mSimd[idx];
   }
@@ -201,8 +201,8 @@ public:
   [[nodiscard]] constexpr float x() const { return mSimd[0]; }
   [[nodiscard]] constexpr float y() const { return mSimd[1]; }
 
-  [[nodiscard]] constexpr simd<float>::reference x() { return mSimd[0]; }
-  [[nodiscard]] constexpr simd<float>::reference y() { return mSimd[1]; }
+  [[nodiscard]] simd<float>::reference x() { return mSimd[0]; }
+  [[nodiscard]] simd<float>::reference y() { return mSimd[1]; }
 };
 constexpr inline CVector2f skOne2f(1.f);
 constexpr inline CVector2f skNegOne2f(-1.f);

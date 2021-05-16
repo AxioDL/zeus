@@ -139,6 +139,7 @@ public:
   [[nodiscard]] bool isNotInf() const { return !(std::isinf(x()) || std::isinf(y()) || std::isinf(z())); }
 
   [[nodiscard]] bool isMagnitudeSafe() const { return isNotInf() && magSquared() >= 9.9999994e-29; }
+  [[nodiscard]] bool isNaN() const { return std::isnan(x()) || std::isnan(y()) || std::isnan(z()); }
 
   void zeroOut() { mSimd.broadcast(0.f); }
 

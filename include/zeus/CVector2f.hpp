@@ -131,7 +131,7 @@ public:
 
   const CVector2f& operator/=(float rhs) {
     float oorhs = 1.f / rhs;
-    mSimd /= simd<float>(oorhs);
+    mSimd *= simd<float>(oorhs);
     return *this;
   }
 

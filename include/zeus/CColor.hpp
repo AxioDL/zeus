@@ -18,8 +18,8 @@
 
 #if BYTE_ORDER == __ORDER_LITTLE_ENDIAN__
 #define COLOR(rgba)                                                                                                    \
-  (unsigned)(((rgba)&0x000000FF) << 24 | ((rgba)&0x0000FF00) << 8 | ((rgba)&0x00FF0000) >> 8 |                         \
-             ((rgba)&0xFF000000) >> 24)
+  (zeus::Comp32)(((rgba)&0x000000FF) << 24 | ((rgba)&0x0000FF00) << 8 | ((rgba)&0x00FF0000) >> 8 |                     \
+                 ((rgba)&0xFF000000) >> 24)
 #else
 #define COLOR(rgba) rgba
 #endif

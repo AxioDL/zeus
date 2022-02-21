@@ -37,9 +37,11 @@ add_library(zeus
     include/zeus/zeus.hpp
     include/zeus/CVector2i.hpp
     include/zeus/CVector2f.hpp
+    include/zeus/CVector2d.hpp
     include/zeus/CVector3f.hpp
     include/zeus/CVector3d.hpp
     include/zeus/CVector4f.hpp
+    include/zeus/CVector4d.hpp
     include/zeus/CRectangle.hpp
     include/zeus/CMatrix4f.hpp
     include/zeus/CFrustum.hpp

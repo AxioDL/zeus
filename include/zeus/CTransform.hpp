@@ -17,22 +17,6 @@ public:
   constexpr CTransform(const CMatrix3f& basis, const CVector3f& offset = {})
   : basis(basis), origin(offset) {}
 
-#if ZE_ATHENA_TYPES
-
-  CTransform(const atVec4f* mtx)
-  : basis(mtx[0], mtx[1], mtx[2]), origin(mtx[0].simd[3], mtx[1].simd[3], mtx[2].simd[3]) {}
-
-  void read34RowMajor(athena::io::IStreamReader& r) {
-    atVec4f r0 = r.readVec4fBig();
-    atVec4f r1 = r.readVec4fBig();
-    atVec4f r2 = r.readVec4fBig();
-    basis = CMatrix3f(r0, r1, r2);
-    basis.transpose();
-    origin = CVector3f(r0.simd[3], r1.simd[3], r2.simd[3]);
-  }
-
-#endif
-
   /* Column constructor */
   constexpr CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
   : basis(c0, c1, c2), origin(c3) {}

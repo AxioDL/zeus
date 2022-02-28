@@ -8,10 +8,6 @@
 #include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/IStreamReader.hpp>
-#endif
-
 namespace zeus {
 class CVector3d;
 class CRelAngle;
@@ -23,31 +19,6 @@ public:
 
   template <typename T>
   constexpr CVector3f(const simd<T>& s) : mSimd(s) {}
-
-#if ZE_ATHENA_TYPES
-
-  constexpr CVector3f(const atVec3f& vec) : mSimd(vec.simd) {}
-
-  operator atVec3f&() { return *reinterpret_cast<atVec3f*>(this); }
-
-  operator const atVec3f&() const { return *reinterpret_cast<const atVec3f*>(this); }
-
-  void readBig(athena::io::IStreamReader& input) {
-    simd_floats f;
-    f[0] = input.readFloatBig();
-    f[1] = input.readFloatBig();
-    f[2] = input.readFloatBig();
-    f[3] = 0.0f;
-    mSimd.copy_from(f);
-  }
-
-  [[nodiscard]] static CVector3f ReadBig(athena::io::IStreamReader& input) {
-    CVector3f ret;
-    ret.readBig(input);
-    return ret;
-  }
-
-#endif
 
   inline CVector3f(const CVector3d& vec);
 

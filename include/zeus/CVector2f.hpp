@@ -5,10 +5,6 @@
 #include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/IStreamReader.hpp>
-#endif
-
 namespace zeus {
 class CVector2f {
 public:
@@ -17,29 +13,6 @@ public:
 
   template <typename T>
   constexpr CVector2f(const simd<T>& s) : mSimd(s) {}
-
-#if ZE_ATHENA_TYPES
-
-  constexpr CVector2f(const atVec2f& vec) : mSimd(vec.simd) {}
-
-  operator atVec2f&() { return *reinterpret_cast<atVec2f*>(this); }
-
-  operator const atVec2f&() const { return *reinterpret_cast<const atVec2f*>(this); }
-
-  void readBig(athena::io::IStreamReader& input) {
-    mSimd[0] = input.readFloatBig();
-    mSimd[1] = input.readFloatBig();
-    mSimd[2] = 0.0f;
-    mSimd[3] = 0.0f;
-  }
-
-  [[nodiscard]] static CVector2f ReadBig(athena::io::IStreamReader& input) {
-    CVector2f ret;
-    ret.readBig(input);
-    return ret;
-  }
-
-#endif
 
   explicit constexpr CVector2f(float xy) : mSimd(xy) {}
 

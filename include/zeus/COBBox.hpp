@@ -4,28 +4,9 @@
 #include "zeus/CTransform.hpp"
 #include "zeus/CVector3f.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/IStreamReader.hpp>
-#endif
-
 namespace zeus {
 class COBBox {
 public:
-#if ZE_ATHENA_TYPES
-
-  void readBig(athena::io::IStreamReader& in) {
-    transform.read34RowMajor(in);
-    extents.readBig(in);
-  }
-
-  [[nodiscard]] static COBBox ReadBig(athena::io::IStreamReader& in) {
-    COBBox out;
-    out.readBig(in);
-    return out;
-  }
-
-#endif
-
   CTransform transform;
   CVector3f extents;
 

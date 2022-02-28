@@ -10,10 +10,6 @@
 #include "zeus/CVector4f.hpp"
 #include "zeus/Global.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/IStreamReader.hpp>
-#endif
-
 namespace zeus {
 
 class CNUQuaternion;
@@ -31,25 +27,6 @@ public:
 
   template <typename T>
   constexpr CQuaternion(const simd<T>& s) : mSimd(s) {}
-
-#if ZE_ATHENA_TYPES
-
-  void readBig(athena::io::IStreamReader& input) {
-    simd_floats f;
-    f[0] = input.readFloatBig();
-    f[1] = input.readFloatBig();
-    f[2] = input.readFloatBig();
-    f[3] = input.readFloatBig();
-    mSimd.copy_from(f);
-  }
-
-  constexpr CQuaternion(const atVec4f& vec) : mSimd(vec.simd) {}
-
-  operator atVec4f&() { return *reinterpret_cast<atVec4f*>(this); }
-
-  operator const atVec4f&() const { return *reinterpret_cast<const atVec4f*>(this); }
-
-#endif
 
   CQuaternion(const CMatrix3f& mat);
 

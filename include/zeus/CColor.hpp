@@ -8,11 +8,6 @@
 #include "zeus/Global.hpp"
 #include "zeus/Math.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/FileReader.hpp>
-#include <athena/FileWriter.hpp>
-#endif
-
 #undef min
 #undef max
 
@@ -47,12 +42,6 @@ public:
   constexpr CColor(float rgb, float a = 1.0) : mSimd(rgb, rgb, rgb, a) {}
 
   constexpr CColor(float r, float g, float b, float a = 1.0f) : mSimd(r, g, b, a) {}
-
-#if ZE_ATHENA_TYPES
-
-  constexpr CColor(const atVec4f& vec) : mSimd(vec.simd) {}
-
-#endif
 
   constexpr CColor(Comp32 rgba) : mSimd(((COLOR(rgba) >> 0) & 0xff) * OneOver255,
                                         ((COLOR(rgba) >> 8) & 0xff) * OneOver255,

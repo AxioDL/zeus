@@ -60,10 +60,5 @@ add_library(zeus
     include/zeus/simd/parallelism_v2_simd.hpp)
 
 target_include_directories(zeus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-if(TARGET athena-core)
-  target_link_libraries(zeus PUBLIC athena-core)
-  target_compile_definitions(zeus PUBLIC ZE_ATHENA_TYPES=1)
-endif()
-
 add_subdirectory(test)
 

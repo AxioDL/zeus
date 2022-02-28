@@ -23,25 +23,6 @@ public:
   template <typename T>
   constexpr CVector4d(const simd<T>& s) : mSimd(s) {}
 
-#if ZE_ATHENA_TYPES
-
-  constexpr CVector4d(const atVec4f& vec) : mSimd(vec.simd) {}
-
-  operator atVec4f&() { return *reinterpret_cast<atVec4f*>(this); }
-
-  operator const atVec4f&() const { return *reinterpret_cast<const atVec4f*>(this); }
-
-  void readBig(athena::io::IStreamReader& input) {
-    simd_doubles f;
-    f[0] = input.readDoubleBig();
-    f[1] = input.readDoubleBig();
-    f[2] = input.readDoubleBig();
-    f[3] = input.readDoubleBig();
-    mSimd.copy_from(f);
-  }
-
-#endif
-
   explicit constexpr CVector4d(double xyzw) : mSimd(xyzw) {}
 
   void assign(double x, double y, double z, double w) { mSimd = simd<double>(x, y, z, w); }

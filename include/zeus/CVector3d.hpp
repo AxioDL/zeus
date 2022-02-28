@@ -5,10 +5,6 @@
 #include "zeus/CVector3f.hpp"
 #include "zeus/Global.hpp"
 
-#if ZE_ATHENA_TYPES
-#include <athena/Types.hpp>
-#endif
-
 namespace zeus {
 
 class CVector3d {
@@ -18,10 +14,6 @@ public:
 
   template <typename T>
   constexpr CVector3d(const simd<T>& s) : mSimd(s) {}
-
-#if ZE_ATHENA_TYPES
-  constexpr CVector3d(const atVec3d& vec) : mSimd(vec.simd) {}
-#endif
 
   explicit constexpr CVector3d(double xyz) : mSimd(xyz) {}
 

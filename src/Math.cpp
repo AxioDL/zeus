@@ -190,12 +190,7 @@ CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f
 int floorPowerOfTwo(int x) {
   if (x == 0)
     return 0;
-  /*
-   * we want to ensure that we always get the previous power,
-   * but if we have values like 256, we'll always get the same value,
-   * x-1 ensures that we always get the previous power.
-   */
-  x = (x - 1) | (x >> 1);
+  x = x | (x >> 1);
   x = x | (x >> 2);
   x = x | (x >> 4);
   x = x | (x >> 8);

@@ -60,9 +60,7 @@ public:
   }
 
   [[nodiscard]] constexpr CQuaternion operator/(const CQuaternion& q) const {
-    CQuaternion p(q);
-    p.invert();
-    return *this * p;
+    return *this * q.inverse();
   }
 
   [[nodiscard]] constexpr CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
@@ -105,7 +103,7 @@ public:
 
   void invert() { mSimd *= InvertQuat; }
 
-  [[nodiscard]] CQuaternion inverse() const { return mSimd * InvertQuat; }
+  [[nodiscard]] constexpr CQuaternion inverse() const { return mSimd * InvertQuat; }
 
   /**
    * @brief Set the rotation using axis angle notation
@@ -230,7 +228,7 @@ public:
 
   CNUQuaternion(const CMatrix3f& mtx) : CNUQuaternion(CQuaternion(mtx)) {}
 
-  CNUQuaternion(const simd<float>& s) : mSimd(s) {}
+  constexpr CNUQuaternion(const simd<float>& s) : mSimd(s) {}
 
   [[nodiscard]] static CNUQuaternion fromAxisAngle(const CUnitVector3f& axis, const CRelAngle& angle) {
     return CNUQuaternion(CQuaternion::fromAxisAngle(axis, angle));
@@ -257,7 +255,7 @@ public:
                          x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
   }
 
-  [[nodiscard]] CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
+  [[nodiscard]] constexpr CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
 
   const CNUQuaternion& operator+=(const CNUQuaternion& q) {
     mSimd += q.mSimd;

@@ -49,23 +49,23 @@ public:
   [[nodiscard]] simd<float>::mask_type operator<(const CVector3f& rhs) const { return mSimd < rhs.mSimd; }
   [[nodiscard]] simd<float>::mask_type operator<=(const CVector3f& rhs) const { return mSimd <= rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator+(const CVector3f& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] constexpr CVector3f operator+(const CVector3f& rhs) const { return mSimd + rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator-(const CVector3f& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] constexpr CVector3f operator-(const CVector3f& rhs) const { return mSimd - rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator-() const { return -mSimd; }
+  [[nodiscard]] constexpr CVector3f operator-() const { return -mSimd; }
 
-  [[nodiscard]] CVector3f operator*(const CVector3f& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] constexpr CVector3f operator*(const CVector3f& rhs) const { return mSimd * rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator/(const CVector3f& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] constexpr CVector3f operator/(const CVector3f& rhs) const { return mSimd / rhs.mSimd; }
 
-  [[nodiscard]] CVector3f operator+(float val) const { return mSimd + val; }
+  [[nodiscard]] constexpr CVector3f operator+(float val) const { return mSimd + val; }
 
-  [[nodiscard]] CVector3f operator-(float val) const { return mSimd - val; }
+  [[nodiscard]] constexpr CVector3f operator-(float val) const { return mSimd - val; }
 
-  [[nodiscard]] CVector3f operator*(float val) const { return mSimd * val; }
+  [[nodiscard]] constexpr CVector3f operator*(float val) const { return mSimd * val; }
 
-  [[nodiscard]] CVector3f operator/(float val) const { return mSimd / val; }
+  [[nodiscard]] constexpr CVector3f operator/(float val) const { return mSimd / val; }
 
   const CVector3f& operator+=(const CVector3f& rhs) {
     mSimd += rhs.mSimd;

@@ -46,23 +46,23 @@ public:
     return mSimd[0] >= rhs.mSimd[0] && mSimd[1] >= rhs.mSimd[1];
   }
 
-  [[nodiscard]] CVector2f operator+(const CVector2f& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2f operator+(const CVector2f& rhs) const { return mSimd + rhs.mSimd; }
 
-  [[nodiscard]] CVector2f operator-(const CVector2f& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2f operator-(const CVector2f& rhs) const { return mSimd - rhs.mSimd; }
 
-  [[nodiscard]] CVector2f operator-() const { return -mSimd; }
+  [[nodiscard]] constexpr CVector2f operator-() const { return -mSimd; }
 
-  [[nodiscard]] CVector2f operator*(const CVector2f& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2f operator*(const CVector2f& rhs) const { return mSimd * rhs.mSimd; }
 
-  [[nodiscard]] CVector2f operator/(const CVector2f& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2f operator/(const CVector2f& rhs) const { return mSimd / rhs.mSimd; }
 
-  [[nodiscard]] CVector2f operator+(float val) const { return mSimd + simd<float>(val); }
+  [[nodiscard]] constexpr CVector2f operator+(float val) const { return mSimd + simd<float>(val); }
 
-  [[nodiscard]] CVector2f operator-(float val) const { return mSimd - simd<float>(val); }
+  [[nodiscard]] constexpr CVector2f operator-(float val) const { return mSimd - simd<float>(val); }
 
-  [[nodiscard]] CVector2f operator*(float val) const { return mSimd * simd<float>(val); }
+  [[nodiscard]] constexpr CVector2f operator*(float val) const { return mSimd * simd<float>(val); }
 
-  [[nodiscard]] CVector2f operator/(float val) const {
+  [[nodiscard]] constexpr CVector2f operator/(float val) const {
     float ooval = 1.f / val;
     return mSimd * simd<float>(ooval);
   }

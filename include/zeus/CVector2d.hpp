@@ -46,23 +46,23 @@ public:
     return mSimd[0] >= rhs.mSimd[0] && mSimd[1] >= rhs.mSimd[1];
   }
 
-  [[nodiscard]] CVector2d operator+(const CVector2d& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2d operator+(const CVector2d& rhs) const { return mSimd + rhs.mSimd; }
 
-  [[nodiscard]] CVector2d operator-(const CVector2d& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2d operator-(const CVector2d& rhs) const { return mSimd - rhs.mSimd; }
 
-  [[nodiscard]] CVector2d operator-() const { return -mSimd; }
+  [[nodiscard]] constexpr CVector2d operator-() const { return -mSimd; }
 
-  [[nodiscard]] CVector2d operator*(const CVector2d& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2d operator*(const CVector2d& rhs) const { return mSimd * rhs.mSimd; }
 
-  [[nodiscard]] CVector2d operator/(const CVector2d& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] constexpr CVector2d operator/(const CVector2d& rhs) const { return mSimd / rhs.mSimd; }
 
-  [[nodiscard]] CVector2d operator+(double val) const { return mSimd + simd<double>(val); }
+  [[nodiscard]] constexpr CVector2d operator+(double val) const { return mSimd + simd<double>(val); }
 
-  [[nodiscard]] CVector2d operator-(double val) const { return mSimd - simd<double>(val); }
+  [[nodiscard]] constexpr CVector2d operator-(double val) const { return mSimd - simd<double>(val); }
 
-  [[nodiscard]] CVector2d operator*(double val) const { return mSimd * simd<double>(val); }
+  [[nodiscard]] constexpr CVector2d operator*(double val) const { return mSimd * simd<double>(val); }
 
-  [[nodiscard]] CVector2d operator/(double val) const {
+  [[nodiscard]] constexpr CVector2d operator/(double val) const {
     double ooval = 1.0 / val;
     return mSimd * simd<double>(ooval);
   }

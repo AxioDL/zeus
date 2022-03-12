@@ -79,25 +79,6 @@ void CQuaternion::fromVector3f(const CVector3f& vec) {
   mSimd.copy_from(f);
 }
 
-CQuaternion CQuaternion::operator*(const CQuaternion& q) const {
-  return CQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
-                     y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
-                     z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
-                     x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
-}
-
-CNUQuaternion CNUQuaternion::operator*(const CNUQuaternion& q) const {
-  return CNUQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
-                       y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
-                       z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
-                       x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
-}
-
-CQuaternion CQuaternion::operator/(const CQuaternion& q) const {
-  CQuaternion p(q);
-  p.invert();
-  return *this * p;
-}
 
 const CQuaternion& CQuaternion::operator*=(const CQuaternion& q) {
   CQuaternion orig = *this;

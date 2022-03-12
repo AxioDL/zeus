@@ -48,19 +48,28 @@ public:
     return *this;
   }
 
-  [[nodiscard]] CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
+  [[nodiscard]] constexpr CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
 
-  [[nodiscard]] CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
+  [[nodiscard]] constexpr CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
 
-  [[nodiscard]] CQuaternion operator*(const CQuaternion& q) const;
+  [[nodiscard]] constexpr CQuaternion operator*(const CQuaternion& q) const {
+    return CQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
+                       y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
+                       z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
+                       x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
+  }
 
-  [[nodiscard]] CQuaternion operator/(const CQuaternion& q) const;
+  [[nodiscard]] constexpr CQuaternion operator/(const CQuaternion& q) const {
+    CQuaternion p(q);
+    p.invert();
+    return *this * p;
+  }
 
-  [[nodiscard]] CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
+  [[nodiscard]] constexpr CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-  [[nodiscard]] CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
+  [[nodiscard]] constexpr CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
 
-  [[nodiscard]] CQuaternion operator-() const { return -mSimd; }
+  [[nodiscard]] constexpr CQuaternion operator-() const { return -mSimd; }
 
   const CQuaternion& operator+=(const CQuaternion& q) {
     mSimd += q.mSimd;
@@ -211,9 +220,9 @@ public:
  */
 class CNUQuaternion {
 public:
-  CNUQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
+  constexpr CNUQuaternion() : mSimd(1.f, 0.f, 0.f, 0.f) {}
 
-  CNUQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
+  constexpr CNUQuaternion(float wi, float xi, float yi, float zi) : mSimd(wi, xi, yi, zi) {}
 
   CNUQuaternion(float win, const zeus::CVector3f& vec) : mSimd(vec.mSimd.shuffle<0, 0, 1, 2>()) { w() = win; }
 
@@ -241,7 +250,12 @@ public:
     return mSimd * simd<float>(magDiv);
   }
 
-  [[nodiscard]] CNUQuaternion operator*(const CNUQuaternion& q) const;
+  [[nodiscard]] constexpr CNUQuaternion operator*(const CNUQuaternion& q) const {
+    return CNUQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
+                         y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
+                         z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
+                         x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
+  }
 
   [[nodiscard]] CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
 

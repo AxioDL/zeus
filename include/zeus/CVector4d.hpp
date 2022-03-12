@@ -69,23 +69,23 @@ public:
     return eq_mask[0] && eq_mask[1] && eq_mask[2] && eq_mask[3];
   }
 
-  [[nodiscard]] CVector4d operator+(const CVector4d& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] constexpr CVector4d operator+(const CVector4d& rhs) const { return mSimd + rhs.mSimd; }
 
-  [[nodiscard]] CVector4d operator-(const CVector4d& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] constexpr CVector4d operator-(const CVector4d& rhs) const { return mSimd - rhs.mSimd; }
 
-  [[nodiscard]] CVector4d operator-() const { return -mSimd; }
+  [[nodiscard]] constexpr CVector4d operator-() const { return -mSimd; }
 
-  [[nodiscard]] CVector4d operator*(const CVector4d& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] constexpr CVector4d operator*(const CVector4d& rhs) const { return mSimd * rhs.mSimd; }
 
-  [[nodiscard]] CVector4d operator/(const CVector4d& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] constexpr CVector4d operator/(const CVector4d& rhs) const { return mSimd / rhs.mSimd; }
 
-  [[nodiscard]] CVector4d operator+(double val) const { return mSimd + zeus::simd<double>(val); }
+  [[nodiscard]] constexpr CVector4d operator+(double val) const { return mSimd + zeus::simd<double>(val); }
 
-  [[nodiscard]] CVector4d operator-(double val) const { return mSimd - zeus::simd<double>(val); }
+  [[nodiscard]] constexpr CVector4d operator-(double val) const { return mSimd - zeus::simd<double>(val); }
 
-  [[nodiscard]] CVector4d operator*(double val) const { return mSimd * zeus::simd<double>(val); }
+  [[nodiscard]] constexpr CVector4d operator*(double val) const { return mSimd * zeus::simd<double>(val); }
 
-  [[nodiscard]] CVector4d operator/(double val) const {
+  [[nodiscard]] constexpr CVector4d operator/(double val) const {
     double ooval = 1.0 / val;
     return mSimd * zeus::simd<double>(ooval);
   }

@@ -164,13 +164,13 @@ public:
   }
 
   [[nodiscard]] CVector3f closestPointAlongVector(const CVector3f& other) const {
-    return {(other.x() > 0.f ? min.x() : max.x()), (other.y() > 0.f ? min.y() : max.y()),
-            (other.z() > 0.f ? min.z() : max.z())};
+    return {(other.x() >= 0.f ? min.x() : max.x()), (other.y() >= 0.f ? min.y() : max.y()),
+            (other.z() >= 0.f ? min.z() : max.z())};
   }
 
   [[nodiscard]] CVector3f furthestPointAlongVector(const CVector3f& other) const {
-    return {(other.x() > 0.f ? max.x() : min.x()), (other.y() > 0.f ? max.y() : min.y()),
-            (other.z() > 0.f ? max.z() : min.z())};
+    return {(other.x() >= 0.f ? max.x() : min.x()), (other.y() >= 0.f ? max.y() : min.y()),
+            (other.z() >= 0.f ? max.z() : min.z())};
   }
 
   [[nodiscard]] float distanceBetween(const CAABox& other) const {

@@ -183,11 +183,11 @@ template <typename E>
 
 [[nodiscard]] bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon = FLT_EPSILON);
 
-[[nodiscard]] inline bool close_enough(float a, float b, double epsilon = FLT_EPSILON) {
+[[nodiscard]] inline bool close_enough(float a, float b, double epsilon = DBL_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 
-[[nodiscard]] inline bool close_enough(double a, double b, double epsilon = FLT_EPSILON) {
+[[nodiscard]] inline bool close_enough(double a, double b, double epsilon = DBL_EPSILON) {
   return std::fabs(a - b) < epsilon;
 }
 } // namespace zeus

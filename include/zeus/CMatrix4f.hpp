@@ -51,6 +51,8 @@ public:
 
   constexpr CMatrix4f& operator=(const CMatrix4f& other) = default;
 
+  constexpr bool operator==(const CMatrix4f&) const = default;
+
   [[nodiscard]] CVector4f operator*(const CVector4f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +
            m[2].mSimd * other.mSimd.shuffle<2, 2, 2, 2>() + m[3].mSimd * other.mSimd.shuffle<3, 3, 3, 3>();

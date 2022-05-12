@@ -4,8 +4,7 @@
 
 namespace zeus {
 
-CMatrix3f::CMatrix3f(const CQuaternion& quat) {
-  CQuaternion nq = quat.normalized();
+CMatrix3f::CMatrix3f(const CQuaternion& nq) {
   float x2 = nq.x() * nq.x();
   float y2 = nq.y() * nq.y();
   float z2 = nq.z() * nq.z();

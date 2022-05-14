@@ -38,7 +38,7 @@ public:
     mSimd[3] = nd * mag;
   }
 
-  [[nodiscard]] float pointToPlaneDist(const CVector3f& pos) const { return pos.dot(normal()) - d(); }
+  [[nodiscard]] float pointToPlaneDist(const CVector3f& pos) const { return normal().dot(pos) - d(); }
 
   [[nodiscard]] bool rayPlaneIntersection(const CVector3f& from, const CVector3f& to, CVector3f& point) const;
 

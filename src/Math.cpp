@@ -272,11 +272,11 @@ CVector3f baryToWorld(const CVector3f& p0, const CVector3f& p1, const CVector3f&
 }
 
 bool close_enough(const CVector3f& a, const CVector3f& b, float epsilon) {
-  return std::fabs(a.x() - b.x()) < epsilon && std::fabs(a.y() - b.y()) < epsilon && std::fabs(a.z() - b.z()) < epsilon;
+  return std::fabs(a.x() - b.x()) <= epsilon && std::fabs(a.y() - b.y()) <= epsilon && std::fabs(a.z() - b.z()) <= epsilon;
 }
 
 bool close_enough(const CVector2f& a, const CVector2f& b, float epsilon) {
-  return std::fabs(a.x() - b.x()) < epsilon && std::fabs(a.y() - b.y()) < epsilon;
+  return std::fabs(a.x() - b.x()) <= epsilon && std::fabs(a.y() - b.y()) <= epsilon;
 }
 
 template <>

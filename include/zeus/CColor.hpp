@@ -43,15 +43,12 @@ public:
 
   constexpr CColor(float r, float g, float b, float a = 1.0f) : mSimd(r, g, b, a) {}
 
-  constexpr CColor(Comp32 rgba) : mSimd(((COLOR(rgba) >> 0) & 0xff) * OneOver255,
-                                        ((COLOR(rgba) >> 8) & 0xff) * OneOver255,
-                                        ((COLOR(rgba) >> 16) & 0xff) * OneOver255,
-                                        ((COLOR(rgba) >> 24) & 0xff) * OneOver255) {}
+  constexpr CColor(Comp32 rgba)
+  : mSimd(((COLOR(rgba) >> 0) & 0xff) * OneOver255, ((COLOR(rgba) >> 8) & 0xff) * OneOver255,
+          ((COLOR(rgba) >> 16) & 0xff) * OneOver255, ((COLOR(rgba) >> 24) & 0xff) * OneOver255) {}
 
-  constexpr CColor(const Comp8* rgba) : mSimd(rgba[0] * OneOver255,
-                                              rgba[1] * OneOver255,
-                                              rgba[2] * OneOver255,
-                                              rgba[3] * OneOver255) {}
+  constexpr CColor(const Comp8* rgba)
+  : mSimd(rgba[0] * OneOver255, rgba[1] * OneOver255, rgba[2] * OneOver255, rgba[3] * OneOver255) {}
 
   constexpr CColor(const CVector4f& other) : mSimd(other.mSimd) {}
 
@@ -248,6 +245,28 @@ public:
     ao = Comp8(a() * 255);
   }
 
+  Comp32 toRGBA() const {
+    RGBA32 ret;
+    ret.r = r() * 255;
+    ret.g = g() * 255;
+    ret.b = b() * 255;
+    ret.a = a() * 255;
+    return ret.rgba;
+  }
+
+  [[nodiscard]] unsigned short toRGB5A3() const {
+    Comp8 r;
+    Comp8 g;
+    Comp8 b;
+    Comp8 a;
+    toRGBA8(r, g, b, a);
+    if (a == 255) {
+      return static_cast<unsigned short>((r & 0xf8) << 7 | (g & 0xf8) << 2 | b >> 3 | 0x8000);
+    }
+
+    return static_cast<unsigned short>((r & 0xf0) << 4 | (g & 0xf0) | b >> 4 | (a & 0xe0) << 7);
+  }
+
   /**
    * @brief Assigns rgba from hsv
    * @param h[0-1] The hue percentage of the color.
@@ -340,4 +359,4 @@ struct hash<zeus::CColor> {
     return ret;
   }
 };
-}
+} // namespace std

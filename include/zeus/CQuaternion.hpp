@@ -48,26 +48,26 @@ public:
     return *this;
   }
 
-  [[nodiscard]] constexpr CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
+  [[nodiscard]] CQuaternion operator+(const CQuaternion& q) const { return mSimd + q.mSimd; }
 
-  [[nodiscard]] constexpr CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
+  [[nodiscard]] CQuaternion operator-(const CQuaternion& q) const { return mSimd - q.mSimd; }
 
-  [[nodiscard]] constexpr CQuaternion operator*(const CQuaternion& q) const {
+  [[nodiscard]] CQuaternion operator*(const CQuaternion& q) const {
     return CQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
                        y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
                        z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
                        x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
   }
 
-  [[nodiscard]] constexpr CQuaternion operator/(const CQuaternion& q) const {
+  [[nodiscard]] CQuaternion operator/(const CQuaternion& q) const {
     return *this * q.inverse();
   }
 
-  [[nodiscard]] constexpr CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
+  [[nodiscard]] CQuaternion operator*(float scale) const { return mSimd * simd<float>(scale); }
 
-  [[nodiscard]] constexpr CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
+  [[nodiscard]] CQuaternion operator/(float scale) const { return mSimd / simd<float>(scale); }
 
-  [[nodiscard]] constexpr CQuaternion operator-() const { return -mSimd; }
+  [[nodiscard]] CQuaternion operator-() const { return -mSimd; }
 
   const CQuaternion& operator+=(const CQuaternion& q) {
     mSimd += q.mSimd;
@@ -103,7 +103,7 @@ public:
 
   void invert() { mSimd *= InvertQuat; }
 
-  [[nodiscard]] constexpr CQuaternion inverse() const { return mSimd * InvertQuat; }
+  [[nodiscard]] CQuaternion inverse() const { return mSimd * InvertQuat; }
 
   /**
    * @brief Set the rotation using axis angle notation
@@ -248,14 +248,14 @@ public:
     return mSimd * simd<float>(magDiv);
   }
 
-  [[nodiscard]] constexpr CNUQuaternion operator*(const CNUQuaternion& q) const {
+  [[nodiscard]] CNUQuaternion operator*(const CNUQuaternion& q) const {
     return CNUQuaternion(w() * q.w() - CVector3f(x(), y(), z()).dot({q.x(), q.y(), q.z()}),
                          y() * q.z() - z() * q.y() + w() * q.x() + x() * q.w(),
                          z() * q.x() - x() * q.z() + w() * q.y() + y() * q.w(),
                          x() * q.y() - y() * q.x() + w() * q.z() + z() * q.w());
   }
 
-  [[nodiscard]] constexpr CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
+  [[nodiscard]] CNUQuaternion operator*(float f) const { return mSimd * simd<float>(f); }
 
   const CNUQuaternion& operator+=(const CNUQuaternion& q) {
     mSimd += q.mSimd;

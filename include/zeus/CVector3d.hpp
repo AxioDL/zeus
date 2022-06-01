@@ -43,13 +43,13 @@ public:
 
   void zeroOut() { mSimd = zeus::simd<double>(0.0); }
 
-  [[nodiscard]] constexpr CVector3d operator+(const CVector3d& rhs) const { return mSimd + rhs.mSimd; }
+  [[nodiscard]] CVector3d operator+(const CVector3d& rhs) const { return mSimd + rhs.mSimd; }
 
-  [[nodiscard]] constexpr CVector3d operator-(const CVector3d& rhs) const { return mSimd - rhs.mSimd; }
+  [[nodiscard]] CVector3d operator-(const CVector3d& rhs) const { return mSimd - rhs.mSimd; }
 
-  [[nodiscard]] constexpr CVector3d operator*(const CVector3d& rhs) const { return mSimd * rhs.mSimd; }
+  [[nodiscard]] CVector3d operator*(const CVector3d& rhs) const { return mSimd * rhs.mSimd; }
 
-  [[nodiscard]] constexpr CVector3d operator/(const CVector3d& rhs) const { return mSimd / rhs.mSimd; }
+  [[nodiscard]] CVector3d operator/(const CVector3d& rhs) const { return mSimd / rhs.mSimd; }
 
   [[nodiscard]] simd<double>::reference operator[](size_t idx) {
     assert(idx < 3);

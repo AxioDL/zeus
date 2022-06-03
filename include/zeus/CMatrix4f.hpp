@@ -51,7 +51,13 @@ public:
 
   constexpr CMatrix4f& operator=(const CMatrix4f& other) = default;
 
-  constexpr bool operator==(const CMatrix4f&) const = default;
+  [[nodiscard]] bool operator==(const CMatrix4f& rhs) const {
+    return m[0] == rhs.m[0] && m[1] == rhs.m[1] && m[2] == rhs.m[2] && m[3] == rhs.m[3];
+  }
+
+  [[nodiscard]] bool operator!=(const CMatrix4f& rhs) const {
+    return m[0] != rhs.m[0] || m[1] != rhs.m[1] || m[2] != rhs.m[2] || m[3] != rhs.m[3];
+  }
 
   [[nodiscard]] CVector4f operator*(const CVector4f& other) const {
     return m[0].mSimd * other.mSimd.shuffle<0, 0, 0, 0>() + m[1].mSimd * other.mSimd.shuffle<1, 1, 1, 1>() +

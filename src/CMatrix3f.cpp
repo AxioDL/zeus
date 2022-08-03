@@ -46,15 +46,15 @@ void CMatrix3f::transpose() {
   float tmp;
 
   tmp = m[0][1];
-  m[0][1] = m[1][0];
+  m[0][1] = m[1][0].operator float();
   m[1][0] = tmp;
 
   tmp = m[0][2];
-  m[0][2] = m[2][0];
+  m[0][2] = m[2][0].operator float();
   m[2][0] = tmp;
 
   tmp = m[1][2];
-  m[1][2] = m[2][1];
+  m[1][2] = m[2][1].operator float();
   m[2][1] = tmp;
 #endif
 }
@@ -80,15 +80,15 @@ CMatrix3f CMatrix3f::transposed() const {
   float tmp;
 
   tmp = ret.m[0][1];
-  ret.m[0][1] = ret.m[1][0];
+  ret.m[0][1] = ret.m[1][0].operator float();
   ret.m[1][0] = tmp;
 
   tmp = m[0][2];
-  ret.m[0][2] = ret.m[2][0];
+  ret.m[0][2] = ret.m[2][0].operator float();
   ret.m[2][0] = tmp;
 
   tmp = m[1][2];
-  ret.m[1][2] = ret.m[2][1];
+  ret.m[1][2] = ret.m[2][1].operator float();
   ret.m[2][1] = tmp;
 
   return ret;

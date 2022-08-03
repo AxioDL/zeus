@@ -1477,6 +1477,9 @@ private:
   friend class simd_mask;
 
 public:
+  constexpr __simd_storage(_Tp __rv) : __storage_{__rv, __rv, __rv, __rv} {}
+  constexpr __simd_storage(_Tp a, _Tp b, _Tp c, _Tp d) : __storage_{a, b, c, d} {}
+
   constexpr _Tp __get(size_t __index) const noexcept { return __storage_[__index]; };
   constexpr void __set(size_t __index, _Tp __val) noexcept { __storage_[__index] = __val; }
   constexpr std::enable_if_t<__num_element >= 4> __set4(float a, float b, float c, float d) noexcept {

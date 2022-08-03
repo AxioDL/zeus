@@ -18,7 +18,7 @@ using namespace std;
 #elif __ARM_NEON
 #include "simd_neon.hpp"
 #else
-namespace simd_abi {
+namespace zeus::_simd::simd_abi {
 template <typename T>
 struct zeus_native {};
 template <>
@@ -29,7 +29,8 @@ template <>
 struct zeus_native<double> {
   using type = fixed_size<4>;
 };
-} // namespace simd_abi
+} // namespace zeus::_simd::simd_abi
+#include "simd_none.hpp"
 #endif
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

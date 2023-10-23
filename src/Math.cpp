@@ -183,7 +183,7 @@ CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3
 
 CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t) {
   const float omt = 1.f - t;
-  return ((a * omt + b * t) * omt + (b * omt + c * t) * t) * omt +
+  return (((a * omt) + b * t) * omt + (b * omt + c * t) * t) * omt +
          ((b * omt + c * t) * omt + (c * omt + d * t) * t) * t;
 }
 

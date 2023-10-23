@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #ifndef _ZEUS_SIMD_INCLUDED
 #error simd_sse.hpp must not be included directly. Include simd.hpp instead.
 #endif

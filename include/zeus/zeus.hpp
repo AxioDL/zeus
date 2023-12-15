@@ -18,6 +18,7 @@
 #include "zeus/CTransform.hpp"
 #include "zeus/CUnitVector.hpp"
 #include "zeus/CVector2f.hpp"
+#include "zeus/CVector2i.hpp"
 #include "zeus/CVector2d.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/CVector3d.hpp"

@@ -14,8 +14,7 @@ class CTransform {
 public:
   constexpr CTransform() : basis(false) {}
 
-  constexpr CTransform(const CMatrix3f& basis, const CVector3f& offset = {})
-  : basis(basis), origin(offset) {}
+  constexpr CTransform(const CMatrix3f& basis, const CVector3f& offset = {}) : basis(basis), origin(offset) {}
 
   /* Column constructor */
   constexpr CTransform(const CVector3f& c0, const CVector3f& c1, const CVector3f& c2, const CVector3f& c3)
@@ -34,6 +33,15 @@ public:
   [[nodiscard]] CTransform inverse() const {
     CMatrix3f inv = basis.inverted();
     return CTransform(inv, inv * -origin);
+  }
+
+  [[nodiscard]] CTransform quickInverse() const {
+    return CTransform{basis.transposed(),
+                      CVector3f{
+                          basis[0][0] * -origin.x() - basis[0][1] * origin.y() - basis[0][2] * origin.z(),
+                          basis[1][0] * -origin.x() - basis[1][1] * origin.y() - basis[1][2] * origin.z(),
+                          basis[2][0] * -origin.x() - basis[2][1] * origin.y() - basis[2][2] * origin.z(),
+                      }};
   }
 
   [[nodiscard]] static CTransform Translate(const CVector3f& position) { return {CMatrix3f(), position}; }
@@ -176,6 +184,24 @@ public:
     ret[2][3] = 0.0f;
     ret[3][3] = 1.0f;
     return ret;
+  }
+
+  /**
+   * Outputs the matrix to a C-style array (column-major, GX style)
+   */
+  void toCStyleMatrix(float mtx[3][4]) const {
+    mtx[0][0] = basis[0][0];
+    mtx[0][1] = basis[1][0];
+    mtx[0][2] = basis[2][0];
+    mtx[0][3] = origin.x();
+    mtx[1][0] = basis[0][1];
+    mtx[1][1] = basis[1][1];
+    mtx[1][2] = basis[2][1];
+    mtx[1][3] = origin.y();
+    mtx[2][0] = basis[0][2];
+    mtx[2][1] = basis[1][2];
+    mtx[2][2] = basis[2][2];
+    mtx[2][3] = origin.z();
   }
 
   [[nodiscard]] CVector3f upVector() const { return basis.m[2]; }

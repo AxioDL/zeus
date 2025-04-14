@@ -251,7 +251,7 @@ public:
     ret.g = g() * 255;
     ret.b = b() * 255;
     ret.a = a() * 255;
-    return ret.rgba;
+    return COLOR(ret.rgba);
   }
 
   [[nodiscard]] unsigned short toRGB5A3() const {

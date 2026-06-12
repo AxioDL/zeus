@@ -23,7 +23,7 @@ public:
     mSimd[3] = displacement;
   }
 
-  [[nodiscard]] float clipLineSegment(const CVector3f& a, const CVector3f& b) {
+  [[nodiscard]] float clipLineSegment(const CVector3f& a, const CVector3f& b) const {
     const float mag = (b - a).dot(normal());
     const float dis = (-(y() - d())) / mag;
     return clamp(0.0f, dis, 1.0f);

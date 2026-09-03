@@ -78,7 +78,7 @@ class CVector3f;
 
 class CVector2f;
 
-class CTransform;
+class CTransform4f;
 
 template <typename T>
 [[nodiscard]] constexpr T min(const T& a, const T& b) {

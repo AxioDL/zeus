@@ -5,7 +5,7 @@
 #include "zeus/CLineSeg.hpp"
 #include "zeus/CPlane.hpp"
 #include "zeus/CSphere.hpp"
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/Math.hpp"
 
@@ -117,7 +117,7 @@ public:
   };
   [[nodiscard]] Tri getTri(EBoxFaceId face, int windOffset) const;
 
-  [[nodiscard]] CAABox getTransformedAABox(const CTransform& xfrm) const {
+  [[nodiscard]] CAABox getTransformedAABox(const CTransform4f& xfrm) const {
     CAABox box;
     CVector3f point = xfrm * getPoint(0);
     box.accumulateBounds(point);

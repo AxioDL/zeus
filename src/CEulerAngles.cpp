@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "zeus/CQuaternion.hpp"
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 
 namespace zeus {
 
@@ -35,7 +35,7 @@ CEulerAngles::CEulerAngles(const CQuaternion& quat) {
   }
 }
 
-CEulerAngles::CEulerAngles(const CTransform& xf) {
+CEulerAngles::CEulerAngles(const CTransform4f& xf) {
   float xyMagSq = xf.basis[1][1] * xf.basis[1][1] + xf.basis[1][0] * xf.basis[1][0];
   float f1 = 0.f;
   if (xyMagSq > 0.f) {

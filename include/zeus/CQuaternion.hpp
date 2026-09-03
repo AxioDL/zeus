@@ -5,7 +5,7 @@
 #include "zeus/CAxisAngle.hpp"
 #include "zeus/CMatrix3f.hpp"
 #include "zeus/CRelAngle.hpp"
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 #include "zeus/CVector3f.hpp"
 #include "zeus/CVector4f.hpp"
 #include "zeus/Global.hpp"
@@ -140,10 +140,10 @@ public:
 
   [[nodiscard]] CQuaternion exp() const;
 
-  [[nodiscard]] CTransform toTransform() const { return CTransform(CMatrix3f(*this)); }
+  [[nodiscard]] CTransform4f toTransform() const { return CTransform4f(CMatrix3f(*this)); }
 
-  [[nodiscard]] CTransform toTransform(const zeus::CVector3f& origin) const {
-    return CTransform(CMatrix3f(*this), origin);
+  [[nodiscard]] CTransform4f toTransform(const zeus::CVector3f& origin) const {
+    return CTransform4f(CMatrix3f(*this), origin);
   }
 
   [[nodiscard]] float dot(const CQuaternion& rhs) const { return mSimd.dot4(rhs.mSimd); }

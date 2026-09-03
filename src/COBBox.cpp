@@ -5,10 +5,10 @@
 
 namespace zeus {
 
-CAABox COBBox::calculateAABox(const CTransform& worldXf) const {
+CAABox COBBox::calculateAABox(const CTransform4f& worldXf) const {
   CAABox ret;
 
-  CTransform trans = worldXf * transform;
+  CTransform4f trans = worldXf * transform;
   static const CVector3f basis[8] = {{1.f, 1.f, 1.f},    {1.f, 1.f, -1.f},  {1.f, -1.f, 1.f},  {1.f, -1.f, -1.f},
                                      {-1.f, -1.f, -1.f}, {-1.f, -1.f, 1.f}, {-1.f, 1.f, -1.f}, {-1.f, 1.f, 1.f}};
   CVector3f p = extents * basis[0];

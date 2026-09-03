@@ -1,6 +1,6 @@
 #pragma once
 
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 #include "zeus/CVector3f.hpp"
 
 namespace zeus {
@@ -17,8 +17,8 @@ struct CMRay {
     dir = invLen * delta;
   }
 
-  [[nodiscard]] CMRay getInvUnscaledTransformRay(const CTransform& xfrm) const {
-    const CTransform inv = xfrm.inverse();
+  [[nodiscard]] CMRay getInvUnscaledTransformRay(const CTransform4f& xfrm) const {
+    const CTransform4f inv = xfrm.Inverse();
     return CMRay(inv * start, inv * end, length, invLength);
   }
 

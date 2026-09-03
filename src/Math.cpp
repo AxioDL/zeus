@@ -4,7 +4,7 @@
 #include <cmath>
 #include <cstring>
 
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 #include "zeus/CVector2f.hpp"
 #include "zeus/CVector3f.hpp"
 
@@ -157,28 +157,6 @@ std::pair<bool, const CPUInfo&> validateCPU() {
 #endif
 
   return {ret, g_missingFeatures};
-}
-
-CTransform lookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up) {
-  CVector3f vLook, vRight, vUp;
-
-  vLook = lookPos - pos;
-  if (vLook.magnitude() <= FLT_EPSILON)
-    vLook = {0.f, 1.f, 0.f};
-  else
-    vLook.normalize();
-
-  vUp = up - vLook * clamp(-1.f, up.dot(vLook), 1.f);
-  if (vUp.magnitude() <= FLT_EPSILON) {
-    vUp = CVector3f(0.f, 0.f, 1.f) - vLook * vLook.z();
-    if (vUp.magnitude() <= FLT_EPSILON)
-      vUp = CVector3f(0.f, 1.f, 0.f) - vLook * vLook.y();
-  }
-  vUp.normalize();
-  vRight = vLook.cross(vUp);
-
-  CMatrix3f rmBasis(vRight, vLook, vUp);
-  return CTransform(rmBasis, pos);
 }
 
 CVector3f getBezierPoint(const CVector3f& a, const CVector3f& b, const CVector3f& c, const CVector3f& d, float t) {

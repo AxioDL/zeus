@@ -1,15 +1,15 @@
-#include "zeus/CFrustum.hpp"
+#include "zeus/CFrustumPlanes.hpp"
 
 #include <algorithm>
 #include <cmath>
 
 #include "zeus/CAABox.hpp"
 #include "zeus/CProjection.hpp"
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 
 namespace zeus {
 
-void CFrustum::updatePlanes(const CMatrix4f& viewMtx, const CMatrix4f& projection) {
+void CFrustumPlanes::updatePlanes(const CMatrix4f& viewMtx, const CMatrix4f& projection) {
   const CMatrix4f mvp = projection * viewMtx;
   const CMatrix4f mvp_rm = mvp.transposed();
 
@@ -41,15 +41,15 @@ void CFrustum::updatePlanes(const CMatrix4f& viewMtx, const CMatrix4f& projectio
   valid = true;
 }
 
-void CFrustum::updatePlanes(const CTransform& viewPointMtx, const CProjection& projection) {
+void CFrustumPlanes::updatePlanes(const CTransform4f& viewPointMtx, const CProjection& projection) {
   const CMatrix3f tmp(viewPointMtx.basis[0], viewPointMtx.basis[2], -viewPointMtx.basis[1]);
-  const CTransform viewBasis = CTransform(tmp.transposed());
-  const CTransform viewMtx = viewBasis * CTransform::Translate(-viewPointMtx.origin);
+  const CTransform4f viewBasis = CTransform4f(tmp.transposed());
+  const CTransform4f viewMtx = viewBasis * CTransform4f::Translate(-viewPointMtx.origin);
 
-  updatePlanes(viewMtx.toMatrix4f(), projection.getCachedMatrix());
+  updatePlanes(viewMtx.ToMatrix4f(), projection.getCachedMatrix());
 }
 
-bool CFrustum::aabbFrustumTest(const CAABox& aabb) const {
+bool CFrustumPlanes::aabbFrustumTest(const CAABox& aabb) const {
   if (!valid) {
     return true;
   }
@@ -64,7 +64,7 @@ bool CFrustum::aabbFrustumTest(const CAABox& aabb) const {
   });
 }
 
-bool CFrustum::sphereFrustumTest(const CSphere& sphere) const {
+bool CFrustumPlanes::sphereFrustumTest(const CSphere& sphere) const {
   if (!valid) {
     return true;
   }
@@ -75,7 +75,7 @@ bool CFrustum::sphereFrustumTest(const CSphere& sphere) const {
   });
 }
 
-bool CFrustum::pointFrustumTest(const CVector3f& point) const {
+bool CFrustumPlanes::pointFrustumTest(const CVector3f& point) const {
   if (!valid) {
     return true;
   }

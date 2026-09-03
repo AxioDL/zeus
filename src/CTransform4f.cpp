@@ -1,10 +1,33 @@
-#include "zeus/CTransform.hpp"
+#include "zeus/CTransform4f.hpp"
 
 #include <cmath>
 
 namespace zeus {
-CTransform CTransformFromEditorEuler(const CVector3f& eulerVec) {
-  CTransform result;
+
+CTransform4f CTransform4f::LookAt(const CVector3f& pos, const CVector3f& lookPos, const CVector3f& up) {
+  CVector3f vLook, vRight, vUp;
+
+  vLook = lookPos - pos;
+  if (vLook.magnitude() <= FLT_EPSILON)
+    vLook = {0.f, 1.f, 0.f};
+  else
+    vLook.normalize();
+
+  vUp = up - vLook * clamp(-1.f, up.dot(vLook), 1.f);
+  if (vUp.magnitude() <= FLT_EPSILON) {
+    vUp = CVector3f(0.f, 0.f, 1.f) - vLook * vLook.z();
+    if (vUp.magnitude() <= FLT_EPSILON)
+      vUp = CVector3f(0.f, 1.f, 0.f) - vLook * vLook.y();
+  }
+  vUp.normalize();
+  vRight = vLook.cross(vUp);
+
+  CMatrix3f rmBasis(vRight, vLook, vUp);
+  return CTransform4f(rmBasis, pos);
+}
+
+CTransform4f CTransformFromEditorEuler(const CVector3f& eulerVec) {
+  CTransform4f result;
   double ti, tj, th, ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
 
   ti = eulerVec[0];
@@ -36,8 +59,8 @@ CTransform CTransformFromEditorEuler(const CVector3f& eulerVec) {
   return result;
 }
 
-CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle) {
-  CTransform result;
+CTransform4f CTransformFromAxisAngle(const CVector3f& axis, float angle) {
+  CTransform4f result;
   CVector3f axisN = axis.normalized();
 
   float c = std::cos(angle);
@@ -59,8 +82,8 @@ CTransform CTransformFromAxisAngle(const CVector3f& axis, float angle) {
   return result;
 }
 
-CTransform CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin) {
-  CTransform ret = CTransformFromEditorEuler(eulerVec);
+CTransform4f CTransformFromEditorEulers(const CVector3f& eulerVec, const CVector3f& origin) {
+  CTransform4f ret = CTransformFromEditorEuler(eulerVec);
   ret.origin = origin;
   return ret;
 }

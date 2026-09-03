@@ -13,8 +13,8 @@ set(SOURCES
     src/CMatrix3f.cpp
     src/CProjection.cpp
     src/CPlane.cpp
-    src/CFrustum.cpp
-    src/CTransform.cpp
+    src/CFrustumPlanes.cpp
+    src/CTransform4f.cpp
     src/CColor.cpp
     src/CVector2f.cpp
     src/CMatrix4f.cpp
@@ -31,7 +31,7 @@ add_library(zeus
     include/zeus/CAxisAngle.hpp
     include/zeus/CRelAngle.hpp
     include/zeus/CPlane.hpp
-    include/zeus/CTransform.hpp
+    include/zeus/CTransform4f.hpp
     include/zeus/CColor.hpp
     include/zeus/Global.hpp
     include/zeus/zeus.hpp
@@ -44,7 +44,7 @@ add_library(zeus
     include/zeus/CVector4d.hpp
     include/zeus/CRectangle.hpp
     include/zeus/CMatrix4f.hpp
-    include/zeus/CFrustum.hpp
+    include/zeus/CFrustumPlanes.hpp
     include/zeus/CAABox.hpp
     include/zeus/COBBox.hpp
     include/zeus/CLine.hpp
